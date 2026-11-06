@@ -1,0 +1,96 @@
+/**
+ * Captures -> action candidates.
+ *
+ * A crawl of a real SaaS app records far more noise than signal: analytics
+ * beacons, session polling, asset fetches. What survives here is what a user
+ * action actually caused.
+ */
+
+import type { CaptureRecord } from '../capture/types.js';
+import { normalizeRoute } from '../crawl/links.js';
+
+export type ActionCandidate = {
+  /** `METHOD /normalized/path` — the cluster key. */
+  key: string;
+  /** The application route this was first seen on. */
+  route: string;
+  method: string;
+  pathTemplate: string;
+  samples: CaptureRecord[];
+};
+
+const MAX_SAMPLES = 3;
+
+/** Third-party telemetry that tells us nothing about Brevo's capabilities. */
+const VENDOR_HOSTS =
+  /(?:segment\.(?:io|com)|datadoghq|sentry\.io|intercom|hotjar|google-analytics|googletagmanager|doubleclick|facebook\.(?:net|com)|fullstory|mixpanel|amplitude|launchdarkly|pusher|cloudflareinsights)/i;
+
+/** Brevo-owned hosts whose traffic is in scope, including its public API. */
+const BREVO_HOSTS = /(?:\.|^)(?:brevo\.com|sendinblue\.com)$/i;
+
+const ASSET_PATH = /\.(?:css|js|mjs|map|woff2?|ttf|eot|svg|png|jpe?g|gif|webp|ico|avif)$/i;
+
+const READ_METHODS = new Set(['GET', 'HEAD', 'OPTIONS']);
+
+function hostOf(url: string): string | null {
+  try {
+    return new URL(url).hostname;
+  } catch {
+    return null;
+  }
+}
+
+function pathOf(url: string): string {
+  try {
+    return new URL(url).pathname;
+  } catch {
+    const queryAt = url.indexOf('?');
+    return queryAt === -1 ? url : url.slice(0, queryAt);
+  }
+}
+
+function isNoise(record: CaptureRecord): boolean {
+  const host = hostOf(record.url);
+  if (host === null) return true;
+
+  // Keep anything Brevo owns — api.brevo.com calls are the app's own traffic.
+  if (!BREVO_HOSTS.test(host)) return true;
+  if (VENDOR_HOSTS.test(host)) return true;
+  if (ASSET_PATH.test(pathOf(record.url))) return true;
+
+  // A server error tells us nothing reliable about the action's contract.
+  if (record.status >= 500) return true;
+
+  // A read that returned nothing is polling, not a business action. A write
+  // with no body is still a write worth cataloguing.
+  if (READ_METHODS.has(record.method) && (record.responseBody ?? '') === '') return true;
+
+  return false;
+}
+
+export function clusterCaptures(records: CaptureRecord[]): ActionCandidate[] {
+  const byKey = new Map<string, ActionCandidate>();
+
+  for (const record of records) {
+    if (isNoise(record)) continue;
+
+    const pathTemplate = normalizeRoute(pathOf(record.url));
+    const key = `${record.method} ${pathTemplate}`;
+
+    const existing = byKey.get(key);
+    if (existing) {
+      if (existing.samples.length < MAX_SAMPLES) existing.samples.push(record);
+      continue;
+    }
+
+    byKey.set(key, {
+      key,
+      route: record.route,
+      method: record.method,
+      pathTemplate,
+      samples: [record],
+    });
+  }
+
+  return [...byKey.values()];
+}
