@@ -20,7 +20,8 @@
     "validate": "tsx scripts/validate.ts",
     "build:index": "tsx scripts/build-index.ts",
     "interact": "tsx scripts/interact.ts",
-    "verify": "tsx scripts/verify.ts"
+    "verify": "tsx scripts/verify.ts",
+    "eval": "tsx scripts/eval-selection.ts"
   },
   "dependencies": {
     "ajv": "^8.17.1",

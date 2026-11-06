@@ -1,0 +1,130 @@
+import { describe, expect, it } from 'vitest';
+import { scoreSelection, type EvalTask } from '../../src/eval/selection.js';
+import { buildIndex } from '../../src/catalog/index-build.js';
+import { ActionSchema, type Action } from '../../src/types.js';
+import { validAction } from '../fixtures/valid-action.js';
+import type { LlmProvider } from '../../src/providers/types.js';
+
+const createContact: Action = ActionSchema.parse(validAction);
+const deleteContact: Action = ActionSchema.parse({
+  ...validAction,
+  id: 'contacts.delete_contact',
+  name: 'Delete contact',
+  destructive: true,
+});
+
+const index = buildIndex([createContact, deleteContact]);
+
+const task: EvalTask = {
+  prompt: 'add john@example.com to my newsletter list',
+  expectedActionId: 'contacts.create_contact',
+};
+
+function picks(actionId: string, inputs: Record<string, unknown> = {}): LlmProvider {
+  return {
+    name: 'fake',
+    async complete() {
+      return JSON.stringify({ action_id: actionId, inputs });
+    },
+  };
+}
+
+const alwaysProse: LlmProvider = {
+  name: 'fake-prose',
+  async complete() {
+    return 'I am not sure which action to use.';
+  },
+};
+
+describe('scoreSelection', () => {
+  it('scores a correct selection as correct', async () => {
+    expect((await scoreSelection([task], index, picks('contacts.create_contact'))).correct).toBe(1);
+  });
+
+  it('scores a wrong selection as incorrect and records what was chosen', async () => {
+    const report = await scoreSelection([task], index, picks('contacts.delete_contact'));
+    expect(report.correct).toBe(0);
+    expect(report.cases[0]?.chosenActionId).toBe('contacts.delete_contact');
+  });
+
+  it('treats an id that is not in the catalog as incorrect, not an error', async () => {
+    const report = await scoreSelection([task], index, picks('made.up_action'));
+    expect(report.cases[0]?.correct).toBe(false);
+    expect(report.cases[0]?.chosenActionId).toBe('made.up_action');
+  });
+
+  it('records null chosenActionId when the model returns unparseable output', async () => {
+    const report = await scoreSelection([task], index, alwaysProse);
+    expect(report.cases[0]?.chosenActionId).toBeNull();
+    expect(report.cases[0]?.correct).toBe(false);
+  });
+
+  it('survives a provider that throws', async () => {
+    const throwing: LlmProvider = {
+      name: 'fake-throwing',
+      async complete() {
+        throw new Error('rate limited');
+      },
+    };
+    const report = await scoreSelection([task], index, throwing);
+    expect(report.total).toBe(1);
+    expect(report.cases[0]?.chosenActionId).toBeNull();
+  });
+
+  it('checks expected inputs when the task declares them', async () => {
+    const withInputs: EvalTask = { ...task, expectedInputs: { email: 'john@example.com' } };
+    const report = await scoreSelection(
+      [withInputs],
+      index,
+      picks('contacts.create_contact', { email: 'john@example.com' }),
+    );
+    expect(report.cases[0]?.inputsCorrect).toBe(true);
+    expect(report.inputsCorrect).toBe(1);
+  });
+
+  it('marks inputs incorrect when a declared value is wrong', async () => {
+    const withInputs: EvalTask = { ...task, expectedInputs: { email: 'john@example.com' } };
+    const report = await scoreSelection(
+      [withInputs],
+      index,
+      picks('contacts.create_contact', { email: 'someone@else.com' }),
+    );
+    expect(report.cases[0]?.inputsCorrect).toBe(false);
+  });
+
+  it('leaves inputsCorrect null when the task declares no expected inputs', async () => {
+    const report = await scoreSelection([task], index, picks('contacts.create_contact'));
+    expect(report.cases[0]?.inputsCorrect).toBeNull();
+  });
+
+  it('ignores extra inputs the model supplied beyond those expected', async () => {
+    const withInputs: EvalTask = { ...task, expectedInputs: { email: 'john@example.com' } };
+    const report = await scoreSelection(
+      [withInputs],
+      index,
+      picks('contacts.create_contact', { email: 'john@example.com', listIds: [3] }),
+    );
+    expect(report.cases[0]?.inputsCorrect).toBe(true);
+  });
+
+  it('reports the total and keeps one case per task', async () => {
+    const report = await scoreSelection([task, task], index, picks('contacts.create_contact'));
+    expect(report.total).toBe(2);
+    expect(report.cases).toHaveLength(2);
+  });
+
+  it('puts the catalog index in the prompt, not the full entries', async () => {
+    let seen = '';
+    const spy: LlmProvider = {
+      name: 'spy',
+      async complete(request) {
+        seen = request.user;
+        return JSON.stringify({ action_id: 'contacts.create_contact', inputs: {} });
+      },
+    };
+    await scoreSelection([task], index, spy);
+    expect(seen).toContain('contacts.create_contact');
+    expect(seen).toContain(task.prompt);
+    expect(seen).not.toContain('body_example');
+  });
+});
