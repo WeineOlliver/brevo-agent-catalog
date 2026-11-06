@@ -9,7 +9,8 @@
   },
   "scripts": {
     "test": "vitest run",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "build:schema": "tsx scripts/build-schema.ts"
   },
   "dependencies": {
     "ajv": "^8.17.1",
