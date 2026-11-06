@@ -52,6 +52,38 @@ describe('clusterCaptures', () => {
     expect(clusterCaptures([capture({ url: 'https://api.brevo.com/v3/contacts' })])).toHaveLength(1);
   });
 
+  it('drops brevo-owned hosts that serve app chrome and telemetry, not business actions', () => {
+    // Discovered on the first real crawl: these account for a large share of
+    // candidates and none of them is something a user does.
+    const chrome = [
+      'https://sidebar-backend.brevo.com/sidebar/api/header/info',
+      'https://notifications-banner-api.brevo.com/banner-info',
+      'https://marketing-notification.brevo.com/marketing/notification-list',
+      'https://dt.brevo.com/collect',
+      'https://metrics.brevo.com/g/collect',
+      'https://fsrelay.brevo.com/x',
+    ].map((url) => capture({ method: 'GET', url, responseBody: '{"a":1}' }));
+    expect(clusterCaptures(chrome)).toEqual([]);
+  });
+
+  it('drops cloudflare and analytics beacon paths on any host', () => {
+    expect(
+      clusterCaptures([
+        capture({ url: 'https://app.brevo.com/cdn-cgi/rum' }),
+        capture({ method: 'GET', url: 'https://app.brevo.com/g/collect', responseBody: '{}' }),
+      ]),
+    ).toEqual([]);
+  });
+
+  it('keeps a product feature that happens to live on its own service', () => {
+    expect(
+      clusterCaptures([
+        capture({ url: 'https://contacts-api.brevo.com/contacts/import' }),
+        capture({ url: 'https://email-campaigns-backend.brevo.com/campaigns' }),
+      ]),
+    ).toHaveLength(2);
+  });
+
   it('drops polling GETs that returned no body', () => {
     expect(
       clusterCaptures([

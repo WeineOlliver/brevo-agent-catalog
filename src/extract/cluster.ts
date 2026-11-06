@@ -30,6 +30,18 @@ const VENDOR_HOSTS =
 /** Methods the catalog schema can express. Anything else cannot be drafted. */
 const SCHEMA_METHODS = new Set<string>(HTTP_METHODS);
 
+/**
+ * Brevo-owned hosts that serve application chrome and telemetry rather than
+ * anything a user does: the sidebar's credit counters, in-app banners,
+ * notification lists, analytics relays. Measured on the first real crawl, these
+ * were a large share of all candidates and not one of them is a business action.
+ */
+const CHROME_HOSTS =
+  /^(?:sidebar-backend|notifications?-banner-api|marketing-notification|dt|metrics|get|fsrelay|rum)\./i;
+
+/** Beacon paths that appear on product hosts too. */
+const BEACON_PATH = /^\/(?:cdn-cgi|g\/collect|collect|banner-info|pr\/|events?\/collect)/i;
+
 const ASSET_PATH = /\.(?:css|js|mjs|map|woff2?|ttf|eot|svg|png|jpe?g|gif|webp|ico|avif)$/i;
 
 const READ_METHODS = new Set(['GET', 'HEAD', 'OPTIONS']);
@@ -58,7 +70,9 @@ function isNoise(record: CaptureRecord): boolean {
   // Keep anything Brevo owns — api.brevo.com calls are the app's own traffic.
   if (!isBrevoHost(record.url)) return true;
   if (VENDOR_HOSTS.test(host)) return true;
+  if (CHROME_HOSTS.test(host)) return true;
   if (ASSET_PATH.test(pathOf(record.url))) return true;
+  if (BEACON_PATH.test(pathOf(record.url))) return true;
 
   // HEAD and OPTIONS are reads to us but are not in the schema's method enum,
   // so every draft for one is rejected after two provider calls. Drop them here
