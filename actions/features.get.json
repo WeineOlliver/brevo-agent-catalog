@@ -1,0 +1,61 @@
+{
+  "id": "features.get",
+  "module": "features",
+  "name": "Get feature toggles",
+  "description": "Call this when you need to determine whether one or more specific feature flags are enabled for the current account. Use a different action such as a feature list endpoint if you need to retrieve all available toggles instead of a specific set.",
+  "preconditions": [],
+  "inputs": {
+    "type": "object",
+    "properties": {
+      "feature_toggles": {
+        "type": "string",
+        "description": "A comma‑separated list of feature toggle identifiers to query (e.g., \"deliv-center-fe\" or \"sales-task-verification,sales-signal-verification\")."
+      }
+    },
+    "required": [
+      "feature_toggles"
+    ],
+    "additionalProperties": false
+  },
+  "outputs": {
+    "type": "object",
+    "properties": {
+      "feature_toggle": {
+        "type": "object",
+        "description": "A map where each key is a requested feature toggle identifier and the value is a boolean indicating if the feature is enabled.",
+        "additionalProperties": {
+          "type": "boolean"
+        }
+      }
+    },
+    "required": [
+      "feature_toggle"
+    ],
+    "additionalProperties": false
+  },
+  "side_effects": [],
+  "destructive": false,
+  "idempotent": true,
+  "ui_path": [
+    "Settings",
+    "Feature toggles"
+  ],
+  "internal_endpoint": {
+    "method": "GET",
+    "path": "/v2/FeatureToggle",
+    "body_example": null
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/root.json",
+      "captures/clean/templates-listing.json"
+    ],
+    "verified_at": null
+  }
+}

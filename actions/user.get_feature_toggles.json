@@ -1,0 +1,71 @@
+{
+  "id": "user.get_feature_toggles",
+  "module": "user",
+  "name": "Get feature toggles",
+  "description": "Call this when you need to retrieve the current state of feature flags for the authenticated user, such as smart detection or IP sharing. If you are already on the Settings page and only need the same data, use the settings‑related endpoint instead.",
+  "preconditions": [
+    "The request must be made by an authenticated user."
+  ],
+  "inputs": {
+    "type": "object",
+    "properties": {},
+    "required": []
+  },
+  "outputs": {
+    "type": "object",
+    "properties": {
+      "ato-smart-detection": {
+        "type": "boolean",
+        "description": "Whether the ATO smart detection feature is enabled."
+      },
+      "ato-master-auth-ip-sharing": {
+        "type": "boolean",
+        "description": "Whether master authentication IP sharing is enabled."
+      },
+      "ato-smtp-smart-detection": {
+        "type": "boolean",
+        "description": "Whether SMTP smart detection is enabled."
+      },
+      "ato-smart-detection-enforced": {
+        "type": "boolean",
+        "description": "Whether smart detection enforcement is active."
+      },
+      "ato-smtp-smart-detection-enforced": {
+        "type": "boolean",
+        "description": "Whether SMTP smart detection enforcement is active."
+      }
+    },
+    "required": [
+      "ato-smart-detection",
+      "ato-master-auth-ip-sharing",
+      "ato-smtp-smart-detection",
+      "ato-smart-detection-enforced",
+      "ato-smtp-smart-detection-enforced"
+    ]
+  },
+  "side_effects": [],
+  "destructive": false,
+  "idempotent": true,
+  "ui_path": [
+    "Security",
+    "Authorised IPs"
+  ],
+  "internal_endpoint": {
+    "method": "GET",
+    "path": "/user/feature-toggle",
+    "body_example": null
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/security-authorised-ips.json",
+      "captures/clean/settings-keys-smtp.json"
+    ],
+    "verified_at": null
+  }
+}

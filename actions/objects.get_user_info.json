@@ -2,10 +2,8 @@
   "id": "objects.get_user_info",
   "module": "objects",
   "name": "Get user info",
-  "description": "Call this when you need to retrieve the current user's identifier and their access rights to custom objects and contact attributes. Use a specific object‑related action (e.g., creating or listing custom objects) instead if you need to perform those operations.",
-  "preconditions": [
-    "The user must be authenticated."
-  ],
+  "description": "Call this when you need to retrieve the current user's identifier and their access rights to custom objects and contact attributes. Use a broader account‑level endpoint (if available) instead when you only need overall account information rather than per‑user flags.",
+  "preconditions": [],
   "inputs": {
     "type": "object",
     "properties": {},
@@ -16,7 +14,7 @@
     "properties": {
       "user_id": {
         "type": "string",
-        "description": "The unique identifier of the authenticated account."
+        "description": "The identifier of the current user (account ID)."
       },
       "has_custom_objects_access": {
         "type": "boolean",

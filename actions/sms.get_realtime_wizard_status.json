@@ -1,8 +1,8 @@
 {
   "id": "sms.get_realtime_wizard_status",
   "module": "sms",
-  "name": "Get realtime SMS wizard status",
-  "description": "Call this when you need to know whether any SMS has been sent during the current realtime wizard session. Use the broader statistics endpoint instead if you need aggregate SMS metrics over a longer period.",
+  "name": "Get real-time wizard status",
+  "description": "Call this when you need to know whether any SMS has been sent during the current real‑time wizard session. If you need detailed SMS logs instead, use the logs endpoint.",
   "preconditions": [],
   "inputs": {
     "type": "object",
@@ -14,7 +14,7 @@
     "properties": {
       "has_sent_sms": {
         "type": "boolean",
-        "description": "Indicates whether an SMS has been sent in the realtime wizard."
+        "description": "Indicates whether any SMS has been sent in the real‑time wizard."
       }
     },
     "required": [

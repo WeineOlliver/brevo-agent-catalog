@@ -1,0 +1,37 @@
+{
+  "id": "ui.load_home",
+  "module": "ui",
+  "name": "Load home page",
+  "description": "Call this when you need to retrieve the main Brevo web application page (the home/dashboard). Use more specific endpoints for contacts, campaigns, or other data instead.",
+  "preconditions": [],
+  "inputs": {
+    "type": "object",
+    "properties": {},
+    "required": []
+  },
+  "outputs": {
+    "type": "string",
+    "description": "HTML content of the Brevo home page."
+  },
+  "side_effects": [],
+  "destructive": false,
+  "idempotent": true,
+  "ui_path": [],
+  "internal_endpoint": {
+    "method": "GET",
+    "path": "/undefined",
+    "body_example": null
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/root.json"
+    ],
+    "verified_at": null
+  }
+}

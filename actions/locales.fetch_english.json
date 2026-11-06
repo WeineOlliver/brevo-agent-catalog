@@ -1,0 +1,59 @@
+{
+  "id": "locales.fetch_english",
+  "module": "locales",
+  "name": "Fetch English locale strings",
+  "description": "Call this when the application needs the English translation strings for the meetings UI (e.g., when rendering the offer page). Use a language‑specific endpoint (e.g., /assets/locales/fr.json) instead when a different locale is required.",
+  "preconditions": [],
+  "inputs": {
+    "type": "object",
+    "properties": {
+      "nocache": {
+        "type": "string",
+        "description": "Cache‑busting query parameter; optional and can be any timestamp or identifier."
+      }
+    },
+    "required": []
+  },
+  "outputs": {
+    "type": "object",
+    "description": "A JSON object containing translation keys and their English strings. Nested objects may represent grouped translations.",
+    "additionalProperties": {
+      "oneOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        }
+      ]
+    }
+  },
+  "side_effects": [],
+  "destructive": false,
+  "idempotent": true,
+  "ui_path": [
+    "Meetings",
+    "Offer",
+    "All"
+  ],
+  "internal_endpoint": {
+    "method": "GET",
+    "path": "/assets/locales/en.json",
+    "body_example": null
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/meetings-offer-all.json"
+    ],
+    "verified_at": null
+  }
+}

@@ -1,0 +1,108 @@
+{
+  "id": "homepage.list_user_widgets",
+  "module": "homepage",
+  "name": "List user homepage widgets",
+  "description": "Call this when you need to retrieve the collection of widgets that are configured for the current user's homepage. Use the returned widget details to render the dashboard. If you need to change widget placement or visibility, use the widget‑update actions instead.",
+  "preconditions": [
+    "User must be authenticated."
+  ],
+  "inputs": {
+    "type": "object",
+    "properties": {},
+    "required": []
+  },
+  "outputs": {
+    "type": "array",
+    "items": {
+      "type": "object",
+      "properties": {
+        "user_widget_id": {
+          "type": "integer",
+          "description": "Unique identifier of the user‑specific widget instance."
+        },
+        "widget_id": {
+          "type": "integer",
+          "description": "Identifier of the widget type."
+        },
+        "name": {
+          "type": "string",
+          "description": "Internal name of the widget."
+        },
+        "icon": {
+          "type": "string",
+          "description": "Icon displayed for the widget."
+        },
+        "description": {
+          "type": "string",
+          "description": "Human‑readable description of the widget."
+        },
+        "category": {
+          "type": "string",
+          "description": "Category grouping for the widget."
+        },
+        "sequence": {
+          "type": "integer",
+          "description": "Order position of the widget on the homepage."
+        },
+        "area_occupancy": {
+          "type": "integer",
+          "description": "Percentage of screen area the widget occupies."
+        },
+        "url": {
+          "type": "string",
+          "description": "URL linked to the widget, if any."
+        },
+        "scope": {
+          "type": "string",
+          "description": "Scope of the widget (e.g., none, global)."
+        },
+        "module": {
+          "type": "string",
+          "description": "Module name associated with the widget."
+        },
+        "remoteEntryFileName": {
+          "type": "string",
+          "description": "Remote entry file name for loading the widget."
+        }
+      },
+      "required": [
+        "user_widget_id",
+        "widget_id",
+        "name",
+        "icon",
+        "description",
+        "category",
+        "sequence",
+        "area_occupancy",
+        "url",
+        "scope",
+        "module",
+        "remoteEntryFileName"
+      ]
+    }
+  },
+  "side_effects": [],
+  "destructive": false,
+  "idempotent": true,
+  "ui_path": [
+    "Home",
+    "Widgets"
+  ],
+  "internal_endpoint": {
+    "method": "GET",
+    "path": "/homepage/user/widget/list",
+    "body_example": null
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/root.json"
+    ],
+    "verified_at": null
+  }
+}

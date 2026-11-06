@@ -1,0 +1,52 @@
+{
+  "id": "contacts.get_contact_workflows",
+  "module": "contacts",
+  "name": "Get contact workflows",
+  "description": "Call this when you need to retrieve the active workflow instances that a specific contact is participating in. Use a workflow‑listing action (e.g., list all workflows) instead when you only need workflow definitions without tying them to a particular contact.",
+  "preconditions": [
+    "The contact with the given ID must exist."
+  ],
+  "inputs": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "string",
+        "description": "The unique identifier of the contact."
+      }
+    },
+    "required": [
+      "id"
+    ],
+    "additionalProperties": false
+  },
+  "outputs": {
+    "type": "object",
+    "description": "Details of the workflows the contact is currently in. The exact shape is not publicly documented, so additional fields may be present.",
+    "additionalProperties": true
+  },
+  "side_effects": [],
+  "destructive": false,
+  "idempotent": true,
+  "ui_path": [
+    "Contacts",
+    "Contact details",
+    "Workflows"
+  ],
+  "internal_endpoint": {
+    "method": "GET",
+    "path": "/v1/contact/:id/workflows",
+    "body_example": null
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/contact-index-id.json"
+    ],
+    "verified_at": null
+  }
+}

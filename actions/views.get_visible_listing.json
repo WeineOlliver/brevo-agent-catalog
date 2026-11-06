@@ -1,0 +1,64 @@
+{
+  "id": "views.get_visible_listing",
+  "module": "views",
+  "name": "Get visible listing",
+  "description": "Call this when you need to retrieve the currently visible items for a specific object type (e.g., companies or contacts) as shown in the list view of the Brevo web app. Use the more specific object‑type endpoints (such as the contacts or companies APIs) if you need full detail or to perform actions on individual records.",
+  "preconditions": [],
+  "inputs": {
+    "type": "object",
+    "properties": {
+      "objectType": {
+        "type": "string",
+        "description": "The type of object whose visible list should be returned.",
+        "enum": [
+          "company",
+          "contact"
+        ]
+      }
+    },
+    "required": [
+      "objectType"
+    ]
+  },
+  "outputs": {
+    "type": "object",
+    "properties": {
+      "data": {
+        "type": "array",
+        "description": "Array of objects that are currently visible in the list view.",
+        "items": {
+          "type": "object",
+          "description": "A representation of a single object (fields vary by object type)."
+        }
+      }
+    },
+    "required": [
+      "data"
+    ]
+  },
+  "side_effects": [],
+  "destructive": false,
+  "idempotent": true,
+  "ui_path": [
+    "[Object Type] page",
+    "Load visible items"
+  ],
+  "internal_endpoint": {
+    "method": "GET",
+    "path": "/view/listing/visible",
+    "body_example": null
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/companies.json",
+      "captures/clean/contact-list.json"
+    ],
+    "verified_at": null
+  }
+}

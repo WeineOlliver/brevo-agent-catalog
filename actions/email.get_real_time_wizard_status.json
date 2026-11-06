@@ -1,0 +1,52 @@
+{
+  "id": "email.get_real_time_wizard_status",
+  "module": "email",
+  "name": "Check real-time email wizard status",
+  "description": "Call this when you need to know whether any real-time transactional emails have been sent in the current session. If you need detailed information about individual sent emails, use the \"Get email logs\" action instead.",
+  "preconditions": [],
+  "inputs": {
+    "type": "object",
+    "properties": {},
+    "required": []
+  },
+  "outputs": {
+    "type": "object",
+    "properties": {
+      "has_sent_emails": {
+        "type": "boolean",
+        "description": "True if at least one real-time email has been sent, false otherwise."
+      }
+    },
+    "required": [
+      "has_sent_emails"
+    ]
+  },
+  "side_effects": [],
+  "destructive": false,
+  "idempotent": true,
+  "ui_path": [
+    "Transactional",
+    "Email",
+    "Logs",
+    "Real-time wizard status"
+  ],
+  "internal_endpoint": {
+    "method": "GET",
+    "path": "/api/email/realtime/wizard/status",
+    "body_example": null
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/transactional-email-logs.json",
+      "captures/clean/transactional-email-real-time.json",
+      "captures/clean/transactional-email-settings.json"
+    ],
+    "verified_at": null
+  }
+}

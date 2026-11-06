@@ -1,8 +1,8 @@
 {
-  "id": "settings.list_agents",
+  "id": "settings.list_ai_agents",
   "module": "settings",
   "name": "List AI agents",
-  "description": "Call this when you need to retrieve the current AI agents configuration for the account. Use a more specific endpoint (if one existed) to fetch details for a single agent instead of the whole list.",
+  "description": "Call this when you need to retrieve the list of AI agents available for the account, including their activation status and badge tier. Use a more specific endpoint (if one existed) to fetch details for a single agent when you only need information about that agent.",
   "preconditions": [],
   "inputs": {
     "type": "object",
@@ -16,36 +16,37 @@
       "properties": {
         "parent": {
           "type": "string",
-          "description": "The parent group identifier for the AI agents."
+          "description": "The parent category for the AI agents."
         },
         "status": {
           "type": "boolean",
-          "description": "Overall status of the AI agents feature."
+          "description": "Overall activation status of the AI feature group."
         },
         "agents": {
           "type": "array",
+          "description": "List of individual AI agents and their properties.",
           "items": {
             "type": "object",
             "properties": {
               "name": {
                 "type": "string",
-                "description": "Identifier of the agent (e.g., marketing, sales)."
+                "description": "Identifier of the AI agent (e.g., marketing, sales)."
               },
               "badge_name": {
                 "type": "string",
+                "description": "Tier badge indicating the plan level for the agent.",
                 "enum": [
                   "free",
                   "pro"
-                ],
-                "description": "Subscription tier badge associated with the agent."
+                ]
               },
               "app_enabled": {
                 "type": "boolean",
-                "description": "Whether the agent is enabled in the application UI."
+                "description": "Whether the agent is enabled in the current app context."
               },
               "status": {
                 "type": "boolean",
-                "description": "Operational status of the specific agent."
+                "description": "Whether the agent is active."
               }
             },
             "required": [
@@ -54,8 +55,7 @@
               "app_enabled",
               "status"
             ]
-          },
-          "description": "List of AI agents with their configuration."
+          }
         }
       },
       "required": [
@@ -70,8 +70,7 @@
   "idempotent": true,
   "ui_path": [
     "Settings",
-    "AI",
-    "Agents"
+    "AI agents"
   ],
   "internal_endpoint": {
     "method": "GET",

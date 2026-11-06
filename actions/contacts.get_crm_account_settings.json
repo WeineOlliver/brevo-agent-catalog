@@ -1,0 +1,91 @@
+{
+  "id": "contacts.get_crm_account_settings",
+  "module": "contacts",
+  "name": "Get CRM account settings",
+  "description": "Call this when you need to retrieve the CRM account field mapping settings for a specific contact. Use the neighboring action contacts.update_crm_account_settings if you need to modify those settings instead.",
+  "preconditions": [
+    "A contact must be selected (its ID is known) and the user must have permission to view its CRM settings."
+  ],
+  "inputs": {
+    "type": "object",
+    "properties": {},
+    "required": []
+  },
+  "outputs": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "string",
+        "description": "Identifier of the CRM account."
+      },
+      "attributes": {
+        "type": "array",
+        "description": "List of CRM field definitions.",
+        "items": {
+          "type": "object",
+          "properties": {
+            "field": {
+              "type": "string",
+              "description": "Name of the CRM field."
+            },
+            "dataType": {
+              "type": "string",
+              "description": "Data type of the field (e.g., \"text\")."
+            },
+            "fieldKey": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "description": "Key used to map the field to a contact attribute; may be null if not mapped."
+            },
+            "single_order": {
+              "type": "integer",
+              "description": "Display order of the field in the UI."
+            },
+            "single_show": {
+              "type": "integer",
+              "description": "Visibility flag (1 = shown, 0 = hidden)."
+            }
+          },
+          "required": [
+            "field",
+            "dataType",
+            "single_order",
+            "single_show"
+          ]
+        }
+      }
+    },
+    "required": [
+      "id",
+      "attributes"
+    ]
+  },
+  "side_effects": [],
+  "destructive": false,
+  "idempotent": true,
+  "ui_path": [
+    "Contacts",
+    "Contact details",
+    "Settings",
+    "CRM account"
+  ],
+  "internal_endpoint": {
+    "method": "GET",
+    "path": "/contact/backend/settings/crm-account",
+    "body_example": null
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/contact-index-id.json"
+    ],
+    "verified_at": null
+  }
+}

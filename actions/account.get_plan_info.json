@@ -1,0 +1,165 @@
+{
+  "id": "account.get_plan_info",
+  "module": "account",
+  "name": "Get plan information",
+  "description": "Call this when you need to retrieve the current subscription plan details for the company, including its type, status, start/end dates, renewal date, pricing version, and any enabled addon limits. Use a plan‑update action instead if you need to change the subscription.",
+  "preconditions": [],
+  "inputs": {
+    "type": "object",
+    "properties": {},
+    "required": []
+  },
+  "outputs": {
+    "type": "object",
+    "properties": {
+      "type": {
+        "type": "string",
+        "description": "The plan tier of the account.",
+        "enum": [
+          "free",
+          "starter",
+          "business",
+          "enterprise"
+        ]
+      },
+      "status": {
+        "type": "string",
+        "description": "Current status of the plan.",
+        "enum": [
+          "active",
+          "inactive",
+          "pending"
+        ]
+      },
+      "start_at": {
+        "type": "string",
+        "format": "date-time",
+        "description": "When the current plan started."
+      },
+      "end_at": {
+        "type": "string",
+        "format": "date-time",
+        "description": "When the current plan ends."
+      },
+      "next_renewal_at": {
+        "type": "string",
+        "format": "date-time",
+        "description": "When the next renewal will occur."
+      },
+      "pricing_version": {
+        "type": "string",
+        "description": "Version identifier for the pricing model."
+      },
+      "addon_features": {
+        "type": "object",
+        "description": "Add‑on features enabled for the account.",
+        "properties": {
+          "crm_pipeline": {
+            "type": "object",
+            "properties": {
+              "enabled": {
+                "type": "string",
+                "description": "Whether the CRM pipeline add‑on is enabled.",
+                "enum": [
+                  "0",
+                  "1"
+                ]
+              },
+              "max_limit": {
+                "type": "string",
+                "description": "Maximum number of pipelines allowed."
+              },
+              "used": {
+                "type": "string",
+                "description": "Number of pipelines currently used."
+              }
+            },
+            "required": [
+              "enabled",
+              "max_limit",
+              "used"
+            ]
+          },
+          "crm_deal": {
+            "type": "object",
+            "properties": {
+              "enabled": {
+                "type": "string",
+                "description": "Whether the CRM deal add‑on is enabled.",
+                "enum": [
+                  "0",
+                  "1"
+                ]
+              },
+              "max_limit": {
+                "type": "string",
+                "description": "Maximum number of deals allowed."
+              },
+              "used": {
+                "type": "string",
+                "description": "Number of deals currently used."
+              }
+            },
+            "required": [
+              "enabled",
+              "max_limit",
+              "used"
+            ]
+          }
+        },
+        "required": [
+          "crm_pipeline",
+          "crm_deal"
+        ]
+      },
+      "additional_features": {
+        "type": [
+          "object",
+          "null"
+        ],
+        "description": "Any extra features beyond the standard add‑ons."
+      },
+      "sales_users_addon_category": {
+        "type": "string",
+        "description": "Category of the sales users add‑on."
+      }
+    },
+    "required": [
+      "type",
+      "status",
+      "start_at",
+      "end_at",
+      "next_renewal_at",
+      "pricing_version",
+      "addon_features",
+      "sales_users_addon_category"
+    ]
+  },
+  "side_effects": [],
+  "destructive": false,
+  "idempotent": true,
+  "ui_path": [
+    "Settings",
+    "Company",
+    "Plan information"
+  ],
+  "internal_endpoint": {
+    "method": "GET",
+    "path": "/crm/backend/plan-manager-info",
+    "body_example": null
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/companies-settings.json",
+      "captures/clean/companies.json",
+      "captures/clean/contact-index-id.json"
+    ],
+    "verified_at": null
+  }
+}

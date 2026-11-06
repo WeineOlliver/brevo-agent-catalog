@@ -1,0 +1,58 @@
+{
+  "id": "features.check_accessibility",
+  "module": "features",
+  "name": "Check feature accessibility",
+  "description": "Call this when you need to determine whether a specific UI feature flag is enabled for the current user. If you only need to know the static configuration of a feature, use the application’s built‑in configuration view instead.",
+  "preconditions": [],
+  "inputs": {
+    "type": "object",
+    "properties": {
+      "source": {
+        "type": "string",
+        "description": "The source of the feature flag request, typically \"unleash\"."
+      },
+      "feature": {
+        "type": "string",
+        "description": "The name of the feature flag to check, e.g., \"contact-summary-rollout\"."
+      }
+    },
+    "required": [
+      "source",
+      "feature"
+    ],
+    "additionalProperties": false
+  },
+  "outputs": {
+    "type": "object",
+    "description": "A map where the key is the requested feature name and the value is a boolean indicating whether the feature is enabled.",
+    "additionalProperties": {
+      "type": "boolean"
+    }
+  },
+  "side_effects": [],
+  "destructive": false,
+  "idempotent": true,
+  "ui_path": [
+    "Contacts",
+    "Contact details",
+    "Feature flag check"
+  ],
+  "internal_endpoint": {
+    "method": "GET",
+    "path": "/crm/backend/feature-accessibility",
+    "body_example": null
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/contact-index-id.json",
+      "captures/clean/tasks.json"
+    ],
+    "verified_at": null
+  }
+}

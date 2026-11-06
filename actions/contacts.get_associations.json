@@ -1,0 +1,143 @@
+{
+  "id": "contacts.get_associations",
+  "module": "contacts",
+  "name": "Get contact associations",
+  "description": "Call this when you need to discover which object types (e.g., deals, companies) can be linked to a contact and what attributes are available for those linked objects. Use the \"List contacts\" action instead if you only need the contacts themselves.",
+  "preconditions": [],
+  "inputs": {
+    "type": "object",
+    "properties": {},
+    "required": []
+  },
+  "outputs": {
+    "type": "object",
+    "properties": {
+      "data": {
+        "type": "object",
+        "properties": {
+          "object_type": {
+            "type": "string",
+            "description": "The primary object type, e.g., \"contact\"."
+          },
+          "associations": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "object_type": {
+                  "type": "string",
+                  "description": "The associated object type, e.g., \"deal\"."
+                },
+                "cardinality": {
+                  "type": "string",
+                  "description": "Relationship cardinality, e.g., \"n-n\"."
+                },
+                "singular_label": {
+                  "type": "string",
+                  "description": "Human‑readable singular label for the associated object."
+                },
+                "plural_label": {
+                  "type": "string",
+                  "description": "Human‑readable plural label for the associated object."
+                },
+                "associations": {
+                  "type": "array",
+                  "description": "Nested associations for the object, if any.",
+                  "items": {
+                    "$ref": "#/definitions/association"
+                  }
+                },
+                "attributes": {
+                  "type": "array",
+                  "description": "Attributes defined on the association.",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "integer",
+                        "description": "Attribute identifier."
+                      },
+                      "key": {
+                        "type": "string",
+                        "description": "Attribute key used in APIs."
+                      },
+                      "label": {
+                        "type": "string",
+                        "description": "Human‑readable label for the attribute."
+                      },
+                      "type": {
+                        "type": "string",
+                        "description": "Data type of the attribute.",
+                        "enum": [
+                          "user",
+                          "text",
+                          "number",
+                          "date",
+                          "boolean"
+                        ]
+                      },
+                      "object_type": {
+                        "type": "string",
+                        "description": "Object type the attribute belongs to."
+                      },
+                      "is_system": {
+                        "type": "boolean",
+                        "description": "Whether the attribute is a system‑provided field."
+                      }
+                    },
+                    "required": [
+                      "id",
+                      "key",
+                      "label",
+                      "type",
+                      "object_type",
+                      "is_system"
+                    ]
+                  }
+                }
+              },
+              "required": [
+                "object_type",
+                "cardinality",
+                "singular_label",
+                "plural_label"
+              ]
+            }
+          }
+        },
+        "required": [
+          "object_type",
+          "associations"
+        ]
+      }
+    },
+    "required": [
+      "data"
+    ]
+  },
+  "side_effects": [],
+  "destructive": false,
+  "idempotent": true,
+  "ui_path": [
+    "Contacts",
+    "List",
+    "Associations"
+  ],
+  "internal_endpoint": {
+    "method": "GET",
+    "path": "/segment/unified_object/paths/contact/associations",
+    "body_example": null
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/contact-list.json"
+    ],
+    "verified_at": null
+  }
+}

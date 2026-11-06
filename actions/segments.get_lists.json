@@ -1,0 +1,82 @@
+{
+  "id": "segments.get_lists",
+  "module": "segments",
+  "name": "Get lists",
+  "description": "Call this when you need to retrieve the contact lists grouped by folder as displayed in the Contacts → List view. Use the action to create a new list (e.g., segments.create_list) instead when you need to add a list rather than just read them.",
+  "preconditions": [],
+  "inputs": {
+    "type": "object",
+    "properties": {},
+    "required": []
+  },
+  "outputs": {
+    "type": "object",
+    "properties": {
+      "data": {
+        "type": "array",
+        "description": "Array of folder objects containing lists.",
+        "items": {
+          "type": "object",
+          "properties": {
+            "folderName": {
+              "type": "string",
+              "description": "Name of the folder containing the lists."
+            },
+            "lists": {
+              "type": "array",
+              "description": "Lists that belong to the folder.",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "integer",
+                    "description": "Unique identifier of the list."
+                  },
+                  "name": {
+                    "type": "string",
+                    "description": "Name of the list."
+                  }
+                },
+                "required": [
+                  "id",
+                  "name"
+                ]
+              }
+            }
+          },
+          "required": [
+            "folderName",
+            "lists"
+          ]
+        }
+      }
+    },
+    "required": [
+      "data"
+    ]
+  },
+  "side_effects": [],
+  "destructive": false,
+  "idempotent": true,
+  "ui_path": [
+    "Contacts",
+    "List"
+  ],
+  "internal_endpoint": {
+    "method": "GET",
+    "path": "/segment/lists",
+    "body_example": null
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/contact-list.json"
+    ],
+    "verified_at": null
+  }
+}

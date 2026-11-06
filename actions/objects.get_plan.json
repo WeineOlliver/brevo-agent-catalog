@@ -1,0 +1,89 @@
+{
+  "id": "objects.get_plan",
+  "module": "objects",
+  "name": "Get objects plan",
+  "description": "Call this when you need to retrieve the current plan limits and feature flags for the custom objects module in the account. Use the object‑listing action (e.g., objects.list_objects) when you need to work with the actual objects instead of the plan information.",
+  "preconditions": [],
+  "inputs": {
+    "type": "object",
+    "properties": {},
+    "required": []
+  },
+  "outputs": {
+    "type": "object",
+    "properties": {
+      "plan_type": {
+        "type": "string",
+        "description": "The type of plan the account is on (e.g., free, paid)."
+      },
+      "plan_status": {
+        "type": "string",
+        "description": "Current status of the plan (e.g., active, inactive)."
+      },
+      "object_limit": {
+        "type": "integer",
+        "description": "Maximum number of custom objects allowed under the plan."
+      },
+      "pricing_version": {
+        "type": "string",
+        "description": "Version identifier for the pricing model."
+      },
+      "custom_object_status": {
+        "type": "boolean",
+        "description": "Whether custom objects are enabled for the account."
+      },
+      "crud_release": {
+        "type": "boolean",
+        "description": "Indicates if CRUD operations on custom objects are released."
+      },
+      "crud_associations": {
+        "type": "boolean",
+        "description": "Indicates if associations between custom objects are supported."
+      },
+      "custom_objects_addon_eligible": {
+        "type": "boolean",
+        "description": "Whether the account is eligible for a custom objects add‑on."
+      },
+      "labeled_associations": {
+        "type": "boolean",
+        "description": "Whether labeled associations are available for custom objects."
+      }
+    },
+    "required": [
+      "plan_type",
+      "plan_status",
+      "object_limit",
+      "pricing_version",
+      "custom_object_status",
+      "crud_release",
+      "crud_associations",
+      "custom_objects_addon_eligible",
+      "labeled_associations"
+    ]
+  },
+  "side_effects": [],
+  "destructive": false,
+  "idempotent": true,
+  "ui_path": [
+    "Objects",
+    "Plan"
+  ],
+  "internal_endpoint": {
+    "method": "GET",
+    "path": "/app/objects/plan",
+    "body_example": null
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/campaigns-listing.json",
+      "captures/clean/contact-index-id.json"
+    ],
+    "verified_at": null
+  }
+}

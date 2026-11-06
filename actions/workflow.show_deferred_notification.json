@@ -1,0 +1,48 @@
+{
+  "id": "workflow.show_deferred_notification",
+  "module": "workflow",
+  "name": "Show Deferred Notification",
+  "description": "Call this when you need to retrieve the details of a deferred notification for an automation workflow, typically to diagnose why a workflow execution was postponed or failed. Use the standard workflow retrieval actions (e.g., workflow.get) instead if you only need general workflow information.",
+  "preconditions": [],
+  "inputs": {
+    "type": "object",
+    "properties": {},
+    "required": []
+  },
+  "outputs": {
+    "type": "object",
+    "properties": {
+      "error": {
+        "type": "string",
+        "description": "Error message describing why the deferred notification could not be retrieved."
+      }
+    },
+    "required": []
+  },
+  "side_effects": [],
+  "destructive": false,
+  "idempotent": true,
+  "ui_path": [
+    "Automation",
+    "Advanced",
+    "Deferred Notification"
+  ],
+  "internal_endpoint": {
+    "method": "GET",
+    "path": "/v1/workflow/showDeferredNotification",
+    "body_example": null
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/automation-advanced.json",
+      "captures/clean/automation-automations.json"
+    ],
+    "verified_at": null
+  }
+}

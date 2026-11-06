@@ -1,0 +1,180 @@
+{
+  "id": "meetings.get_expert_user",
+  "module": "meetings",
+  "name": "Get expert user",
+  "description": "Call this when you need to retrieve the expert user profile associated with the current Brevo account. Use the \"meetings.list_offers\" action instead if you need a list of meeting offers rather than the expert user details.",
+  "preconditions": [],
+  "inputs": {
+    "type": "object",
+    "properties": {},
+    "required": []
+  },
+  "outputs": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "integer",
+        "description": "Unique identifier of the expert user."
+      },
+      "sib_account_id": {
+        "type": "string",
+        "description": "Brevo account identifier."
+      },
+      "sib_organization_id": {
+        "type": "string",
+        "description": "Brevo organization identifier."
+      },
+      "sib_int_organization_id": {
+        "type": "string",
+        "description": "Internal organization identifier (placeholder for ACCOUNT_ID)."
+      },
+      "active": {
+        "type": "integer",
+        "description": "Indicates whether the expert user is active (1) or not (0)."
+      },
+      "hash": {
+        "type": "string",
+        "description": "Unique hash for the expert user."
+      },
+      "email_step": {
+        "type": "integer",
+        "description": "Current email step configuration."
+      },
+      "created": {
+        "type": "string",
+        "format": "date-time",
+        "description": "Timestamp when the expert user was created."
+      },
+      "google_enabled": {
+        "type": "integer",
+        "description": "Flag indicating if Google integration is enabled."
+      },
+      "microsoft_enabled": {
+        "type": "integer",
+        "description": "Flag indicating if Microsoft integration is enabled."
+      },
+      "advance": {
+        "type": "integer",
+        "description": "Advance booking setting."
+      },
+      "slug": {
+        "type": "string",
+        "description": "URL-friendly slug for the expert user."
+      },
+      "is_booking_page_disabled": {
+        "type": "integer",
+        "description": "Flag indicating if the booking page is disabled."
+      },
+      "page_title": {
+        "type": "string",
+        "description": "Title displayed on the booking page."
+      },
+      "page_description": {
+        "type": "string",
+        "description": "Description displayed on the booking page."
+      },
+      "use_billing": {
+        "type": "integer",
+        "description": "Flag indicating if billing is used."
+      },
+      "currency_code": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "description": "Currency code for billing, if applicable."
+      },
+      "own_payments": {
+        "type": "integer",
+        "description": "Flag indicating if own payments are enabled."
+      },
+      "client_dashboard_color": {
+        "type": "string",
+        "description": "Hex color for the client dashboard."
+      },
+      "remove_brevo_brand": {
+        "type": "integer",
+        "description": "Flag indicating if Brevo branding is removed."
+      },
+      "tax_type_id": {
+        "type": [
+          "integer",
+          "null"
+        ],
+        "description": "Identifier for the tax type, if set."
+      },
+      "tax_type_description": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "description": "Description of the tax type."
+      },
+      "has_priced_services": {
+        "type": "integer",
+        "description": "Flag indicating if priced services are available."
+      },
+      "teams": {
+        "type": "array",
+        "description": "List of teams associated with the expert user.",
+        "items": {
+          "type": "object",
+          "properties": {
+            "hash": {
+              "type": "string",
+              "description": "Unique hash of the team."
+            }
+          },
+          "required": [
+            "hash"
+          ],
+          "additionalProperties": true
+        }
+      },
+      "stripe_payments": {
+        "type": "integer",
+        "description": "Flag indicating if Stripe payments are enabled."
+      },
+      "simultanous_meetings_limit": {
+        "type": "integer",
+        "description": "Maximum number of simultaneous meetings allowed."
+      },
+      "advance_from": {
+        "type": "integer",
+        "description": "Advance booking start offset."
+      }
+    },
+    "required": [
+      "id",
+      "hash",
+      "slug"
+    ]
+  },
+  "side_effects": [],
+  "destructive": false,
+  "idempotent": true,
+  "ui_path": [
+    "Meetings",
+    "Offers",
+    "All",
+    "Expert User"
+  ],
+  "internal_endpoint": {
+    "method": "GET",
+    "path": "/users/expert",
+    "body_example": null
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/meetings-offer-all.json",
+      "captures/clean/meetings-settings.json"
+    ],
+    "verified_at": null
+  }
+}

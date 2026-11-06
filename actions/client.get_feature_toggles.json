@@ -2,7 +2,7 @@
   "id": "client.get_feature_toggles",
   "module": "client",
   "name": "Get feature toggles",
-  "description": "Call this when you need to retrieve the current set of feature flags for the logged‑in account, such as whether bots tracking, compliance, or email campaign duplication are enabled. Use a different action (e.g., get account plan details) if you only need plan information rather than the full feature list.",
+  "description": "Call this when you need to know which feature flags are enabled for the current Brevo account, for example to adjust UI behavior. Use a more specific feature‑check endpoint if one exists for the particular capability you are interested in.",
   "preconditions": [],
   "inputs": {
     "type": "object",
@@ -11,114 +11,92 @@
   },
   "outputs": {
     "type": "object",
-    "additionalProperties": false,
     "properties": {
       "bots-tracking": {
         "type": "boolean",
-        "description": "Indicates if bots tracking is enabled."
+        "description": "Indicates whether bot tracking is enabled."
       },
       "compliance-allowed": {
         "type": "boolean",
-        "description": "Indicates if compliance features are allowed."
+        "description": "Indicates whether compliance features are allowed."
       },
       "dedup-customization-enabled": {
         "type": "boolean",
-        "description": "Indicates if deduplication customization is enabled."
+        "description": "Indicates whether deduplication customization is enabled."
       },
       "duplicate-identifiers": {
         "type": "boolean",
-        "description": "Indicates if duplicate identifiers are allowed."
+        "description": "Indicates whether duplicate identifiers are permitted."
       },
       "editor-beta": {
         "type": "boolean",
-        "description": "Indicates if the editor beta features are enabled."
+        "description": "Indicates whether the editor beta features are enabled."
       },
       "email-campaign-duplicate": {
         "type": "boolean",
-        "description": "Indicates if duplicate email campaigns are permitted."
+        "description": "Indicates whether duplicate email campaigns are allowed."
       },
       "email-campaigns-limit-disabled": {
         "type": "boolean",
-        "description": "Indicates if the limit on email campaigns is disabled."
+        "description": "Indicates whether limits on email campaigns are disabled."
       },
       "ent-users-push-experiment": {
         "type": "boolean",
-        "description": "Indicates if enterprise users push experiment is active."
+        "description": "Indicates whether the enterprise users push experiment is active."
       },
       "es-new-sender-domain": {
         "type": "boolean",
-        "description": "Indicates if the new sender domain feature is enabled."
+        "description": "Indicates whether the new sender domain feature for ElasticSearch is enabled."
       },
       "is-webpush-enabled": {
         "type": "boolean",
-        "description": "Indicates if web push notifications are enabled."
+        "description": "Indicates whether web push notifications are enabled."
       },
       "marketing-subject-ai-disabled": {
         "type": "boolean",
-        "description": "Indicates if AI‑generated marketing subject lines are disabled."
+        "description": "Indicates whether AI assistance for marketing subject lines is disabled."
       },
       "mpp-opens-tracking": {
         "type": "boolean",
-        "description": "Indicates if MPP opens tracking is enabled."
+        "description": "Indicates whether MPP opens tracking is enabled."
       },
       "new-conversions": {
         "type": "boolean",
-        "description": "Indicates if the new conversions tracking is active."
+        "description": "Indicates whether the new conversions tracking is enabled."
       },
       "new-signup-flow": {
         "type": "boolean",
-        "description": "Indicates if the new signup flow is enabled."
+        "description": "Indicates whether the new signup flow is enabled."
       },
       "new_marketing_pressure_enabled": {
         "type": "boolean",
-        "description": "Indicates if new marketing pressure features are enabled."
+        "description": "Indicates whether new marketing pressure controls are enabled."
       },
       "plan-management-service": {
         "type": "boolean",
-        "description": "Indicates if the plan management service is available."
+        "description": "Indicates whether the plan management service is active."
       },
       "preview-on-email-clients": {
         "type": "boolean",
-        "description": "Indicates if preview on email clients is enabled."
+        "description": "Indicates whether preview on email clients is enabled."
       },
       "self-serve-users-push-experiment": {
         "type": "boolean",
-        "description": "Indicates if self‑serve users push experiment is active."
+        "description": "Indicates whether the self‑serve users push experiment is active."
       },
       "wallet-rollout": {
         "type": "boolean",
-        "description": "Indicates if the wallet rollout feature is enabled."
+        "description": "Indicates whether the wallet rollout feature is enabled."
       }
     },
-    "required": [
-      "bots-tracking",
-      "compliance-allowed",
-      "dedup-customization-enabled",
-      "duplicate-identifiers",
-      "editor-beta",
-      "email-campaign-duplicate",
-      "email-campaigns-limit-disabled",
-      "ent-users-push-experiment",
-      "es-new-sender-domain",
-      "is-webpush-enabled",
-      "marketing-subject-ai-disabled",
-      "mpp-opens-tracking",
-      "new-conversions",
-      "new-signup-flow",
-      "new_marketing_pressure_enabled",
-      "plan-management-service",
-      "preview-on-email-clients",
-      "self-serve-users-push-experiment",
-      "wallet-rollout"
-    ]
+    "required": []
   },
   "side_effects": [],
   "destructive": false,
   "idempotent": true,
   "ui_path": [
     "Campaigns",
-    "Listing",
-    "Feature toggles"
+    "Listing"
   ],
   "internal_endpoint": {
     "method": "GET",

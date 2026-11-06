@@ -1,0 +1,174 @@
+{
+  "id": "automation.get_meta_info",
+  "module": "automation",
+  "name": "Get Automation Meta Info",
+  "description": "Call this when you need to retrieve the current user's automation configuration, privileges, and feature flags (e.g., object‑based workflow, classic editor status, premium status). Use a different action such as automation.update_settings if you need to modify any of these values.",
+  "preconditions": [],
+  "inputs": {
+    "type": "object",
+    "properties": {},
+    "required": []
+  },
+  "outputs": {
+    "type": "object",
+    "properties": {
+      "privileges": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "enum": [
+            "activate",
+            "settings",
+            "crud"
+          ]
+        },
+        "description": "List of privileges the user has for automation."
+      },
+      "is_ent_or_agency": {
+        "type": "boolean",
+        "description": "True if the account is an enterprise or agency account."
+      },
+      "is_ma_db_created": {
+        "type": "boolean",
+        "description": "Indicates whether the marketing automation database has been created."
+      },
+      "user_info": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email",
+            "description": "User's email address."
+          },
+          "client_id": {
+            "type": "string",
+            "description": "Identifier of the client."
+          },
+          "organization_id": {
+            "type": "string",
+            "description": "Identifier of the organization."
+          },
+          "language": {
+            "type": "string",
+            "description": "User's preferred language (e.g., \"en\")."
+          }
+        },
+        "required": [
+          "email",
+          "client_id",
+          "organization_id",
+          "language"
+        ],
+        "description": "Basic information about the logged‑in user."
+      },
+      "is_premium": {
+        "type": "boolean",
+        "description": "True if the account has a premium subscription."
+      },
+      "is_enabled_object_based_workflow": {
+        "type": "boolean",
+        "description": "Whether object‑based workflows are enabled."
+      },
+      "is_classic_user_active": {
+        "type": "boolean",
+        "description": "Whether the classic user mode is active."
+      },
+      "is_classic_editor_hidden": {
+        "type": "boolean",
+        "description": "Whether the classic editor UI is hidden."
+      },
+      "is_user_on_classic_editor": {
+        "type": "boolean",
+        "description": "Whether the user is currently using the classic editor."
+      },
+      "automation_templates_management": {
+        "type": "boolean",
+        "description": "Permission to manage automation templates."
+      },
+      "sales_sequences": {
+        "type": "boolean",
+        "description": "Availability of sales sequence features."
+      },
+      "is_bispa_enabled": {
+        "type": "boolean",
+        "description": "Whether BISPA (Business Integration Service Provider API) is enabled."
+      },
+      "is_back_in_stock_premade_enabled": {
+        "type": "boolean",
+        "description": "Availability of back‑in‑stock premade workflows."
+      },
+      "is_price_drop_premade_enabled": {
+        "type": "boolean",
+        "description": "Availability of price‑drop premade workflows."
+      },
+      "is_preview_trigger_events_enabled": {
+        "type": "boolean",
+        "description": "Whether preview of trigger events is enabled."
+      },
+      "is_bis_restock_minimum_enabled": {
+        "type": "boolean",
+        "description": "Whether BIS restock minimum feature is enabled."
+      },
+      "is_fue_vert_account_enabled": {
+        "type": "boolean",
+        "description": "Whether the FUE (First User Experience) vertical account is enabled."
+      },
+      "pure_object_source": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        },
+        "description": "Sources of pure objects, e.g., [\"product\"]."
+      },
+      "is_user_on_v5": {
+        "type": "boolean",
+        "description": "Whether the user is on version 5 of the automation platform."
+      }
+    },
+    "required": [
+      "privileges",
+      "is_ent_or_agency",
+      "is_ma_db_created",
+      "user_info",
+      "is_premium",
+      "is_enabled_object_based_workflow",
+      "is_classic_user_active",
+      "is_classic_editor_hidden",
+      "is_user_on_classic_editor",
+      "automation_templates_management",
+      "sales_sequences",
+      "is_bispa_enabled",
+      "is_back_in_stock_premade_enabled",
+      "is_price_drop_premade_enabled",
+      "is_preview_trigger_events_enabled",
+      "is_bis_restock_minimum_enabled",
+      "is_fue_vert_account_enabled",
+      "pure_object_source",
+      "is_user_on_v5"
+    ]
+  },
+  "side_effects": [],
+  "destructive": false,
+  "idempotent": true,
+  "ui_path": [
+    "Automation",
+    "Advanced"
+  ],
+  "internal_endpoint": {
+    "method": "GET",
+    "path": "/v1/workflow/metaInfo",
+    "body_example": null
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/automation-advanced.json"
+    ],
+    "verified_at": null
+  }
+}

@@ -1,0 +1,130 @@
+{
+  "id": "contacts.list_attributes",
+  "module": "contacts",
+  "name": "List contact attributes",
+  "description": "Call this when you need to retrieve the definition metadata for all contact attributes (custom fields) that exist in the account, optionally filtering by special, calculated or specific types. Use the neighbouring action contacts.get_contact when you need the values of these attributes for a particular contact instead.",
+  "preconditions": [],
+  "inputs": {
+    "type": "object",
+    "properties": {
+      "includeSpecial": {
+        "type": "boolean",
+        "description": "If true, include special system attributes in the response."
+      },
+      "includeCalculated": {
+        "type": "boolean",
+        "description": "If true, include calculated attributes (derived from other data) in the response."
+      },
+      "includeTypes": {
+        "type": "string",
+        "description": "Comma‑separated list of attribute types to include (e.g., \"tag\", \"text\")."
+      }
+    },
+    "required": []
+  },
+  "outputs": {
+    "type": "object",
+    "properties": {
+      "attributes": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "key": {
+              "type": "string",
+              "description": "Internal identifier for the attribute."
+            },
+            "label": {
+              "type": "string",
+              "description": "Human‑readable label shown in the UI."
+            },
+            "type": {
+              "type": "string",
+              "description": "Data type of the attribute (e.g., \"text\", \"date\", \"boolean\", \"tag\")."
+            },
+            "owner": {
+              "type": "string",
+              "description": "Identifier of the account or user that owns the attribute."
+            },
+            "modification_metadata": {
+              "type": "object",
+              "properties": {
+                "is_read_only": {
+                  "type": "boolean",
+                  "description": "Whether the attribute value cannot be edited."
+                },
+                "is_options_read_only": {
+                  "type": "boolean",
+                  "description": "Whether the attribute's selectable options cannot be edited."
+                },
+                "is_value_read_only": {
+                  "type": "boolean",
+                  "description": "Whether the attribute's stored value cannot be changed."
+                }
+              },
+              "required": []
+            },
+            "additional_metadata": {
+              "type": "object",
+              "properties": {
+                "field_key": {
+                  "type": "string",
+                  "description": "Key used in contact payloads for this attribute."
+                }
+              },
+              "required": []
+            },
+            "created_at": {
+              "type": "string",
+              "format": "date-time",
+              "description": "Timestamp when the attribute was created."
+            },
+            "updated_at": {
+              "type": "string",
+              "format": "date-time",
+              "description": "Timestamp of the last modification to the attribute."
+            },
+            "is_system": {
+              "type": "boolean",
+              "description": "True if this is a built‑in system attribute."
+            }
+          },
+          "required": [
+            "key",
+            "label",
+            "type"
+          ]
+        }
+      }
+    },
+    "required": [
+      "attributes"
+    ]
+  },
+  "side_effects": [],
+  "destructive": false,
+  "idempotent": true,
+  "ui_path": [
+    "Contacts",
+    "Attributes",
+    "View all attributes"
+  ],
+  "internal_endpoint": {
+    "method": "GET",
+    "path": "/v3/app/objects/contact/attributes",
+    "body_example": null
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/contact-index-id.json",
+      "captures/clean/contact-list.json"
+    ],
+    "verified_at": null
+  }
+}

@@ -2,7 +2,7 @@
   "id": "segments.list_folders",
   "module": "segments",
   "name": "List segment folders",
-  "description": "Call this when you need to retrieve the list of segment folders available for contacts. Use the \"segments.list\" action instead if you need the individual segments inside a folder.",
+  "description": "Call this when you need to retrieve all segment folders visible in the Contacts > Segments view. If you need details of a specific segment instead of the folder list, use the action to get a single segment.",
   "preconditions": [],
   "inputs": {
     "type": "object",
@@ -14,21 +14,20 @@
     "properties": {
       "data": {
         "type": "array",
-        "description": "Array of segment folder objects.",
         "items": {
           "type": "object",
           "properties": {
             "id": {
               "type": "string",
-              "description": "Unique identifier of the folder."
+              "description": "Unique identifier of the segment folder."
             },
             "name": {
               "type": "string",
-              "description": "Name of the folder."
+              "description": "Name of the segment folder."
             },
             "default": {
               "type": "boolean",
-              "description": "Indicates whether this folder is the default folder."
+              "description": "Indicates whether this folder is the default one."
             }
           },
           "required": [
@@ -36,19 +35,19 @@
             "name",
             "default"
           ]
-        }
+        },
+        "description": "List of segment folders."
       },
       "metadata": {
         "type": "object",
-        "description": "Additional information about the listing.",
         "properties": {
           "is_archived_list": {
             "type": "boolean",
-            "description": "Whether the list is an archived list."
+            "description": "Whether the list is archived."
           },
           "is_dynamic_list": {
             "type": "boolean",
-            "description": "Whether the list is a dynamic list."
+            "description": "Whether the list is dynamic."
           }
         },
         "required": [
@@ -67,8 +66,7 @@
   "idempotent": true,
   "ui_path": [
     "Contacts",
-    "Segments",
-    "Folder list"
+    "Segments"
   ],
   "internal_endpoint": {
     "method": "GET",

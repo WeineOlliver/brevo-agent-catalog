@@ -1,0 +1,136 @@
+{
+  "id": "attributes.get_rules",
+  "module": "attributes",
+  "name": "Get attribute rules",
+  "description": "Call this when you need to retrieve the validation and system‑rule metadata for a specific CRM object type (e.g., deals, contacts, companies). Use the \"attributes.update_rule\" action instead if you need to modify these rules.",
+  "preconditions": [
+    "The object type (e.g., deals, contacts, companies) must be a valid CRM entity."
+  ],
+  "inputs": {
+    "type": "object",
+    "properties": {
+      "objectType": {
+        "type": "string",
+        "description": "The CRM object type for which to fetch attribute rules. Example values: \"deals\", \"contacts\", \"companies\"."
+      }
+    },
+    "required": [
+      "objectType"
+    ]
+  },
+  "outputs": {
+    "type": "array",
+    "items": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier of the rule."
+        },
+        "objectType": {
+          "type": "string",
+          "description": "CRM object type the rule applies to."
+        },
+        "attributeInternalName": {
+          "type": "string",
+          "description": "Internal name of the attribute the rule targets."
+        },
+        "attributeId": {
+          "type": "string",
+          "description": "Identifier of the attribute."
+        },
+        "attributeKey": {
+          "type": "string",
+          "description": "Public key of the attribute."
+        },
+        "attributeType": {
+          "type": "string",
+          "description": "Data type of the attribute (e.g., \"single-select\", \"text\")."
+        },
+        "createdBy": {
+          "type": "string",
+          "description": "Identifier of the user who created the rule."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Timestamp when the rule was created."
+        },
+        "lastUpdatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Timestamp of the last update to the rule."
+        },
+        "importantAttributes": {
+          "type": "array",
+          "description": "List of attributes that are required or have system‑level constraints for this object type.",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "description": "Unique identifier of the important attribute."
+              },
+              "attributeInternalName": {
+                "type": "string",
+                "description": "Internal name of the important attribute."
+              },
+              "isRequired": {
+                "type": "boolean",
+                "description": "Whether this attribute must be provided."
+              },
+              "isSystemRule": {
+                "type": "boolean",
+                "description": "Whether this attribute is enforced by the system."
+              }
+            },
+            "required": [
+              "id",
+              "attributeInternalName",
+              "isRequired",
+              "isSystemRule"
+            ]
+          }
+        }
+      },
+      "required": [
+        "id",
+        "objectType",
+        "attributeInternalName",
+        "attributeId",
+        "attributeKey",
+        "attributeType",
+        "createdBy",
+        "createdAt",
+        "lastUpdatedAt",
+        "importantAttributes"
+      ]
+    }
+  },
+  "side_effects": [],
+  "destructive": false,
+  "idempotent": true,
+  "ui_path": [
+    "CRM",
+    "Attributes",
+    "Rules",
+    "View"
+  ],
+  "internal_endpoint": {
+    "method": "GET",
+    "path": "/crm/backend/attributes/rules",
+    "body_example": null
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/companies.json"
+    ],
+    "verified_at": null
+  }
+}

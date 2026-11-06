@@ -1,0 +1,81 @@
+{
+  "id": "organizations.get_features_and_channels",
+  "module": "organizations",
+  "name": "Get organization features and channels",
+  "description": "Call this when you need to retrieve the set of communication channels (e.g., email, sms, whatsapp) and product features (e.g., scripts, actions, groups) that are enabled for the current Brevo organization. Use a contact‑specific endpoint such as contacts.get_contact if you only need information related to an individual contact.",
+  "preconditions": [],
+  "inputs": {
+    "type": "object",
+    "properties": {},
+    "required": []
+  },
+  "outputs": {
+    "type": "object",
+    "properties": {
+      "availableChannels": {
+        "type": "array",
+        "description": "List of channels that the organization can use.",
+        "items": {
+          "type": "object",
+          "properties": {
+            "key": {
+              "type": "string",
+              "description": "Identifier of the channel (e.g., \"email\", \"sms\", \"whatsapp\")."
+            }
+          },
+          "required": [
+            "key"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "availableFeatures": {
+        "type": "array",
+        "description": "List of product features that are active for the organization.",
+        "items": {
+          "type": "object",
+          "properties": {
+            "key": {
+              "type": "string",
+              "description": "Identifier of the feature (e.g., \"scripts\", \"actions\", \"groups\")."
+            }
+          },
+          "required": [
+            "key"
+          ],
+          "additionalProperties": false
+        }
+      }
+    },
+    "required": [
+      "availableChannels",
+      "availableFeatures"
+    ],
+    "additionalProperties": false
+  },
+  "side_effects": [],
+  "destructive": false,
+  "idempotent": true,
+  "ui_path": [
+    "Contacts",
+    "Open a contact",
+    "Contact details page loads"
+  ],
+  "internal_endpoint": {
+    "method": "GET",
+    "path": "/feApi/orgFeaturesAndChannels",
+    "body_example": null
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/contact-index-id.json"
+    ],
+    "verified_at": null
+  }
+}

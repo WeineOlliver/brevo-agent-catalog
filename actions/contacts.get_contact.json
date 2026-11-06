@@ -1,0 +1,192 @@
+{
+  "id": "contacts.get_contact",
+  "module": "contacts",
+  "name": "Get contact details",
+  "description": "Call this when you need to retrieve the full details of a contact by its internal Brevo ID. Use the list contacts action instead if you only need a summary list of contacts.",
+  "preconditions": [
+    "The contact with the given ID must exist."
+  ],
+  "inputs": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "integer",
+        "description": "The internal Brevo identifier of the contact."
+      }
+    },
+    "required": [
+      "id"
+    ],
+    "additionalProperties": false
+  },
+  "outputs": {
+    "type": "object",
+    "properties": {
+      "_id": {
+        "type": "string",
+        "description": "Internal database identifier."
+      },
+      "id": {
+        "type": "integer",
+        "description": "Contact numeric ID."
+      },
+      "email": {
+        "type": "string",
+        "description": "Contact email address."
+      },
+      "emailTag": {
+        "type": "string",
+        "description": "Domain part of the email."
+      },
+      "emailBlacklisted": {
+        "type": "integer",
+        "description": "Flag indicating if the email is blacklisted."
+      },
+      "attributes": {
+        "type": "array",
+        "items": {
+          "type": "object"
+        },
+        "description": "Custom attributes of the contact."
+      },
+      "listid": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            }
+          }
+        },
+        "description": "Lists the contact belongs to."
+      },
+      "consentGroups": {
+        "type": "array",
+        "items": {
+          "type": "object"
+        }
+      },
+      "assignTo": {
+        "type": [
+          "null",
+          "string"
+        ]
+      },
+      "sc": {
+        "type": "integer"
+      },
+      "userHistory": {
+        "type": "array",
+        "items": {
+          "type": "object"
+        }
+      },
+      "smsBlacklisted": {
+        "type": "integer"
+      },
+      "whatsappBlacklisted": {
+        "type": "integer"
+      },
+      "pushActive": {
+        "type": [
+          "null",
+          "boolean"
+        ]
+      },
+      "blacklistForList": {
+        "type": "array",
+        "items": {
+          "type": "object"
+        }
+      },
+      "createdAt": {
+        "type": "string",
+        "format": "date-time"
+      },
+      "pushSubscribed": {
+        "type": [
+          "null",
+          "boolean"
+        ]
+      },
+      "ecommerce": {
+        "type": "object",
+        "properties": {
+          "sibRevenue": {
+            "type": "integer"
+          },
+          "sibOrder": {
+            "type": "integer"
+          },
+          "sibProductCount": {
+            "type": "integer"
+          },
+          "sibLastOrder": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "format": "date-time"
+          }
+        }
+      },
+      "is_anonymous": {
+        "type": "boolean"
+      },
+      "subscriptions": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "object",
+            "properties": {
+              "status": {
+                "type": "string",
+                "enum": [
+                  "subscribed",
+                  "unsubscribed",
+                  "pending"
+                ]
+              }
+            }
+          }
+        }
+      },
+      "contact": {
+        "type": "string"
+      },
+      "listObject": {
+        "type": "array",
+        "items": {
+          "type": "object"
+        }
+      }
+    },
+    "additionalProperties": true
+  },
+  "side_effects": [],
+  "destructive": false,
+  "idempotent": true,
+  "ui_path": [
+    "Contacts",
+    "Contact details",
+    "View"
+  ],
+  "internal_endpoint": {
+    "method": "GET",
+    "path": "/contact/backend/contacts/:id",
+    "body_example": null
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/contact-index-id.json"
+    ],
+    "verified_at": null
+  }
+}

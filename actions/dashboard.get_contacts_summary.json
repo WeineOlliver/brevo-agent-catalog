@@ -1,0 +1,63 @@
+{
+  "id": "dashboard.get_contacts_summary",
+  "module": "dashboard",
+  "name": "Get contacts dashboard summary",
+  "description": "Call this when you need a high‑level overview of contact statistics for the Brevo dashboard, such as total contacts and recent activity. Use the detailed contacts list action instead when you need information about individual contacts.",
+  "preconditions": [],
+  "inputs": {
+    "type": "object",
+    "properties": {},
+    "required": []
+  },
+  "outputs": {
+    "type": "object",
+    "properties": {
+      "last30DaysData": {
+        "type": "integer",
+        "description": "Number of contacts added or engaged in the last 30 days."
+      },
+      "totalContacts": {
+        "type": "integer",
+        "description": "Total number of contacts in the account."
+      },
+      "isOldCampaignFlowEnabled": {
+        "type": "boolean",
+        "description": "Flag indicating whether the old campaign flow is enabled."
+      },
+      "isFirstContact": {
+        "type": "integer",
+        "description": "Indicator (0/1) if this is the first contact in the account."
+      }
+    },
+    "required": [
+      "last30DaysData",
+      "totalContacts",
+      "isOldCampaignFlowEnabled",
+      "isFirstContact"
+    ]
+  },
+  "side_effects": [],
+  "destructive": false,
+  "idempotent": true,
+  "ui_path": [
+    "Dashboard",
+    "Contacts Overview"
+  ],
+  "internal_endpoint": {
+    "method": "GET",
+    "path": "/dashboard-contacts",
+    "body_example": null
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/root.json"
+    ],
+    "verified_at": null
+  }
+}

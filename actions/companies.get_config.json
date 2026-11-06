@@ -1,0 +1,122 @@
+{
+  "id": "companies.get_config",
+  "module": "companies",
+  "name": "Get organization config",
+  "description": "Call this when you need to retrieve the CRM organization settings such as the company name, onboarding status, folder ID and the list of attribute definitions. Use a configuration‑update action instead if you intend to modify these values.",
+  "preconditions": [],
+  "inputs": {
+    "type": "object",
+    "properties": {},
+    "required": []
+  },
+  "outputs": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "integer",
+        "description": "Internal identifier of the organization configuration."
+      },
+      "companyOrg": {
+        "type": "string",
+        "description": "Name of the organization/company."
+      },
+      "crmOnboardingDone": {
+        "type": "boolean",
+        "description": "Indicates whether the CRM onboarding process has been completed."
+      },
+      "crmFolderId": {
+        "type": "integer",
+        "description": "Identifier of the folder used by the CRM."
+      },
+      "listAttributes": {
+        "type": "array",
+        "description": "Array of attribute definitions available for contacts.",
+        "items": {
+          "type": "object",
+          "properties": {
+            "field": {
+              "type": "string",
+              "description": "Standard field name."
+            },
+            "fieldKey": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "description": "Custom key for the field, if any."
+            },
+            "dataType": {
+              "type": "string",
+              "description": "Data type of the attribute (e.g., \"text\")."
+            },
+            "show": {
+              "type": [
+                "boolean",
+                "null"
+              ],
+              "description": "Whether the attribute is visible in the UI."
+            },
+            "order": {
+              "type": [
+                "integer",
+                "null"
+              ],
+              "description": "Display order of the attribute."
+            },
+            "IsRecurring": {
+              "type": [
+                "boolean",
+                "null"
+              ],
+              "description": "Indicates if the attribute is recurring."
+            },
+            "ProcessID": {
+              "type": [
+                "integer",
+                "null"
+              ],
+              "description": "Associated process identifier, if any."
+            }
+          },
+          "required": [
+            "field",
+            "dataType"
+          ]
+        }
+      }
+    },
+    "required": [
+      "id",
+      "companyOrg",
+      "crmOnboardingDone",
+      "crmFolderId",
+      "listAttributes"
+    ]
+  },
+  "side_effects": [],
+  "destructive": false,
+  "idempotent": true,
+  "ui_path": [
+    "Companies",
+    "Settings"
+  ],
+  "internal_endpoint": {
+    "method": "GET",
+    "path": "/crm/backend/organization/config",
+    "body_example": null
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/companies-settings.json",
+      "captures/clean/companies.json",
+      "captures/clean/crm-settings.json"
+    ],
+    "verified_at": null
+  }
+}

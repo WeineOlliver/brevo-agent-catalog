@@ -1,0 +1,53 @@
+{
+  "id": "loyalty.list_programs",
+  "module": "loyalty",
+  "name": "List loyalty programs",
+  "description": "Call this when you need to retrieve the collection of loyalty programs configured in the account. Use the Get loyalty program details action instead when you only need information about a single program.",
+  "preconditions": [],
+  "inputs": {
+    "type": "object",
+    "properties": {},
+    "required": []
+  },
+  "outputs": {
+    "type": "object",
+    "properties": {
+      "items": {
+        "type": "array",
+        "description": "Array of loyalty program objects.",
+        "items": {
+          "type": "object",
+          "description": "A loyalty program. Fields are not documented in the public API."
+        }
+      }
+    },
+    "required": [
+      "items"
+    ]
+  },
+  "side_effects": [],
+  "destructive": false,
+  "idempotent": true,
+  "ui_path": [
+    "Loyalty",
+    "Programs",
+    "List"
+  ],
+  "internal_endpoint": {
+    "method": "GET",
+    "path": "/loyalty/programs",
+    "body_example": null
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/loyalty.json"
+    ],
+    "verified_at": null
+  }
+}

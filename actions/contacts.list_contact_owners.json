@@ -1,0 +1,74 @@
+{
+  "id": "contacts.list_contact_owners",
+  "module": "contacts",
+  "name": "List contact owners",
+  "description": "Call this when you need to retrieve the full list of contact owners to show in the contacts UI (e.g., for an owners dropdown or filter). If you only need details for a single owner, use a more specific endpoint that fetches that owner directly.",
+  "preconditions": [],
+  "inputs": {
+    "type": "object",
+    "properties": {},
+    "required": []
+  },
+  "outputs": {
+    "type": "object",
+    "properties": {
+      "data": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "description": "Unique identifier of the contact owner."
+            },
+            "display_name": {
+              "type": "string",
+              "description": "Human‑readable name of the owner."
+            },
+            "status": {
+              "type": "string",
+              "enum": [
+                "active",
+                "inactive"
+              ],
+              "description": "Current status of the owner."
+            }
+          },
+          "required": [
+            "id",
+            "display_name",
+            "status"
+          ]
+        }
+      }
+    },
+    "required": [
+      "data"
+    ]
+  },
+  "side_effects": [],
+  "destructive": false,
+  "idempotent": true,
+  "ui_path": [
+    "Contacts",
+    "Contact List",
+    "Owners"
+  ],
+  "internal_endpoint": {
+    "method": "GET",
+    "path": "/segment/all-contact-owners",
+    "body_example": null
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/contact-list.json"
+    ],
+    "verified_at": null
+  }
+}

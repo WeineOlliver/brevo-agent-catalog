@@ -1,0 +1,65 @@
+{
+  "id": "events.list_dates",
+  "module": "events",
+  "name": "List event dates",
+  "description": "Call this when you need to retrieve the calendar dates on which events are scheduled within a specific date range and timezone. Use the broader \"events.list_events\" action if you need full event details rather than just the dates.",
+  "preconditions": [],
+  "inputs": {
+    "type": "object",
+    "properties": {
+      "startDate": {
+        "type": "string",
+        "format": "date",
+        "description": "Start of the date range (inclusive) in YYYY-MM-DD format."
+      },
+      "endDate": {
+        "type": "string",
+        "format": "date",
+        "description": "End of the date range (inclusive) in YYYY-MM-DD format."
+      },
+      "timezone": {
+        "type": "string",
+        "description": "IANA timezone identifier (e.g., \"America/Sao_Paulo\")."
+      }
+    },
+    "required": [
+      "startDate",
+      "endDate",
+      "timezone"
+    ]
+  },
+  "outputs": {
+    "type": "array",
+    "items": {
+      "type": "string",
+      "format": "date",
+      "description": "A date (YYYY-MM-DD) on which at least one event is scheduled."
+    },
+    "description": "List of dates that have events within the requested range."
+  },
+  "side_effects": [],
+  "destructive": false,
+  "idempotent": true,
+  "ui_path": [
+    "Events",
+    "Calendar",
+    "View dates"
+  ],
+  "internal_endpoint": {
+    "method": "GET",
+    "path": "/events/dates",
+    "body_example": null
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/root.json"
+    ],
+    "verified_at": null
+  }
+}

@@ -1,0 +1,154 @@
+{
+  "id": "account.get_apps_information",
+  "module": "account",
+  "name": "Get account apps information",
+  "description": "Call this when you need to retrieve the full set of account metadata that determines which Brevo applications are enabled for the current user, as well as plan and configuration flags. Use a more specific endpoint (e.g., a dedicated plan‑status endpoint) if you only need high‑level subscription information.",
+  "preconditions": [
+    "The request must be made by an authenticated user."
+  ],
+  "inputs": {
+    "type": "object",
+    "properties": {},
+    "required": []
+  },
+  "outputs": {
+    "type": "object",
+    "properties": {
+      "userId": {
+        "type": "string",
+        "description": "Identifier of the current user."
+      },
+      "userTokenId": {
+        "type": "string",
+        "description": "Token identifier for the current session."
+      },
+      "userValidationStatus": {
+        "type": "integer",
+        "description": "Numeric status of user validation (e.g., 1 means validated)."
+      },
+      "isOrganizationValidated": {
+        "type": "boolean",
+        "description": "True if the organization has been validated."
+      },
+      "isPremium": {
+        "type": "boolean",
+        "description": "True if the user has a premium account."
+      },
+      "pricingVersion": {
+        "type": "string",
+        "description": "Version string of the pricing model (e.g., \"v5\")."
+      },
+      "isEnterprise": {
+        "type": "boolean",
+        "description": "True if the account is an Enterprise plan."
+      },
+      "activatedApplications": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "description": "Name of an activated Brevo application (e.g., \"automation\")."
+        },
+        "description": "List of applications that are enabled for the account."
+      },
+      "isRedirectedFromProfile": {
+        "type": "boolean",
+        "description": "Indicates whether the request originated from the profile page."
+      },
+      "isPaidPlan": {
+        "type": "boolean",
+        "description": "True if the account is on a paid plan."
+      },
+      "showAppsDiscoverabilityModal": {
+        "type": "boolean",
+        "description": "Flag indicating whether the apps discoverability modal should be shown."
+      },
+      "isClientPaginationEnabled": {
+        "type": "boolean",
+        "description": "True if client‑side pagination is enabled."
+      },
+      "isAgency": {
+        "type": "boolean",
+        "description": "True if the account belongs to an agency."
+      },
+      "dateFormat": {
+        "type": "string",
+        "description": "Preferred date format for the user (e.g., \"dd-mm-yyyy\")."
+      },
+      "partnerUserClientInvitation": {
+        "type": "boolean",
+        "description": "Indicates whether partner user client invitation is allowed."
+      },
+      "isENTv4SubAccount": {
+        "type": "boolean",
+        "description": "True if the account is an ENT v4 sub‑account."
+      },
+      "isUserRoleManagementEnabled": {
+        "type": "boolean",
+        "description": "True if user role management features are enabled."
+      },
+      "organization_type": {
+        "type": "string",
+        "enum": [
+          "self_service"
+        ],
+        "description": "Type of organization; currently observed value is \"self_service\"."
+      },
+      "isPushowlUser": {
+        "type": "boolean",
+        "description": "True if the user is a Pushowl user."
+      },
+      "isPartnerForPushowlEnabled": {
+        "type": "boolean",
+        "description": "True if the partner for Pushowl feature is enabled."
+      }
+    },
+    "required": [
+      "userId",
+      "userTokenId",
+      "userValidationStatus",
+      "isOrganizationValidated",
+      "isPremium",
+      "pricingVersion",
+      "isEnterprise",
+      "activatedApplications",
+      "isRedirectedFromProfile",
+      "isPaidPlan",
+      "showAppsDiscoverabilityModal",
+      "isClientPaginationEnabled",
+      "isAgency",
+      "dateFormat",
+      "partnerUserClientInvitation",
+      "isENTv4SubAccount",
+      "isUserRoleManagementEnabled",
+      "organization_type",
+      "isPushowlUser",
+      "isPartnerForPushowlEnabled"
+    ]
+  },
+  "side_effects": [],
+  "destructive": false,
+  "idempotent": true,
+  "ui_path": [
+    "Security",
+    "Authorized IPs"
+  ],
+  "internal_endpoint": {
+    "method": "GET",
+    "path": "/account/apps/information",
+    "body_example": null
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/security-authorised-ips.json",
+      "captures/clean/settings-advanced.json",
+      "captures/clean/settings-keys-smtp.json"
+    ],
+    "verified_at": null
+  }
+}

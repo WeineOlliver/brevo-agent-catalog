@@ -1,0 +1,67 @@
+{
+  "id": "settings.list_timezones",
+  "module": "settings",
+  "name": "List timezones",
+  "description": "Call this when you need the full list of available timezones for a contact or account configuration. If you only need the current timezone of a specific contact, use the endpoint that retrieves that contact's details instead.",
+  "preconditions": [],
+  "inputs": {
+    "type": "object",
+    "properties": {},
+    "required": []
+  },
+  "outputs": {
+    "type": "object",
+    "properties": {
+      "timezones": {
+        "type": "array",
+        "description": "Array of timezone options.",
+        "items": {
+          "type": "object",
+          "properties": {
+            "label": {
+              "type": "string",
+              "description": "Human‑readable label of the timezone, including GMT offset."
+            },
+            "value": {
+              "type": "string",
+              "description": "IANA timezone identifier."
+            }
+          },
+          "required": [
+            "label",
+            "value"
+          ]
+        }
+      }
+    },
+    "required": [
+      "timezones"
+    ]
+  },
+  "side_effects": [],
+  "destructive": false,
+  "idempotent": true,
+  "ui_path": [
+    "Settings",
+    "Advanced",
+    "Timezones"
+  ],
+  "internal_endpoint": {
+    "method": "GET",
+    "path": "/api/settings/list-timezone",
+    "body_example": null
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/contact-index-id.json",
+      "captures/clean/settings-advanced.json"
+    ],
+    "verified_at": null
+  }
+}

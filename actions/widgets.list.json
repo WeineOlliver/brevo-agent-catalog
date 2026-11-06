@@ -1,0 +1,141 @@
+{
+  "id": "widgets.list",
+  "module": "widgets",
+  "name": "List homepage widgets",
+  "description": "Call this when you need to retrieve the collection of widgets that are available on the homepage for display or configuration. Use a specific widget‑detail action (e.g., widgets.get) if you only need information about a single widget.",
+  "preconditions": [],
+  "inputs": {
+    "type": "object",
+    "properties": {},
+    "required": []
+  },
+  "outputs": {
+    "type": "array",
+    "items": {
+      "type": "object",
+      "properties": {
+        "widget_id": {
+          "type": "integer",
+          "description": "Unique identifier of the widget."
+        },
+        "default_page": {
+          "type": "string",
+          "description": "The page where the widget is shown by default."
+        },
+        "name": {
+          "type": "string",
+          "description": "Internal name of the widget."
+        },
+        "icon": {
+          "type": "string",
+          "description": "Icon label used to represent the widget."
+        },
+        "description": {
+          "type": "string",
+          "description": "Human‑readable description of the widget."
+        },
+        "category": {
+          "type": "string",
+          "description": "Category grouping for the widget."
+        },
+        "app_name": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "List of Brevo applications where the widget is applicable."
+        },
+        "sequence": {
+          "type": "integer",
+          "description": "Display order of the widget on the page."
+        },
+        "area_occupancy": {
+          "type": "integer",
+          "description": "Percentage of page area the widget occupies."
+        },
+        "url": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "External URL linked to the widget, if any."
+        },
+        "scope": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Scope definition for the widget."
+        },
+        "module": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Module identifier associated with the widget."
+        },
+        "remoteEntryFileName": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Filename for remote entry, if the widget loads remotely."
+        },
+        "ft_check": {
+          "type": [
+            "null"
+          ],
+          "description": "Feature‑toggle check value (currently null)."
+        },
+        "internal_access": {
+          "type": [
+            "null"
+          ],
+          "description": "Internal access flag (currently null)."
+        }
+      },
+      "required": [
+        "widget_id",
+        "default_page",
+        "name",
+        "icon",
+        "description",
+        "category",
+        "app_name",
+        "sequence",
+        "area_occupancy",
+        "url",
+        "scope",
+        "module",
+        "remoteEntryFileName",
+        "ft_check",
+        "internal_access"
+      ]
+    }
+  },
+  "side_effects": [],
+  "destructive": false,
+  "idempotent": true,
+  "ui_path": [
+    "Home",
+    "Widgets",
+    "View all"
+  ],
+  "internal_endpoint": {
+    "method": "GET",
+    "path": "/homepage/widget/list",
+    "body_example": null
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/root.json"
+    ],
+    "verified_at": null
+  }
+}

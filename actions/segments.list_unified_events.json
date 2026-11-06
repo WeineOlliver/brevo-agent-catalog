@@ -1,0 +1,113 @@
+{
+  "id": "segments.list_unified_events",
+  "module": "segments",
+  "name": "List Unified Segment Events",
+  "description": "Call this when you need to retrieve the full catalogue of segment events and their properties as displayed in the Contact List view. Use a more specific source‑filtered endpoint (if one exists) when you only need events for a particular source.",
+  "preconditions": [],
+  "inputs": {
+    "type": "object",
+    "properties": {},
+    "required": []
+  },
+  "outputs": {
+    "type": "object",
+    "properties": {
+      "data": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "source": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "description": "Name of the source (e.g., \"coupon\", \"deals\")."
+                }
+              },
+              "required": [
+                "name"
+              ]
+            },
+            "events": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "description": "Name of the event (e.g., \"unique_coupon_sent\", \"deal_created\")."
+                  },
+                  "properties": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "name": {
+                          "type": "string",
+                          "description": "Property name of the event."
+                        },
+                        "type": {
+                          "type": "string",
+                          "description": "Data type of the property (e.g., \"string\", \"number\", \"date\").",
+                          "enum": [
+                            "string",
+                            "number",
+                            "date"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "name",
+                        "type"
+                      ]
+                    },
+                    "description": "List of properties associated with the event."
+                  }
+                },
+                "required": [
+                  "name",
+                  "properties"
+                ]
+              },
+              "description": "Events belonging to the source."
+            }
+          },
+          "required": [
+            "source",
+            "events"
+          ]
+        },
+        "description": "Array of sources each containing their events."
+      }
+    },
+    "required": [
+      "data"
+    ]
+  },
+  "side_effects": [],
+  "destructive": false,
+  "idempotent": true,
+  "ui_path": [
+    "Contacts",
+    "List",
+    "Segment Events"
+  ],
+  "internal_endpoint": {
+    "method": "GET",
+    "path": "/segment/events/unified",
+    "body_example": null
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/contact-list.json"
+    ],
+    "verified_at": null
+  }
+}

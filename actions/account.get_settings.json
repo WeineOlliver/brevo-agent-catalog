@@ -1,0 +1,100 @@
+{
+  "id": "account.get_settings",
+  "module": "account",
+  "name": "Get account settings",
+  "description": "Call this when you need to read the current account configuration such as timezone, date format, locale and notification preferences. If you need to change any of these values, use the neighbouring action `account.update_settings` instead.",
+  "preconditions": [],
+  "inputs": {
+    "type": "object",
+    "properties": {},
+    "required": []
+  },
+  "outputs": {
+    "type": "object",
+    "properties": {
+      "account_timezone": {
+        "type": "string",
+        "description": "Timezone of the account (e.g., \"America/Sao_Paulo\")."
+      },
+      "organization_timezone": {
+        "type": "string",
+        "description": "Timezone of the organization."
+      },
+      "time_format": {
+        "type": "string",
+        "enum": [
+          "12",
+          "24"
+        ],
+        "description": "Preferred time format; \"12\" for 12‑hour, \"24\" for 24‑hour."
+      },
+      "date_format": {
+        "type": "string",
+        "description": "Preferred date format (e.g., \"dd-mm-yyyy\")."
+      },
+      "invoices_renewal": {
+        "type": "boolean",
+        "description": "Whether invoice renewal is enabled."
+      },
+      "disable_notification_email": {
+        "type": "boolean",
+        "description": "Whether notification emails are disabled."
+      },
+      "is_user_accessible": {
+        "type": "boolean",
+        "description": "Indicates if the account is accessible by users."
+      },
+      "sms_notification_enable": {
+        "type": "boolean",
+        "description": "Whether SMS notifications are enabled."
+      },
+      "sms_limit": {
+        "type": "integer",
+        "description": "Maximum number of SMS messages allowed."
+      },
+      "account_locale": {
+        "type": "string",
+        "description": "Locale of the account (e.g., \"en_US\")."
+      }
+    },
+    "required": [
+      "account_timezone",
+      "organization_timezone",
+      "time_format",
+      "date_format",
+      "invoices_renewal",
+      "disable_notification_email",
+      "is_user_accessible",
+      "sms_notification_enable",
+      "sms_limit",
+      "account_locale"
+    ]
+  },
+  "side_effects": [],
+  "destructive": false,
+  "idempotent": true,
+  "ui_path": [
+    "Automation",
+    "Advanced",
+    "Settings"
+  ],
+  "internal_endpoint": {
+    "method": "GET",
+    "path": "/api/settings",
+    "body_example": null
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/automation-advanced.json",
+      "captures/clean/automation-automations.json",
+      "captures/clean/settings-advanced.json"
+    ],
+    "verified_at": null
+  }
+}

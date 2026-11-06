@@ -2,7 +2,7 @@
   "id": "automation.get_deferred_count",
   "module": "automation",
   "name": "Get deferred email count",
-  "description": "Call this when you need the current number of deferred emails for automation processing, together with the processing status, rate limits, and any configured delay. Use the automation status endpoint instead if you only need the processing status without the deferred count details.",
+  "description": "Call this when you need to retrieve the current number of deferred emails and related processing status for automation workflows, as shown in the sidebar of the Advanced Automation UI. Use the automation.get_rate_limit_status action instead if you only need rate‑limit information without the deferred count.",
   "preconditions": [],
   "inputs": {
     "type": "object",
@@ -14,43 +14,37 @@
     "properties": {
       "processingStatus": {
         "type": "string",
-        "description": "Overall processing health status for automation.",
-        "enum": [
-          "Excellent",
-          "Good",
-          "Warning",
-          "Critical"
-        ]
+        "description": "Overall health status of the automation processing engine."
       },
       "deferredEmailCount": {
         "type": "integer",
-        "description": "Number of emails currently deferred."
+        "description": "Number of emails currently deferred from sending."
       },
       "rateLimit": {
         "type": "integer",
-        "description": "Maximum number of requests allowed per time window."
+        "description": "Maximum number of emails that can be processed per second."
       },
       "maxDelay": {
         "type": "integer",
-        "description": "Maximum delay in seconds before processing resumes."
+        "description": "Maximum allowed delay in seconds before processing deferred emails."
       },
       "delay": {
         "type": "object",
-        "description": "Current configured delay before processing.",
         "properties": {
           "hours": {
             "type": "integer",
-            "description": "Delay hours component."
+            "description": "Current delay expressed in whole hours."
           },
           "minutes": {
             "type": "integer",
-            "description": "Delay minutes component."
+            "description": "Current delay expressed in whole minutes."
           }
         },
         "required": [
           "hours",
           "minutes"
-        ]
+        ],
+        "description": "Breakdown of the current delay."
       }
     },
     "required": [
@@ -67,7 +61,7 @@
   "ui_path": [
     "Automation",
     "Advanced",
-    "View deferred email count"
+    "Sidebar"
   ],
   "internal_endpoint": {
     "method": "GET",

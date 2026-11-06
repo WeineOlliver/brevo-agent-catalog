@@ -1,0 +1,69 @@
+{
+  "id": "objects.get_view",
+  "module": "objects",
+  "name": "Get objects view status",
+  "description": "Call this when you need to retrieve the current onboarding view status for objects, including whether onboarding is complete, which steps have been completed, and UI preferences. Use a different action that updates these settings if you need to change them.",
+  "preconditions": [],
+  "inputs": {
+    "type": "object",
+    "properties": {},
+    "required": []
+  },
+  "outputs": {
+    "type": "object",
+    "properties": {
+      "completed_steps": {
+        "type": [
+          "array",
+          "null"
+        ],
+        "items": {
+          "type": "string"
+        },
+        "description": "List of completed onboarding steps, or null if not applicable."
+      },
+      "onboarding_complete": {
+        "type": "boolean",
+        "description": "Indicates whether the onboarding process is finished."
+      },
+      "do_not_show_again": {
+        "type": "boolean",
+        "description": "Flag indicating whether the onboarding view should be hidden in the future."
+      },
+      "object_type": {
+        "type": "string",
+        "description": "The type of object the onboarding view pertains to."
+      }
+    },
+    "required": [
+      "completed_steps",
+      "onboarding_complete",
+      "do_not_show_again",
+      "object_type"
+    ]
+  },
+  "side_effects": [],
+  "destructive": false,
+  "idempotent": true,
+  "ui_path": [
+    "Objects",
+    "View"
+  ],
+  "internal_endpoint": {
+    "method": "GET",
+    "path": "/app/objects/view",
+    "body_example": null
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/campaigns-listing.json"
+    ],
+    "verified_at": null
+  }
+}

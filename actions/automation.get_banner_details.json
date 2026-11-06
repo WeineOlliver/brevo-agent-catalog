@@ -2,10 +2,8 @@
   "id": "automation.get_banner_details",
   "module": "automation",
   "name": "Get banner details",
-  "description": "Call this when the Automation UI needs to display the status banner (e.g., marketing email status, profile completeness, or account warnings). Use a more specific account‑status endpoint if you only need the marketing email status without the full banner payload.",
-  "preconditions": [
-    "The user must be authenticated and have access to the Automation feature."
-  ],
+  "description": "Call this when you need to retrieve the current marketing email status, profile completeness flag, and any related warning message to decide whether to display a banner on the Automation Advanced page. Use the endpoint that fetches automation list instead if you only need automation data.",
+  "preconditions": [],
   "inputs": {
     "type": "object",
     "properties": {},
@@ -16,19 +14,15 @@
     "properties": {
       "marketing_email_status": {
         "type": "string",
-        "enum": [
-          "enabled",
-          "disabled"
-        ],
-        "description": "Whether marketing emails are enabled for the account."
+        "description": "The status of the marketing email feature for the account (e.g., \"enabled\" or \"disabled\")."
       },
       "is_profile_complete": {
         "type": "integer",
-        "description": "1 if the account profile is complete, 0 otherwise."
+        "description": "Flag indicating whether the account profile is complete (1 for complete, 0 for incomplete)."
       },
       "err_msg": {
         "type": "string",
-        "description": "Message key describing any account‑level warning shown on the banner."
+        "description": "Identifier of the warning message to show when the account is disabled."
       }
     },
     "required": [
@@ -42,8 +36,7 @@
   "idempotent": true,
   "ui_path": [
     "Automation",
-    "Advanced",
-    "Load banner details"
+    "Advanced"
   ],
   "internal_endpoint": {
     "method": "GET",

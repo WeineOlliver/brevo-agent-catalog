@@ -1,0 +1,111 @@
+{
+  "id": "client.get_info",
+  "module": "client",
+  "name": "Get client info",
+  "description": "Call this when you need to retrieve the logged‑in user's basic account details such as name, email, activated applications and visible channel listings. If you only need a subset of this data (e.g., just activated applications), use a more specific endpoint instead.",
+  "preconditions": [],
+  "inputs": {
+    "type": "object",
+    "properties": {},
+    "required": []
+  },
+  "outputs": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "string",
+        "description": "Unique identifier of the client."
+      },
+      "account_id": {
+        "type": "string",
+        "description": "Identifier of the Brevo account."
+      },
+      "organization_id": {
+        "type": "string",
+        "description": "Identifier of the organization the account belongs to."
+      },
+      "name": {
+        "type": "string",
+        "description": "Full name of the account holder."
+      },
+      "email": {
+        "type": "string",
+        "description": "Email address associated with the account."
+      },
+      "account_invalidated": {
+        "type": "boolean",
+        "description": "Indicates whether the account has been invalidated."
+      },
+      "excluded_conversion_user": {
+        "type": "boolean",
+        "description": "Flag indicating if the user is excluded from conversion tracking."
+      },
+      "phoneNumber": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "description": "Phone number of the user, if provided."
+      },
+      "activated_applications": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "enum": [
+            "automation",
+            "email-campaigns",
+            "transactional-emails",
+            "crm"
+          ]
+        },
+        "description": "List of Brevo applications activated for this account."
+      },
+      "visible_channel_listing": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "enum": [
+            "no-email-campaigns",
+            "no-sms-campaigns"
+          ]
+        },
+        "description": "Channels that are visible in the UI for this account."
+      }
+    },
+    "required": [
+      "id",
+      "account_id",
+      "organization_id",
+      "name",
+      "email",
+      "account_invalidated",
+      "excluded_conversion_user",
+      "activated_applications",
+      "visible_channel_listing"
+    ]
+  },
+  "side_effects": [],
+  "destructive": false,
+  "idempotent": true,
+  "ui_path": [
+    "Campaigns",
+    "Listing"
+  ],
+  "internal_endpoint": {
+    "method": "GET",
+    "path": "/client/info",
+    "body_example": null
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/campaigns-listing.json"
+    ],
+    "verified_at": null
+  }
+}

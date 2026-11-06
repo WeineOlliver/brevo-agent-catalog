@@ -1,0 +1,113 @@
+{
+  "id": "segments.list_segments",
+  "module": "segments",
+  "name": "List segments",
+  "description": "Call this when you need to retrieve a paginated list of contact segments. Use get_segment_details instead when you need information about a specific segment.",
+  "preconditions": [],
+  "inputs": {
+    "type": "object",
+    "properties": {
+      "page": {
+        "type": "integer",
+        "description": "Page number to retrieve"
+      },
+      "limit": {
+        "type": "integer",
+        "description": "Number of items per page"
+      },
+      "sort_key": {
+        "type": "string",
+        "description": "Field to sort by",
+        "enum": [
+          "updated"
+        ]
+      },
+      "sort_order": {
+        "type": "string",
+        "description": "Sort direction",
+        "enum": [
+          "desc",
+          "asc"
+        ]
+      }
+    },
+    "required": []
+  },
+  "outputs": {
+    "type": "object",
+    "properties": {
+      "data": {
+        "type": "array",
+        "description": "List of segment objects",
+        "items": {
+          "type": "object"
+        }
+      },
+      "metadata": {
+        "type": "object",
+        "description": "Pagination metadata",
+        "properties": {
+          "page": {
+            "type": "object",
+            "properties": {
+              "total": {
+                "type": "integer"
+              },
+              "current": {
+                "type": "integer"
+              },
+              "pageCount": {
+                "type": "integer"
+              },
+              "limit": {
+                "type": "integer"
+              },
+              "totalCount": {
+                "type": "integer"
+              }
+            },
+            "required": [
+              "total",
+              "current",
+              "pageCount",
+              "limit",
+              "totalCount"
+            ]
+          }
+        },
+        "required": [
+          "page"
+        ]
+      }
+    },
+    "required": [
+      "data",
+      "metadata"
+    ]
+  },
+  "side_effects": [],
+  "destructive": false,
+  "idempotent": true,
+  "ui_path": [
+    "Contacts",
+    "Segments",
+    "List segments"
+  ],
+  "internal_endpoint": {
+    "method": "GET",
+    "path": "/segment/listing",
+    "body_example": null
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/contact-segment.json"
+    ],
+    "verified_at": null
+  }
+}

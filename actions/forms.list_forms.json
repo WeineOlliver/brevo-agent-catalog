@@ -1,0 +1,78 @@
+{
+  "id": "forms.list_forms",
+  "module": "forms",
+  "name": "List forms",
+  "description": "Call this when you need to retrieve a paginated list of forms of a specific type (e.g., subscription) from the Brevo Forms API. Use the \"Get form details\" action instead if you need information about a single form identified by its ID.",
+  "preconditions": [],
+  "inputs": {
+    "type": "object",
+    "properties": {
+      "type": {
+        "type": "string",
+        "description": "The category of forms to retrieve.",
+        "enum": [
+          "subscription"
+        ]
+      },
+      "limit": {
+        "type": "integer",
+        "minimum": 1,
+        "description": "Maximum number of forms to return in the response."
+      },
+      "offset": {
+        "type": "integer",
+        "minimum": 0,
+        "description": "Number of forms to skip before starting to collect the result set."
+      }
+    },
+    "required": [
+      "type"
+    ]
+  },
+  "outputs": {
+    "type": "object",
+    "properties": {
+      "forms": {
+        "type": "array",
+        "description": "Array of form objects matching the request criteria.",
+        "items": {
+          "type": "object",
+          "description": "A form representation (fields are not documented)."
+        }
+      },
+      "totalRecords": {
+        "type": "integer",
+        "description": "Total number of forms that match the query, irrespective of pagination."
+      }
+    },
+    "required": [
+      "forms",
+      "totalRecords"
+    ]
+  },
+  "side_effects": [],
+  "destructive": false,
+  "idempotent": true,
+  "ui_path": [
+    "Contact",
+    "Forms",
+    "Subscription"
+  ],
+  "internal_endpoint": {
+    "method": "GET",
+    "path": "/forms-api/forms",
+    "body_example": null
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/contact-forms-app-subscription.json"
+    ],
+    "verified_at": null
+  }
+}

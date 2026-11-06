@@ -1,0 +1,69 @@
+{
+  "id": "integrations.list_integrations",
+  "module": "integrations",
+  "name": "List integrations",
+  "description": "Call this when you need to retrieve the collection of integrations available for a specific UI location, such as the contact details view. Use a more specific integration‑detail action (e.g., integrations.get_integration_details) if you need information about a single integration rather than the list.",
+  "preconditions": [],
+  "inputs": {
+    "type": "object",
+    "properties": {
+      "location": {
+        "type": "string",
+        "description": "The UI location for which integrations should be listed (e.g., \"contactDetails\")."
+      }
+    },
+    "required": [
+      "location"
+    ]
+  },
+  "outputs": {
+    "type": "object",
+    "properties": {
+      "data": {
+        "type": "array",
+        "description": "Array of integration objects (structure not defined in observed data).",
+        "items": {
+          "type": "object"
+        }
+      },
+      "totalCount": {
+        "type": "integer",
+        "description": "Total number of integrations available for the given location."
+      },
+      "itemCount": {
+        "type": "integer",
+        "description": "Number of integrations returned in this response page."
+      }
+    },
+    "required": [
+      "data",
+      "totalCount",
+      "itemCount"
+    ]
+  },
+  "side_effects": [],
+  "destructive": false,
+  "idempotent": true,
+  "ui_path": [
+    "Contacts",
+    "Contact details",
+    "Integrations"
+  ],
+  "internal_endpoint": {
+    "method": "GET",
+    "path": "/extensibility/integrations",
+    "body_example": null
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/contact-index-id.json"
+    ],
+    "verified_at": null
+  }
+}

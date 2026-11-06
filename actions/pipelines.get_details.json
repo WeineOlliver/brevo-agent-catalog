@@ -1,0 +1,107 @@
+{
+  "id": "pipelines.get_details",
+  "module": "pipelines",
+  "name": "Get pipeline details",
+  "description": "Call this when you need to retrieve the full list of CRM pipelines and their stages, for example to display them in a UI or to decide which stage to move a deal into. Use the pipeline‑creation action instead if you need to add a new pipeline.",
+  "preconditions": [],
+  "inputs": {
+    "type": "object",
+    "properties": {},
+    "required": []
+  },
+  "outputs": {
+    "type": "object",
+    "properties": {
+      "pipelines": {
+        "type": "array",
+        "description": "Array of pipeline definitions.",
+        "items": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "description": "Unique identifier of the pipeline."
+            },
+            "name": {
+              "type": "string",
+              "description": "Human‑readable name of the pipeline."
+            },
+            "stages": {
+              "type": "array",
+              "description": "Stages that belong to the pipeline, ordered as they appear in the UI.",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "description": "Unique identifier of the stage."
+                  },
+                  "name": {
+                    "type": "string",
+                    "description": "Name of the stage."
+                  },
+                  "probability": {
+                    "type": "integer",
+                    "description": "Estimated win probability for deals in this stage (0‑100).",
+                    "minimum": 0,
+                    "maximum": 100
+                  },
+                  "isDeletable": {
+                    "type": "boolean",
+                    "description": "Whether the stage can be deleted by the user."
+                  },
+                  "createdAt": {
+                    "type": "string",
+                    "format": "date-time",
+                    "description": "Timestamp when the stage was created."
+                  }
+                },
+                "required": [
+                  "id",
+                  "name",
+                  "probability",
+                  "isDeletable",
+                  "createdAt"
+                ]
+              }
+            }
+          },
+          "required": [
+            "id",
+            "name",
+            "stages"
+          ]
+        }
+      }
+    },
+    "required": [
+      "pipelines"
+    ]
+  },
+  "side_effects": [],
+  "destructive": false,
+  "idempotent": true,
+  "ui_path": [
+    "Companies",
+    "Settings",
+    "Pipeline details"
+  ],
+  "internal_endpoint": {
+    "method": "GET",
+    "path": "/crm/backend/pipeline/details",
+    "body_example": null
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/companies-settings.json",
+      "captures/clean/companies.json"
+    ],
+    "verified_at": null
+  }
+}

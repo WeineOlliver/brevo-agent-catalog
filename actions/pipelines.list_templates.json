@@ -1,0 +1,77 @@
+{
+  "id": "pipelines.list_templates",
+  "module": "pipelines",
+  "name": "List pipeline templates",
+  "description": "Call this when you need to retrieve the set of pipeline templates available for task management. Use a creation or update action (e.g., pipeline.create or pipeline.update) instead when you need to modify pipelines.",
+  "preconditions": [],
+  "inputs": {
+    "type": "object",
+    "properties": {}
+  },
+  "outputs": {
+    "type": "object",
+    "properties": {
+      "templates": {
+        "type": "array",
+        "description": "Array of pipeline template definitions.",
+        "items": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "description": "Name of the pipeline template."
+            },
+            "stages": {
+              "type": "array",
+              "description": "Ordered list of stages in the template.",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "description": "Name of the stage."
+                  }
+                },
+                "required": [
+                  "name"
+                ]
+              }
+            }
+          },
+          "required": [
+            "name",
+            "stages"
+          ]
+        }
+      }
+    },
+    "required": [
+      "templates"
+    ]
+  },
+  "side_effects": [],
+  "destructive": false,
+  "idempotent": true,
+  "ui_path": [
+    "Tasks",
+    "Pipelines",
+    "Templates"
+  ],
+  "internal_endpoint": {
+    "method": "GET",
+    "path": "/crm/backend/pipeline/pipeline-template",
+    "body_example": null
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/tasks.json"
+    ],
+    "verified_at": null
+  }
+}

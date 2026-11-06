@@ -1,10 +1,10 @@
 {
   "id": "loyalty.get_user_permissions",
   "module": "loyalty",
-  "name": "Get user permissions",
-  "description": "Call this when you need to retrieve the list of actions the current authenticated user can perform in the Loyalty module and whether they are the owner. Use a program‑specific endpoint (e.g., get‑program‑details) if you only need information about a particular loyalty program rather than the full permission set.",
+  "name": "Get User Permissions",
+  "description": "Call this when you need to know which loyalty‑program actions the currently authenticated user is allowed to perform and whether they are the program owner. Use a program‑detail endpoint (e.g. /loyalty/get-program) instead when you need information about the program itself rather than the user's rights.",
   "preconditions": [
-    "The user must be authenticated."
+    "The request must be made by an authenticated user who belongs to a loyalty program."
   ],
   "inputs": {
     "type": "object",
@@ -16,6 +16,7 @@
     "properties": {
       "actions": {
         "type": "array",
+        "description": "List of permission identifiers the user has for the loyalty program.",
         "items": {
           "type": "string",
           "enum": [
@@ -26,8 +27,7 @@
             "manage_rewards",
             "manage_rules"
           ]
-        },
-        "description": "Permissions granted to the user."
+        }
       },
       "is_owner": {
         "type": "boolean",
@@ -44,7 +44,8 @@
   "idempotent": true,
   "ui_path": [
     "Loyalty",
-    "User permissions"
+    "Settings",
+    "Permissions"
   ],
   "internal_endpoint": {
     "method": "GET",

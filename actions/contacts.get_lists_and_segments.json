@@ -1,8 +1,8 @@
 {
-  "id": "lists.get_lists_and_segments",
-  "module": "lists",
+  "id": "contacts.get_lists_and_segments",
+  "module": "contacts",
   "name": "Get lists and segments",
-  "description": "Call this when you need to retrieve the full hierarchy of contact folders, lists, segments, and categories as shown on the Contacts → List page. If you only need the simple list of contact lists without folder or segment information, use the \"List contact lists\" action instead.",
+  "description": "Call this when you need to retrieve the hierarchy of folders, contact lists, segments, and categories displayed on the Contact → Lists page. Use the action to populate UI selectors or to sync local copies. If you only need a single list's details, use the dedicated list‑fetch operation instead.",
   "preconditions": [],
   "inputs": {
     "type": "object",
@@ -14,15 +14,17 @@
     "properties": {
       "folder": {
         "type": "array",
+        "description": "Array of folder objects that group lists.",
         "items": {
           "type": "object",
           "properties": {
             "_id": {
               "type": "object",
+              "description": "Internal identifier object.",
               "properties": {
                 "timestamp": {
                   "type": "integer",
-                  "description": "Timestamp component of the identifier."
+                  "description": "Timestamp part of the identifier."
                 }
               },
               "required": [
@@ -31,7 +33,7 @@
             },
             "id": {
               "type": "integer",
-              "description": "Folder identifier."
+              "description": "Folder numeric ID."
             },
             "name": {
               "type": "string",
@@ -39,15 +41,15 @@
             },
             "entered": {
               "type": "string",
-              "description": "Creation date and time."
+              "description": "Creation datetime of the folder."
             },
             "listorder": {
               "type": "integer",
-              "description": "Order of the folder."
+              "description": "Ordering index within the parent."
             },
             "list_parent": {
               "type": "integer",
-              "description": "Parent folder identifier (0 if none)."
+              "description": "Parent folder ID (0 if root)."
             },
             "clientid": {
               "type": "integer",
@@ -55,23 +57,15 @@
             },
             "is_folder": {
               "type": "integer",
-              "enum": [
-                0,
-                1
-              ],
-              "description": "Flag indicating this is a folder (1) or not (0)."
+              "description": "Flag indicating this object is a folder (1)."
             },
             "blacklisted": {
               "type": "integer",
-              "enum": [
-                0,
-                1
-              ],
-              "description": "Flag indicating if the folder is blacklisted."
+              "description": "Blacklisting flag."
             },
             "count": {
               "type": "integer",
-              "description": "Number of contacts in the folder."
+              "description": "Number of lists inside the folder."
             },
             "is_default_folder": {
               "type": "boolean",
@@ -95,15 +89,17 @@
       },
       "list": {
         "type": "array",
+        "description": "Array of contact list objects.",
         "items": {
           "type": "object",
           "properties": {
             "_id": {
               "type": "object",
+              "description": "Internal identifier object.",
               "properties": {
                 "timestamp": {
                   "type": "integer",
-                  "description": "Timestamp component of the identifier."
+                  "description": "Timestamp part of the identifier."
                 }
               },
               "required": [
@@ -112,7 +108,7 @@
             },
             "id": {
               "type": "integer",
-              "description": "List identifier."
+              "description": "List numeric ID."
             },
             "name": {
               "type": "string",
@@ -120,15 +116,15 @@
             },
             "entered": {
               "type": "string",
-              "description": "Creation date and time."
+              "description": "Creation datetime of the list."
             },
             "listorder": {
               "type": "integer",
-              "description": "Order of the list."
+              "description": "Ordering index within the parent folder."
             },
             "list_parent": {
               "type": "integer",
-              "description": "Parent folder identifier."
+              "description": "Parent folder ID."
             },
             "parent_name": {
               "type": "string",
@@ -140,19 +136,11 @@
             },
             "is_folder": {
               "type": "integer",
-              "enum": [
-                0,
-                1
-              ],
-              "description": "Flag indicating this is a folder (1) or a list (0)."
+              "description": "Flag indicating this object is a folder (0 for list)."
             },
             "blacklisted": {
               "type": "integer",
-              "enum": [
-                0,
-                1
-              ],
-              "description": "Flag indicating if the list is blacklisted."
+              "description": "Blacklisting flag."
             },
             "count": {
               "type": "integer",
@@ -176,12 +164,14 @@
       },
       "segment": {
         "type": "array",
+        "description": "Array of segment objects (currently empty in example).",
         "items": {
           "type": "object"
         }
       },
       "category": {
         "type": "array",
+        "description": "Array of category objects for segment grouping.",
         "items": {
           "type": "object",
           "properties": {
@@ -217,7 +207,7 @@
   "destructive": false,
   "idempotent": true,
   "ui_path": [
-    "Contacts",
+    "Contact",
     "Lists"
   ],
   "internal_endpoint": {

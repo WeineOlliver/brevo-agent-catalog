@@ -1,0 +1,51 @@
+{
+  "id": "settings.get_phone_call_enabled",
+  "module": "settings",
+  "name": "Get phone call enabled status",
+  "description": "Call this when you need to know whether the phone call feature is currently enabled for the account. Use the corresponding action to enable or disable phone calls if you need to modify the setting instead.",
+  "preconditions": [],
+  "inputs": {
+    "type": "object",
+    "properties": {},
+    "required": [],
+    "additionalProperties": false
+  },
+  "outputs": {
+    "type": "object",
+    "properties": {
+      "isPhoneCallEnabled": {
+        "type": "boolean",
+        "description": "Indicates if phone call functionality is enabled."
+      }
+    },
+    "required": [
+      "isPhoneCallEnabled"
+    ],
+    "additionalProperties": false
+  },
+  "side_effects": [],
+  "destructive": false,
+  "idempotent": true,
+  "ui_path": [
+    "Settings",
+    "SMTP",
+    "Phone call enabled"
+  ],
+  "internal_endpoint": {
+    "method": "GET",
+    "path": "/phone/call-enabled",
+    "body_example": null
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/settings-keys-smtp.json"
+    ],
+    "verified_at": null
+  }
+}

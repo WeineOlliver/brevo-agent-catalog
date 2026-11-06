@@ -1,0 +1,62 @@
+{
+  "id": "countries.list",
+  "module": "countries",
+  "name": "List countries",
+  "description": "Call this when you need the full list of supported countries and their calling codes for phone onboarding. Use a more specific lookup action if you only need details for a single country.",
+  "preconditions": [],
+  "inputs": {
+    "type": "object",
+    "properties": {},
+    "required": []
+  },
+  "outputs": {
+    "type": "array",
+    "items": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Full name of the country."
+        },
+        "code": {
+          "type": "string",
+          "description": "ISO 3166‑1 alpha‑2 country code."
+        },
+        "calling_code": {
+          "type": "string",
+          "description": "International dialing prefix, including the leading '+'."
+        }
+      },
+      "required": [
+        "name",
+        "code",
+        "calling_code"
+      ]
+    }
+  },
+  "side_effects": [],
+  "destructive": false,
+  "idempotent": true,
+  "ui_path": [
+    "Phone",
+    "Onboarding",
+    "Country list"
+  ],
+  "internal_endpoint": {
+    "method": "GET",
+    "path": "/js/countries.json",
+    "body_example": null
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/phone-onboarding.json"
+    ],
+    "verified_at": null
+  }
+}

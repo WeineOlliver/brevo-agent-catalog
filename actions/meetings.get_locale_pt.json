@@ -1,0 +1,50 @@
+{
+  "id": "meetings.get_locale_pt",
+  "module": "meetings",
+  "name": "Get Portuguese locale",
+  "description": "Call this when the Meetings UI needs the Portuguese translation strings for static UI text. Use the corresponding locale endpoint (e.g., /assets/locales/en.json) if a different language is required.",
+  "preconditions": [],
+  "inputs": {
+    "type": "object",
+    "properties": {
+      "nocache": {
+        "type": "string",
+        "description": "Optional cache‑busting token to force a fresh fetch (e.g., a timestamp)."
+      }
+    },
+    "required": []
+  },
+  "outputs": {
+    "type": "object",
+    "description": "A mapping of translation keys to their Portuguese strings.",
+    "additionalProperties": {
+      "type": "string"
+    }
+  },
+  "side_effects": [],
+  "destructive": false,
+  "idempotent": true,
+  "ui_path": [
+    "Meetings",
+    "Offers",
+    "All",
+    "Load locale"
+  ],
+  "internal_endpoint": {
+    "method": "GET",
+    "path": "/assets/locales/pt.json",
+    "body_example": null
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/meetings-offer-all.json"
+    ],
+    "verified_at": null
+  }
+}

@@ -1,9 +1,11 @@
 {
-  "id": "accounts.list_accounts",
-  "module": "accounts",
+  "id": "account.list_accounts",
+  "module": "account",
   "name": "List accounts",
-  "description": "Call this when you need to retrieve the full list of accounts (companies) visible to the current user, including their email, name details, timezone, locale, memberships, login status and activity flag. Use the 'accounts.get_account' action if you only need a single account by its ID instead.",
-  "preconditions": [],
+  "description": "Call this when you need to retrieve the list of accounts accessible to the current user, such as when displaying company settings or the account overview. Use the get_account action for a single account if you only need details for a specific account.",
+  "preconditions": [
+    "The user must be authenticated."
+  ],
   "inputs": {
     "type": "object",
     "properties": {},
@@ -21,33 +23,33 @@
         "email": {
           "type": "string",
           "format": "email",
-          "description": "Primary email address of the account."
+          "description": "Contact email associated with the account."
         },
         "name": {
           "type": "object",
           "properties": {
             "familyName": {
               "type": "string",
-              "description": "Family (last) name of the account holder."
+              "description": "Family (last) name of the account owner."
             },
             "givenName": {
               "type": "string",
-              "description": "Given (first) name of the account holder."
+              "description": "Given (first) name of the account owner."
             }
           },
           "required": [
             "familyName",
             "givenName"
           ],
-          "description": "Full name of the account holder."
+          "description": "Name details of the account owner."
         },
         "timezone": {
           "type": "string",
-          "description": "IANA timezone identifier for the account."
+          "description": "Timezone identifier for the account (e.g., \"America/Sao_Paulo\")."
         },
         "locale": {
           "type": "string",
-          "description": "Locale code for the account (e.g., en_US)."
+          "description": "Locale code for the account (e.g., \"en_US\")."
         },
         "memberships": {
           "type": "array",
@@ -60,7 +62,7 @@
               },
               "rank": {
                 "type": "string",
-                "description": "Rank or role of the account within the organization."
+                "description": "Role of the account within the organization (e.g., \"owner\")."
               }
             },
             "required": [
@@ -72,11 +74,11 @@
         },
         "loginStatus": {
           "type": "boolean",
-          "description": "Whether the account is currently logged in."
+          "description": "Indicates whether the account is currently logged in."
         },
         "inactive": {
           "type": "boolean",
-          "description": "Flag indicating if the account is inactive."
+          "description": "Indicates whether the account is inactive."
         }
       },
       "required": [

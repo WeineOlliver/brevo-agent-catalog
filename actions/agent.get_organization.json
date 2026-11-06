@@ -1,0 +1,53 @@
+{
+  "id": "agent.get_organization",
+  "module": "agent",
+  "name": "Get organization info",
+  "description": "Call this when you need to retrieve the current organization's identifier and business‑unit classification for the logged‑in Brevo account. Use a list‑organizations action instead when you need information about multiple organizations.",
+  "preconditions": [],
+  "inputs": {
+    "type": "object",
+    "properties": {},
+    "required": []
+  },
+  "outputs": {
+    "type": "object",
+    "properties": {
+      "client_id": {
+        "type": "string",
+        "description": "The unique identifier of the organization."
+      },
+      "bu_classification": {
+        "type": "string",
+        "description": "The business‑unit classification of the organization, e.g., \"self-service\"."
+      }
+    },
+    "required": [
+      "client_id",
+      "bu_classification"
+    ]
+  },
+  "side_effects": [],
+  "destructive": false,
+  "idempotent": true,
+  "ui_path": [
+    "Home",
+    "Organization information"
+  ],
+  "internal_endpoint": {
+    "method": "GET",
+    "path": "/api/agent/organization",
+    "body_example": null
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/root.json"
+    ],
+    "verified_at": null
+  }
+}

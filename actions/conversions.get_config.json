@@ -1,0 +1,55 @@
+{
+  "id": "conversions.get_config",
+  "module": "conversions",
+  "name": "Get conversion goals configuration",
+  "description": "Call this when you need to read the current conversion‑goals settings for the logged‑in account, such as the user type and whether conversion tracking is excluded. Use the update configuration action instead if you intend to modify these settings.",
+  "preconditions": [],
+  "inputs": {
+    "type": "object",
+    "properties": {},
+    "required": []
+  },
+  "outputs": {
+    "type": "object",
+    "properties": {
+      "user_type": {
+        "type": "string",
+        "description": "The type of user account (e.g., free)."
+      },
+      "excluded_conversion_user": {
+        "type": "boolean",
+        "description": "Indicates whether conversion tracking is excluded for this user."
+      }
+    },
+    "required": [
+      "user_type",
+      "excluded_conversion_user"
+    ]
+  },
+  "side_effects": [],
+  "destructive": false,
+  "idempotent": true,
+  "ui_path": [
+    "Conversions",
+    "Settings",
+    "Configuration"
+  ],
+  "internal_endpoint": {
+    "method": "GET",
+    "path": "/conversions-goals/config",
+    "body_example": null
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "free",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/conversions-listing.json",
+      "captures/clean/conversions-settings.json"
+    ],
+    "verified_at": null
+  }
+}

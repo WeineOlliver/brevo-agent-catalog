@@ -1,0 +1,206 @@
+{
+  "id": "contacts.get_backend_settings",
+  "module": "contacts",
+  "name": "Get backend settings",
+  "description": "Call this when you need to retrieve the organization configuration and the current account details displayed in the contacts UI. Use a more specific endpoint such as \"contacts.get_current_account\" if you only require the current account information without the organization config.",
+  "preconditions": [],
+  "inputs": {
+    "type": "object",
+    "properties": {},
+    "required": []
+  },
+  "outputs": {
+    "type": "object",
+    "properties": {
+      "organization_config": {
+        "type": "object",
+        "description": "Configuration details for the organization.",
+        "properties": {
+          "crmOnboardingDone": {
+            "type": "boolean",
+            "description": "Whether the CRM onboarding process has been completed."
+          },
+          "organizationName": {
+            "type": "string",
+            "description": "Name of the organization."
+          },
+          "crmFolderId": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Identifier of the CRM folder, if any."
+          },
+          "planTag": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Tag representing the subscription plan."
+          },
+          "dateFormat": {
+            "type": "string",
+            "description": "Date format used by the organization."
+          },
+          "timeFormat": {
+            "type": "string",
+            "description": "Time format used by the organization."
+          },
+          "multiUnsub": {
+            "type": [
+              "boolean",
+              "null"
+            ],
+            "description": "Flag indicating if multiple unsubscribe options are enabled."
+          },
+          "isENT": {
+            "type": "boolean",
+            "description": "Whether the account is an Enterprise (ENT) account."
+          },
+          "isPro": {
+            "type": "boolean",
+            "description": "Whether the account has a Pro subscription."
+          },
+          "isAttributeMigratedToObject": {
+            "type": "boolean",
+            "description": "Whether attributes have been migrated to object format."
+          },
+          "isAttributeOrderPreferenceMigratedToObject": {
+            "type": "boolean",
+            "description": "Whether attribute order preferences have been migrated."
+          },
+          "isAttributeGroupPreferenceMigratedToObject": {
+            "type": "boolean",
+            "description": "Whether attribute group preferences have been migrated."
+          },
+          "isAttributeExportPreferenceMigratedToObject": {
+            "type": "boolean",
+            "description": "Whether attribute export preferences have been migrated."
+          },
+          "isInternalAccount": {
+            "type": "boolean",
+            "description": "Whether the account is an internal Brevo account."
+          }
+        },
+        "required": [
+          "crmOnboardingDone",
+          "organizationName",
+          "crmFolderId",
+          "planTag",
+          "dateFormat",
+          "timeFormat",
+          "multiUnsub",
+          "isENT",
+          "isPro",
+          "isAttributeMigratedToObject",
+          "isAttributeOrderPreferenceMigratedToObject",
+          "isAttributeGroupPreferenceMigratedToObject",
+          "isAttributeExportPreferenceMigratedToObject",
+          "isInternalAccount"
+        ]
+      },
+      "current_account": {
+        "type": "object",
+        "description": "Details about the account currently logged in.",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique identifier of the account."
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "description": "Email address of the account."
+          },
+          "locale": {
+            "type": "string",
+            "description": "Locale code of the account."
+          },
+          "timezone": {
+            "type": "string",
+            "description": "Timezone of the account."
+          },
+          "name": {
+            "type": "string",
+            "description": "Full name of the account holder."
+          },
+          "memberships": {
+            "type": "array",
+            "description": "Memberships of the account in various organizations.",
+            "items": {
+              "type": "object",
+              "properties": {
+                "rank": {
+                  "type": "string",
+                  "description": "Rank of the membership (e.g., owner)."
+                },
+                "mongoId": {
+                  "type": "string",
+                  "description": "MongoDB identifier for the membership."
+                },
+                "mySqlId": {
+                  "type": "string",
+                  "description": "MySQL identifier for the membership."
+                }
+              },
+              "required": [
+                "rank",
+                "mongoId",
+                "mySqlId"
+              ]
+            }
+          },
+          "rank": {
+            "type": "string",
+            "description": "Overall rank of the account within the organization."
+          },
+          "mySqlId": {
+            "type": "string",
+            "description": "MySQL identifier of the account."
+          }
+        },
+        "required": [
+          "id",
+          "email",
+          "locale",
+          "timezone",
+          "name",
+          "memberships",
+          "rank",
+          "mySqlId"
+        ]
+      }
+    },
+    "required": [
+      "organization_config",
+      "current_account"
+    ]
+  },
+  "side_effects": [],
+  "destructive": false,
+  "idempotent": true,
+  "ui_path": [
+    "Contacts",
+    "Settings",
+    "View backend settings"
+  ],
+  "internal_endpoint": {
+    "method": "GET",
+    "path": "/contact/backend/settings",
+    "body_example": null
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/contact-index-id.json",
+      "captures/clean/contact-list-listing.json",
+      "captures/clean/contact-list.json"
+    ],
+    "verified_at": null
+  }
+}

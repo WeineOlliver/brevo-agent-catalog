@@ -1,8 +1,8 @@
 {
-  "id": "segments.get_event_status",
+  "id": "segments.get_events_status",
   "module": "segments",
-  "name": "Get segment event status",
-  "description": "Call this when you need to retrieve the list of event types that are currently enabled for segment filtering (e.g., \"email\"). If you need detailed metadata about each event type, use the action that lists events instead.",
+  "name": "Get segment events status",
+  "description": "Call this when you need to retrieve the list of event types that are currently available for segment operations (e.g., before creating or editing a segment). If you need detailed information about a specific event, use the \"Get segment event details\" action instead.",
   "preconditions": [],
   "inputs": {
     "type": "object",
@@ -14,11 +14,10 @@
     "properties": {
       "data": {
         "type": "array",
+        "description": "Array of event type identifiers available for segments.",
         "items": {
-          "type": "string",
-          "description": "An event type identifier, such as \"email\"."
-        },
-        "description": "Array of enabled event type identifiers."
+          "type": "string"
+        }
       }
     },
     "required": [
@@ -29,8 +28,9 @@
   "destructive": false,
   "idempotent": true,
   "ui_path": [
-    "Segments",
-    "Event status"
+    "Contacts",
+    "List",
+    "Segment events status"
   ],
   "internal_endpoint": {
     "method": "GET",

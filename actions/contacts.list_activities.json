@@ -1,0 +1,129 @@
+{
+  "id": "contacts.list_activities",
+  "module": "contacts",
+  "name": "List contact activities",
+  "description": "Call this when you need to retrieve the recent activities (tasks, notes, campaigns, ecommerce events) for a specific contact. Use the neighbouring action \"contacts.get_contact\" if you only need basic contact details instead of the activity feed.",
+  "preconditions": [
+    "The contact identified by contact_id or email must exist."
+  ],
+  "inputs": {
+    "type": "object",
+    "properties": {
+      "contact_id": {
+        "type": "integer",
+        "description": "Unique identifier of the contact whose activities are being fetched."
+      },
+      "email": {
+        "type": "string",
+        "format": "email",
+        "description": "Email address of the contact (alternative to contact_id)."
+      },
+      "limit": {
+        "type": "integer",
+        "minimum": 1,
+        "description": "Maximum number of activity items to return."
+      },
+      "planned": {
+        "type": "boolean",
+        "description": "If true, include only planned activities."
+      },
+      "pinned": {
+        "type": "boolean",
+        "description": "If true, include only pinned activities."
+      },
+      "type": {
+        "type": "string",
+        "enum": [
+          "task",
+          "note",
+          "campaign",
+          "ecommerce"
+        ],
+        "description": "Filter activities by type."
+      }
+    },
+    "required": [
+      "contact_id"
+    ]
+  },
+  "outputs": {
+    "type": "object",
+    "properties": {
+      "items": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "description": "An activity object (task, note, campaign, etc.)."
+        },
+        "description": "List of activity entries matching the query."
+      },
+      "date_offset": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "format": "date-time",
+        "description": "Offset date used for pagination, if applicable."
+      },
+      "task_start_frame_date": {
+        "type": "string",
+        "format": "date-time",
+        "description": "Reference date for task framing."
+      },
+      "task_offset": {
+        "type": "integer",
+        "description": "Numeric offset for task pagination."
+      },
+      "ecommerce_offset": {
+        "type": "integer",
+        "description": "Numeric offset for ecommerce activity pagination."
+      },
+      "ecommerce_frame_date": {
+        "type": "string",
+        "format": "date-time",
+        "description": "Reference date for ecommerce activity framing."
+      },
+      "campaigns": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "description": "A campaign activity object."
+        },
+        "description": "List of campaign activities."
+      }
+    },
+    "required": [
+      "items",
+      "task_start_frame_date",
+      "task_offset",
+      "ecommerce_offset",
+      "ecommerce_frame_date",
+      "campaigns"
+    ]
+  },
+  "side_effects": [],
+  "destructive": false,
+  "idempotent": true,
+  "ui_path": [
+    "Contacts",
+    "Contact details",
+    "Activities"
+  ],
+  "internal_endpoint": {
+    "method": "GET",
+    "path": "/contact/backend/contacts/activities",
+    "body_example": null
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/contact-index-id.json"
+    ],
+    "verified_at": null
+  }
+}

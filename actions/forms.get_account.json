@@ -2,9 +2,9 @@
   "id": "forms.get_account",
   "module": "forms",
   "name": "Get account information",
-  "description": "Call this when you need to retrieve the account configuration and current user details for the Forms application, such as organization name, plan, locale, and other settings. Use the forms.get_form action instead if you only need details about a specific form.",
+  "description": "Call this when you need to retrieve the current Brevo account details shown on the Forms subscription page. Use the authentication actions (e.g., login or token refresh) instead if the user is not already authenticated.",
   "preconditions": [
-    "A valid authentication token must be provided."
+    "The user must be authenticated (valid session cookie or token)."
   ],
   "inputs": {
     "type": "object",
@@ -16,19 +16,18 @@
     "properties": {
       "organizationConfig": {
         "type": "object",
-        "description": "Configuration of the organization.",
         "properties": {
           "organisationName": {
             "type": "string",
-            "description": "The name of the organization."
+            "description": "Name of the organization."
           },
           "planTag": {
             "type": "string",
-            "description": "The plan tag of the organization.",
+            "description": "Plan tier tag for the organization.",
             "enum": [
               "FREE",
               "STARTER",
-              "PREMIUM",
+              "BUSINESS",
               "ENTERPRISE"
             ]
           }
@@ -40,7 +39,6 @@
       },
       "currentAccount": {
         "type": "object",
-        "description": "Details of the currently authenticated account.",
         "properties": {
           "id": {
             "type": "string",
@@ -48,11 +46,11 @@
           },
           "email": {
             "type": "string",
-            "description": "Account email address."
+            "description": "Email address of the account."
           },
           "locale": {
             "type": "string",
-            "description": "Locale of the account, e.g., en_US."
+            "description": "Locale setting, e.g., en_US."
           },
           "timezone": {
             "type": "string",
@@ -64,7 +62,7 @@
           },
           "rank": {
             "type": "string",
-            "description": "Rank of the user within the organization."
+            "description": "Rank/role of the user within the organization."
           },
           "mySqlId": {
             "type": "string",
@@ -87,21 +85,15 @@
       },
       "isSMTPEnabled": {
         "type": "boolean",
-        "description": "Indicates if SMTP is enabled."
+        "description": "Whether SMTP is enabled."
       },
       "transactionalStatus": {
         "type": "string",
-        "description": "Status of transactional email verification.",
-        "enum": [
-          "phone_not_verified",
-          "phone_verified",
-          "email_not_verified",
-          "email_verified"
-        ]
+        "description": "Status of transactional email verification."
       },
       "isSenderAvailable": {
         "type": "boolean",
-        "description": "Indicates if a sender address is available."
+        "description": "Whether a sender address is available."
       },
       "defaultCountryCode": {
         "type": "string",
@@ -109,7 +101,7 @@
       },
       "auth_token": {
         "type": "string",
-        "description": "Authentication token for the session."
+        "description": "Authentication token for API calls."
       },
       "pricingVersion": {
         "type": "string",
@@ -117,11 +109,11 @@
       },
       "companyIntegrationEnabled": {
         "type": "boolean",
-        "description": "Indicates if company integration features are enabled."
+        "description": "Whether company integrations are enabled."
       },
       "features": {
         "type": "object",
-        "description": "Feature flags for the account.",
+        "description": "Feature flags map.",
         "additionalProperties": true
       }
     },

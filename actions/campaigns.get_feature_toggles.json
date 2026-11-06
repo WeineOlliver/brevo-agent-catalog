@@ -1,0 +1,54 @@
+{
+  "id": "campaigns.get_feature_toggles",
+  "module": "campaigns",
+  "name": "Get feature toggles",
+  "description": "Call this when you need to determine which optional campaign features are currently enabled for the user interface. Use the admin settings UI instead if you need to change any toggle values.",
+  "preconditions": [],
+  "inputs": {
+    "type": "object",
+    "properties": {
+      "t": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        },
+        "description": "Feature toggle identifiers to query (e.g., \"wallet-rollout\", \"ai-campaign-agent-v3\")."
+      }
+    },
+    "required": [
+      "t"
+    ],
+    "additionalProperties": false
+  },
+  "outputs": {
+    "type": "object",
+    "description": "Mapping of each requested feature toggle to its enabled status.",
+    "additionalProperties": {
+      "type": "boolean"
+    }
+  },
+  "side_effects": [],
+  "destructive": false,
+  "idempotent": true,
+  "ui_path": [
+    "Campaigns",
+    "Listing"
+  ],
+  "internal_endpoint": {
+    "method": "GET",
+    "path": "/feature-toggle/unleash",
+    "body_example": null
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/campaigns-listing.json"
+    ],
+    "verified_at": null
+  }
+}

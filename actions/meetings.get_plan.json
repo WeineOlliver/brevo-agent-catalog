@@ -1,0 +1,90 @@
+{
+  "id": "meetings.get_plan",
+  "module": "meetings",
+  "name": "Get plan",
+  "description": "Call this when you need to determine whether the account has a paid Meetings plan and which feature flags are enabled. Use the upgrade plan action instead if the user wants to change to a paid plan.",
+  "preconditions": [],
+  "inputs": {
+    "type": "object",
+    "properties": {},
+    "required": []
+  },
+  "outputs": {
+    "type": "object",
+    "properties": {
+      "has_paid_plan": {
+        "type": "boolean",
+        "description": "Indicates if the account currently has a paid Meetings plan."
+      },
+      "features": {
+        "type": "object",
+        "description": "Feature flags available for the current plan.",
+        "properties": {
+          "remove_brevo_brand": {
+            "type": "boolean",
+            "description": "Whether the Brevo brand can be removed from meeting pages."
+          },
+          "round_robin": {
+            "type": "boolean",
+            "description": "Whether round-robin scheduling is enabled."
+          },
+          "unrestricted_calendars": {
+            "type": "boolean",
+            "description": "Whether unrestricted calendars are allowed."
+          },
+          "add_more_calendars": {
+            "type": "boolean",
+            "description": "Whether adding additional calendars is permitted."
+          }
+        },
+        "required": [
+          "remove_brevo_brand",
+          "round_robin",
+          "unrestricted_calendars",
+          "add_more_calendars"
+        ]
+      },
+      "pricing_version": {
+        "type": "string",
+        "description": "Version identifier for the pricing schema."
+      },
+      "permissions_invalid": {
+        "type": "boolean",
+        "description": "Indicates if the current permissions are invalid for accessing plan details."
+      }
+    },
+    "required": [
+      "has_paid_plan",
+      "features",
+      "pricing_version",
+      "permissions_invalid"
+    ]
+  },
+  "side_effects": [],
+  "destructive": false,
+  "idempotent": true,
+  "ui_path": [
+    "Meetings",
+    "Offer",
+    "All",
+    "Plan"
+  ],
+  "internal_endpoint": {
+    "method": "GET",
+    "path": "/plan",
+    "body_example": null
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/meetings-offer-all.json",
+      "captures/clean/meetings-settings.json"
+    ],
+    "verified_at": null
+  }
+}

@@ -1,0 +1,131 @@
+{
+  "id": "crm.get_form_attributes",
+  "module": "crm",
+  "name": "Get CRM form attributes",
+  "description": "Call this when you need to retrieve the configuration attributes for the contact form in the CRM, such as the default pipeline, deal currency and synchronization settings. Use an update‑form‑attributes action instead when you need to modify these settings.",
+  "preconditions": [],
+  "inputs": {
+    "type": "object",
+    "properties": {},
+    "required": []
+  },
+  "outputs": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "string",
+        "description": "Unique identifier of the configuration record."
+      },
+      "canonicalId": {
+        "type": "integer",
+        "description": "Canonical identifier used internally."
+      },
+      "defaultPipeline": {
+        "type": "string",
+        "description": "Identifier of the default pipeline."
+      },
+      "dealCurrency": {
+        "type": "string",
+        "description": "Currency code used for deals."
+      },
+      "salesProSync": {
+        "type": "boolean",
+        "description": "Whether SalesPro synchronization is enabled."
+      },
+      "translationsSync": {
+        "type": "boolean",
+        "description": "Whether translation synchronization is enabled."
+      },
+      "dealCardView": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "description": "View mode for deal cards, if configured."
+      },
+      "pipelineAttributeVisibility": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "description": "Visibility settings for pipeline attributes."
+      },
+      "isDefaultAttributesSynced_new": {
+        "type": "boolean",
+        "description": "Flag indicating if default attributes have been synced."
+      },
+      "taskSynced": {
+        "type": "boolean",
+        "description": "Flag indicating if tasks are synced."
+      },
+      "noteSynced": {
+        "type": "boolean",
+        "description": "Flag indicating if notes are synced."
+      },
+      "fileSynced": {
+        "type": "boolean",
+        "description": "Flag indicating if files are synced."
+      },
+      "exchange_rates": {
+        "type": [
+          "object",
+          "null"
+        ],
+        "description": "Exchange rates configuration, if any."
+      },
+      "automaticCompanyEnrichment": {
+        "type": [
+          "boolean",
+          "null"
+        ],
+        "description": "Whether automatic company enrichment is enabled."
+      },
+      "automaticCompanyCreation": {
+        "type": [
+          "boolean",
+          "null"
+        ],
+        "description": "Whether automatic company creation is enabled."
+      }
+    },
+    "required": [
+      "id",
+      "canonicalId",
+      "defaultPipeline",
+      "dealCurrency",
+      "salesProSync",
+      "translationsSync",
+      "isDefaultAttributesSynced_new",
+      "taskSynced",
+      "noteSynced",
+      "fileSynced"
+    ]
+  },
+  "side_effects": [],
+  "destructive": false,
+  "idempotent": true,
+  "ui_path": [
+    "CRM",
+    "Contacts",
+    "Contact Details",
+    "Form Settings",
+    "View Attributes"
+  ],
+  "internal_endpoint": {
+    "method": "GET",
+    "path": "/crm/backend/crm-config/get-form-attributes",
+    "body_example": null
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/contact-index-id.json"
+    ],
+    "verified_at": null
+  }
+}

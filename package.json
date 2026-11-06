@@ -22,7 +22,8 @@
     "verify": "tsx scripts/verify.ts",
     "eval": "tsx scripts/eval-selection.ts",
     "build:docs": "tsx scripts/build-modules-doc.ts",
-    "scan": "tsx scripts/scan-secrets.ts"
+    "scan": "tsx scripts/scan-secrets.ts",
+    "normalize": "tsx scripts/normalize-catalog.ts"
   },
   "dependencies": {
     "ajv": "^8.17.1",

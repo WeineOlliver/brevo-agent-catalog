@@ -1,0 +1,198 @@
+{
+  "id": "segments.get_settings",
+  "module": "segments",
+  "name": "Get segment settings",
+  "description": "Call this when you need to retrieve the organization configuration and current account details that the Segments UI uses. If you only need basic account information, use the general account information endpoint instead.",
+  "preconditions": [],
+  "inputs": {
+    "type": "object",
+    "properties": {},
+    "required": []
+  },
+  "outputs": {
+    "type": "object",
+    "properties": {
+      "organization_config": {
+        "type": "object",
+        "properties": {
+          "crmOnboardingDone": {
+            "type": "boolean",
+            "description": "Whether the CRM onboarding flow has been completed."
+          },
+          "organizationName": {
+            "type": "string",
+            "description": "Name of the organization."
+          },
+          "crmFolderId": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Identifier of the CRM folder, if any."
+          },
+          "planTag": {
+            "type": "string",
+            "description": "Plan tag of the organization (e.g., Free, Paid)."
+          },
+          "dateFormat": {
+            "type": "string",
+            "description": "Date format used in the UI."
+          },
+          "timeFormat": {
+            "type": "string",
+            "description": "Time format used in the UI."
+          },
+          "multiUnsub": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Multi-unsubscribe setting, if configured."
+          },
+          "isENT": {
+            "type": "boolean",
+            "description": "Indicates if the account is an Enterprise tier."
+          },
+          "isPro": {
+            "type": "boolean",
+            "description": "Indicates if the account has Pro features enabled."
+          },
+          "isAttributeMigratedToObject": {
+            "type": "boolean",
+            "description": "Flag for attribute migration status."
+          },
+          "isAttributeOrderPreferenceMigratedToObject": {
+            "type": "boolean",
+            "description": "Flag for attribute order preference migration status."
+          },
+          "isAttributeGroupPreferenceMigratedToObject": {
+            "type": "boolean",
+            "description": "Flag for attribute group preference migration status."
+          },
+          "isAttributeExportPreferenceMigratedToObject": {
+            "type": "boolean",
+            "description": "Flag for attribute export preference migration status."
+          },
+          "isInternalAccount": {
+            "type": "boolean",
+            "description": "Whether the account is internal."
+          }
+        },
+        "required": [
+          "crmOnboardingDone",
+          "organizationName",
+          "crmFolderId",
+          "planTag",
+          "dateFormat",
+          "timeFormat",
+          "multiUnsub",
+          "isENT",
+          "isPro",
+          "isAttributeMigratedToObject",
+          "isAttributeOrderPreferenceMigratedToObject",
+          "isAttributeGroupPreferenceMigratedToObject",
+          "isAttributeExportPreferenceMigratedToObject",
+          "isInternalAccount"
+        ]
+      },
+      "current_account": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique identifier of the account."
+          },
+          "email": {
+            "type": "string",
+            "description": "Email address of the account."
+          },
+          "locale": {
+            "type": "string",
+            "description": "Locale setting (e.g., en_US)."
+          },
+          "timezone": {
+            "type": "string",
+            "description": "Timezone of the account."
+          },
+          "name": {
+            "type": "string",
+            "description": "Full name of the account holder."
+          },
+          "memberships": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "rank": {
+                  "type": "string",
+                  "description": "Membership rank (e.g., owner)."
+                },
+                "mongoId": {
+                  "type": "string",
+                  "description": "MongoDB identifier for the membership."
+                },
+                "mySqlId": {
+                  "type": "string",
+                  "description": "MySQL identifier for the membership."
+                }
+              },
+              "required": [
+                "rank",
+                "mongoId",
+                "mySqlId"
+              ]
+            },
+            "description": "List of membership records for the account."
+          },
+          "rank": {
+            "type": "string",
+            "description": "Overall rank of the account (e.g., owner)."
+          },
+          "mySqlId": {
+            "type": "string",
+            "description": "MySQL identifier of the account."
+          }
+        },
+        "required": [
+          "id",
+          "email",
+          "locale",
+          "timezone",
+          "name",
+          "memberships",
+          "rank",
+          "mySqlId"
+        ]
+      }
+    },
+    "required": [
+      "organization_config",
+      "current_account"
+    ]
+  },
+  "side_effects": [],
+  "destructive": false,
+  "idempotent": true,
+  "ui_path": [
+    "Contacts",
+    "Segments",
+    "Settings"
+  ],
+  "internal_endpoint": {
+    "method": "GET",
+    "path": "/contact/backend/settings/segment",
+    "body_example": null
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "free",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/contact-segment.json"
+    ],
+    "verified_at": null
+  }
+}

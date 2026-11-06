@@ -1,0 +1,103 @@
+{
+  "id": "ecommerce.get_settings",
+  "module": "ecommerce",
+  "name": "Get ecommerce settings",
+  "description": "Call this when you need to retrieve the current ecommerce configuration, integration details, permissions, and plan information for the account. Use an update‑settings action instead if you need to modify these values.",
+  "preconditions": [],
+  "inputs": {
+    "type": "object",
+    "properties": {},
+    "required": []
+  },
+  "outputs": {
+    "type": "object",
+    "properties": {
+      "ecommerce": {
+        "type": "object",
+        "properties": {
+          "ecommerce_enabled": {
+            "type": "boolean",
+            "description": "Indicates whether the ecommerce feature is enabled."
+          }
+        },
+        "required": [
+          "ecommerce_enabled"
+        ]
+      },
+      "account": {
+        "type": "object",
+        "description": "Account‑related information (structure not documented).",
+        "properties": {}
+      },
+      "integration": {
+        "type": "object",
+        "properties": {
+          "sync": {
+            "type": "object",
+            "description": "Synchronization settings for integrations.",
+            "properties": {}
+          }
+        },
+        "required": [
+          "sync"
+        ]
+      },
+      "permissions": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        },
+        "description": "List of permission identifiers granted to the current user."
+      },
+      "plan": {
+        "type": "object",
+        "properties": {
+          "v5": {
+            "type": "boolean",
+            "description": "Indicates if the V5 plan is active."
+          },
+          "free": {
+            "type": "boolean",
+            "description": "Indicates if the free plan is active."
+          }
+        },
+        "required": [
+          "v5",
+          "free"
+        ]
+      }
+    },
+    "required": [
+      "ecommerce",
+      "account",
+      "integration",
+      "permissions",
+      "plan"
+    ]
+  },
+  "side_effects": [],
+  "destructive": false,
+  "idempotent": true,
+  "ui_path": [
+    "Ecommerce",
+    "Settings"
+  ],
+  "internal_endpoint": {
+    "method": "GET",
+    "path": "/settings",
+    "body_example": null
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/ecommerce-settings.json",
+      "captures/clean/ecommerce.json"
+    ],
+    "verified_at": null
+  }
+}

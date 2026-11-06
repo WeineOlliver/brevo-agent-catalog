@@ -2,9 +2,9 @@
   "id": "analytics.get_live_updates_token",
   "module": "analytics",
   "name": "Get live updates token",
-  "description": "Call this when you need to obtain a token for receiving live updates in analytics or automation dashboards. If the user does not have any active integrations, the response will contain an error; in that case, use the action to configure or activate an integration instead.",
+  "description": "Call this when the UI needs a token to subscribe to real‑time analytics updates (e.g., live dashboards, conversation streams). If the user does not have any active integrations, use the action to prompt the user to set up an integration instead.",
   "preconditions": [
-    "The user must have at least one active integration."
+    "The user must have at least one active integration configured."
   ],
   "inputs": {
     "type": "object",
@@ -13,24 +13,43 @@
   },
   "outputs": {
     "type": "object",
-    "properties": {
-      "error": {
-        "type": "string",
-        "description": "Error message when no active integrations are present."
+    "oneOf": [
+      {
+        "type": "object",
+        "properties": {
+          "token": {
+            "type": "string",
+            "description": "A JWT or opaque token that can be used to open a live‑updates connection."
+          }
+        },
+        "required": [
+          "token"
+        ],
+        "additionalProperties": false
       },
-      "token": {
-        "type": "string",
-        "description": "A JWT or similar token used for live update connections."
+      {
+        "type": "object",
+        "properties": {
+          "error": {
+            "type": "string",
+            "description": "Error message describing why a token could not be issued."
+          }
+        },
+        "required": [
+          "error"
+        ],
+        "additionalProperties": false
       }
-    },
-    "required": []
+    ]
   },
-  "side_effects": [],
+  "side_effects": [
+    "None; the call only retrieves a token or an error message."
+  ],
   "destructive": false,
   "idempotent": true,
   "ui_path": [
     "Analytics",
-    "Live updates",
+    "Live Updates",
     "Refresh token"
   ],
   "internal_endpoint": {

@@ -1,0 +1,68 @@
+{
+  "id": "dashboard.get_transactional_stats",
+  "module": "dashboard",
+  "name": "Get transactional stats",
+  "description": "Call this when you need the current transactional email statistics displayed on the Brevo dashboard, such as delivered count, estimated openers, hard bounces, blocked messages, and emails sent. If you need more detailed or historical analytics, use the dedicated analytics endpoints instead.",
+  "preconditions": [],
+  "inputs": {
+    "type": "object",
+    "properties": {},
+    "required": []
+  },
+  "outputs": {
+    "type": "object",
+    "properties": {
+      "delivered": {
+        "type": "integer",
+        "description": "Number of emails successfully delivered."
+      },
+      "estimatedOpeners": {
+        "type": "integer",
+        "description": "Estimated number of recipients who opened the email."
+      },
+      "hardBounce": {
+        "type": "integer",
+        "description": "Count of emails that hard bounced."
+      },
+      "blocked": {
+        "type": "integer",
+        "description": "Number of emails blocked by spam filters or other rules."
+      },
+      "emailSent": {
+        "type": "integer",
+        "description": "Total number of emails sent."
+      }
+    },
+    "required": [
+      "delivered",
+      "estimatedOpeners",
+      "hardBounce",
+      "blocked",
+      "emailSent"
+    ]
+  },
+  "side_effects": [],
+  "destructive": false,
+  "idempotent": true,
+  "ui_path": [
+    "Dashboard",
+    "Transactional stats"
+  ],
+  "internal_endpoint": {
+    "method": "GET",
+    "path": "/dashboard-transactional-stats",
+    "body_example": null
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/root.json"
+    ],
+    "verified_at": null
+  }
+}

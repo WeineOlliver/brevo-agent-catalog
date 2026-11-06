@@ -1,0 +1,63 @@
+{
+  "id": "scores.get_history",
+  "module": "scores",
+  "name": "Get scores history",
+  "description": "Call this when you need to retrieve the historical scoring data for the current organization. If you only need the latest score, use the \"scores.get_current\" action instead.",
+  "preconditions": [],
+  "inputs": {
+    "type": "object",
+    "properties": {},
+    "required": []
+  },
+  "outputs": {
+    "type": "object",
+    "properties": {
+      "status": {
+        "type": "string",
+        "description": "Indicates the request outcome, e.g., \"success\"."
+      },
+      "organization_id": {
+        "type": "string",
+        "description": "The identifier of the organization whose scores are being retrieved."
+      },
+      "data": {
+        "type": "array",
+        "description": "List of score entries over time.",
+        "items": {
+          "type": "object",
+          "description": "A single score record; fields are not documented."
+        }
+      }
+    },
+    "required": [
+      "status",
+      "organization_id",
+      "data"
+    ]
+  },
+  "side_effects": [],
+  "destructive": false,
+  "idempotent": true,
+  "ui_path": [
+    "Dashboard",
+    "Scores",
+    "History"
+  ],
+  "internal_endpoint": {
+    "method": "GET",
+    "path": "/scores-history",
+    "body_example": null
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/root.json"
+    ],
+    "verified_at": null
+  }
+}

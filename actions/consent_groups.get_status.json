@@ -1,0 +1,77 @@
+{
+  "id": "consent_groups.get_status",
+  "module": "consent_groups",
+  "name": "Get consent groups status",
+  "description": "Call this when you need to know whether consent‑group features are available for the current account (e.g., before showing consent‑group UI options). Use a more specific contact‑level endpoint if you only need consent information for an individual contact.",
+  "preconditions": [],
+  "inputs": {
+    "type": "object",
+    "properties": {},
+    "required": []
+  },
+  "outputs": {
+    "type": "object",
+    "properties": {
+      "consent_group_enabled": {
+        "type": "boolean",
+        "description": "True if the consent‑group feature is enabled for the account."
+      },
+      "has_ent_plan": {
+        "type": "boolean",
+        "description": "True if the account has an Enterprise plan."
+      },
+      "is_pro": {
+        "type": "boolean",
+        "description": "True if the account is a Pro subscription."
+      },
+      "config_enabled": {
+        "type": "boolean",
+        "description": "True if consent‑group configuration is enabled."
+      },
+      "cdt_consent_group": {
+        "type": "boolean",
+        "description": "Indicates whether the CDT consent‑group flag is active."
+      },
+      "multi_unsub": {
+        "type": "boolean",
+        "description": "True if multi‑unsubscribe is allowed."
+      }
+    },
+    "required": [
+      "consent_group_enabled",
+      "has_ent_plan",
+      "is_pro",
+      "config_enabled",
+      "cdt_consent_group",
+      "multi_unsub"
+    ]
+  },
+  "side_effects": [],
+  "destructive": false,
+  "idempotent": true,
+  "ui_path": [
+    "Contacts",
+    "List listing",
+    "Open list :id",
+    "Check consent groups status"
+  ],
+  "internal_endpoint": {
+    "method": "GET",
+    "path": "/v1/consent-groups/status",
+    "body_example": null
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/companies-settings.json",
+      "captures/clean/contact-index-id.json",
+      "captures/clean/contact-list-listing.json"
+    ],
+    "verified_at": null
+  }
+}

@@ -1,0 +1,150 @@
+{
+  "id": "contacts.add_contact_to_lists",
+  "module": "contacts",
+  "name": "Add contact to lists",
+  "description": "Call this when you need to add the currently viewed contact to one or more existing lists. Use the remove contact from lists action instead when you want to detach the contact from a list.",
+  "preconditions": [
+    "The contact must already exist.",
+    "The target lists must already exist."
+  ],
+  "inputs": {
+    "type": "object",
+    "properties": {
+      "listIds": {
+        "type": "array",
+        "items": {
+          "type": "integer"
+        },
+        "description": "Array of list IDs to which the contact should be added."
+      }
+    },
+    "required": [
+      "listIds"
+    ],
+    "additionalProperties": false
+  },
+  "outputs": {
+    "type": "array",
+    "items": {
+      "type": "object",
+      "properties": {
+        "folder": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "integer"
+            },
+            "name": {
+              "type": "string"
+            },
+            "listParent": {
+              "type": "integer"
+            },
+            "isFolder": {
+              "type": "integer"
+            },
+            "blacklisted": {
+              "type": "integer"
+            },
+            "count": {
+              "type": "integer"
+            },
+            "listOrder": {
+              "type": "integer"
+            },
+            "entered": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          "required": [
+            "id",
+            "name",
+            "listParent",
+            "isFolder",
+            "blacklisted",
+            "count",
+            "listOrder",
+            "entered"
+          ]
+        },
+        "list": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer"
+              },
+              "name": {
+                "type": "string"
+              },
+              "listParent": {
+                "type": "integer"
+              },
+              "isFolder": {
+                "type": "integer"
+              },
+              "blacklisted": {
+                "type": "integer"
+              },
+              "count": {
+                "type": "integer"
+              },
+              "listOrder": {
+                "type": "integer"
+              },
+              "entered": {
+                "type": "string",
+                "format": "date-time"
+              }
+            },
+            "required": [
+              "id",
+              "name",
+              "listParent",
+              "isFolder",
+              "blacklisted",
+              "count",
+              "listOrder",
+              "entered"
+            ]
+          }
+        }
+      },
+      "required": [
+        "folder",
+        "list"
+      ]
+    }
+  },
+  "side_effects": [
+    "The contact is added to the specified list(s)."
+  ],
+  "destructive": true,
+  "idempotent": false,
+  "ui_path": [
+    "Contacts",
+    "Contact details",
+    "Lists",
+    "Add to list",
+    "Save"
+  ],
+  "internal_endpoint": {
+    "method": "POST",
+    "path": "/contact/backend/contacts/lists",
+    "body_example": "{\"listIds\":[2]}"
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/contact-index-id.json"
+    ],
+    "verified_at": null
+  }
+}

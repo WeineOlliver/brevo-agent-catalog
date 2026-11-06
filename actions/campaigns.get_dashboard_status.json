@@ -1,8 +1,8 @@
 {
-  "id": "dashboard.get_campaign_status",
-  "module": "dashboard",
-  "name": "Get campaign status",
-  "description": "Call this when you need to know whether any campaign is currently scheduled in the account. If you need details about specific campaigns, use the campaigns.list_campaigns action instead.",
+  "id": "campaigns.get_dashboard_status",
+  "module": "campaigns",
+  "name": "Get dashboard campaign status",
+  "description": "Call this when you need to know whether a campaign is currently scheduled as shown on the dashboard. Use the list scheduled campaigns action instead if you need details about which campaigns are scheduled.",
   "preconditions": [],
   "inputs": {
     "type": "object",
@@ -14,7 +14,7 @@
     "properties": {
       "isCampaignScheduled": {
         "type": "boolean",
-        "description": "True if there is at least one campaign scheduled, false otherwise."
+        "description": "True if a campaign is scheduled, false otherwise."
       }
     },
     "required": [

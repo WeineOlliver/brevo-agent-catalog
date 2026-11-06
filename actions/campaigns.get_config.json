@@ -1,0 +1,266 @@
+{
+  "id": "campaigns.get_config",
+  "module": "campaigns",
+  "name": "Get campaign configuration",
+  "description": "Call this when you need to retrieve the current account's email‑campaign configuration, such as organization name, plan limits, authorized actions, and remaining email credits. Use the \"campaigns.list\" action instead when you need to fetch the list of actual campaigns rather than the configuration.",
+  "preconditions": [],
+  "inputs": {
+    "type": "object",
+    "properties": {},
+    "required": []
+  },
+  "outputs": {
+    "type": "object",
+    "properties": {
+      "organization_name": {
+        "type": "string",
+        "description": "Name of the organization."
+      },
+      "delay": {
+        "type": "integer",
+        "description": "Configured delay for sending."
+      },
+      "plan_info": {
+        "type": "object",
+        "description": "Details about the current plan.",
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "FREE",
+              "PAID"
+            ],
+            "description": "Plan type."
+          },
+          "name": {
+            "type": "string",
+            "description": "Plan name."
+          },
+          "ab_test_addon": {
+            "type": "boolean",
+            "description": "Whether the A/B test addon is enabled."
+          },
+          "marketing_contact": {
+            "type": "object",
+            "description": "Marketing contact limits.",
+            "properties": {
+              "enabled": {
+                "type": "string",
+                "description": "Flag indicating if marketing contact is enabled (e.g., \"1\")."
+              },
+              "max_limit": {
+                "type": "string",
+                "description": "Maximum number of marketing contacts allowed."
+              },
+              "used": {
+                "type": "string",
+                "description": "Number of marketing contacts already used."
+              }
+            },
+            "required": [
+              "enabled",
+              "max_limit",
+              "used"
+            ]
+          }
+        },
+        "required": [
+          "type",
+          "name",
+          "ab_test_addon",
+          "marketing_contact"
+        ]
+      },
+      "plans_max_emails_limit": {
+        "type": "object",
+        "description": "Maximum email sending limits per plan tier.",
+        "properties": {
+          "Atomic": {
+            "type": "integer"
+          },
+          "Bronze": {
+            "type": "integer"
+          },
+          "Diamond": {
+            "type": "integer"
+          },
+          "Gold": {
+            "type": "integer"
+          },
+          "Lite": {
+            "type": "integer"
+          },
+          "Micro": {
+            "type": "integer"
+          },
+          "Platinum": {
+            "type": "integer"
+          },
+          "Silver": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "Atomic",
+          "Bronze",
+          "Diamond",
+          "Gold",
+          "Lite",
+          "Micro",
+          "Platinum",
+          "Silver"
+        ]
+      },
+      "tags": {
+        "type": [
+          "null",
+          "array"
+        ],
+        "items": {
+          "type": "string"
+        },
+        "description": "Custom tags, if any."
+      },
+      "sms_credits": {
+        "type": "integer",
+        "description": "Remaining SMS credits."
+      },
+      "authorized_actions": {
+        "type": "object",
+        "description": "Permissions for different channel types.",
+        "properties": {
+          "email": {
+            "type": "object",
+            "properties": {
+              "crud": {
+                "type": "boolean"
+              },
+              "send": {
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "crud",
+              "send"
+            ]
+          },
+          "sms": {
+            "type": "object",
+            "properties": {
+              "crud": {
+                "type": "boolean"
+              },
+              "send": {
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "crud",
+              "send"
+            ]
+          },
+          "facebook_ads": {
+            "type": "object",
+            "properties": {
+              "crud": {
+                "type": "boolean"
+              },
+              "send": {
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "crud",
+              "send"
+            ]
+          },
+          "push_notifications": {
+            "type": "object",
+            "properties": {
+              "view": {
+                "type": "boolean"
+              },
+              "crud": {
+                "type": "boolean"
+              },
+              "send": {
+                "type": "boolean"
+              },
+              "settings": {
+                "type": "boolean"
+              },
+              "segments": {
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "view",
+              "crud",
+              "send",
+              "settings",
+              "segments"
+            ]
+          }
+        },
+        "required": [
+          "email",
+          "sms",
+          "facebook_ads",
+          "push_notifications"
+        ]
+      },
+      "is_chargebee_user": {
+        "type": "boolean",
+        "description": "Whether the account uses Chargebee billing."
+      },
+      "new_pricing_enabled": {
+        "type": "boolean",
+        "description": "Flag indicating if the new pricing model is enabled."
+      },
+      "pricing_version": {
+        "type": "string",
+        "description": "Version identifier for the pricing model."
+      },
+      "remaining_email_pd": {
+        "type": "integer",
+        "description": "Remaining daily email quota."
+      }
+    },
+    "required": [
+      "organization_name",
+      "delay",
+      "plan_info",
+      "plans_max_emails_limit",
+      "authorized_actions",
+      "is_chargebee_user",
+      "new_pricing_enabled",
+      "pricing_version",
+      "remaining_email_pd"
+    ]
+  },
+  "side_effects": [],
+  "destructive": false,
+  "idempotent": true,
+  "ui_path": [
+    "Campaigns",
+    "Listing"
+  ],
+  "internal_endpoint": {
+    "method": "GET",
+    "path": "/email-campaign/api/config",
+    "body_example": null
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/campaigns-listing.json",
+      "captures/clean/templates-listing.json"
+    ],
+    "verified_at": null
+  }
+}

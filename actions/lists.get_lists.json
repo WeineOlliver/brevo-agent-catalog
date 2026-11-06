@@ -1,0 +1,124 @@
+{
+  "id": "lists.get_lists",
+  "module": "lists",
+  "name": "Get lists",
+  "description": "Call this when you need to retrieve a paginated collection of contact lists, optionally filtered by folder and sorted. Use the list‑details endpoint (if available) when you need information about a single list or its members.",
+  "preconditions": [],
+  "inputs": {
+    "type": "object",
+    "properties": {
+      "folder_id": {
+        "type": "string",
+        "description": "Identifier of the folder to filter lists; empty string returns lists from all folders."
+      },
+      "limit": {
+        "type": "integer",
+        "description": "Maximum number of lists to return per page. Defaults to 20 if omitted."
+      },
+      "offset": {
+        "type": "integer",
+        "description": "Page offset (starting at 1). Used together with limit for pagination."
+      },
+      "sort_key": {
+        "type": "string",
+        "enum": [
+          "entered",
+          "name",
+          "count"
+        ],
+        "description": "Field to sort the results by. \"entered\" sorts by creation date."
+      },
+      "sort_order": {
+        "type": "string",
+        "enum": [
+          "asc",
+          "desc"
+        ],
+        "description": "Direction of sorting; \"asc\" for ascending, \"desc\" for descending."
+      }
+    },
+    "required": []
+  },
+  "outputs": {
+    "type": "object",
+    "properties": {
+      "data": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "integer",
+              "description": "Unique identifier of the list."
+            },
+            "name": {
+              "type": "string",
+              "description": "Human‑readable name of the list."
+            },
+            "count": {
+              "type": "integer",
+              "description": "Number of contacts in the list."
+            },
+            "list_parent": {
+              "type": "integer",
+              "description": "Identifier of the parent folder."
+            },
+            "entered": {
+              "type": "string",
+              "description": "Timestamp when the list was created, in \"DD-MM-YYYY HH:MM:SS\" format."
+            },
+            "isDynamicList": {
+              "type": "integer",
+              "enum": [
+                0,
+                1
+              ],
+              "description": "Flag indicating if the list is dynamic (1) or static (0)."
+            }
+          },
+          "required": [
+            "id",
+            "name",
+            "count",
+            "list_parent",
+            "entered",
+            "isDynamicList"
+          ]
+        },
+        "description": "Array of list objects matching the query."
+      },
+      "total_count": {
+        "type": "integer",
+        "description": "Total number of lists available across all pages."
+      }
+    },
+    "required": [
+      "data",
+      "total_count"
+    ]
+  },
+  "side_effects": [],
+  "destructive": false,
+  "idempotent": true,
+  "ui_path": [
+    "Contacts",
+    "List listing"
+  ],
+  "internal_endpoint": {
+    "method": "GET",
+    "path": "/lists/get-lists",
+    "body_example": null
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/contact-list-listing.json"
+    ],
+    "verified_at": null
+  }
+}

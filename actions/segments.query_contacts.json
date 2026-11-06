@@ -1,0 +1,210 @@
+{
+  "id": "segments.query_contacts",
+  "module": "segments",
+  "name": "Query segment contacts",
+  "description": "Call this when you need to retrieve the contacts that belong to a specific segment, with pagination and optional forced refresh of the segment calculation. Use the standard contacts list endpoint instead if you only need a simple, unfiltered list of contacts.",
+  "preconditions": [
+    "The segment being queried must already exist."
+  ],
+  "inputs": {
+    "type": "object",
+    "properties": {
+      "fe_query": {
+        "type": "object",
+        "description": "The front‑end query definition that specifies the segmentation criteria."
+      },
+      "page": {
+        "type": "integer",
+        "minimum": 1,
+        "description": "The page number to retrieve (starting at 1)."
+      },
+      "limit": {
+        "type": "integer",
+        "minimum": 1,
+        "description": "Maximum number of contacts to return per page."
+      },
+      "force_refresh": {
+        "type": "boolean",
+        "description": "If true, forces Brevo to recalculate the segment before returning results."
+      }
+    },
+    "required": [
+      "fe_query",
+      "page",
+      "limit",
+      "force_refresh"
+    ]
+  },
+  "outputs": {
+    "type": "object",
+    "properties": {
+      "data": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "integer",
+              "description": "Contact identifier."
+            },
+            "email": {
+              "type": "string",
+              "format": "email",
+              "description": "Contact email address."
+            },
+            "attributes": {
+              "type": "array",
+              "items": {
+                "type": "object"
+              },
+              "description": "Custom attributes of the contact."
+            },
+            "entered": {
+              "type": "string",
+              "format": "date-time",
+              "description": "Timestamp when the contact entered the segment."
+            },
+            "last_modified": {
+              "type": "string",
+              "format": "date-time",
+              "description": "Timestamp of the last modification of the contact."
+            },
+            "blacklisted": {
+              "type": "integer",
+              "description": "Indicates if the contact is blacklisted (0 = no, 1 = yes)."
+            },
+            "sc": {
+              "type": "integer",
+              "description": "Segment score or similar internal metric."
+            },
+            "sib_order": {
+              "type": "integer",
+              "description": "Internal order value for Sendinblue."
+            },
+            "sib_revenue": {
+              "type": "integer",
+              "description": "Revenue associated with the contact in Sendinblue."
+            },
+            "pushSubscribed": {
+              "type": [
+                "boolean",
+                "null"
+              ],
+              "description": "Whether the contact is subscribed to push notifications."
+            },
+            "is_anonymous": {
+              "type": "boolean",
+              "description": "True if the contact is anonymous."
+            },
+            "subscriptions": {
+              "type": "object",
+              "description": "Subscription status per channel.",
+              "additionalProperties": {
+                "type": "object",
+                "properties": {
+                  "status": {
+                    "type": "string",
+                    "enum": [
+                      "subscribed",
+                      "unsubscribed",
+                      "pending"
+                    ],
+                    "description": "Subscription status for the channel."
+                  }
+                },
+                "required": [
+                  "status"
+                ]
+              }
+            },
+            "assignTo": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "description": "User the contact is assigned to, if any."
+            },
+            "nextTaskStartAt": {
+              "type": "string",
+              "description": "Timestamp for the next scheduled task for the contact."
+            }
+          },
+          "required": [
+            "id",
+            "email"
+          ]
+        },
+        "description": "List of contacts matching the segment query."
+      },
+      "metadata": {
+        "type": "object",
+        "properties": {
+          "contact_count": {
+            "type": "integer",
+            "description": "Number of contacts returned in this page."
+          },
+          "total_count": {
+            "type": "integer",
+            "description": "Total number of contacts in the segment."
+          },
+          "segmentation": {
+            "type": "object",
+            "description": "Additional segmentation metadata.",
+            "properties": {
+              "first_values": {
+                "type": "object",
+                "properties": {
+                  "bucket_number": {
+                    "type": "integer"
+                  },
+                  "durations": {
+                    "type": "array",
+                    "items": {
+                      "type": "integer"
+                    }
+                  },
+                  "max_duration": {
+                    "type": "integer"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "required": [
+          "contact_count",
+          "total_count"
+        ]
+      }
+    },
+    "required": [
+      "data",
+      "metadata"
+    ]
+  },
+  "side_effects": [],
+  "destructive": true,
+  "idempotent": false,
+  "ui_path": [
+    "Contacts",
+    "Segments",
+    "Query segment"
+  ],
+  "internal_endpoint": {
+    "method": "POST",
+    "path": "/segment/query",
+    "body_example": "{\"fe_query\":{},\"page\":1,\"limit\":20,\"force_refresh\":true}"
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/contact-list.json"
+    ],
+    "verified_at": null
+  }
+}

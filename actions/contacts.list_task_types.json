@@ -1,0 +1,62 @@
+{
+  "id": "contacts.list_task_types",
+  "module": "contacts",
+  "name": "List task types",
+  "description": "Call this when you need to retrieve the catalog of task types that can be associated with a contact (e.g., Email, Call, Todo, etc.). Use the neighbouring action contacts.get_contact if you need information about a specific contact instead.",
+  "preconditions": [],
+  "inputs": {
+    "type": "object",
+    "properties": {},
+    "required": []
+  },
+  "outputs": {
+    "type": "array",
+    "items": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier of the task type."
+        },
+        "title": {
+          "type": "string",
+          "description": "Human‑readable name of the task type."
+        },
+        "icon": {
+          "type": "string",
+          "description": "Icon identifier associated with the task type."
+        }
+      },
+      "required": [
+        "id",
+        "title",
+        "icon"
+      ]
+    }
+  },
+  "side_effects": [],
+  "destructive": false,
+  "idempotent": true,
+  "ui_path": [
+    "Contacts",
+    "Contact Details",
+    "Task Types"
+  ],
+  "internal_endpoint": {
+    "method": "GET",
+    "path": "/contact/backend/settings/task-types",
+    "body_example": null
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/contact-index-id.json"
+    ],
+    "verified_at": null
+  }
+}

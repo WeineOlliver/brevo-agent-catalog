@@ -1,0 +1,76 @@
+{
+  "id": "domains.list",
+  "module": "domains",
+  "name": "List domains",
+  "description": "Call this when you need to retrieve the paginated list of domains associated with the account, for example to display them in a UI or to select a domain for further actions. Use the domain detail endpoint instead when you need information about a specific domain.",
+  "preconditions": [],
+  "inputs": {
+    "type": "object",
+    "properties": {
+      "limit": {
+        "type": "integer",
+        "description": "Maximum number of domains to return per page."
+      },
+      "page": {
+        "type": "integer",
+        "description": "Page number to retrieve."
+      }
+    },
+    "required": []
+  },
+  "outputs": {
+    "type": "object",
+    "properties": {
+      "domains": {
+        "type": "array",
+        "description": "Array of domain objects.",
+        "items": {
+          "type": "object"
+        }
+      },
+      "count": {
+        "type": "integer",
+        "description": "Total number of domains matching the query."
+      },
+      "current_page": {
+        "type": "integer",
+        "description": "The page number returned in this response."
+      },
+      "total_pages": {
+        "type": "integer",
+        "description": "Total number of pages available."
+      }
+    },
+    "required": [
+      "domains",
+      "count",
+      "current_page",
+      "total_pages"
+    ]
+  },
+  "side_effects": [],
+  "destructive": false,
+  "idempotent": true,
+  "ui_path": [
+    "Settings",
+    "Domain Management",
+    "Domain List"
+  ],
+  "internal_endpoint": {
+    "method": "GET",
+    "path": "/api/domain/list",
+    "body_example": null
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/root.json"
+    ],
+    "verified_at": null
+  }
+}

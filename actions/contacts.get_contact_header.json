@@ -1,0 +1,189 @@
+{
+  "id": "contacts.get_contact_header",
+  "module": "contacts",
+  "name": "Get contact header",
+  "description": "Call this when you need the concise header information for a specific contact, such as full title, short title, and subscription status. Use contacts.get_contact to retrieve the full contact details instead.",
+  "preconditions": [
+    "The contact with the given ID must exist."
+  ],
+  "inputs": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "integer",
+        "description": "The unique identifier of the contact."
+      }
+    },
+    "required": [
+      "id"
+    ]
+  },
+  "outputs": {
+    "type": "object",
+    "properties": {
+      "full_title": {
+        "type": "string",
+        "description": "Full title of the contact, often the email address."
+      },
+      "short_title": {
+        "type": "string",
+        "description": "Short title or abbreviation for the contact."
+      },
+      "user_history": {
+        "type": "object",
+        "properties": {
+          "action": {
+            "type": "string",
+            "description": "The action that created or modified the contact."
+          },
+          "date": {
+            "type": "string",
+            "description": "Timestamp of the action in ISO format."
+          },
+          "source": {
+            "type": "string",
+            "description": "Source of the action."
+          },
+          "ip": {
+            "type": "string",
+            "description": "IP address associated with the action."
+          },
+          "name": {
+            "type": "string",
+            "description": "Name of the source entity."
+          }
+        },
+        "required": [
+          "action",
+          "date",
+          "source",
+          "ip",
+          "name"
+        ]
+      },
+      "created_at": {
+        "type": "string",
+        "format": "date-time",
+        "description": "When the contact was created."
+      },
+      "email_tag": {
+        "type": "string",
+        "description": "Domain part of the email address."
+      },
+      "show_sms": {
+        "type": "boolean",
+        "description": "Whether SMS channel is shown for this contact."
+      },
+      "show_whatsapp": {
+        "type": "boolean",
+        "description": "Whether WhatsApp channel is shown for this contact."
+      },
+      "show_webpush": {
+        "type": "boolean",
+        "description": "Whether Webpush channel is shown for this contact."
+      },
+      "sms": {
+        "type": "string",
+        "description": "SMS number of the contact."
+      },
+      "email_blacklisted": {
+        "type": "integer",
+        "description": "Email blacklisted flag (0 = not blacklisted, 1 = blacklisted)."
+      },
+      "sms_blacklisted": {
+        "type": "integer",
+        "description": "SMS blacklisted flag."
+      },
+      "whatsapp_blacklisted": {
+        "type": "integer",
+        "description": "WhatsApp blacklisted flag."
+      },
+      "whatsapp": {
+        "type": "string",
+        "description": "WhatsApp number of the contact."
+      },
+      "email": {
+        "type": "string",
+        "format": "email",
+        "description": "Email address of the contact."
+      },
+      "id": {
+        "type": "integer",
+        "description": "Unique identifier of the contact."
+      },
+      "contact": {
+        "type": "string",
+        "description": "Display name of the contact, often the email address."
+      },
+      "subscriptions": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "object",
+            "properties": {
+              "status": {
+                "type": "string",
+                "enum": [
+                  "subscribed",
+                  "unsubscribed",
+                  "pending"
+                ],
+                "description": "Subscription status for email channel."
+              }
+            },
+            "required": [
+              "status"
+            ]
+          }
+        },
+        "required": [
+          "email"
+        ]
+      }
+    },
+    "required": [
+      "full_title",
+      "short_title",
+      "user_history",
+      "created_at",
+      "email_tag",
+      "show_sms",
+      "show_whatsapp",
+      "show_webpush",
+      "sms",
+      "email_blacklisted",
+      "sms_blacklisted",
+      "whatsapp_blacklisted",
+      "whatsapp",
+      "email",
+      "id",
+      "contact",
+      "subscriptions"
+    ]
+  },
+  "side_effects": [],
+  "destructive": false,
+  "idempotent": true,
+  "ui_path": [
+    "Contacts",
+    "Contact details",
+    "Header"
+  ],
+  "internal_endpoint": {
+    "method": "GET",
+    "path": "/contact/backend/contacts/:id/header",
+    "body_example": null
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/contact-index-id.json"
+    ],
+    "verified_at": null
+  }
+}

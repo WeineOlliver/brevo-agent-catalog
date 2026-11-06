@@ -2,7 +2,7 @@
   "id": "lists.get_folders",
   "module": "lists",
   "name": "Get list folders",
-  "description": "Call this when you need to retrieve the folder hierarchy that groups contact lists in the UI. Use the \"lists.get_lists\" action instead if you need the actual lists within a folder rather than the folder metadata.",
+  "description": "Call this when you need to retrieve the folders that contain contact lists, including their IDs, names, list counts, and default status. Use the action to populate folder selection UI. If you need to create a new folder instead, use lists.create_folder.",
   "preconditions": [],
   "inputs": {
     "type": "object",
@@ -14,6 +14,7 @@
     "properties": {
       "folders_data": {
         "type": "array",
+        "description": "Array of folder objects.",
         "items": {
           "type": "object",
           "properties": {
@@ -27,7 +28,7 @@
             },
             "list_count": {
               "type": "integer",
-              "description": "Number of static lists contained in the folder."
+              "description": "Number of contact lists contained in the folder."
             },
             "is_default": {
               "type": "boolean",
@@ -40,16 +41,15 @@
             "list_count",
             "is_default"
           ]
-        },
-        "description": "Array of folder metadata."
+        }
       },
       "total_list_count": {
         "type": "integer",
-        "description": "Total number of static lists across all folders."
+        "description": "Total number of static contact lists across all folders."
       },
       "total_dynamic_list_count": {
         "type": "integer",
-        "description": "Total number of dynamic lists across all folders."
+        "description": "Total number of dynamic contact lists across all folders."
       }
     },
     "required": [
@@ -63,8 +63,7 @@
   "idempotent": true,
   "ui_path": [
     "Contacts",
-    "List listing",
-    "Folders"
+    "List listing"
   ],
   "internal_endpoint": {
     "method": "GET",

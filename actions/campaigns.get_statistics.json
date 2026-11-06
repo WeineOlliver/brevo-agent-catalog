@@ -1,0 +1,192 @@
+{
+  "id": "campaigns.get_statistics",
+  "module": "campaigns",
+  "name": "Get campaign statistics",
+  "description": "Call this when you need aggregated statistics for campaigns over a specific date range, including totals for sent, delivered, opens, clicks, bounces, unsubscribes, etc. Use the detailed single‑campaign report action instead if you only need information for one campaign.",
+  "preconditions": [],
+  "inputs": {
+    "type": "object",
+    "properties": {
+      "startDate": {
+        "type": "string",
+        "format": "date",
+        "description": "Start date (inclusive) for the statistics period, in YYYY-MM-DD format."
+      },
+      "endDate": {
+        "type": "string",
+        "format": "date",
+        "description": "End date (inclusive) for the statistics period, in YYYY-MM-DD format."
+      },
+      "page": {
+        "type": "integer",
+        "minimum": 1,
+        "default": 1,
+        "description": "Page number for pagination."
+      },
+      "pageSize": {
+        "type": "integer",
+        "minimum": 1,
+        "default": 10,
+        "description": "Number of items per page."
+      },
+      "sortBy": {
+        "type": "string",
+        "enum": [
+          "sendDate"
+        ],
+        "description": "Field to sort results by."
+      },
+      "sortOrder": {
+        "type": "string",
+        "enum": [
+          "asc",
+          "desc"
+        ],
+        "description": "Sort direction."
+      },
+      "campaignType": {
+        "type": "string",
+        "enum": [
+          "sms",
+          "email"
+        ],
+        "description": "Filter results by campaign type."
+      }
+    },
+    "required": [
+      "startDate",
+      "endDate"
+    ]
+  },
+  "outputs": {
+    "type": "object",
+    "properties": {
+      "data": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "description": "Individual campaign statistic entry (fields not documented)."
+        },
+        "description": "List of campaign statistics for the requested page."
+      },
+      "total": {
+        "type": "object",
+        "properties": {
+          "total_sent": {
+            "type": "number"
+          },
+          "total_delivered": {
+            "type": "number"
+          },
+          "total_delivered_email": {
+            "type": "number"
+          },
+          "total_viewed": {
+            "type": "number"
+          },
+          "total_clicked": {
+            "type": "number"
+          },
+          "total_bounces": {
+            "type": "number"
+          },
+          "total_unsub": {
+            "type": "number"
+          },
+          "total_replied": {
+            "type": "number"
+          },
+          "total_count": {
+            "type": "number"
+          },
+          "totalViewedPercent": {
+            "type": "number"
+          },
+          "totalClickedPercent": {
+            "type": "number"
+          },
+          "totalUnsubPercent": {
+            "type": "number"
+          },
+          "totalKnownOpens": {
+            "type": "number"
+          },
+          "totalEstimatedOpens": {
+            "type": "number"
+          },
+          "totalknownOpensRatePercentage": {
+            "type": "number"
+          },
+          "totalProxyOpens": {
+            "type": "number"
+          },
+          "totalOpensWithAppleMpp": {
+            "type": "number"
+          },
+          "totalAppleMppOpensRatePercentage": {
+            "type": "number"
+          },
+          "totalDeliveredEmailWithoutProxy": {
+            "type": "number"
+          },
+          "totalOpenNonUnique": {
+            "type": "number"
+          },
+          "totalOpenNonUniqueWithAppleMpp": {
+            "type": "number"
+          },
+          "totalCalculatedOpenRate": {
+            "type": "number"
+          },
+          "totalCalculatedClickRate": {
+            "type": "number"
+          },
+          "totalCalculatedOpens": {
+            "type": "number"
+          },
+          "totalCalculatedClicks": {
+            "type": "number"
+          },
+          "totalCalculatedTotalOpens": {
+            "type": "number"
+          }
+        },
+        "description": "Aggregated totals for the entire query range."
+      },
+      "source": {
+        "type": "string",
+        "description": "Origin of the data, e.g., \"CH\"."
+      }
+    },
+    "required": [
+      "data",
+      "total",
+      "source"
+    ]
+  },
+  "side_effects": [],
+  "destructive": false,
+  "idempotent": true,
+  "ui_path": [
+    "Marketing reports",
+    "Statistics",
+    "View"
+  ],
+  "internal_endpoint": {
+    "method": "GET",
+    "path": "/campaigns/statistics",
+    "body_example": null
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/marketing-reports-statistics.json"
+    ],
+    "verified_at": null
+  }
+}

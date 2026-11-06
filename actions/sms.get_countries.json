@@ -1,0 +1,62 @@
+{
+  "id": "sms.get_countries",
+  "module": "sms",
+  "name": "Get SMS supported countries",
+  "description": "Call this when you need to retrieve the full list of countries supported for sending SMS, for example to populate a country‑code dropdown. Use a more specific action if you need details about a single country (which is not covered by this endpoint).",
+  "preconditions": [],
+  "inputs": {
+    "type": "object",
+    "properties": {},
+    "required": []
+  },
+  "outputs": {
+    "type": "array",
+    "items": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Country name"
+        },
+        "code": {
+          "type": "string",
+          "description": "Phone country calling prefix, e.g. +355"
+        },
+        "calling_code": {
+          "type": "string",
+          "description": "ISO 3166-1 alpha-2 country code"
+        }
+      },
+      "required": [
+        "name",
+        "code",
+        "calling_code"
+      ]
+    }
+  },
+  "side_effects": [],
+  "destructive": false,
+  "idempotent": true,
+  "ui_path": [
+    "Settings",
+    "SMS",
+    "Countries"
+  ],
+  "internal_endpoint": {
+    "method": "GET",
+    "path": "/sms/countries",
+    "body_example": null
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/settings-keys-smtp.json"
+    ],
+    "verified_at": null
+  }
+}

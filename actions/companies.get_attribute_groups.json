@@ -1,0 +1,106 @@
+{
+  "id": "companies.get_attribute_groups",
+  "module": "companies",
+  "name": "Get attribute groups",
+  "description": "Call this when you need to retrieve the list of attribute groups and their attributes for a specific object type (e.g., companies). Use a different endpoint if you need to modify or create attribute groups instead.",
+  "preconditions": [],
+  "inputs": {
+    "type": "object",
+    "properties": {
+      "object_type": {
+        "type": "string",
+        "description": "The object type to retrieve attribute groups for, e.g., \"companies\"."
+      }
+    },
+    "required": [
+      "object_type"
+    ]
+  },
+  "outputs": {
+    "type": "array",
+    "items": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier of the attribute group."
+        },
+        "accountId": {
+          "type": "string",
+          "description": "Identifier of the account owning the attribute group."
+        },
+        "groupName": {
+          "type": "string",
+          "description": "Human‑readable name of the attribute group."
+        },
+        "description": {
+          "type": "string",
+          "description": "Description of the attribute group."
+        },
+        "component": {
+          "type": "string",
+          "description": "UI component where the group is displayed (e.g., \"details\")."
+        },
+        "objectType": {
+          "type": "string",
+          "description": "The object type this group belongs to."
+        },
+        "attributes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "List of attribute keys included in this group."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Timestamp when the group was created."
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Timestamp of the last update to the group."
+        }
+      },
+      "required": [
+        "id",
+        "accountId",
+        "groupName",
+        "description",
+        "component",
+        "objectType",
+        "attributes",
+        "createdAt",
+        "updatedAt"
+      ]
+    }
+  },
+  "side_effects": [],
+  "destructive": false,
+  "idempotent": true,
+  "ui_path": [
+    "Companies",
+    "Settings",
+    "Attribute groups"
+  ],
+  "internal_endpoint": {
+    "method": "GET",
+    "path": "/crm/backend/object-config/attribute-group-view",
+    "body_example": null
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/companies-settings.json",
+      "captures/clean/companies.json",
+      "captures/clean/contact-index-id.json"
+    ],
+    "verified_at": null
+  }
+}

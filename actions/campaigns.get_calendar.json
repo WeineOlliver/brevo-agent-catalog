@@ -1,0 +1,68 @@
+{
+  "id": "campaigns.get_calendar",
+  "module": "campaigns",
+  "name": "Get campaign calendar",
+  "description": "Call this when you need to retrieve the list of dates on which campaigns occurred within a specific date range for reporting purposes. Use a detailed campaign report action instead when you need metrics or performance data for those campaigns.",
+  "preconditions": [],
+  "inputs": {
+    "type": "object",
+    "properties": {
+      "startDate": {
+        "type": "string",
+        "format": "date",
+        "description": "Start of the date range (inclusive) in YYYY-MM-DD format."
+      },
+      "endDate": {
+        "type": "string",
+        "format": "date",
+        "description": "End of the date range (inclusive) in YYYY-MM-DD format."
+      }
+    },
+    "required": [
+      "startDate",
+      "endDate"
+    ]
+  },
+  "outputs": {
+    "type": "object",
+    "properties": {
+      "dates": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "format": "date",
+          "description": "A date on which at least one campaign was sent."
+        },
+        "description": "Array of campaign dates within the requested range."
+      }
+    },
+    "required": [
+      "dates"
+    ]
+  },
+  "side_effects": [],
+  "destructive": false,
+  "idempotent": true,
+  "ui_path": [
+    "Marketing reports",
+    "Statistics",
+    "Calendar"
+  ],
+  "internal_endpoint": {
+    "method": "GET",
+    "path": "/campaigns/calendar",
+    "body_example": null
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/marketing-reports-statistics.json"
+    ],
+    "verified_at": null
+  }
+}

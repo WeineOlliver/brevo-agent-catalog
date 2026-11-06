@@ -1,0 +1,99 @@
+{
+  "id": "ecommerce.list_categories",
+  "module": "ecommerce",
+  "name": "List categories",
+  "description": "Call this when you need to retrieve the full set of categories available in the platform. If you need details for a single category, use the get_category action instead.",
+  "preconditions": [],
+  "inputs": {
+    "type": "object",
+    "properties": {
+      "sort": {
+        "type": "string",
+        "enum": [
+          "asc",
+          "desc"
+        ],
+        "description": "Sort order of the returned categories."
+      }
+    },
+    "required": []
+  },
+  "outputs": {
+    "type": "object",
+    "properties": {
+      "data": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "category_key": {
+              "type": "string",
+              "description": "Unique identifier of the category."
+            },
+            "sources": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "description": "Source systems that provide this category."
+              },
+              "description": "List of sources contributing to the category."
+            }
+          },
+          "required": [
+            "category_key",
+            "sources"
+          ]
+        },
+        "description": "List of categories with their keys and sources (used by the events management view)."
+      },
+      "categoryList": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "integer",
+              "description": "Numeric identifier of the category."
+            },
+            "name": {
+              "type": "string",
+              "description": "Human‑readable name of the category."
+            }
+          },
+          "required": [
+            "id",
+            "name"
+          ]
+        },
+        "description": "List of categories with id and name (used by the app‑store view)."
+      }
+    },
+    "additionalProperties": false
+  },
+  "side_effects": [],
+  "destructive": false,
+  "idempotent": true,
+  "ui_path": [
+    "Ecommerce",
+    "Categories",
+    "View categories"
+  ],
+  "internal_endpoint": {
+    "method": "GET",
+    "path": "/categories",
+    "body_example": null
+  },
+  "public_api": {
+    "exists": true,
+    "operationId": "getCategories"
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/contact-list.json",
+      "captures/clean/ecommerce.json"
+    ],
+    "verified_at": null
+  }
+}

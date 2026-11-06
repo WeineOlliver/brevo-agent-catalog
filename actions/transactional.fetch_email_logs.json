@@ -1,0 +1,99 @@
+{
+  "id": "transactional.fetch_email_logs",
+  "module": "transactional",
+  "name": "Fetch email logs",
+  "description": "Call this when you need to retrieve a paginated list of transactional email logs for a specific date range. Use a GET‑based logs endpoint (if available) instead when you only need to read logs without submitting a request body.",
+  "preconditions": [],
+  "inputs": {
+    "type": "object",
+    "properties": {
+      "startDate": {
+        "type": "string",
+        "format": "date-time",
+        "description": "ISO‑8601 start of the time window for which logs should be returned."
+      },
+      "endDate": {
+        "type": "string",
+        "format": "date-time",
+        "description": "ISO‑8601 end of the time window for which logs should be returned."
+      },
+      "limit": {
+        "type": "integer",
+        "minimum": 1,
+        "description": "Maximum number of log entries to return per page."
+      },
+      "page": {
+        "type": "integer",
+        "minimum": 1,
+        "description": "Page number to retrieve (starting at 1)."
+      }
+    },
+    "required": [
+      "startDate",
+      "endDate",
+      "limit",
+      "page"
+    ]
+  },
+  "outputs": {
+    "type": "object",
+    "properties": {
+      "data": {
+        "type": [
+          "array",
+          "null"
+        ],
+        "description": "Array of email log objects; null if no logs match the query."
+      },
+      "limit": {
+        "type": "integer",
+        "description": "The limit that was applied to the query."
+      },
+      "skip": {
+        "type": "integer",
+        "description": "Number of records skipped (offset) based on pagination."
+      },
+      "page": {
+        "type": "integer",
+        "description": "Current page number returned."
+      },
+      "totalCount": {
+        "type": "integer",
+        "description": "Total number of log entries matching the query."
+      }
+    },
+    "required": [
+      "data",
+      "limit",
+      "skip",
+      "page",
+      "totalCount"
+    ]
+  },
+  "side_effects": [],
+  "destructive": true,
+  "idempotent": false,
+  "ui_path": [
+    "Transactional",
+    "Email",
+    "Logs",
+    "View"
+  ],
+  "internal_endpoint": {
+    "method": "POST",
+    "path": "/api/email/logs",
+    "body_example": "{\"startDate\":\"2026-10-30T03:00:00.000Z\",\"endDate\":\"2026-11-06T18:19:30.150Z\",\"limit\":20,\"page\":1}"
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/transactional-email-logs.json"
+    ],
+    "verified_at": null
+  }
+}

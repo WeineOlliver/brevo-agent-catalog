@@ -1,0 +1,48 @@
+{
+  "id": "ecommerce.detect_store",
+  "module": "ecommerce",
+  "name": "Detect store",
+  "description": "Call this when you need to know whether the e‑commerce store is recognized by the system. If the store is not detected and you need to set it up, use the store configuration action instead.",
+  "preconditions": [],
+  "inputs": {
+    "type": "object",
+    "properties": {},
+    "required": []
+  },
+  "outputs": {
+    "type": "object",
+    "properties": {
+      "matched": {
+        "type": "boolean",
+        "description": "True if a store match was found, false otherwise."
+      }
+    },
+    "required": [
+      "matched"
+    ]
+  },
+  "side_effects": [],
+  "destructive": false,
+  "idempotent": true,
+  "ui_path": [
+    "E‑commerce",
+    "Store detection"
+  ],
+  "internal_endpoint": {
+    "method": "GET",
+    "path": "/store/detection",
+    "body_example": null
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/ecommerce.json"
+    ],
+    "verified_at": null
+  }
+}

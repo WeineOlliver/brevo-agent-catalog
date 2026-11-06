@@ -1,0 +1,955 @@
+{
+  "generated_at": "2026-11-06T20:12:14.472Z",
+  "count": 118,
+  "by_status": {
+    "verified": 0,
+    "observed": 118,
+    "inferred": 0
+  },
+  "actions": [
+    {
+      "id": "account.get_account",
+      "module": "account",
+      "name": "Get account information",
+      "description": "Call this when you need to retrieve the organization’s account details such as plan type, pricing version, and analytics status. Use an update action (e.g., account.update_settings) if you need to modify these settings instead.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
+      "id": "account.get_apps_information",
+      "module": "account",
+      "name": "Get account apps information",
+      "description": "Call this when you need to retrieve the full set of account metadata that determines which Brevo applications are enabled for the current user, as well as plan and configuration flags. Use a more specific endpoint (e.g., a dedicated plan‑status endpoint) if you only need high‑level subscription information.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
+      "id": "account.get_plan_info",
+      "module": "account",
+      "name": "Get plan information",
+      "description": "Call this when you need to retrieve the current subscription plan details for the company, including its type, status, start/end dates, renewal date, pricing version, and any enabled addon limits. Use a plan‑update action instead if you need to change the subscription.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
+      "id": "account.get_settings",
+      "module": "account",
+      "name": "Get account settings",
+      "description": "Call this when you need to read the current account configuration such as timezone, date format, locale and notification preferences. If you need to change any of these values, use the neighbouring action `account.update_settings` instead.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
+      "id": "account.list_accounts",
+      "module": "account",
+      "name": "List accounts",
+      "description": "Call this when you need to retrieve the list of accounts accessible to the current user, such as when displaying company settings or the account overview. Use the get_account action for a single account if you only need details for a specific account.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
+      "id": "agent.get_organization",
+      "module": "agent",
+      "name": "Get organization info",
+      "description": "Call this when you need to retrieve the current organization's identifier and business‑unit classification for the logged‑in Brevo account. Use a list‑organizations action instead when you need information about multiple organizations.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
+      "id": "analytics.get_live_updates_token",
+      "module": "analytics",
+      "name": "Get live updates token",
+      "description": "Call this when the UI needs a token to subscribe to real‑time analytics updates (e.g., live dashboards, conversation streams). If the user does not have any active integrations, use the action to prompt the user to set up an integration instead.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
+      "id": "apps.list_apps",
+      "module": "apps",
+      "name": "List apps",
+      "description": "Call this when you need to retrieve the catalog of available integrations/apps, optionally filtered by category. Use a more specific action such as fetching a single app's details (e.g., /apps/{id}) when you only need one app.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
+      "id": "attributes.get_rules",
+      "module": "attributes",
+      "name": "Get attribute rules",
+      "description": "Call this when you need to retrieve the validation and system‑rule metadata for a specific CRM object type (e.g., deals, contacts, companies). Use the \"attributes.update_rule\" action instead if you need to modify these rules.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
+      "id": "automation.get_banner_details",
+      "module": "automation",
+      "name": "Get banner details",
+      "description": "Call this when you need to retrieve the current marketing email status, profile completeness flag, and any related warning message to decide whether to display a banner on the Automation Advanced page. Use the endpoint that fetches automation list instead if you only need automation data.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
+      "id": "automation.get_contact_count",
+      "module": "automation",
+      "name": "Get contact count",
+      "description": "Call this when you need to retrieve the number of contacts displayed in the Automation sidebar. Use the automation list action instead if you only need to enumerate automations without needing the sidebar count.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
+      "id": "automation.get_deferred_count",
+      "module": "automation",
+      "name": "Get deferred email count",
+      "description": "Call this when you need to retrieve the current number of deferred emails and related processing status for automation workflows, as shown in the sidebar of the Advanced Automation UI. Use the automation.get_rate_limit_status action instead if you only need rate‑limit information without the deferred count.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
+      "id": "automation.get_meta_info",
+      "module": "automation",
+      "name": "Get Automation Meta Info",
+      "description": "Call this when you need to retrieve the current user's automation configuration, privileges, and feature flags (e.g., object‑based workflow, classic editor status, premium status). Use a different action such as automation.update_settings if you need to modify any of these values.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
+      "id": "automation.get_processing_details",
+      "module": "automation",
+      "name": "Get processing details",
+      "description": "Call this when you need to retrieve the current processing status, pending counts, and rate limits of the automation engine. Use a summary endpoint (e.g., automation.get_automation_summary) instead if you only need high‑level automation information.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
+      "id": "billing.get_organization_currency",
+      "module": "billing",
+      "name": "Get organization currency",
+      "description": "Call this when you need to retrieve the currency code used for the organization's billing (e.g., to display amounts in the correct currency). Use a broader organization‑details action instead when you also need other organization information.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
+      "id": "campaigns.get_calendar",
+      "module": "campaigns",
+      "name": "Get campaign calendar",
+      "description": "Call this when you need to retrieve the list of dates on which campaigns occurred within a specific date range for reporting purposes. Use a detailed campaign report action instead when you need metrics or performance data for those campaigns.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
+      "id": "campaigns.get_config",
+      "module": "campaigns",
+      "name": "Get campaign configuration",
+      "description": "Call this when you need to retrieve the current account's email‑campaign configuration, such as organization name, plan limits, authorized actions, and remaining email credits. Use the \"campaigns.list\" action instead when you need to fetch the list of actual campaigns rather than the configuration.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
+      "id": "campaigns.get_dashboard_status",
+      "module": "campaigns",
+      "name": "Get dashboard campaign status",
+      "description": "Call this when you need to know whether a campaign is currently scheduled as shown on the dashboard. Use the list scheduled campaigns action instead if you need details about which campaigns are scheduled.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
+      "id": "campaigns.get_feature_toggles",
+      "module": "campaigns",
+      "name": "Get feature toggles",
+      "description": "Call this when you need to determine which optional campaign features are currently enabled for the user interface. Use the admin settings UI instead if you need to change any toggle values.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
+      "id": "campaigns.get_statistics",
+      "module": "campaigns",
+      "name": "Get campaign statistics",
+      "description": "Call this when you need aggregated statistics for campaigns over a specific date range, including totals for sent, delivered, opens, clicks, bounces, unsubscribes, etc. Use the detailed single‑campaign report action instead if you only need information for one campaign.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
+      "id": "campaigns.get_total_users_config",
+      "module": "campaigns",
+      "name": "Get total users configuration",
+      "description": "Call this when you need to retrieve the global user statistics configuration displayed on the Campaigns listing page. Use the \"campaigns.get_campaign_stats\" action instead if you need statistics for a specific campaign rather than the overall totals.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
+      "id": "campaigns.get_upgrade_flags",
+      "module": "campaigns",
+      "name": "Get upgrade flags",
+      "description": "Call this when rendering the campaigns listing page to determine whether upgrade prompts for tags or folders should be shown. Use a different action (e.g., a plan‑details endpoint) if you only need generic account feature information.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
+      "id": "campaigns.list_campaigns",
+      "module": "campaigns",
+      "name": "List campaigns",
+      "description": "Call this when you need to retrieve a paginated list of email campaigns, optionally filtered by status. Use the get campaign action (campaigns.get_campaign) if you need details of a single campaign instead.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
+      "id": "client.get_feature_toggles",
+      "module": "client",
+      "name": "Get feature toggles",
+      "description": "Call this when you need to know which feature flags are enabled for the current Brevo account, for example to adjust UI behavior. Use a more specific feature‑check endpoint if one exists for the particular capability you are interested in.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
+      "id": "client.get_info",
+      "module": "client",
+      "name": "Get client info",
+      "description": "Call this when you need to retrieve the logged‑in user's basic account details such as name, email, activated applications and visible channel listings. If you only need a subset of this data (e.g., just activated applications), use a more specific endpoint instead.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
+      "id": "companies.get_attribute_groups",
+      "module": "companies",
+      "name": "Get attribute groups",
+      "description": "Call this when you need to retrieve the list of attribute groups and their attributes for a specific object type (e.g., companies). Use a different endpoint if you need to modify or create attribute groups instead.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
+      "id": "companies.get_config",
+      "module": "companies",
+      "name": "Get organization config",
+      "description": "Call this when you need to retrieve the CRM organization settings such as the company name, onboarding status, folder ID and the list of attribute definitions. Use a configuration‑update action instead if you intend to modify these values.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
+      "id": "companies.get_organization_info",
+      "module": "companies",
+      "name": "Get organization info",
+      "description": "Call this when you need to retrieve the current organization's activated applications and feature toggles from the Brevo CRM. If you only need specific feature toggle values, consider using a more focused endpoint (if available) rather than this comprehensive call.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
+      "id": "companies.list_attributes",
+      "module": "companies",
+      "name": "List company attributes",
+      "description": "Call this when you need to retrieve the definitions of custom attributes that exist for company objects, for example to display them in a UI or to validate data before creating or updating a company. Use the create attribute action (companies.create_attribute) if you need to add a new attribute instead.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
+      "id": "companies.list_companies",
+      "module": "companies",
+      "name": "List companies",
+      "description": "Call this when you need to retrieve a paginated list of companies, optionally filtered by linked contacts or sorted. Use the endpoint for fetching multiple companies; if you need details of a single company, use a dedicated get_company action instead.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
+      "id": "consent_groups.get_status",
+      "module": "consent_groups",
+      "name": "Get consent groups status",
+      "description": "Call this when you need to know whether consent‑group features are available for the current account (e.g., before showing consent‑group UI options). Use a more specific contact‑level endpoint if you only need consent information for an individual contact.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
+      "id": "contacts.add_contact_to_lists",
+      "module": "contacts",
+      "name": "Add contact to lists",
+      "description": "Call this when you need to add the currently viewed contact to one or more existing lists. Use the remove contact from lists action instead when you want to detach the contact from a list.",
+      "status": "observed",
+      "destructive": true
+    },
+    {
+      "id": "contacts.calculate_attributes",
+      "module": "contacts",
+      "name": "Calculate contact attributes",
+      "description": "Call this when you need to compute derived attributes for a specific contact, such as transaction count and whether a particular attribute is present. Use the Get Contact action instead if you only need basic contact information.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
+      "id": "contacts.get_associations",
+      "module": "contacts",
+      "name": "Get contact associations",
+      "description": "Call this when you need to discover which object types (e.g., deals, companies) can be linked to a contact and what attributes are available for those linked objects. Use the \"List contacts\" action instead if you only need the contacts themselves.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
+      "id": "contacts.get_attributes",
+      "module": "contacts",
+      "name": "Get contact attributes",
+      "description": "Call this when you need to retrieve the full set of contact attribute definitions configured in the account (field name, key, data type, system‑generated flag, visibility, order, etc.). Use a more specific attribute‑detail action if you only need information for a single attribute.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
+      "id": "contacts.get_backend_settings",
+      "module": "contacts",
+      "name": "Get backend settings",
+      "description": "Call this when you need to retrieve the organization configuration and the current account details displayed in the contacts UI. Use a more specific endpoint such as \"contacts.get_current_account\" if you only require the current account information without the organization config.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
+      "id": "contacts.get_contact",
+      "module": "contacts",
+      "name": "Get contact details",
+      "description": "Call this when you need to retrieve the full details of a contact by its internal Brevo ID. Use the list contacts action instead if you only need a summary list of contacts.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
+      "id": "contacts.get_contact_header",
+      "module": "contacts",
+      "name": "Get contact header",
+      "description": "Call this when you need the concise header information for a specific contact, such as full title, short title, and subscription status. Use contacts.get_contact to retrieve the full contact details instead.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
+      "id": "contacts.get_contact_workflows",
+      "module": "contacts",
+      "name": "Get contact workflows",
+      "description": "Call this when you need to retrieve the active workflow instances that a specific contact is participating in. Use a workflow‑listing action (e.g., list all workflows) instead when you only need workflow definitions without tying them to a particular contact.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
+      "id": "contacts.get_crm_account_settings",
+      "module": "contacts",
+      "name": "Get CRM account settings",
+      "description": "Call this when you need to retrieve the CRM account field mapping settings for a specific contact. Use the neighboring action contacts.update_crm_account_settings if you need to modify those settings instead.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
+      "id": "contacts.get_feature_toggles",
+      "module": "contacts",
+      "name": "Get feature toggles",
+      "description": "Call this when you need to know whether specific optional features (e.g., tags, deduplication, AI assistant, SMS nudge banner) are enabled for the current account or context. Use a broader account‑settings action instead if you need more than just feature flags.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
+      "id": "contacts.get_lists_and_segments",
+      "module": "contacts",
+      "name": "Get lists and segments",
+      "description": "Call this when you need to retrieve the hierarchy of folders, contact lists, segments, and categories displayed on the Contact → Lists page. Use the action to populate UI selectors or to sync local copies. If you only need a single list's details, use the dedicated list‑fetch operation instead.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
+      "id": "contacts.get_presentation_config",
+      "module": "contacts",
+      "name": "Get presentation config",
+      "description": "Call this when you need to retrieve the presentation configuration used for displaying a contact's events in the UI. Use a different action (e.g., a configuration update endpoint) if you need to modify the presentation settings.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
+      "id": "contacts.list_activities",
+      "module": "contacts",
+      "name": "List contact activities",
+      "description": "Call this when you need to retrieve the recent activities (tasks, notes, campaigns, ecommerce events) for a specific contact. Use the neighbouring action \"contacts.get_contact\" if you only need basic contact details instead of the activity feed.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
+      "id": "contacts.list_attributes",
+      "module": "contacts",
+      "name": "List contact attributes",
+      "description": "Call this when you need to retrieve the definition metadata for all contact attributes (custom fields) that exist in the account, optionally filtering by special, calculated or specific types. Use the neighbouring action contacts.get_contact when you need the values of these attributes for a particular contact instead.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
+      "id": "contacts.list_contact_owners",
+      "module": "contacts",
+      "name": "List contact owners",
+      "description": "Call this when you need to retrieve the full list of contact owners to show in the contacts UI (e.g., for an owners dropdown or filter). If you only need details for a single owner, use a more specific endpoint that fetches that owner directly.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
+      "id": "contacts.list_task_types",
+      "module": "contacts",
+      "name": "List task types",
+      "description": "Call this when you need to retrieve the catalog of task types that can be associated with a contact (e.g., Email, Call, Todo, etc.). Use the neighbouring action contacts.get_contact if you need information about a specific contact instead.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
+      "id": "conversions.get_config",
+      "module": "conversions",
+      "name": "Get conversion goals configuration",
+      "description": "Call this when you need to read the current conversion‑goals settings for the logged‑in account, such as the user type and whether conversion tracking is excluded. Use the update configuration action instead if you intend to modify these settings.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
+      "id": "countries.list",
+      "module": "countries",
+      "name": "List countries",
+      "description": "Call this when you need the full list of supported countries and their calling codes for phone onboarding. Use a more specific lookup action if you only need details for a single country.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
+      "id": "crm.get_account_settings",
+      "module": "crm",
+      "name": "Get account settings",
+      "description": "Call this when you need to read the current CRM account configuration such as notification preferences, attribute list views, and sales stepper flags. Use the neighboring action \"crm.update_account_settings\" if you need to modify any of these settings instead.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
+      "id": "crm.get_form_attributes",
+      "module": "crm",
+      "name": "Get CRM form attributes",
+      "description": "Call this when you need to retrieve the configuration attributes for the contact form in the CRM, such as the default pipeline, deal currency and synchronization settings. Use an update‑form‑attributes action instead when you need to modify these settings.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
+      "id": "dashboard.get_contacts_summary",
+      "module": "dashboard",
+      "name": "Get contacts dashboard summary",
+      "description": "Call this when you need a high‑level overview of contact statistics for the Brevo dashboard, such as total contacts and recent activity. Use the detailed contacts list action instead when you need information about individual contacts.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
+      "id": "dashboard.get_information",
+      "module": "dashboard",
+      "name": "Get dashboard information",
+      "description": "Call this when you need to retrieve the current user's dashboard overview, including account details, plan, activated applications, and feature flags. Use a more specific endpoint such as \"account.get_details\" if you only need basic account metadata without the full dashboard payload.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
+      "id": "dashboard.get_transactional_stats",
+      "module": "dashboard",
+      "name": "Get transactional stats",
+      "description": "Call this when you need the current transactional email statistics displayed on the Brevo dashboard, such as delivered count, estimated openers, hard bounces, blocked messages, and emails sent. If you need more detailed or historical analytics, use the dedicated analytics endpoints instead.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
+      "id": "deals.list",
+      "module": "deals",
+      "name": "List deals",
+      "description": "Call this when you need to retrieve the list of deals linked to a specific contact. Use the \"deals.get\" action instead when you need details of a single deal, or \"deals.create\" when you need to add a new deal.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
+      "id": "domains.list",
+      "module": "domains",
+      "name": "List domains",
+      "description": "Call this when you need to retrieve the paginated list of domains associated with the account, for example to display them in a UI or to select a domain for further actions. Use the domain detail endpoint instead when you need information about a specific domain.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
+      "id": "ecommerce.detect_store",
+      "module": "ecommerce",
+      "name": "Detect store",
+      "description": "Call this when you need to know whether the e‑commerce store is recognized by the system. If the store is not detected and you need to set it up, use the store configuration action instead.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
+      "id": "ecommerce.get_onboarding",
+      "module": "ecommerce",
+      "name": "Get ecommerce onboarding status",
+      "description": "Call this when you need to retrieve the current onboarding status of the ecommerce integration for the account, including whether a store is connected and if the account is eligible for onboarding. Use the ecommerce.start_onboarding action instead when you need to initiate the onboarding process.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
+      "id": "ecommerce.get_settings",
+      "module": "ecommerce",
+      "name": "Get ecommerce settings",
+      "description": "Call this when you need to retrieve the current ecommerce configuration, integration details, permissions, and plan information for the account. Use an update‑settings action instead if you need to modify these values.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
+      "id": "ecommerce.list_categories",
+      "module": "ecommerce",
+      "name": "List categories",
+      "description": "Call this when you need to retrieve the full set of categories available in the platform. If you need details for a single category, use the get_category action instead.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
+      "id": "email_templates.list_templates",
+      "module": "email_templates",
+      "name": "List email templates",
+      "description": "Call this when you need to retrieve a paginated list of email templates. Use the \"Get email template details\" action instead when you need information about a single template.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
+      "id": "email.get_real_time_wizard_status",
+      "module": "email",
+      "name": "Check real-time email wizard status",
+      "description": "Call this when you need to know whether any real-time transactional emails have been sent in the current session. If you need detailed information about individual sent emails, use the \"Get email logs\" action instead.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
+      "id": "events.list",
+      "module": "events",
+      "name": "List events",
+      "description": "Call this when you need to retrieve a paginated list of events for a given time range, date, and filter criteria. Use the \"events.export\" action instead if you need a downloadable export of all matching events rather than a limited, sortable view.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
+      "id": "events.list_dates",
+      "module": "events",
+      "name": "List event dates",
+      "description": "Call this when you need to retrieve the calendar dates on which events are scheduled within a specific date range and timezone. Use the broader \"events.list_events\" action if you need full event details rather than just the dates.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
+      "id": "features.check_accessibility",
+      "module": "features",
+      "name": "Check feature accessibility",
+      "description": "Call this when you need to determine whether a specific UI feature flag is enabled for the current user. If you only need to know the static configuration of a feature, use the application’s built‑in configuration view instead.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
+      "id": "features.get",
+      "module": "features",
+      "name": "Get feature toggles",
+      "description": "Call this when you need to determine whether one or more specific feature flags are enabled for the current account. Use a different action such as a feature list endpoint if you need to retrieve all available toggles instead of a specific set.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
+      "id": "forms.get_account",
+      "module": "forms",
+      "name": "Get account information",
+      "description": "Call this when you need to retrieve the current Brevo account details shown on the Forms subscription page. Use the authentication actions (e.g., login or token refresh) instead if the user is not already authenticated.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
+      "id": "forms.list_forms",
+      "module": "forms",
+      "name": "List forms",
+      "description": "Call this when you need to retrieve a paginated list of forms of a specific type (e.g., subscription) from the Brevo Forms API. Use the \"Get form details\" action instead if you need information about a single form identified by its ID.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
+      "id": "homepage.list_user_widgets",
+      "module": "homepage",
+      "name": "List user homepage widgets",
+      "description": "Call this when you need to retrieve the collection of widgets that are configured for the current user's homepage. Use the returned widget details to render the dashboard. If you need to change widget placement or visibility, use the widget‑update actions instead.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
+      "id": "integrations.list_integrations",
+      "module": "integrations",
+      "name": "List integrations",
+      "description": "Call this when you need to retrieve the collection of integrations available for a specific UI location, such as the contact details view. Use a more specific integration‑detail action (e.g., integrations.get_integration_details) if you need information about a single integration rather than the list.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
+      "id": "lists.get_folders",
+      "module": "lists",
+      "name": "Get list folders",
+      "description": "Call this when you need to retrieve the folders that contain contact lists, including their IDs, names, list counts, and default status. Use the action to populate folder selection UI. If you need to create a new folder instead, use lists.create_folder.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
+      "id": "lists.get_lists",
+      "module": "lists",
+      "name": "Get lists",
+      "description": "Call this when you need to retrieve a paginated collection of contact lists, optionally filtered by folder and sorted. Use the list‑details endpoint (if available) when you need information about a single list or its members.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
+      "id": "locales.fetch_english",
+      "module": "locales",
+      "name": "Fetch English locale strings",
+      "description": "Call this when the application needs the English translation strings for the meetings UI (e.g., when rendering the offer page). Use a language‑specific endpoint (e.g., /assets/locales/fr.json) instead when a different locale is required.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
+      "id": "localization.list_languages",
+      "module": "localization",
+      "name": "List languages",
+      "description": "Call this when you need to retrieve the full list of supported languages for the template editor, for example to populate a language selector in the UI. If you only need the language of a specific template, use the template details endpoint instead.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
+      "id": "loyalty.get_user_permissions",
+      "module": "loyalty",
+      "name": "Get User Permissions",
+      "description": "Call this when you need to know which loyalty‑program actions the currently authenticated user is allowed to perform and whether they are the program owner. Use a program‑detail endpoint (e.g. /loyalty/get-program) instead when you need information about the program itself rather than the user's rights.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
+      "id": "loyalty.list_programs",
+      "module": "loyalty",
+      "name": "List loyalty programs",
+      "description": "Call this when you need to retrieve the collection of loyalty programs configured in the account. Use the Get loyalty program details action instead when you only need information about a single program.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
+      "id": "marketing_campaign.get_features",
+      "module": "marketing_campaign",
+      "name": "Get feature toggles",
+      "description": "Call this when you need to retrieve the current set of feature flags enabled for the client in the Marketing Campaign module. Use the (hypothetical) \"marketing_campaign.update_features\" action if you need to modify any of these flags instead.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
+      "id": "meetings.get_expert_user",
+      "module": "meetings",
+      "name": "Get expert user",
+      "description": "Call this when you need to retrieve the expert user profile associated with the current Brevo account. Use the \"meetings.list_offers\" action instead if you need a list of meeting offers rather than the expert user details.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
+      "id": "meetings.get_locale_pt",
+      "module": "meetings",
+      "name": "Get Portuguese locale",
+      "description": "Call this when the Meetings UI needs the Portuguese translation strings for static UI text. Use the corresponding locale endpoint (e.g., /assets/locales/en.json) if a different language is required.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
+      "id": "meetings.get_plan",
+      "module": "meetings",
+      "name": "Get plan",
+      "description": "Call this when you need to determine whether the account has a paid Meetings plan and which feature flags are enabled. Use the upgrade plan action instead if the user wants to change to a paid plan.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
+      "id": "objects.get_plan",
+      "module": "objects",
+      "name": "Get objects plan",
+      "description": "Call this when you need to retrieve the current plan limits and feature flags for the custom objects module in the account. Use the object‑listing action (e.g., objects.list_objects) when you need to work with the actual objects instead of the plan information.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
+      "id": "objects.get_user_info",
+      "module": "objects",
+      "name": "Get user info",
+      "description": "Call this when you need to retrieve the current user's identifier and their access rights to custom objects and contact attributes. Use a broader account‑level endpoint (if available) instead when you only need overall account information rather than per‑user flags.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
+      "id": "objects.get_view",
+      "module": "objects",
+      "name": "Get objects view status",
+      "description": "Call this when you need to retrieve the current onboarding view status for objects, including whether onboarding is complete, which steps have been completed, and UI preferences. Use a different action that updates these settings if you need to change them.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
+      "id": "organizations.get_details",
+      "module": "organizations",
+      "name": "Get organization details",
+      "description": "Call this when you need to retrieve basic information about the current Brevo organization, such as its ID, client ID, type, and status flags. Use a more specific action like \"account.get_subscription\" if you only need subscription or pricing details instead.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
+      "id": "organizations.get_features_and_channels",
+      "module": "organizations",
+      "name": "Get organization features and channels",
+      "description": "Call this when you need to retrieve the set of communication channels (e.g., email, sms, whatsapp) and product features (e.g., scripts, actions, groups) that are enabled for the current Brevo organization. Use a contact‑specific endpoint such as contacts.get_contact if you only need information related to an individual contact.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
+      "id": "phone.get_auth",
+      "module": "phone",
+      "name": "Get authentication info",
+      "description": "Call this when you need to retrieve the current organization's authentication details and onboarding status during phone provisioning. Use the phone.start_onboarding action instead if you need to initiate or continue the onboarding flow.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
+      "id": "pipelines.get_details",
+      "module": "pipelines",
+      "name": "Get pipeline details",
+      "description": "Call this when you need to retrieve the full list of CRM pipelines and their stages, for example to display them in a UI or to decide which stage to move a deal into. Use the pipeline‑creation action instead if you need to add a new pipeline.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
+      "id": "pipelines.list_templates",
+      "module": "pipelines",
+      "name": "List pipeline templates",
+      "description": "Call this when you need to retrieve the set of pipeline templates available for task management. Use a creation or update action (e.g., pipeline.create or pipeline.update) instead when you need to modify pipelines.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
+      "id": "scores.get_days",
+      "module": "scores",
+      "name": "Get Scores Days",
+      "description": "Call this when you need to retrieve the daily scoring data for the current organization. If you only need a high‑level summary of scores, use the neighbouring action that fetches the summary instead.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
+      "id": "scores.get_history",
+      "module": "scores",
+      "name": "Get scores history",
+      "description": "Call this when you need to retrieve the historical scoring data for the current organization. If you only need the latest score, use the \"scores.get_current\" action instead.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
+      "id": "security.list_authorized_ips",
+      "module": "security",
+      "name": "List authorized IPs",
+      "description": "Call this when you need to retrieve the current list of IP addresses authorized for the account. If you need to add, update, or remove an IP address, use the corresponding security.add_authorized_ip or security.remove_authorized_ip actions instead.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
+      "id": "segments.get_count",
+      "module": "segments",
+      "name": "Get segment count",
+      "description": "Call this when you need to know how many contacts match a given segment query without retrieving the contacts themselves. If you need the actual contact records, use the contacts listing action instead.",
+      "status": "observed",
+      "destructive": true
+    },
+    {
+      "id": "segments.get_events_status",
+      "module": "segments",
+      "name": "Get segment events status",
+      "description": "Call this when you need to retrieve the list of event types that are currently available for segment operations (e.g., before creating or editing a segment). If you need detailed information about a specific event, use the \"Get segment event details\" action instead.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
+      "id": "segments.get_lists",
+      "module": "segments",
+      "name": "Get lists",
+      "description": "Call this when you need to retrieve the contact lists grouped by folder as displayed in the Contacts → List view. Use the action to create a new list (e.g., segments.create_list) instead when you need to add a list rather than just read them.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
+      "id": "segments.get_settings",
+      "module": "segments",
+      "name": "Get segment settings",
+      "description": "Call this when you need to retrieve the organization configuration and current account details that the Segments UI uses. If you only need basic account information, use the general account information endpoint instead.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
+      "id": "segments.list_folders",
+      "module": "segments",
+      "name": "List segment folders",
+      "description": "Call this when you need to retrieve all segment folders visible in the Contacts > Segments view. If you need details of a specific segment instead of the folder list, use the action to get a single segment.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
+      "id": "segments.list_properties",
+      "module": "segments",
+      "name": "List segment properties",
+      "description": "Call this when you need to retrieve the full set of contact attributes (fields) that can be used when defining or editing a segment. Use contacts.get_contact if you only need the data of a specific contact instead of the attribute catalogue.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
+      "id": "segments.list_segments",
+      "module": "segments",
+      "name": "List segments",
+      "description": "Call this when you need to retrieve a paginated list of contact segments. Use get_segment_details instead when you need information about a specific segment.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
+      "id": "segments.list_unified_events",
+      "module": "segments",
+      "name": "List Unified Segment Events",
+      "description": "Call this when you need to retrieve the full catalogue of segment events and their properties as displayed in the Contact List view. Use a more specific source‑filtered endpoint (if one exists) when you only need events for a particular source.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
+      "id": "segments.paginated_count",
+      "module": "segments",
+      "name": "Get paginated count of segment",
+      "description": "Call this when you need to know the total number of contacts that match a segment query without retrieving the actual contacts. Use the segment list retrieval endpoint instead when you need the contact data itself.",
+      "status": "observed",
+      "destructive": true
+    },
+    {
+      "id": "segments.query_contacts",
+      "module": "segments",
+      "name": "Query segment contacts",
+      "description": "Call this when you need to retrieve the contacts that belong to a specific segment, with pagination and optional forced refresh of the segment calculation. Use the standard contacts list endpoint instead if you only need a simple, unfiltered list of contacts.",
+      "status": "observed",
+      "destructive": true
+    },
+    {
+      "id": "settings.get_phone_call_enabled",
+      "module": "settings",
+      "name": "Get phone call enabled status",
+      "description": "Call this when you need to know whether the phone call feature is currently enabled for the account. Use the corresponding action to enable or disable phone calls if you need to modify the setting instead.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
+      "id": "settings.list_ai_agents",
+      "module": "settings",
+      "name": "List AI agents",
+      "description": "Call this when you need to retrieve the list of AI agents available for the account, including their activation status and badge tier. Use a more specific endpoint (if one existed) to fetch details for a single agent when you only need information about that agent.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
+      "id": "settings.list_timezones",
+      "module": "settings",
+      "name": "List timezones",
+      "description": "Call this when you need the full list of available timezones for a contact or account configuration. If you only need the current timezone of a specific contact, use the endpoint that retrieves that contact's details instead.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
+      "id": "sms.get_countries",
+      "module": "sms",
+      "name": "Get SMS supported countries",
+      "description": "Call this when you need to retrieve the full list of countries supported for sending SMS, for example to populate a country‑code dropdown. Use a more specific action if you need details about a single country (which is not covered by this endpoint).",
+      "status": "observed",
+      "destructive": false
+    },
+    {
+      "id": "sms.get_realtime_wizard_status",
+      "module": "sms",
+      "name": "Get real-time wizard status",
+      "description": "Call this when you need to know whether any SMS has been sent during the current real‑time wizard session. If you need detailed SMS logs instead, use the logs endpoint.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
+      "id": "smtp.get_keys",
+      "module": "smtp",
+      "name": "Get SMTP keys",
+      "description": "Call this when you need to retrieve the current SMTP relay configuration and any existing SMTP keys for the account. Use a separate action (e.g., smtp.create_key or smtp.update_key) if you need to add or modify keys instead.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
+      "id": "tags.list_tags",
+      "module": "tags",
+      "name": "List tags",
+      "description": "Call this when you need to retrieve the complete list of tags used across campaigns. If you only need tags for a specific campaign, use the campaign‑specific tag retrieval action instead.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
+      "id": "tasks.list_tasktypes",
+      "module": "tasks",
+      "name": "List task types",
+      "description": "Call this when you need to retrieve the list of predefined task types (e.g., Email, Call, Meeting) that can be used when creating or filtering tasks. Use tasks.create_task if you need to create a new task instead.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
+      "id": "transactional_senders.get_sender",
+      "module": "transactional_senders",
+      "name": "Get transactional sender",
+      "description": "Call this when you need to retrieve the details of a specific transactional sender identified by its email address. Use a list‑senders action instead if you need to enumerate all senders.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
+      "id": "transactional.fetch_email_logs",
+      "module": "transactional",
+      "name": "Fetch email logs",
+      "description": "Call this when you need to retrieve a paginated list of transactional email logs for a specific date range. Use a GET‑based logs endpoint (if available) instead when you only need to read logs without submitting a request body.",
+      "status": "observed",
+      "destructive": true
+    },
+    {
+      "id": "transactional.get_email_log_filters",
+      "module": "transactional",
+      "name": "Get email log filters",
+      "description": "Call this when you need to retrieve the list of tags and sender identities that can be used to filter transactional email logs in the UI. Use the separate action to fetch the actual logs (e.g., get_email_logs) when you need the log entries themselves.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
+      "id": "ui.load_home",
+      "module": "ui",
+      "name": "Load home page",
+      "description": "Call this when you need to retrieve the main Brevo web application page (the home/dashboard). Use more specific endpoints for contacts, campaigns, or other data instead.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
+      "id": "user.get_feature_toggles",
+      "module": "user",
+      "name": "Get feature toggles",
+      "description": "Call this when you need to retrieve the current state of feature flags for the authenticated user, such as smart detection or IP sharing. If you are already on the Settings page and only need the same data, use the settings‑related endpoint instead.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
+      "id": "views.get_visible_listing",
+      "module": "views",
+      "name": "Get visible listing",
+      "description": "Call this when you need to retrieve the currently visible items for a specific object type (e.g., companies or contacts) as shown in the list view of the Brevo web app. Use the more specific object‑type endpoints (such as the contacts or companies APIs) if you need full detail or to perform actions on individual records.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
+      "id": "views.list_hidden",
+      "module": "views",
+      "name": "List hidden views",
+      "description": "Call this when you need to retrieve the system‑generated hidden views for a given object type (e.g., company or contact). Use the regular view listing action instead if you want the visible, user‑created views.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
+      "id": "widgets.list",
+      "module": "widgets",
+      "name": "List homepage widgets",
+      "description": "Call this when you need to retrieve the collection of widgets that are available on the homepage for display or configuration. Use a specific widget‑detail action (e.g., widgets.get) if you only need information about a single widget.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
+      "id": "workflow.show_deferred_notification",
+      "module": "workflow",
+      "name": "Show Deferred Notification",
+      "description": "Call this when you need to retrieve the details of a deferred notification for an automation workflow, typically to diagnose why a workflow execution was postponed or failed. Use the standard workflow retrieval actions (e.g., workflow.get) instead if you only need general workflow information.",
+      "status": "observed",
+      "destructive": false
+    }
+  ]
+}

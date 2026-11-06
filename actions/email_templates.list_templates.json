@@ -1,0 +1,77 @@
+{
+  "id": "email_templates.list_templates",
+  "module": "email_templates",
+  "name": "List email templates",
+  "description": "Call this when you need to retrieve a paginated list of email templates. Use the \"Get email template details\" action instead when you need information about a single template.",
+  "preconditions": [],
+  "inputs": {
+    "type": "object",
+    "properties": {
+      "page_number": {
+        "type": "integer",
+        "description": "The page number to retrieve.",
+        "default": 1
+      },
+      "current_status": {
+        "type": "string",
+        "description": "Filter templates by status; leave empty to retrieve all statuses."
+      },
+      "paging_limit": {
+        "type": "integer",
+        "description": "Maximum number of templates to return per page.",
+        "default": 25
+      }
+    },
+    "required": []
+  },
+  "outputs": {
+    "type": "object",
+    "properties": {
+      "templates": {
+        "type": "array",
+        "description": "Array of email template objects.",
+        "items": {
+          "type": "object"
+        }
+      },
+      "total_records": {
+        "type": "integer",
+        "description": "Total number of templates matching the query."
+      },
+      "total_pages": {
+        "type": "integer",
+        "description": "Total number of pages available."
+      }
+    },
+    "required": [
+      "templates",
+      "total_records",
+      "total_pages"
+    ]
+  },
+  "side_effects": [],
+  "destructive": false,
+  "idempotent": true,
+  "ui_path": [
+    "Email Campaigns",
+    "Templates",
+    "Listing"
+  ],
+  "internal_endpoint": {
+    "method": "GET",
+    "path": "/email-template/api/templates",
+    "body_example": null
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/templates-listing.json"
+    ],
+    "verified_at": null
+  }
+}

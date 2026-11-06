@@ -1,0 +1,75 @@
+{
+  "id": "localization.list_languages",
+  "module": "localization",
+  "name": "List languages",
+  "description": "Call this when you need to retrieve the full list of supported languages for the template editor, for example to populate a language selector in the UI. If you only need the language of a specific template, use the template details endpoint instead.",
+  "preconditions": [],
+  "inputs": {
+    "type": "object",
+    "properties": {},
+    "required": []
+  },
+  "outputs": {
+    "type": "object",
+    "properties": {
+      "languages": {
+        "type": "array",
+        "description": "Array of supported languages.",
+        "items": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "integer",
+              "description": "Numeric identifier of the language."
+            },
+            "code": {
+              "type": "string",
+              "description": "IETF language tag (e.g., \"en-US\")."
+            },
+            "name": {
+              "type": "string",
+              "description": "English name of the language."
+            },
+            "translatedName": {
+              "type": "string",
+              "description": "Name of the language in its own language."
+            }
+          },
+          "required": [
+            "id",
+            "code",
+            "name",
+            "translatedName"
+          ]
+        }
+      }
+    },
+    "required": [
+      "languages"
+    ]
+  },
+  "side_effects": [],
+  "destructive": false,
+  "idempotent": true,
+  "ui_path": [
+    "Templates",
+    "Listing"
+  ],
+  "internal_endpoint": {
+    "method": "GET",
+    "path": "/editor-api/localization/languages",
+    "body_example": null
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/templates-listing.json"
+    ],
+    "verified_at": null
+  }
+}

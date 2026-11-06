@@ -1,0 +1,141 @@
+{
+  "id": "companies.list_companies",
+  "module": "companies",
+  "name": "List companies",
+  "description": "Call this when you need to retrieve a paginated list of companies, optionally filtered by linked contacts or sorted. Use the endpoint for fetching multiple companies; if you need details of a single company, use a dedicated get_company action instead.",
+  "preconditions": [],
+  "inputs": {
+    "type": "object",
+    "properties": {
+      "sort": {
+        "type": "string",
+        "enum": [
+          "asc",
+          "desc"
+        ],
+        "description": "Sort direction for the results."
+      },
+      "sortBy": {
+        "type": "string",
+        "description": "Field to sort by, e.g., \"attributes.created_at\"."
+      },
+      "limit": {
+        "type": "integer",
+        "minimum": 1,
+        "description": "Maximum number of companies to return per page."
+      },
+      "page": {
+        "type": "integer",
+        "minimum": 1,
+        "description": "Page number to retrieve."
+      },
+      "linkedContactsIds": {
+        "type": "string",
+        "description": "Comma‑separated list of contact IDs to filter companies linked to those contacts."
+      }
+    },
+    "required": []
+  },
+  "outputs": {
+    "type": "object",
+    "properties": {
+      "items": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "description": "Company object (fields not documented)."
+        },
+        "description": "Array of company records."
+      },
+      "pager": {
+        "type": "object",
+        "properties": {
+          "current": {
+            "type": "integer",
+            "description": "Current page number."
+          },
+          "limit": {
+            "type": "integer",
+            "description": "Limit per page."
+          },
+          "from": {
+            "type": "integer",
+            "description": "Index of the first item in the current page."
+          },
+          "to": {
+            "type": "integer",
+            "description": "Index of the last item in the current page."
+          },
+          "count": {
+            "type": "integer",
+            "description": "Number of items in the current page."
+          },
+          "total": {
+            "type": "integer",
+            "description": "Total number of items across all pages."
+          },
+          "max": {
+            "type": "integer",
+            "description": "Maximum possible page number."
+          }
+        },
+        "required": [
+          "current",
+          "limit",
+          "from",
+          "to",
+          "count",
+          "total",
+          "max"
+        ],
+        "description": "Pagination information."
+      },
+      "refs": {
+        "type": "object",
+        "properties": {
+          "linkedContacts": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            },
+            "description": "List of contact IDs linked to the returned companies."
+          }
+        },
+        "required": [
+          "linkedContacts"
+        ],
+        "description": "Reference data."
+      }
+    },
+    "required": [
+      "items",
+      "pager",
+      "refs"
+    ]
+  },
+  "side_effects": [],
+  "destructive": false,
+  "idempotent": true,
+  "ui_path": [
+    "Companies",
+    "List"
+  ],
+  "internal_endpoint": {
+    "method": "GET",
+    "path": "/crm/backend/companies",
+    "body_example": null
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/companies.json",
+      "captures/clean/contact-index-id.json"
+    ],
+    "verified_at": null
+  }
+}

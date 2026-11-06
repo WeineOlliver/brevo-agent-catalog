@@ -1,8 +1,8 @@
 {
   "id": "account.get_account",
   "module": "account",
-  "name": "Get account",
-  "description": "Call this when you need to retrieve the current analytics plan, pricing version, and enabled status for the Brevo account. Use an account update action instead if you need to modify any of these settings.",
+  "name": "Get account information",
+  "description": "Call this when you need to retrieve the organization’s account details such as plan type, pricing version, and analytics status. Use an update action (e.g., account.update_settings) if you need to modify these settings instead.",
   "preconditions": [],
   "inputs": {
     "type": "object",
@@ -14,23 +14,23 @@
     "properties": {
       "org_id": {
         "type": "string",
-        "description": "The unique identifier of the organization."
+        "description": "Identifier of the organization."
       },
       "analytics_plan_type": {
         "type": "string",
-        "description": "The type of analytics plan assigned to the account."
+        "description": "The type of analytics plan the organization is on."
       },
       "plan_name": {
         "type": "string",
-        "description": "Human‑readable name of the plan."
+        "description": "Human readable name of the current plan."
       },
       "pricing_version": {
         "type": "string",
-        "description": "Version of the pricing model in effect."
+        "description": "Version of the pricing model."
       },
       "analytics_enabled": {
         "type": "boolean",
-        "description": "Indicates whether analytics features are enabled for the account."
+        "description": "Flag indicating whether analytics are enabled for the account."
       }
     },
     "required": [
@@ -57,7 +57,7 @@
     "exists": true,
     "operationId": "getAccount"
   },
-  "plan_tier": "unknown",
+  "plan_tier": "free",
   "verification": {
     "status": "observed",
     "evidence": [

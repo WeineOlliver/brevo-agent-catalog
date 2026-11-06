@@ -1,0 +1,78 @@
+{
+  "id": "automation.get_processing_details",
+  "module": "automation",
+  "name": "Get processing details",
+  "description": "Call this when you need to retrieve the current processing status, pending counts, and rate limits of the automation engine. Use a summary endpoint (e.g., automation.get_automation_summary) instead if you only need high‑level automation information.",
+  "preconditions": [],
+  "inputs": {
+    "type": "object",
+    "properties": {},
+    "required": []
+  },
+  "outputs": {
+    "type": "object",
+    "properties": {
+      "processingStatus": {
+        "type": "string",
+        "description": "Overall health status of the automation processing engine.",
+        "enum": [
+          "excellent"
+        ]
+      },
+      "pendingActionsCount": {
+        "type": "integer",
+        "description": "Number of actions waiting to be processed."
+      },
+      "pendingEventsCount": {
+        "type": "integer",
+        "description": "Number of events waiting to be processed."
+      },
+      "pendingTriggersCount": {
+        "type": "integer",
+        "description": "Number of triggers waiting to be processed."
+      },
+      "actionsRateLimit": {
+        "type": "integer",
+        "description": "Maximum number of actions that can be processed per second."
+      },
+      "eventsRateLimit": {
+        "type": "integer",
+        "description": "Maximum number of events that can be processed per second."
+      }
+    },
+    "required": [
+      "processingStatus",
+      "pendingActionsCount",
+      "pendingEventsCount",
+      "pendingTriggersCount",
+      "actionsRateLimit",
+      "eventsRateLimit"
+    ]
+  },
+  "side_effects": [],
+  "destructive": false,
+  "idempotent": true,
+  "ui_path": [
+    "Automation",
+    "Advanced",
+    "Processing details"
+  ],
+  "internal_endpoint": {
+    "method": "GET",
+    "path": "/processing-details",
+    "body_example": null
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/automation-advanced.json",
+      "captures/clean/automation-automations.json"
+    ],
+    "verified_at": null
+  }
+}

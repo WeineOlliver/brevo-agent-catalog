@@ -1,0 +1,199 @@
+{
+  "id": "crm.get_account_settings",
+  "module": "crm",
+  "name": "Get account settings",
+  "description": "Call this when you need to read the current CRM account configuration such as notification preferences, attribute list views, and sales stepper flags. Use the neighboring action \"crm.update_account_settings\" if you need to modify any of these settings instead.",
+  "preconditions": [],
+  "inputs": {
+    "type": "object",
+    "properties": {},
+    "required": []
+  },
+  "outputs": {
+    "type": "object",
+    "properties": {
+      "ID": {
+        "type": "string",
+        "description": "Unique identifier of the account settings record."
+      },
+      "attributes": {
+        "type": "array",
+        "items": {
+          "type": "object"
+        },
+        "description": "Custom attributes defined for the account (empty if none)."
+      },
+      "account": {
+        "type": "string",
+        "description": "Identifier of the CRM account."
+      },
+      "LastAssignedAt": {
+        "type": "string",
+        "format": "date-time",
+        "description": "Timestamp of the last assignment operation."
+      },
+      "NotificationSettings": {
+        "type": "object",
+        "properties": {
+          "ContactAssignedNotification": {
+            "type": "boolean"
+          },
+          "TaskAssignedNotification": {
+            "type": "boolean"
+          },
+          "TaskEmailNotification": {
+            "type": "boolean"
+          },
+          "TaskPushNotification": {
+            "type": "boolean"
+          },
+          "WeeklyTasksReport": {
+            "type": "boolean"
+          },
+          "DailyTasksReport": {
+            "type": "boolean"
+          },
+          "WeeklyTasksReportTimeShift": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "ContactAssignedNotification",
+          "TaskAssignedNotification",
+          "TaskEmailNotification",
+          "TaskPushNotification",
+          "WeeklyTasksReport",
+          "DailyTasksReport",
+          "WeeklyTasksReportTimeShift"
+        ],
+        "description": "User notification preferences."
+      },
+      "welcomeDone": {
+        "type": "boolean",
+        "description": "Whether the welcome tutorial has been completed."
+      },
+      "companyAttributesListView": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        },
+        "description": "List of company attribute keys displayed in the list view."
+      },
+      "companyAttributesPageView": {
+        "type": [
+          "array",
+          "null"
+        ],
+        "items": {
+          "type": "string"
+        },
+        "description": "List of company attribute keys displayed on the detail page."
+      },
+      "dealCardView": {
+        "type": [
+          "object",
+          "null"
+        ],
+        "description": "Configuration for the deal card view (null if default)."
+      },
+      "dealAttributesPageView": {
+        "type": [
+          "array",
+          "null"
+        ],
+        "items": {
+          "type": "string"
+        },
+        "description": "Deal attribute keys shown on the detail page."
+      },
+      "dealAttributesListView": {
+        "type": [
+          "array",
+          "null"
+        ],
+        "items": {
+          "type": "string"
+        },
+        "description": "Deal attribute keys shown in the list view."
+      },
+      "taskAttributesListView": {
+        "type": [
+          "array",
+          "null"
+        ],
+        "items": {
+          "type": "string"
+        },
+        "description": "Task attribute keys shown in the list view."
+      },
+      "salesStepper": {
+        "type": "object",
+        "properties": {
+          "watchVideo": {
+            "type": "boolean"
+          },
+          "adaptPipeline": {
+            "type": "boolean"
+          },
+          "dealCreate": {
+            "type": "boolean"
+          },
+          "taskCreate": {
+            "type": "boolean"
+          },
+          "salesAutoma": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "watchVideo",
+          "adaptPipeline",
+          "dealCreate",
+          "taskCreate",
+          "salesAutoma"
+        ],
+        "description": "Flags indicating progress through the sales stepper tutorial."
+      }
+    },
+    "required": [
+      "ID",
+      "attributes",
+      "account",
+      "LastAssignedAt",
+      "NotificationSettings",
+      "welcomeDone",
+      "companyAttributesListView",
+      "companyAttributesPageView",
+      "dealCardView",
+      "dealAttributesPageView",
+      "dealAttributesListView",
+      "taskAttributesListView",
+      "salesStepper"
+    ]
+  },
+  "side_effects": [],
+  "destructive": false,
+  "idempotent": true,
+  "ui_path": [
+    "Companies",
+    "Settings"
+  ],
+  "internal_endpoint": {
+    "method": "GET",
+    "path": "/crm/backend/account-settings",
+    "body_example": null
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/companies-settings.json",
+      "captures/clean/companies.json"
+    ],
+    "verified_at": null
+  }
+}

@@ -1,0 +1,76 @@
+{
+  "id": "contacts.get_feature_toggles",
+  "module": "contacts",
+  "name": "Get feature toggles",
+  "description": "Call this when you need to know whether specific optional features (e.g., tags, deduplication, AI assistant, SMS nudge banner) are enabled for the current account or context. Use a broader account‑settings action instead if you need more than just feature flags.",
+  "preconditions": [],
+  "inputs": {
+    "type": "object",
+    "properties": {
+      "toggles": {
+        "type": "string",
+        "description": "Comma‑separated list of feature toggle keys to retrieve, e.g. \"tags_support,dp-contact-pipeline-enabled\"."
+      }
+    },
+    "required": [
+      "toggles"
+    ],
+    "additionalProperties": false
+  },
+  "outputs": {
+    "type": "object",
+    "properties": {
+      "ai-assistant-enabled": {
+        "type": "boolean",
+        "description": "True if the AI assistant feature is enabled."
+      },
+      "dedup-customization-enabled": {
+        "type": "boolean",
+        "description": "True if deduplication customization is enabled."
+      },
+      "dp-contact-pipeline-enabled": {
+        "type": "boolean",
+        "description": "True if the contact pipeline feature is enabled."
+      },
+      "sms-nudge-banner": {
+        "type": "boolean",
+        "description": "True if the SMS nudge banner is displayed."
+      },
+      "tags_support": {
+        "type": "boolean",
+        "description": "True if tag support is enabled."
+      }
+    },
+    "additionalProperties": {
+      "type": "boolean"
+    }
+  },
+  "side_effects": [],
+  "destructive": false,
+  "idempotent": true,
+  "ui_path": [
+    "Contacts",
+    "Contact list",
+    "Details",
+    "Feature toggles"
+  ],
+  "internal_endpoint": {
+    "method": "GET",
+    "path": "/feature-toggle",
+    "body_example": null
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/companies-settings.json",
+      "captures/clean/contact-index-id.json",
+      "captures/clean/contact-list-listing.json"
+    ],
+    "verified_at": null
+  }
+}

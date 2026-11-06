@@ -1,0 +1,127 @@
+{
+  "id": "companies.list_attributes",
+  "module": "companies",
+  "name": "List company attributes",
+  "description": "Call this when you need to retrieve the definitions of custom attributes that exist for company objects, for example to display them in a UI or to validate data before creating or updating a company. Use the create attribute action (companies.create_attribute) if you need to add a new attribute instead.",
+  "preconditions": [],
+  "inputs": {
+    "type": "object",
+    "properties": {},
+    "required": []
+  },
+  "outputs": {
+    "type": "array",
+    "items": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier of the attribute."
+        },
+        "internalName": {
+          "type": "string",
+          "description": "Internal name used by the system for the attribute."
+        },
+        "group": {
+          "type": "string",
+          "description": "Identifier of the attribute group this attribute belongs to."
+        },
+        "description": {
+          "type": "string",
+          "description": "Human‑readable description of the attribute."
+        },
+        "attributeTypeName": {
+          "type": "string",
+          "description": "Data type of the attribute (e.g., text, number, date)."
+        },
+        "isEditable": {
+          "type": "boolean",
+          "description": "Whether the attribute can be edited by users."
+        },
+        "label": {
+          "type": "string",
+          "description": "Label shown in the UI for the attribute."
+        },
+        "objectType": {
+          "type": "string",
+          "enum": [
+            "companies"
+          ],
+          "description": "The object type this attribute applies to."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Timestamp when the attribute was created."
+        },
+        "createdBy": {
+          "type": "string",
+          "description": "Identifier of the user who created the attribute."
+        },
+        "attributeOptions": {
+          "anyOf": [
+            {
+              "type": "array",
+              "items": {
+                "type": "object"
+              }
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Options for attributes that have predefined choices; null for free‑text attributes."
+        },
+        "isValueReadonly": {
+          "type": "boolean",
+          "description": "Whether the value of this attribute is read‑only."
+        },
+        "oldInternalName": {
+          "type": "string",
+          "description": "Previous internal name if the attribute was renamed."
+        }
+      },
+      "required": [
+        "id",
+        "internalName",
+        "group",
+        "attributeTypeName",
+        "isEditable",
+        "label",
+        "objectType",
+        "createdAt",
+        "createdBy",
+        "isValueReadonly",
+        "oldInternalName"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "side_effects": [],
+  "destructive": false,
+  "idempotent": true,
+  "ui_path": [
+    "Companies",
+    "Settings",
+    "Attributes"
+  ],
+  "internal_endpoint": {
+    "method": "GET",
+    "path": "/crm/backend/attributes",
+    "body_example": null
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/companies-settings.json",
+      "captures/clean/companies.json",
+      "captures/clean/contact-index-id.json"
+    ],
+    "verified_at": null
+  }
+}

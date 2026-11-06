@@ -1,0 +1,64 @@
+{
+  "id": "segments.paginated_count",
+  "module": "segments",
+  "name": "Get paginated count of segment",
+  "description": "Call this when you need to know the total number of contacts that match a segment query without retrieving the actual contacts. Use the segment list retrieval endpoint instead when you need the contact data itself.",
+  "preconditions": [],
+  "inputs": {
+    "type": "object",
+    "properties": {
+      "fe_query": {
+        "type": "object",
+        "description": "Frontend query object defining filter criteria for the segment."
+      },
+      "searchBy": {
+        "type": "string",
+        "description": "Optional free‑text search applied to the segment."
+      }
+    },
+    "required": []
+  },
+  "outputs": {
+    "type": "object",
+    "properties": {
+      "cache_ready": {
+        "type": "boolean",
+        "description": "Indicates whether the count was served from a ready cache."
+      },
+      "count": {
+        "type": "integer",
+        "description": "Total number of contacts matching the segment query."
+      }
+    },
+    "required": [
+      "cache_ready",
+      "count"
+    ]
+  },
+  "side_effects": [],
+  "destructive": true,
+  "idempotent": false,
+  "ui_path": [
+    "Contacts",
+    "Segments",
+    "View segment",
+    "Count"
+  ],
+  "internal_endpoint": {
+    "method": "POST",
+    "path": "/segment/paginated_count",
+    "body_example": "{\"fe_query\":{},\"searchBy\":\"\"}"
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/contact-list.json"
+    ],
+    "verified_at": null
+  }
+}

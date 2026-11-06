@@ -1,0 +1,100 @@
+{
+  "id": "views.list_hidden",
+  "module": "views",
+  "name": "List hidden views",
+  "description": "Call this when you need to retrieve the system‑generated hidden views for a given object type (e.g., company or contact). Use the regular view listing action instead if you want the visible, user‑created views.",
+  "preconditions": [],
+  "inputs": {
+    "type": "object",
+    "properties": {
+      "objectType": {
+        "type": "string",
+        "enum": [
+          "company",
+          "contact"
+        ],
+        "description": "The type of object whose hidden views are being requested."
+      }
+    },
+    "required": [
+      "objectType"
+    ]
+  },
+  "outputs": {
+    "type": "object",
+    "properties": {
+      "data": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "description": "The name of the hidden view."
+            },
+            "id": {
+              "type": "integer",
+              "description": "Unique identifier of the hidden view."
+            },
+            "account": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "description": "Account identifier."
+                },
+                "name": {
+                  "type": "string",
+                  "description": "Account name."
+                }
+              },
+              "required": [
+                "id",
+                "name"
+              ]
+            },
+            "isSystemView": {
+              "type": "boolean",
+              "description": "Indicates that this view is a system‑generated hidden view."
+            }
+          },
+          "required": [
+            "name",
+            "id",
+            "account",
+            "isSystemView"
+          ]
+        },
+        "description": "Array of hidden view objects."
+      }
+    },
+    "required": [
+      "data"
+    ]
+  },
+  "side_effects": [],
+  "destructive": false,
+  "idempotent": true,
+  "ui_path": [
+    "Companies",
+    "Hidden views"
+  ],
+  "internal_endpoint": {
+    "method": "GET",
+    "path": "/view/listing/hidden",
+    "body_example": null
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/companies.json",
+      "captures/clean/contact-list.json"
+    ],
+    "verified_at": null
+  }
+}

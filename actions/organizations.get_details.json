@@ -1,0 +1,88 @@
+{
+  "id": "organizations.get_details",
+  "module": "organizations",
+  "name": "Get organization details",
+  "description": "Call this when you need to retrieve basic information about the current Brevo organization, such as its ID, client ID, type, and status flags. Use a more specific action like \"account.get_subscription\" if you only need subscription or pricing details instead.",
+  "preconditions": [],
+  "inputs": {
+    "type": "object",
+    "properties": {},
+    "required": []
+  },
+  "outputs": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "string",
+        "description": "Unique identifier of the organization."
+      },
+      "client_id": {
+        "type": "string",
+        "description": "The client identifier associated with the organization."
+      },
+      "organization_type": {
+        "type": "string",
+        "enum": [
+          "standard",
+          "enterprise"
+        ],
+        "description": "Type of the organization."
+      },
+      "is_archived": {
+        "type": "boolean",
+        "description": "Whether the organization is archived."
+      },
+      "is_locked": {
+        "type": "boolean",
+        "description": "Whether the organization is locked."
+      },
+      "pricing_version": {
+        "type": "string",
+        "description": "Version of the pricing plan currently applied."
+      },
+      "is_enterprise": {
+        "type": "boolean",
+        "description": "Whether the organization has enterprise status."
+      },
+      "mission_onboarding_done": {
+        "type": "boolean",
+        "description": "Whether the onboarding mission has been completed."
+      }
+    },
+    "required": [
+      "id",
+      "client_id",
+      "organization_type",
+      "is_archived",
+      "is_locked",
+      "pricing_version",
+      "is_enterprise",
+      "mission_onboarding_done"
+    ]
+  },
+  "side_effects": [],
+  "destructive": false,
+  "idempotent": true,
+  "ui_path": [
+    "Settings",
+    "Organization",
+    "Details"
+  ],
+  "internal_endpoint": {
+    "method": "GET",
+    "path": "/organization",
+    "body_example": null
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/contact-index-id.json"
+    ],
+    "verified_at": null
+  }
+}

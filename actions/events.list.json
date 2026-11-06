@@ -1,0 +1,102 @@
+{
+  "id": "events.list",
+  "module": "events",
+  "name": "List events",
+  "description": "Call this when you need to retrieve a paginated list of events for a given time range, date, and filter criteria. Use the \"events.export\" action instead if you need a downloadable export of all matching events rather than a limited, sortable view.",
+  "preconditions": [],
+  "inputs": {
+    "type": "object",
+    "properties": {
+      "startAt": {
+        "type": "integer",
+        "description": "Unix timestamp (seconds) marking the start of the period to fetch events from."
+      },
+      "endAt": {
+        "type": "integer",
+        "description": "Unix timestamp (seconds) marking the end of the period to fetch events up to."
+      },
+      "date": {
+        "type": "string",
+        "format": "date",
+        "description": "The calendar date (YYYY-MM-DD) for which events are queried."
+      },
+      "limit": {
+        "type": "integer",
+        "description": "Maximum number of events to return in the response."
+      },
+      "sort": {
+        "type": "string",
+        "enum": [
+          "asc",
+          "desc"
+        ],
+        "description": "Sort order of the returned events by timestamp."
+      },
+      "eventType": {
+        "type": "string",
+        "enum": [
+          "all"
+        ],
+        "description": "Type of events to include; \"all\" returns every type."
+      },
+      "status": {
+        "type": "string",
+        "enum": [
+          "sent_queued"
+        ],
+        "description": "Filter events by their status; example value \"sent_queued\"."
+      }
+    },
+    "required": [
+      "startAt",
+      "endAt",
+      "date",
+      "limit",
+      "sort",
+      "eventType",
+      "status"
+    ]
+  },
+  "outputs": {
+    "type": "object",
+    "properties": {
+      "items": {
+        "type": [
+          "array",
+          "null"
+        ],
+        "description": "Array of event objects matching the query; may be null if no events are found.",
+        "items": {
+          "type": "object"
+        }
+      }
+    },
+    "required": [
+      "items"
+    ]
+  },
+  "side_effects": [],
+  "destructive": false,
+  "idempotent": true,
+  "ui_path": [
+    "Events",
+    "List"
+  ],
+  "internal_endpoint": {
+    "method": "GET",
+    "path": "/events/list",
+    "body_example": null
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/root.json"
+    ],
+    "verified_at": null
+  }
+}

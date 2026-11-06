@@ -1,0 +1,78 @@
+{
+  "id": "smtp.get_keys",
+  "module": "smtp",
+  "name": "Get SMTP keys",
+  "description": "Call this when you need to retrieve the current SMTP relay configuration and any existing SMTP keys for the account. Use a separate action (e.g., smtp.create_key or smtp.update_key) if you need to add or modify keys instead.",
+  "preconditions": [],
+  "inputs": {
+    "type": "object",
+    "properties": {},
+    "required": []
+  },
+  "outputs": {
+    "type": "object",
+    "properties": {
+      "keys": {
+        "type": "array",
+        "items": {
+          "type": "object"
+        },
+        "description": "List of SMTP keys associated with the account."
+      },
+      "count": {
+        "type": "integer",
+        "description": "Number of SMTP keys returned."
+      },
+      "smtp_server": {
+        "type": "string",
+        "description": "Hostname of the SMTP relay server."
+      },
+      "smtp_port": {
+        "type": "integer",
+        "description": "Port number for the SMTP relay."
+      },
+      "smtp_login": {
+        "type": "string",
+        "description": "Login identifier (email placeholder) for the SMTP server."
+      },
+      "account_creation_date": {
+        "type": "string",
+        "format": "date-time",
+        "description": "Timestamp when the account was created."
+      }
+    },
+    "required": [
+      "keys",
+      "count",
+      "smtp_server",
+      "smtp_port",
+      "smtp_login",
+      "account_creation_date"
+    ]
+  },
+  "side_effects": [],
+  "destructive": false,
+  "idempotent": true,
+  "ui_path": [
+    "Settings",
+    "SMTP",
+    "Keys"
+  ],
+  "internal_endpoint": {
+    "method": "GET",
+    "path": "/api/keys/smtp",
+    "body_example": null
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/settings-keys-smtp.json"
+    ],
+    "verified_at": null
+  }
+}

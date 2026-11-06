@@ -2,7 +2,7 @@
   "id": "tasks.list_tasktypes",
   "module": "tasks",
   "name": "List task types",
-  "description": "Call this when you need to retrieve the catalogue of task types that can be assigned to CRM tasks, including their titles and icons. Use a different action (e.g., tasks.create_task) if you need to create a task rather than just list the types.",
+  "description": "Call this when you need to retrieve the list of predefined task types (e.g., Email, Call, Meeting) that can be used when creating or filtering tasks. Use tasks.create_task if you need to create a new task instead.",
   "preconditions": [],
   "inputs": {
     "type": "object",
@@ -24,7 +24,7 @@
         },
         "icon": {
           "type": "string",
-          "description": "Name of the icon representing the task type."
+          "description": "Name of the icon associated with the task type."
         }
       },
       "required": [
@@ -40,7 +40,7 @@
   "ui_path": [
     "CRM",
     "Tasks",
-    "Task Types"
+    "Task types"
   ],
   "internal_endpoint": {
     "method": "GET",

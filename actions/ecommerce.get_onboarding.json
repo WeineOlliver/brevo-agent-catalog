@@ -1,8 +1,8 @@
 {
   "id": "ecommerce.get_onboarding",
   "module": "ecommerce",
-  "name": "Get eCommerce onboarding status",
-  "description": "Call this when you need to retrieve the current onboarding status for the eCommerce integration, including whether a store is connected and if the account is eligible for onboarding. Use the \"ecommerce.start_onboarding\" action instead if you need to initiate the onboarding process.",
+  "name": "Get ecommerce onboarding status",
+  "description": "Call this when you need to retrieve the current onboarding status of the ecommerce integration for the account, including whether a store is connected and if the account is eligible for onboarding. Use the ecommerce.start_onboarding action instead when you need to initiate the onboarding process.",
   "preconditions": [],
   "inputs": {
     "type": "object",
@@ -14,22 +14,27 @@
     "properties": {
       "store_connected": {
         "type": "boolean",
-        "description": "Indicates whether a store is currently connected."
+        "description": "True if a store is already connected to the account."
       },
       "onboarding_eligible": {
         "type": "boolean",
-        "description": "Indicates whether the account is eligible to start onboarding."
+        "description": "True if the account meets all criteria to start ecommerce onboarding."
       },
       "onboarding_ineligibility_reason": {
         "type": "string",
-        "description": "Reason why onboarding is not eligible, if applicable."
+        "description": "Reason why the account is not eligible for onboarding, if applicable."
       },
       "onboarding": {
-        "type": [
-          "object",
-          "null"
-        ],
-        "description": "Details of the onboarding process if it has been started; null otherwise."
+        "description": "Detailed onboarding information if onboarding has been started; null otherwise.",
+        "anyOf": [
+          {
+            "type": "object",
+            "additionalProperties": true
+          },
+          {
+            "type": "null"
+          }
+        ]
       }
     },
     "required": [
@@ -43,7 +48,7 @@
   "destructive": false,
   "idempotent": true,
   "ui_path": [
-    "E-commerce",
+    "Ecommerce",
     "Settings"
   ],
   "internal_endpoint": {

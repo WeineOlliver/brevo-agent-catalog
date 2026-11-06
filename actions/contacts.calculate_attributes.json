@@ -1,0 +1,71 @@
+{
+  "id": "contacts.calculate_attributes",
+  "module": "contacts",
+  "name": "Calculate contact attributes",
+  "description": "Call this when you need to compute derived attributes for a specific contact, such as transaction count and whether a particular attribute is present. Use the Get Contact action instead if you only need basic contact information.",
+  "preconditions": [
+    "The contact with the given ID must exist."
+  ],
+  "inputs": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "integer",
+        "description": "The unique identifier of the contact."
+      }
+    },
+    "required": [
+      "id"
+    ]
+  },
+  "outputs": {
+    "type": "object",
+    "properties": {
+      "transaction": {
+        "type": "object",
+        "properties": {
+          "count": {
+            "type": "integer",
+            "description": "Number of transactions associated with the contact."
+          },
+          "has_attribute": {
+            "type": "boolean",
+            "description": "Indicates whether the contact has the specific calculated attribute."
+          }
+        },
+        "required": [
+          "count",
+          "has_attribute"
+        ]
+      }
+    },
+    "required": [
+      "transaction"
+    ]
+  },
+  "side_effects": [],
+  "destructive": false,
+  "idempotent": true,
+  "ui_path": [
+    "Contacts",
+    "View contact",
+    "Calculate attributes"
+  ],
+  "internal_endpoint": {
+    "method": "GET",
+    "path": "/contact/backend/contacts/:id/calc-attributes",
+    "body_example": null
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/contact-index-id.json"
+    ],
+    "verified_at": null
+  }
+}

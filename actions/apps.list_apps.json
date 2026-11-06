@@ -1,0 +1,153 @@
+{
+  "id": "apps.list_apps",
+  "module": "apps",
+  "name": "List apps",
+  "description": "Call this when you need to retrieve the catalog of available integrations/apps, optionally filtered by category. Use a more specific action such as fetching a single app's details (e.g., /apps/{id}) when you only need one app.",
+  "preconditions": [],
+  "inputs": {
+    "type": "object",
+    "properties": {
+      "category": {
+        "type": "array",
+        "items": {
+          "type": "integer"
+        },
+        "description": "Filter apps by one or more category IDs."
+      },
+      "offset": {
+        "type": "integer",
+        "default": 0,
+        "description": "Number of items to skip for pagination."
+      },
+      "limit": {
+        "type": "integer",
+        "default": 100,
+        "description": "Maximum number of apps to return."
+      }
+    },
+    "required": []
+  },
+  "outputs": {
+    "type": "object",
+    "properties": {
+      "appList": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "integer",
+              "description": "Unique identifier of the app."
+            },
+            "name": {
+              "type": "string",
+              "description": "Name of the app."
+            },
+            "category": {
+              "type": "array",
+              "items": {
+                "type": "integer"
+              },
+              "description": "Category IDs the app belongs to."
+            },
+            "displayCategory": {
+              "type": "array",
+              "items": {
+                "type": "integer"
+              },
+              "description": "Category IDs displayed in the UI."
+            },
+            "description": {
+              "type": "string",
+              "description": "Brief description of the app."
+            },
+            "redirectLink": {
+              "type": "string",
+              "format": "uri",
+              "description": "Link to documentation or installation guide."
+            },
+            "author": {
+              "type": "integer",
+              "description": "Identifier of the app author."
+            },
+            "logoLink": {
+              "type": "string",
+              "format": "uri",
+              "description": "URL of the app's logo image."
+            },
+            "published": {
+              "type": "boolean",
+              "description": "Whether the app is publicly published."
+            },
+            "isBeta": {
+              "type": "boolean",
+              "description": "Whether the app is in beta."
+            },
+            "target": {
+              "type": "string",
+              "enum": [
+                "_blank",
+                "_self",
+                "_parent",
+                "_top"
+              ],
+              "description": "HTML target attribute for the redirect link."
+            },
+            "planUpgradeRequired": {
+              "type": "boolean",
+              "description": "Whether a plan upgrade is required to use the app."
+            },
+            "isNew": {
+              "type": "boolean",
+              "description": "Whether the app is newly added."
+            }
+          },
+          "required": [
+            "id",
+            "name",
+            "category",
+            "displayCategory",
+            "description",
+            "redirectLink",
+            "author",
+            "logoLink",
+            "published",
+            "isBeta",
+            "target",
+            "planUpgradeRequired",
+            "isNew"
+          ]
+        },
+        "description": "List of apps matching the query."
+      }
+    },
+    "required": [
+      "appList"
+    ]
+  },
+  "side_effects": [],
+  "destructive": false,
+  "idempotent": true,
+  "ui_path": [
+    "E-commerce",
+    "Apps",
+    "Marketplace"
+  ],
+  "internal_endpoint": {
+    "method": "GET",
+    "path": "/apps",
+    "body_example": null
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/ecommerce.json"
+    ],
+    "verified_at": null
+  }
+}

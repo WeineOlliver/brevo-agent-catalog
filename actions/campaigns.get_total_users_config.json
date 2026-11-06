@@ -1,0 +1,150 @@
+{
+  "id": "campaigns.get_total_users_config",
+  "module": "campaigns",
+  "name": "Get total users configuration",
+  "description": "Call this when you need to retrieve the global user statistics configuration displayed on the Campaigns listing page. Use the \"campaigns.get_campaign_stats\" action instead if you need statistics for a specific campaign rather than the overall totals.",
+  "preconditions": [
+    "The \"language\" query parameter must be supplied."
+  ],
+  "inputs": {
+    "type": "object",
+    "properties": {
+      "language": {
+        "type": "string",
+        "description": "Language code (e.g., \"en\", \"fr\") used to localise the returned values."
+      }
+    },
+    "required": [
+      "language"
+    ],
+    "additionalProperties": false
+  },
+  "outputs": {
+    "type": "object",
+    "properties": {
+      "result": {
+        "type": "object",
+        "properties": {
+          "global_attrib": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "cal": {
+                  "type": "string",
+                  "enum": [
+                    "eq"
+                  ],
+                  "description": "Comparison operator used for the attribute."
+                },
+                "field": {
+                  "type": "string",
+                  "enum": [
+                    "BLACKLIST",
+                    "READERS",
+                    "CLICKERS"
+                  ],
+                  "description": "Name of the user segment."
+                },
+                "isUser": {
+                  "type": "boolean",
+                  "description": "Indicates whether the segment counts users."
+                },
+                "perc": {
+                  "type": "string",
+                  "description": "Percentage representation of the segment (e.g., \"0%\")."
+                },
+                "value": {
+                  "type": "string",
+                  "description": "Raw numeric value as a string."
+                },
+                "valueFormated": {
+                  "type": "string",
+                  "description": "Formatted numeric value."
+                },
+                "valuePlan": {
+                  "type": "integer",
+                  "description": "Plan‑specific numeric value for the segment."
+                }
+              },
+              "required": [
+                "cal",
+                "field",
+                "isUser",
+                "perc",
+                "value",
+                "valueFormated",
+                "valuePlan"
+              ],
+              "additionalProperties": false
+            },
+            "description": "Array of global user segment attributes."
+          },
+          "last_updated": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Timestamp of the last update of the configuration."
+          },
+          "totalPlan": {
+            "type": "integer",
+            "description": "Total plan identifier."
+          },
+          "is_global_stats_refreshed": {
+            "type": "boolean",
+            "description": "Flag indicating if global statistics have been refreshed."
+          },
+          "stats_refreshed_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Timestamp when statistics were last refreshed."
+          },
+          "source": {
+            "type": "string",
+            "enum": [
+              "DB"
+            ],
+            "description": "Origin of the data."
+          }
+        },
+        "required": [
+          "global_attrib",
+          "last_updated",
+          "totalPlan",
+          "is_global_stats_refreshed",
+          "stats_refreshed_at",
+          "source"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "required": [
+      "result"
+    ],
+    "additionalProperties": false
+  },
+  "side_effects": [],
+  "destructive": false,
+  "idempotent": true,
+  "ui_path": [
+    "Campaigns",
+    "Listing",
+    "Load total users configuration"
+  ],
+  "internal_endpoint": {
+    "method": "GET",
+    "path": "/getTotalUsersConfig",
+    "body_example": null
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/campaigns-listing.json"
+    ],
+    "verified_at": null
+  }
+}

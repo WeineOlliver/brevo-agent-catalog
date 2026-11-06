@@ -1,0 +1,42 @@
+{
+  "id": "contacts.get_presentation_config",
+  "module": "contacts",
+  "name": "Get presentation config",
+  "description": "Call this when you need to retrieve the presentation configuration used for displaying a contact's events in the UI. Use a different action (e.g., a configuration update endpoint) if you need to modify the presentation settings.",
+  "preconditions": [],
+  "inputs": {
+    "type": "object",
+    "properties": {},
+    "required": []
+  },
+  "outputs": {
+    "type": "array",
+    "items": {}
+  },
+  "side_effects": [],
+  "destructive": false,
+  "idempotent": true,
+  "ui_path": [
+    "Contacts",
+    "Contact details",
+    "Events",
+    "Presentation config"
+  ],
+  "internal_endpoint": {
+    "method": "GET",
+    "path": "/events/presentation_config",
+    "body_example": null
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/contact-index-id.json"
+    ],
+    "verified_at": null
+  }
+}
