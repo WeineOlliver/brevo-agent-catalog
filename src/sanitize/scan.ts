@@ -20,6 +20,18 @@ export type LeakKind = 'api_key' | 'jwt' | 'cookie' | 'email' | 'account_id';
 
 export type Leak = { kind: LeakKind; match: string };
 
+/**
+ * Domains RFC 2606 and RFC 6761 reserve for documentation and testing. They can
+ * never belong to a real person, so an address on one is not a leak — and
+ * treating it as one would train the operator to ignore this gate, which is far
+ * more dangerous than the false positives themselves.
+ *
+ * An address the operator explicitly configured as theirs is still reported,
+ * even on a reserved domain.
+ */
+const RESERVED_EMAIL_DOMAIN =
+  /@(?:example\.(?:com|org|net)|[^@\s]*\.(?:example|test|invalid|localhost))$/i;
+
 const SHAPES: ReadonlyArray<{ kind: LeakKind; source: string; flags: string }> = [
   { kind: 'jwt', source: JWT_SOURCE, flags: 'g' },
   { kind: 'api_key', source: API_KEY_SOURCE, flags: 'g' },
@@ -34,6 +46,7 @@ export function scanForLeaks(text: string, rules: RedactionRules): Leak[] {
   for (const shape of SHAPES) {
     const pattern = new RegExp(shape.source, shape.flags);
     for (let m = pattern.exec(text); m !== null; m = pattern.exec(text)) {
+      if (shape.kind === 'email' && RESERVED_EMAIL_DOMAIN.test(m[0])) continue;
       leaks.push({ kind: shape.kind, match: m[0] });
     }
   }

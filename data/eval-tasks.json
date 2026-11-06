@@ -77,7 +77,7 @@
       "expectedActionId": "contacts.export_contacts"
     },
     {
-      "prompt": "we need a new From address — set up marketing@ourcompany.com so we can send from it",
+      "prompt": "we need a new From address — set up marketing@example.com so we can send from it",
       "expectedActionId": "senders.create_sender"
     },
     {

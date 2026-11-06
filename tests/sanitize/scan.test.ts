@@ -40,6 +40,26 @@ describe('scanForLeaks', () => {
     expect(scanForLeaks('{"name":"Promo campaign","status":"draft"}', empty)).toEqual([]);
   });
 
+  it('does not flag RFC 2606 documentation addresses', () => {
+    expect(scanForLeaks('{"to":"john@example.com"}', empty)).toEqual([]);
+    expect(scanForLeaks('a@example.org and b@example.net', empty)).toEqual([]);
+    expect(scanForLeaks('c@host.test and d@thing.invalid', empty)).toEqual([]);
+  });
+
+  it('still flags a real-looking address alongside a documentation one', () => {
+    const leaks = scanForLeaks('john@example.com and real.person@gmail.com', empty);
+    expect(leaks).toHaveLength(1);
+    expect(leaks[0]?.match).toBe('real.person@gmail.com');
+  });
+
+  it('flags a configured email even on a reserved domain, because it is really ours', () => {
+    expect(
+      scanForLeaks('weine@example.com', { accountIds: [], emails: ['weine@example.com'] }).map(
+        (l) => l.kind,
+      ),
+    ).toContain('email');
+  });
+
   it('reports the matched text so a failure is actionable', () => {
     const leaks = scanForLeaks('xkeysib-0123456789abcdef0123', empty);
     expect(leaks[0]?.match).toContain('xkeysib-');

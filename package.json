@@ -21,7 +21,8 @@
     "build:index": "tsx scripts/build-index.ts",
     "interact": "tsx scripts/interact.ts",
     "verify": "tsx scripts/verify.ts",
-    "eval": "tsx scripts/eval-selection.ts"
+    "eval": "tsx scripts/eval-selection.ts",
+    "build:docs": "tsx scripts/build-modules-doc.ts"
   },
   "dependencies": {
     "ajv": "^8.17.1",
