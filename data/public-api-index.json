@@ -1,0 +1,4255 @@
+{
+  "generated_at": "2026-11-06T15:17:25.697Z",
+  "source_url": "https://api.brevo.com/v3/swagger_definition_v3.yml",
+  "path_count": 208,
+  "operation_count": 292,
+  "with_operation_id": 208,
+  "operations": [
+    {
+      "operationId": "getAccount",
+      "method": "GET",
+      "pathTemplate": "/account",
+      "required": [],
+      "enums": {},
+      "tags": [
+        "Account"
+      ]
+    },
+    {
+      "operationId": null,
+      "method": "POST",
+      "pathTemplate": "/corporate/group",
+      "required": [
+        "groupName"
+      ],
+      "enums": {},
+      "tags": [
+        "Master account"
+      ]
+    },
+    {
+      "operationId": null,
+      "method": "PUT",
+      "pathTemplate": "/corporate/group/unlink/{groupId}/subAccounts",
+      "required": [
+        "groupId",
+        "subAccountIds"
+      ],
+      "enums": {},
+      "tags": [
+        "Master account"
+      ]
+    },
+    {
+      "operationId": null,
+      "method": "DELETE",
+      "pathTemplate": "/corporate/group/{id}",
+      "required": [
+        "id"
+      ],
+      "enums": {},
+      "tags": [
+        "Master account"
+      ]
+    },
+    {
+      "operationId": null,
+      "method": "GET",
+      "pathTemplate": "/corporate/group/{id}",
+      "required": [
+        "id"
+      ],
+      "enums": {},
+      "tags": [
+        "Master account"
+      ]
+    },
+    {
+      "operationId": null,
+      "method": "PUT",
+      "pathTemplate": "/corporate/group/{id}",
+      "required": [
+        "id"
+      ],
+      "enums": {},
+      "tags": [
+        "Master account"
+      ]
+    },
+    {
+      "operationId": "getSubAccountGroups",
+      "method": "GET",
+      "pathTemplate": "/corporate/groups",
+      "required": [],
+      "enums": {},
+      "tags": [
+        "Master account"
+      ]
+    },
+    {
+      "operationId": "getCorporateInvitedUsersList",
+      "method": "GET",
+      "pathTemplate": "/corporate/invited/users",
+      "required": [],
+      "enums": {},
+      "tags": [
+        "Master account"
+      ]
+    },
+    {
+      "operationId": null,
+      "method": "GET",
+      "pathTemplate": "/corporate/ip",
+      "required": [],
+      "enums": {},
+      "tags": [
+        "Master account"
+      ]
+    },
+    {
+      "operationId": null,
+      "method": "GET",
+      "pathTemplate": "/corporate/masterAccount",
+      "required": [],
+      "enums": {},
+      "tags": [
+        "Master account"
+      ]
+    },
+    {
+      "operationId": null,
+      "method": "POST",
+      "pathTemplate": "/corporate/ssoToken",
+      "required": [
+        "email"
+      ],
+      "enums": {},
+      "tags": [
+        "Master account"
+      ]
+    },
+    {
+      "operationId": null,
+      "method": "GET",
+      "pathTemplate": "/corporate/subAccount",
+      "required": [
+        "offset",
+        "limit"
+      ],
+      "enums": {},
+      "tags": [
+        "Master account"
+      ]
+    },
+    {
+      "operationId": null,
+      "method": "POST",
+      "pathTemplate": "/corporate/subAccount",
+      "required": [
+        "companyName",
+        "email"
+      ],
+      "enums": {
+        "language": [
+          "en",
+          "fr",
+          "it",
+          "es",
+          "pt",
+          "de"
+        ]
+      },
+      "tags": [
+        "Master account"
+      ]
+    },
+    {
+      "operationId": null,
+      "method": "POST",
+      "pathTemplate": "/corporate/subAccount/ip/associate",
+      "required": [
+        "ip",
+        "ids"
+      ],
+      "enums": {},
+      "tags": [
+        "Master account"
+      ]
+    },
+    {
+      "operationId": null,
+      "method": "PUT",
+      "pathTemplate": "/corporate/subAccount/ip/dissociate",
+      "required": [
+        "ip",
+        "ids"
+      ],
+      "enums": {},
+      "tags": [
+        "Master account"
+      ]
+    },
+    {
+      "operationId": null,
+      "method": "POST",
+      "pathTemplate": "/corporate/subAccount/key",
+      "required": [
+        "id",
+        "name"
+      ],
+      "enums": {},
+      "tags": [
+        "Master account"
+      ]
+    },
+    {
+      "operationId": null,
+      "method": "POST",
+      "pathTemplate": "/corporate/subAccount/ssoToken",
+      "required": [
+        "id"
+      ],
+      "enums": {
+        "target": [
+          "automation",
+          "email_campaign",
+          "contacts",
+          "landing_pages",
+          "email_transactional",
+          "senders",
+          "sms_campaign",
+          "sms_transactional"
+        ]
+      },
+      "tags": [
+        "Master account"
+      ]
+    },
+    {
+      "operationId": null,
+      "method": "DELETE",
+      "pathTemplate": "/corporate/subAccount/{id}",
+      "required": [
+        "id"
+      ],
+      "enums": {},
+      "tags": [
+        "Master account"
+      ]
+    },
+    {
+      "operationId": null,
+      "method": "GET",
+      "pathTemplate": "/corporate/subAccount/{id}",
+      "required": [
+        "id"
+      ],
+      "enums": {},
+      "tags": [
+        "Master account"
+      ]
+    },
+    {
+      "operationId": null,
+      "method": "PUT",
+      "pathTemplate": "/corporate/subAccount/{id}/applications/toggle",
+      "required": [
+        "id"
+      ],
+      "enums": {},
+      "tags": [
+        "Master account"
+      ]
+    },
+    {
+      "operationId": null,
+      "method": "PUT",
+      "pathTemplate": "/corporate/subAccount/{id}/plan",
+      "required": [
+        "id"
+      ],
+      "enums": {},
+      "tags": [
+        "Master account"
+      ]
+    },
+    {
+      "operationId": null,
+      "method": "PUT",
+      "pathTemplate": "/corporate/subAccounts/plan",
+      "required": [],
+      "enums": {},
+      "tags": [
+        "Master account"
+      ]
+    },
+    {
+      "operationId": "inviteAdminUser",
+      "method": "POST",
+      "pathTemplate": "/corporate/user/invitation/send",
+      "required": [
+        "email",
+        "all_features_access",
+        "privileges"
+      ],
+      "enums": {},
+      "tags": [
+        "Master account"
+      ]
+    },
+    {
+      "operationId": null,
+      "method": "PUT",
+      "pathTemplate": "/corporate/user/invitation/{action}/{email}",
+      "required": [
+        "action",
+        "email"
+      ],
+      "enums": {
+        "action": [
+          "resend",
+          "cancel"
+        ]
+      },
+      "tags": [
+        "Master account"
+      ]
+    },
+    {
+      "operationId": null,
+      "method": "DELETE",
+      "pathTemplate": "/corporate/user/revoke/{email}",
+      "required": [
+        "email"
+      ],
+      "enums": {},
+      "tags": [
+        "Master account"
+      ]
+    },
+    {
+      "operationId": "getCorporateUserPermission",
+      "method": "GET",
+      "pathTemplate": "/corporate/user/{email}/permissions",
+      "required": [
+        "email"
+      ],
+      "enums": {},
+      "tags": [
+        "Master account"
+      ]
+    },
+    {
+      "operationId": null,
+      "method": "PUT",
+      "pathTemplate": "/corporate/user/{email}/permissions",
+      "required": [
+        "email",
+        "all_features_access",
+        "privileges"
+      ],
+      "enums": {},
+      "tags": [
+        "Master account"
+      ]
+    },
+    {
+      "operationId": "getAccountActivity",
+      "method": "GET",
+      "pathTemplate": "/organization/activities",
+      "required": [],
+      "enums": {},
+      "tags": [
+        "Account",
+        "Master account"
+      ]
+    },
+    {
+      "operationId": "getInvitedUsersList",
+      "method": "GET",
+      "pathTemplate": "/organization/invited/users",
+      "required": [],
+      "enums": {},
+      "tags": [
+        "User"
+      ]
+    },
+    {
+      "operationId": "putRevokeUserPermission",
+      "method": "PUT",
+      "pathTemplate": "/organization/user/invitation/revoke/{email}",
+      "required": [
+        "email"
+      ],
+      "enums": {},
+      "tags": [
+        "User"
+      ]
+    },
+    {
+      "operationId": "inviteuser",
+      "method": "POST",
+      "pathTemplate": "/organization/user/invitation/send",
+      "required": [],
+      "enums": {},
+      "tags": [
+        "User"
+      ]
+    },
+    {
+      "operationId": "putresendcancelinvitation",
+      "method": "PUT",
+      "pathTemplate": "/organization/user/invitation/{action}/{email}",
+      "required": [
+        "action",
+        "email"
+      ],
+      "enums": {
+        "action": [
+          "resend",
+          "cancel"
+        ]
+      },
+      "tags": [
+        "User"
+      ]
+    },
+    {
+      "operationId": "EditUserPermission",
+      "method": "POST",
+      "pathTemplate": "/organization/user/update/permissions",
+      "required": [],
+      "enums": {},
+      "tags": [
+        "User"
+      ]
+    },
+    {
+      "operationId": "getUserPermission",
+      "method": "GET",
+      "pathTemplate": "/organization/user/{email}/permissions",
+      "required": [
+        "email"
+      ],
+      "enums": {},
+      "tags": [
+        "User"
+      ]
+    },
+    {
+      "operationId": "getProcesses",
+      "method": "GET",
+      "pathTemplate": "/processes",
+      "required": [],
+      "enums": {
+        "sort": [
+          "asc",
+          "desc"
+        ]
+      },
+      "tags": [
+        "Process"
+      ]
+    },
+    {
+      "operationId": "getProcess",
+      "method": "GET",
+      "pathTemplate": "/processes/{processId}",
+      "required": [
+        "processId"
+      ],
+      "enums": {},
+      "tags": [
+        "Process"
+      ]
+    },
+    {
+      "operationId": "getSenders",
+      "method": "GET",
+      "pathTemplate": "/senders",
+      "required": [],
+      "enums": {},
+      "tags": [
+        "Senders"
+      ]
+    },
+    {
+      "operationId": "createSender",
+      "method": "POST",
+      "pathTemplate": "/senders",
+      "required": [
+        "email",
+        "name"
+      ],
+      "enums": {},
+      "tags": [
+        "Senders"
+      ]
+    },
+    {
+      "operationId": "getDomains",
+      "method": "GET",
+      "pathTemplate": "/senders/domains",
+      "required": [],
+      "enums": {},
+      "tags": [
+        "Domains"
+      ]
+    },
+    {
+      "operationId": "createDomain",
+      "method": "POST",
+      "pathTemplate": "/senders/domains",
+      "required": [
+        "name"
+      ],
+      "enums": {},
+      "tags": [
+        "Domains"
+      ]
+    },
+    {
+      "operationId": "deleteDomain",
+      "method": "DELETE",
+      "pathTemplate": "/senders/domains/{domainName}",
+      "required": [
+        "domainName"
+      ],
+      "enums": {},
+      "tags": [
+        "Domains"
+      ]
+    },
+    {
+      "operationId": "getDomainConfiguration",
+      "method": "GET",
+      "pathTemplate": "/senders/domains/{domainName}",
+      "required": [
+        "domainName"
+      ],
+      "enums": {},
+      "tags": [
+        "Domains"
+      ]
+    },
+    {
+      "operationId": "authenticateDomain",
+      "method": "PUT",
+      "pathTemplate": "/senders/domains/{domainName}/authenticate",
+      "required": [
+        "domainName"
+      ],
+      "enums": {},
+      "tags": [
+        "Domains"
+      ]
+    },
+    {
+      "operationId": "getIps",
+      "method": "GET",
+      "pathTemplate": "/senders/ips",
+      "required": [],
+      "enums": {},
+      "tags": [
+        "Senders"
+      ]
+    },
+    {
+      "operationId": "deleteSender",
+      "method": "DELETE",
+      "pathTemplate": "/senders/{senderId}",
+      "required": [
+        "senderId"
+      ],
+      "enums": {},
+      "tags": [
+        "Senders"
+      ]
+    },
+    {
+      "operationId": "updateSender",
+      "method": "PUT",
+      "pathTemplate": "/senders/{senderId}",
+      "required": [
+        "senderId"
+      ],
+      "enums": {},
+      "tags": [
+        "Senders"
+      ]
+    },
+    {
+      "operationId": "getIpsFromSender",
+      "method": "GET",
+      "pathTemplate": "/senders/{senderId}/ips",
+      "required": [
+        "senderId"
+      ],
+      "enums": {},
+      "tags": [
+        "Senders"
+      ]
+    },
+    {
+      "operationId": "validateSenderByOTP",
+      "method": "PUT",
+      "pathTemplate": "/senders/{senderId}/validate",
+      "required": [
+        "senderId",
+        "otp"
+      ],
+      "enums": {},
+      "tags": [
+        "Senders"
+      ]
+    },
+    {
+      "operationId": "getWebhooks",
+      "method": "GET",
+      "pathTemplate": "/webhooks",
+      "required": [],
+      "enums": {
+        "type": [
+          "marketing",
+          "transactional",
+          "inbound"
+        ],
+        "sort": [
+          "asc",
+          "desc"
+        ]
+      },
+      "tags": [
+        "Webhooks"
+      ]
+    },
+    {
+      "operationId": "createWebhook",
+      "method": "POST",
+      "pathTemplate": "/webhooks",
+      "required": [
+        "url"
+      ],
+      "enums": {
+        "channel": [
+          "email",
+          "sms"
+        ],
+        "type": [
+          "transactional",
+          "marketing",
+          "inbound"
+        ]
+      },
+      "tags": [
+        "Webhooks"
+      ]
+    },
+    {
+      "operationId": "exportWebhooksHistory",
+      "method": "POST",
+      "pathTemplate": "/webhooks/export",
+      "required": [],
+      "enums": {},
+      "tags": [
+        "Webhooks"
+      ]
+    },
+    {
+      "operationId": "deleteWebhook",
+      "method": "DELETE",
+      "pathTemplate": "/webhooks/{webhookId}",
+      "required": [
+        "webhookId"
+      ],
+      "enums": {},
+      "tags": [
+        "Webhooks"
+      ]
+    },
+    {
+      "operationId": "getWebhook",
+      "method": "GET",
+      "pathTemplate": "/webhooks/{webhookId}",
+      "required": [
+        "webhookId"
+      ],
+      "enums": {},
+      "tags": [
+        "Webhooks"
+      ]
+    },
+    {
+      "operationId": "updateWebhook",
+      "method": "PUT",
+      "pathTemplate": "/webhooks/{webhookId}",
+      "required": [
+        "webhookId"
+      ],
+      "enums": {},
+      "tags": [
+        "Webhooks"
+      ]
+    },
+    {
+      "operationId": "getAllExternalFeeds",
+      "method": "GET",
+      "pathTemplate": "/feeds",
+      "required": [],
+      "enums": {
+        "sort": [
+          "asc",
+          "desc"
+        ],
+        "authType": [
+          "basic",
+          "token",
+          "noAuth"
+        ]
+      },
+      "tags": [
+        "External Feeds"
+      ]
+    },
+    {
+      "operationId": "createExternalFeed",
+      "method": "POST",
+      "pathTemplate": "/feeds",
+      "required": [
+        "name",
+        "url"
+      ],
+      "enums": {
+        "authType": [
+          "basic",
+          "token",
+          "noAuth"
+        ]
+      },
+      "tags": [
+        "External Feeds"
+      ]
+    },
+    {
+      "operationId": "deleteExternalFeed",
+      "method": "DELETE",
+      "pathTemplate": "/feeds/{uuid}",
+      "required": [
+        "uuid"
+      ],
+      "enums": {},
+      "tags": [
+        "External Feeds"
+      ]
+    },
+    {
+      "operationId": "getExternalFeedByUUID",
+      "method": "GET",
+      "pathTemplate": "/feeds/{uuid}",
+      "required": [
+        "uuid"
+      ],
+      "enums": {},
+      "tags": [
+        "External Feeds"
+      ]
+    },
+    {
+      "operationId": "updateExternalFeed",
+      "method": "PUT",
+      "pathTemplate": "/feeds/{uuid}",
+      "required": [
+        "uuid"
+      ],
+      "enums": {
+        "authType": [
+          "basic",
+          "token",
+          "noAuth"
+        ]
+      },
+      "tags": [
+        "External Feeds"
+      ]
+    },
+    {
+      "operationId": "upsertrecords",
+      "method": "POST",
+      "pathTemplate": "/objects/{object_type}/batch/upsert",
+      "required": [
+        "object_type",
+        "records"
+      ],
+      "enums": {},
+      "tags": [
+        "Custom Objects"
+      ]
+    },
+    {
+      "operationId": "getrecords",
+      "method": "GET",
+      "pathTemplate": "/objects/{object_type}/records",
+      "required": [
+        "object_type",
+        "limit",
+        "page_num"
+      ],
+      "enums": {
+        "sort": [
+          "asc",
+          "desc"
+        ],
+        "association": [
+          "true",
+          "false"
+        ]
+      },
+      "tags": [
+        "Custom Objects"
+      ]
+    },
+    {
+      "operationId": "batchDeleteObjectRecords",
+      "method": "POST",
+      "pathTemplate": "/objects/{object_type}/batch/delete",
+      "required": [
+        "object_type"
+      ],
+      "enums": {},
+      "tags": [
+        "Custom Objects"
+      ]
+    },
+    {
+      "operationId": "getAssociatedRecords",
+      "method": "GET",
+      "pathTemplate": "/objects/{object_type}/associated-records",
+      "required": [
+        "object_type"
+      ],
+      "enums": {},
+      "tags": [
+        "Custom Objects"
+      ]
+    },
+    {
+      "operationId": "getContacts",
+      "method": "GET",
+      "pathTemplate": "/contacts",
+      "required": [],
+      "enums": {
+        "sort": [
+          "asc",
+          "desc"
+        ]
+      },
+      "tags": [
+        "Contacts"
+      ]
+    },
+    {
+      "operationId": "createContact",
+      "method": "POST",
+      "pathTemplate": "/contacts",
+      "required": [],
+      "enums": {},
+      "tags": [
+        "Contacts"
+      ]
+    },
+    {
+      "operationId": "getAttributes",
+      "method": "GET",
+      "pathTemplate": "/contacts/attributes",
+      "required": [],
+      "enums": {},
+      "tags": [
+        "Contacts"
+      ]
+    },
+    {
+      "operationId": "deleteAttribute",
+      "method": "DELETE",
+      "pathTemplate": "/contacts/attributes/{attributeCategory}/{attributeName}",
+      "required": [
+        "attributeCategory",
+        "attributeName"
+      ],
+      "enums": {
+        "attributeCategory": [
+          "normal",
+          "transactional",
+          "category",
+          "calculated",
+          "global"
+        ]
+      },
+      "tags": [
+        "Contacts"
+      ]
+    },
+    {
+      "operationId": "createAttribute",
+      "method": "POST",
+      "pathTemplate": "/contacts/attributes/{attributeCategory}/{attributeName}",
+      "required": [
+        "attributeCategory",
+        "attributeName"
+      ],
+      "enums": {
+        "attributeCategory": [
+          "normal",
+          "transactional",
+          "category",
+          "calculated",
+          "global"
+        ],
+        "type": [
+          "text",
+          "date",
+          "float",
+          "boolean",
+          "id",
+          "category",
+          "multiple-choice",
+          "user"
+        ]
+      },
+      "tags": [
+        "Contacts"
+      ]
+    },
+    {
+      "operationId": "updateAttribute",
+      "method": "PUT",
+      "pathTemplate": "/contacts/attributes/{attributeCategory}/{attributeName}",
+      "required": [
+        "attributeCategory",
+        "attributeName"
+      ],
+      "enums": {
+        "attributeCategory": [
+          "category",
+          "calculated",
+          "global",
+          "normal"
+        ]
+      },
+      "tags": [
+        "Contacts"
+      ]
+    },
+    {
+      "operationId": "deleteMultiAttributeOptions",
+      "method": "DELETE",
+      "pathTemplate": "/contacts/attributes/{attributeType}/{multipleChoiceAttribute}/{multipleChoiceAttributeOption}",
+      "required": [
+        "attributeType",
+        "multipleChoiceAttribute",
+        "multipleChoiceAttributeOption"
+      ],
+      "enums": {
+        "attributeType": [
+          "multiple-choice"
+        ]
+      },
+      "tags": [
+        "Contacts"
+      ]
+    },
+    {
+      "operationId": "updateBatchContacts",
+      "method": "POST",
+      "pathTemplate": "/contacts/batch",
+      "required": [],
+      "enums": {},
+      "tags": [
+        "Contacts"
+      ]
+    },
+    {
+      "operationId": "createDoiContact",
+      "method": "POST",
+      "pathTemplate": "/contacts/doubleOptinConfirmation",
+      "required": [
+        "email",
+        "includeListIds",
+        "redirectionUrl",
+        "templateId"
+      ],
+      "enums": {},
+      "tags": [
+        "Contacts"
+      ]
+    },
+    {
+      "operationId": "requestContactExport",
+      "method": "POST",
+      "pathTemplate": "/contacts/export",
+      "required": [
+        "customContactFilter"
+      ],
+      "enums": {},
+      "tags": [
+        "Contacts"
+      ]
+    },
+    {
+      "operationId": "getFolders",
+      "method": "GET",
+      "pathTemplate": "/contacts/folders",
+      "required": [],
+      "enums": {
+        "sort": [
+          "asc",
+          "desc"
+        ]
+      },
+      "tags": [
+        "Contacts"
+      ]
+    },
+    {
+      "operationId": "createFolder",
+      "method": "POST",
+      "pathTemplate": "/contacts/folders",
+      "required": [],
+      "enums": {},
+      "tags": [
+        "Contacts"
+      ]
+    },
+    {
+      "operationId": "deleteFolder",
+      "method": "DELETE",
+      "pathTemplate": "/contacts/folders/{folderId}",
+      "required": [
+        "folderId"
+      ],
+      "enums": {},
+      "tags": [
+        "Contacts"
+      ]
+    },
+    {
+      "operationId": "getFolder",
+      "method": "GET",
+      "pathTemplate": "/contacts/folders/{folderId}",
+      "required": [
+        "folderId"
+      ],
+      "enums": {},
+      "tags": [
+        "Contacts"
+      ]
+    },
+    {
+      "operationId": "updateFolder",
+      "method": "PUT",
+      "pathTemplate": "/contacts/folders/{folderId}",
+      "required": [
+        "folderId"
+      ],
+      "enums": {},
+      "tags": [
+        "Contacts"
+      ]
+    },
+    {
+      "operationId": "getFolderLists",
+      "method": "GET",
+      "pathTemplate": "/contacts/folders/{folderId}/lists",
+      "required": [
+        "folderId"
+      ],
+      "enums": {
+        "sort": [
+          "asc",
+          "desc"
+        ]
+      },
+      "tags": [
+        "Contacts"
+      ]
+    },
+    {
+      "operationId": "importContacts",
+      "method": "POST",
+      "pathTemplate": "/contacts/import",
+      "required": [],
+      "enums": {},
+      "tags": [
+        "Contacts"
+      ]
+    },
+    {
+      "operationId": "getLists",
+      "method": "GET",
+      "pathTemplate": "/contacts/lists",
+      "required": [],
+      "enums": {
+        "sort": [
+          "asc",
+          "desc"
+        ]
+      },
+      "tags": [
+        "Contacts"
+      ]
+    },
+    {
+      "operationId": "createList",
+      "method": "POST",
+      "pathTemplate": "/contacts/lists",
+      "required": [
+        "folderId",
+        "name"
+      ],
+      "enums": {},
+      "tags": [
+        "Contacts"
+      ]
+    },
+    {
+      "operationId": "deleteList",
+      "method": "DELETE",
+      "pathTemplate": "/contacts/lists/{listId}",
+      "required": [
+        "listId"
+      ],
+      "enums": {},
+      "tags": [
+        "Contacts"
+      ]
+    },
+    {
+      "operationId": "getList",
+      "method": "GET",
+      "pathTemplate": "/contacts/lists/{listId}",
+      "required": [
+        "listId"
+      ],
+      "enums": {},
+      "tags": [
+        "Contacts"
+      ]
+    },
+    {
+      "operationId": "updateList",
+      "method": "PUT",
+      "pathTemplate": "/contacts/lists/{listId}",
+      "required": [
+        "listId"
+      ],
+      "enums": {},
+      "tags": [
+        "Contacts"
+      ]
+    },
+    {
+      "operationId": "getContactsFromList",
+      "method": "GET",
+      "pathTemplate": "/contacts/lists/{listId}/contacts",
+      "required": [
+        "listId"
+      ],
+      "enums": {
+        "sort": [
+          "asc",
+          "desc"
+        ]
+      },
+      "tags": [
+        "Contacts"
+      ]
+    },
+    {
+      "operationId": "addContactToList",
+      "method": "POST",
+      "pathTemplate": "/contacts/lists/{listId}/contacts/add",
+      "required": [
+        "listId"
+      ],
+      "enums": {},
+      "tags": [
+        "Contacts"
+      ]
+    },
+    {
+      "operationId": "removeContactFromList",
+      "method": "POST",
+      "pathTemplate": "/contacts/lists/{listId}/contacts/remove",
+      "required": [
+        "listId"
+      ],
+      "enums": {},
+      "tags": [
+        "Contacts"
+      ]
+    },
+    {
+      "operationId": "getSegments",
+      "method": "GET",
+      "pathTemplate": "/contacts/segments",
+      "required": [],
+      "enums": {
+        "sort": [
+          "asc",
+          "desc"
+        ]
+      },
+      "tags": [
+        "Contacts"
+      ]
+    },
+    {
+      "operationId": "getConsentGroups",
+      "method": "GET",
+      "pathTemplate": "/contacts/consent-groups",
+      "required": [],
+      "enums": {
+        "signupMode": [
+          "manual",
+          "automatic"
+        ]
+      },
+      "tags": [
+        "ConsentGroups"
+      ]
+    },
+    {
+      "operationId": "createConsentGroup",
+      "method": "POST",
+      "pathTemplate": "/contacts/consent-groups",
+      "required": [],
+      "enums": {},
+      "tags": [
+        "ConsentGroups"
+      ]
+    },
+    {
+      "operationId": "getConsentGroup",
+      "method": "GET",
+      "pathTemplate": "/contacts/consent-groups/{id}",
+      "required": [
+        "id"
+      ],
+      "enums": {},
+      "tags": [
+        "ConsentGroups"
+      ]
+    },
+    {
+      "operationId": "updateConsentGroup",
+      "method": "PUT",
+      "pathTemplate": "/contacts/consent-groups/{id}",
+      "required": [
+        "id"
+      ],
+      "enums": {},
+      "tags": [
+        "ConsentGroups"
+      ]
+    },
+    {
+      "operationId": "deleteConsentGroup",
+      "method": "DELETE",
+      "pathTemplate": "/contacts/consent-groups/{id}",
+      "required": [
+        "id"
+      ],
+      "enums": {},
+      "tags": [
+        "ConsentGroups"
+      ]
+    },
+    {
+      "operationId": "deleteContact",
+      "method": "DELETE",
+      "pathTemplate": "/contacts/{identifier}",
+      "required": [
+        "identifier"
+      ],
+      "enums": {
+        "identifierType": [
+          "email_id",
+          "contact_id",
+          "ext_id",
+          "phone_id",
+          "whatsapp_id",
+          "landline_number_id"
+        ]
+      },
+      "tags": [
+        "Contacts"
+      ]
+    },
+    {
+      "operationId": "getContactInfo",
+      "method": "GET",
+      "pathTemplate": "/contacts/{identifier}",
+      "required": [
+        "identifier"
+      ],
+      "enums": {
+        "identifierType": [
+          "email_id",
+          "phone_id",
+          "contact_id",
+          "ext_id",
+          "whatsapp_id",
+          "landline_number_id"
+        ]
+      },
+      "tags": [
+        "Contacts"
+      ]
+    },
+    {
+      "operationId": "updateContact",
+      "method": "PUT",
+      "pathTemplate": "/contacts/{identifier}",
+      "required": [
+        "identifier"
+      ],
+      "enums": {
+        "identifierType": [
+          "email_id",
+          "contact_id",
+          "ext_id",
+          "phone_id",
+          "whatsapp_id",
+          "landline_number_id"
+        ]
+      },
+      "tags": [
+        "Contacts"
+      ]
+    },
+    {
+      "operationId": "getContactStats",
+      "method": "GET",
+      "pathTemplate": "/contacts/{identifier}/campaignStats",
+      "required": [
+        "identifier"
+      ],
+      "enums": {},
+      "tags": [
+        "Contacts"
+      ]
+    },
+    {
+      "operationId": null,
+      "method": "POST",
+      "pathTemplate": "/conversations/agentOnlinePing",
+      "required": [],
+      "enums": {},
+      "tags": [
+        "Conversations"
+      ]
+    },
+    {
+      "operationId": null,
+      "method": "POST",
+      "pathTemplate": "/conversations/messages",
+      "required": [
+        "visitorId",
+        "text"
+      ],
+      "enums": {},
+      "tags": [
+        "Conversations"
+      ]
+    },
+    {
+      "operationId": null,
+      "method": "DELETE",
+      "pathTemplate": "/conversations/messages/{id}",
+      "required": [
+        "id"
+      ],
+      "enums": {},
+      "tags": [
+        "Conversations"
+      ]
+    },
+    {
+      "operationId": null,
+      "method": "GET",
+      "pathTemplate": "/conversations/messages/{id}",
+      "required": [
+        "id"
+      ],
+      "enums": {},
+      "tags": [
+        "Conversations"
+      ]
+    },
+    {
+      "operationId": null,
+      "method": "PUT",
+      "pathTemplate": "/conversations/messages/{id}",
+      "required": [
+        "id",
+        "text"
+      ],
+      "enums": {},
+      "tags": [
+        "Conversations"
+      ]
+    },
+    {
+      "operationId": null,
+      "method": "POST",
+      "pathTemplate": "/conversations/pushedMessages",
+      "required": [
+        "visitorId",
+        "text"
+      ],
+      "enums": {},
+      "tags": [
+        "Conversations"
+      ]
+    },
+    {
+      "operationId": null,
+      "method": "DELETE",
+      "pathTemplate": "/conversations/pushedMessages/{id}",
+      "required": [
+        "id"
+      ],
+      "enums": {},
+      "tags": [
+        "Conversations"
+      ]
+    },
+    {
+      "operationId": null,
+      "method": "GET",
+      "pathTemplate": "/conversations/pushedMessages/{id}",
+      "required": [
+        "id"
+      ],
+      "enums": {},
+      "tags": [
+        "Conversations"
+      ]
+    },
+    {
+      "operationId": null,
+      "method": "PUT",
+      "pathTemplate": "/conversations/pushedMessages/{id}",
+      "required": [
+        "id",
+        "text"
+      ],
+      "enums": {},
+      "tags": [
+        "Conversations"
+      ]
+    },
+    {
+      "operationId": null,
+      "method": "PUT",
+      "pathTemplate": "/conversations/visitorGroup",
+      "required": [
+        "groupId"
+      ],
+      "enums": {},
+      "tags": [
+        "Conversations"
+      ]
+    },
+    {
+      "operationId": "getCategories",
+      "method": "GET",
+      "pathTemplate": "/categories",
+      "required": [],
+      "enums": {
+        "sort": [
+          "asc",
+          "desc"
+        ]
+      },
+      "tags": [
+        "Ecommerce"
+      ]
+    },
+    {
+      "operationId": "createUpdateCategory",
+      "method": "POST",
+      "pathTemplate": "/categories",
+      "required": [
+        "id"
+      ],
+      "enums": {},
+      "tags": [
+        "Ecommerce"
+      ]
+    },
+    {
+      "operationId": "createUpdateBatchCategory",
+      "method": "POST",
+      "pathTemplate": "/categories/batch",
+      "required": [
+        "categories"
+      ],
+      "enums": {},
+      "tags": [
+        "Ecommerce"
+      ]
+    },
+    {
+      "operationId": "getCategoryInfo",
+      "method": "GET",
+      "pathTemplate": "/categories/{id}",
+      "required": [
+        "id"
+      ],
+      "enums": {},
+      "tags": [
+        "Ecommerce"
+      ]
+    },
+    {
+      "operationId": "getCouponCollections",
+      "method": "GET",
+      "pathTemplate": "/couponCollections",
+      "required": [],
+      "enums": {
+        "sort": [
+          "asc",
+          "desc"
+        ],
+        "sortBy": [
+          "createdAt",
+          "remainingCoupons",
+          "expirationDate"
+        ]
+      },
+      "tags": [
+        "Coupons"
+      ]
+    },
+    {
+      "operationId": "createCouponCollection",
+      "method": "POST",
+      "pathTemplate": "/couponCollections",
+      "required": [
+        "name",
+        "defaultCoupon"
+      ],
+      "enums": {},
+      "tags": [
+        "Coupons"
+      ]
+    },
+    {
+      "operationId": "getCouponCollection",
+      "method": "GET",
+      "pathTemplate": "/couponCollections/{id}",
+      "required": [
+        "id"
+      ],
+      "enums": {},
+      "tags": [
+        "Coupons"
+      ]
+    },
+    {
+      "operationId": "updateCouponCollection",
+      "method": "PATCH",
+      "pathTemplate": "/couponCollections/{id}",
+      "required": [
+        "id"
+      ],
+      "enums": {},
+      "tags": [
+        "Coupons"
+      ]
+    },
+    {
+      "operationId": "createCoupons",
+      "method": "POST",
+      "pathTemplate": "/coupons",
+      "required": [
+        "collectionId",
+        "coupons"
+      ],
+      "enums": {},
+      "tags": [
+        "Coupons"
+      ]
+    },
+    {
+      "operationId": null,
+      "method": "POST",
+      "pathTemplate": "/ecommerce/activate",
+      "required": [],
+      "enums": {},
+      "tags": [
+        "Ecommerce"
+      ]
+    },
+    {
+      "operationId": null,
+      "method": "GET",
+      "pathTemplate": "/ecommerce/attribution/metrics",
+      "required": [],
+      "enums": {},
+      "tags": [
+        "Ecommerce"
+      ]
+    },
+    {
+      "operationId": null,
+      "method": "GET",
+      "pathTemplate": "/ecommerce/attribution/metrics/{conversionSource}/{conversionSourceId}",
+      "required": [
+        "conversionSource",
+        "conversionSourceId"
+      ],
+      "enums": {
+        "conversionSource": [
+          "email_campaign",
+          "sms_campaign",
+          "automation_workflow_email",
+          "automation_workflow_sms"
+        ]
+      },
+      "tags": [
+        "Ecommerce"
+      ]
+    },
+    {
+      "operationId": null,
+      "method": "GET",
+      "pathTemplate": "/ecommerce/attribution/products/{conversionSource}/{conversionSourceId}",
+      "required": [
+        "conversionSource",
+        "conversionSourceId"
+      ],
+      "enums": {
+        "conversionSource": [
+          "email_campaign",
+          "sms_campaign",
+          "automation_workflow_email",
+          "automation_workflow_sms"
+        ]
+      },
+      "tags": [
+        "Ecommerce"
+      ]
+    },
+    {
+      "operationId": null,
+      "method": "GET",
+      "pathTemplate": "/ecommerce/config/displayCurrency",
+      "required": [],
+      "enums": {},
+      "tags": [
+        "Ecommerce"
+      ]
+    },
+    {
+      "operationId": "setConfigDisplayCurrency",
+      "method": "POST",
+      "pathTemplate": "/ecommerce/config/displayCurrency",
+      "required": [
+        "code"
+      ],
+      "enums": {},
+      "tags": [
+        "Ecommerce"
+      ]
+    },
+    {
+      "operationId": "getOrders",
+      "method": "GET",
+      "pathTemplate": "/orders",
+      "required": [],
+      "enums": {
+        "sort": [
+          "asc",
+          "desc"
+        ]
+      },
+      "tags": [
+        "Ecommerce"
+      ]
+    },
+    {
+      "operationId": "createOrder",
+      "method": "POST",
+      "pathTemplate": "/orders/status",
+      "required": [],
+      "enums": {},
+      "tags": [
+        "Ecommerce"
+      ]
+    },
+    {
+      "operationId": "createBatchOrder",
+      "method": "POST",
+      "pathTemplate": "/orders/status/batch",
+      "required": [
+        "orders"
+      ],
+      "enums": {},
+      "tags": [
+        "Ecommerce"
+      ]
+    },
+    {
+      "operationId": "createPaymentRequest",
+      "method": "POST",
+      "pathTemplate": "/payments/requests",
+      "required": [
+        "reference",
+        "contactId",
+        "cart"
+      ],
+      "enums": {},
+      "tags": [
+        "Payments"
+      ]
+    },
+    {
+      "operationId": "deletePaymentRequest",
+      "method": "DELETE",
+      "pathTemplate": "/payments/requests/{id}",
+      "required": [
+        "id"
+      ],
+      "enums": {},
+      "tags": [
+        "Payments"
+      ]
+    },
+    {
+      "operationId": "getPaymentRequest",
+      "method": "GET",
+      "pathTemplate": "/payments/requests/{id}",
+      "required": [
+        "id"
+      ],
+      "enums": {},
+      "tags": [
+        "Payments"
+      ]
+    },
+    {
+      "operationId": "getProducts",
+      "method": "GET",
+      "pathTemplate": "/products",
+      "required": [],
+      "enums": {
+        "sort": [
+          "asc",
+          "desc"
+        ],
+        "sortByField": [
+          "created_at",
+          "name",
+          "price",
+          "id"
+        ]
+      },
+      "tags": [
+        "Ecommerce"
+      ]
+    },
+    {
+      "operationId": "createUpdateProduct",
+      "method": "POST",
+      "pathTemplate": "/products",
+      "required": [
+        "id",
+        "name"
+      ],
+      "enums": {},
+      "tags": [
+        "Ecommerce"
+      ]
+    },
+    {
+      "operationId": "createUpdateBatchProducts",
+      "method": "POST",
+      "pathTemplate": "/products/batch",
+      "required": [
+        "products"
+      ],
+      "enums": {},
+      "tags": [
+        "Ecommerce"
+      ]
+    },
+    {
+      "operationId": "getProductInfo",
+      "method": "GET",
+      "pathTemplate": "/products/{id}",
+      "required": [
+        "id"
+      ],
+      "enums": {},
+      "tags": [
+        "Ecommerce"
+      ]
+    },
+    {
+      "operationId": "createProductAlert",
+      "method": "POST",
+      "pathTemplate": "/products/{id}/alerts/{type}",
+      "required": [
+        "id",
+        "type"
+      ],
+      "enums": {
+        "type": [
+          "back_in_stock"
+        ]
+      },
+      "tags": [
+        "Ecommerce"
+      ]
+    },
+    {
+      "operationId": "getEvents",
+      "method": "GET",
+      "pathTemplate": "/events",
+      "required": [],
+      "enums": {},
+      "tags": [
+        "Event"
+      ]
+    },
+    {
+      "operationId": "createEvent",
+      "method": "POST",
+      "pathTemplate": "/events",
+      "required": [
+        "event_name",
+        "identifiers"
+      ],
+      "enums": {},
+      "tags": [
+        "Event"
+      ]
+    },
+    {
+      "operationId": "createBatchEvents",
+      "method": "POST",
+      "pathTemplate": "/events/batch",
+      "required": [
+        "events"
+      ],
+      "enums": {},
+      "tags": [
+        "Event"
+      ]
+    },
+    {
+      "operationId": "getInboundEmailEvents",
+      "method": "GET",
+      "pathTemplate": "/inbound/events",
+      "required": [],
+      "enums": {
+        "sort": [
+          "asc",
+          "desc"
+        ]
+      },
+      "tags": [
+        "Inbound Parsing"
+      ]
+    },
+    {
+      "operationId": "getInboundEmailEventsByUuid",
+      "method": "GET",
+      "pathTemplate": "/inbound/events/{uuid}",
+      "required": [
+        "uuid"
+      ],
+      "enums": {},
+      "tags": [
+        "Inbound Parsing"
+      ]
+    },
+    {
+      "operationId": "getInboundEmailAttachment",
+      "method": "GET",
+      "pathTemplate": "/inbound/attachments/{downloadToken}",
+      "required": [
+        "downloadToken"
+      ],
+      "enums": {},
+      "tags": [
+        "Inbound Parsing"
+      ]
+    },
+    {
+      "operationId": null,
+      "method": "GET",
+      "pathTemplate": "/loyalty/balance/programs/{pid}/active-balance",
+      "required": [
+        "pid",
+        "contactId",
+        "balanceDefinitionId"
+      ],
+      "enums": {
+        "sortField": [
+          "createdAt"
+        ],
+        "sort": [
+          "asc",
+          "desc"
+        ]
+      },
+      "tags": [
+        "Balance"
+      ]
+    },
+    {
+      "operationId": "getBalanceDefinitionList",
+      "method": "GET",
+      "pathTemplate": "/loyalty/balance/programs/{pid}/balance-definitions",
+      "required": [
+        "pid"
+      ],
+      "enums": {
+        "sortField": [
+          "name",
+          "created_at",
+          "updated_at"
+        ],
+        "sort": [
+          "asc",
+          "desc"
+        ],
+        "version": [
+          "active",
+          "draft"
+        ]
+      },
+      "tags": [
+        "Balance"
+      ]
+    },
+    {
+      "operationId": null,
+      "method": "POST",
+      "pathTemplate": "/loyalty/balance/programs/{pid}/balance-definitions",
+      "required": [
+        "pid",
+        "name",
+        "unit"
+      ],
+      "enums": {
+        "balanceAvailabilityDurationModifier": [
+          "noModification",
+          "startOfPeriod",
+          "endOfPeriod"
+        ],
+        "balanceAvailabilityDurationUnit": [
+          "day",
+          "week",
+          "month",
+          "year"
+        ],
+        "balanceOptionAmountOvertakingStrategy": [
+          "strict",
+          "partial"
+        ],
+        "balanceOptionCreditRounding": [
+          "lower",
+          "upper",
+          "natural"
+        ],
+        "balanceOptionDebitRounding": [
+          "lower",
+          "upper",
+          "natural"
+        ],
+        "unit": [
+          "POINTS",
+          "EUR",
+          "USD",
+          "MXN",
+          "GBP",
+          "INR",
+          "CAD",
+          "SGD",
+          "RON",
+          "JPY",
+          "MYR",
+          "CLP",
+          "PEN",
+          "MAD",
+          "AUD",
+          "CHF",
+          "BRL"
+        ]
+      },
+      "tags": [
+        "Balance"
+      ]
+    },
+    {
+      "operationId": "deleteBalanceDefinition",
+      "method": "DELETE",
+      "pathTemplate": "/loyalty/balance/programs/{pid}/balance-definitions/{bdid}",
+      "required": [
+        "pid",
+        "bdid"
+      ],
+      "enums": {},
+      "tags": [
+        "Balance"
+      ]
+    },
+    {
+      "operationId": "getBalanceDefinition",
+      "method": "GET",
+      "pathTemplate": "/loyalty/balance/programs/{pid}/balance-definitions/{bdid}",
+      "required": [
+        "pid",
+        "bdid"
+      ],
+      "enums": {
+        "version": [
+          "active",
+          "draft"
+        ]
+      },
+      "tags": [
+        "Balance"
+      ]
+    },
+    {
+      "operationId": "updateBalanceDefinition",
+      "method": "PUT",
+      "pathTemplate": "/loyalty/balance/programs/{pid}/balance-definitions/{bdid}",
+      "required": [
+        "pid",
+        "bdid",
+        "name",
+        "unit"
+      ],
+      "enums": {
+        "balanceAvailabilityDurationModifier": [
+          "noModification",
+          "startOfPeriod",
+          "endOfPeriod"
+        ],
+        "balanceAvailabilityDurationUnit": [
+          "day",
+          "week",
+          "month",
+          "year"
+        ],
+        "balanceOptionAmountOvertakingStrategy": [
+          "strict",
+          "partial"
+        ],
+        "balanceOptionCreditRounding": [
+          "lower",
+          "upper",
+          "natural"
+        ],
+        "balanceOptionDebitRounding": [
+          "lower",
+          "upper",
+          "natural"
+        ],
+        "unit": [
+          "POINTS",
+          "EUR",
+          "USD",
+          "MXN",
+          "GBP",
+          "INR",
+          "CAD",
+          "SGD",
+          "RON",
+          "JPY",
+          "MYR",
+          "CLP",
+          "PEN",
+          "MAD",
+          "AUD",
+          "CHF",
+          "BRL"
+        ]
+      },
+      "tags": [
+        "Balance"
+      ]
+    },
+    {
+      "operationId": "createBalanceLimit",
+      "method": "POST",
+      "pathTemplate": "/loyalty/balance/programs/{pid}/balance-definitions/{bdid}/limits",
+      "required": [
+        "pid",
+        "bdid",
+        "constraintType",
+        "durationUnit",
+        "durationValue",
+        "transactionType",
+        "value"
+      ],
+      "enums": {
+        "constraintType": [
+          "transaction",
+          "amount"
+        ],
+        "durationUnit": [
+          "day",
+          "week",
+          "month",
+          "year"
+        ],
+        "transactionType": [
+          "credit",
+          "debit"
+        ]
+      },
+      "tags": [
+        "Balance"
+      ]
+    },
+    {
+      "operationId": "deleteBalanceLimit",
+      "method": "DELETE",
+      "pathTemplate": "/loyalty/balance/programs/{pid}/balance-definitions/{bdid}/limits/{blid}",
+      "required": [
+        "pid",
+        "bdid",
+        "blid"
+      ],
+      "enums": {},
+      "tags": [
+        "Balance"
+      ]
+    },
+    {
+      "operationId": "getBalanceLimit",
+      "method": "GET",
+      "pathTemplate": "/loyalty/balance/programs/{pid}/balance-definitions/{bdid}/limits/{blid}",
+      "required": [
+        "pid",
+        "bdid",
+        "blid"
+      ],
+      "enums": {
+        "version": [
+          "active",
+          "draft"
+        ]
+      },
+      "tags": [
+        "Balance"
+      ]
+    },
+    {
+      "operationId": "updateBalanceLimit",
+      "method": "PUT",
+      "pathTemplate": "/loyalty/balance/programs/{pid}/balance-definitions/{bdid}/limits/{blid}",
+      "required": [
+        "pid",
+        "bdid",
+        "blid",
+        "constraintType",
+        "durationUnit",
+        "durationValue",
+        "transactionType",
+        "value"
+      ],
+      "enums": {
+        "constraintType": [
+          "transaction",
+          "amount"
+        ],
+        "durationUnit": [
+          "day",
+          "week",
+          "month",
+          "year"
+        ],
+        "transactionType": [
+          "credit",
+          "debit"
+        ]
+      },
+      "tags": [
+        "Balance"
+      ]
+    },
+    {
+      "operationId": "getContactBalances",
+      "method": "GET",
+      "pathTemplate": "/loyalty/balance/programs/{pid}/contact-balances",
+      "required": [
+        "pid",
+        "balanceDefinitionId"
+      ],
+      "enums": {
+        "sort": [
+          "asc",
+          "desc"
+        ],
+        "sortField": [
+          "updatedAt",
+          "value"
+        ]
+      },
+      "tags": [
+        "Balance"
+      ]
+    },
+    {
+      "operationId": "createBalanceOrder",
+      "method": "POST",
+      "pathTemplate": "/loyalty/balance/programs/{pid}/create-order",
+      "required": [
+        "pid",
+        "amount",
+        "balanceDefinitionId",
+        "contactId",
+        "dueAt",
+        "source"
+      ],
+      "enums": {
+        "source": [
+          "engine",
+          "user"
+        ]
+      },
+      "tags": [
+        "Balance"
+      ]
+    },
+    {
+      "operationId": "getSubscriptionBalances",
+      "method": "GET",
+      "pathTemplate": "/loyalty/balance/programs/{pid}/subscriptions/{cid}/balances",
+      "required": [
+        "cid",
+        "pid"
+      ],
+      "enums": {},
+      "tags": [
+        "Balance"
+      ]
+    },
+    {
+      "operationId": null,
+      "method": "POST",
+      "pathTemplate": "/loyalty/balance/programs/{pid}/subscriptions/{cid}/balances",
+      "required": [
+        "pid",
+        "cid",
+        "balanceDefinitionId"
+      ],
+      "enums": {},
+      "tags": [
+        "Balance"
+      ]
+    },
+    {
+      "operationId": null,
+      "method": "GET",
+      "pathTemplate": "/loyalty/balance/programs/{pid}/transaction-history",
+      "required": [
+        "pid",
+        "contactId",
+        "balanceDefinitionId"
+      ],
+      "enums": {
+        "sortField": [
+          "createdAt"
+        ],
+        "sort": [
+          "asc",
+          "desc"
+        ],
+        "status": [
+          "draft",
+          "completed",
+          "rejected",
+          "cancelled",
+          "expired"
+        ],
+        "transactionType": [
+          "credit",
+          "debit"
+        ]
+      },
+      "tags": [
+        "Balance"
+      ]
+    },
+    {
+      "operationId": "beginTransaction",
+      "method": "POST",
+      "pathTemplate": "/loyalty/balance/programs/{pid}/transactions",
+      "required": [
+        "pid",
+        "amount",
+        "balanceDefinitionId"
+      ],
+      "enums": {
+        "transactionType": [
+          "credit",
+          "debit"
+        ]
+      },
+      "tags": [
+        "Balance"
+      ]
+    },
+    {
+      "operationId": "cancelTransaction",
+      "method": "POST",
+      "pathTemplate": "/loyalty/balance/programs/{pid}/transactions/{tid}/cancel",
+      "required": [
+        "pid",
+        "tid"
+      ],
+      "enums": {},
+      "tags": [
+        "Balance"
+      ]
+    },
+    {
+      "operationId": "completeTransaction",
+      "method": "POST",
+      "pathTemplate": "/loyalty/balance/programs/{pid}/transactions/{tid}/complete",
+      "required": [
+        "pid",
+        "tid"
+      ],
+      "enums": {},
+      "tags": [
+        "Balance"
+      ]
+    },
+    {
+      "operationId": "getLPList",
+      "method": "GET",
+      "pathTemplate": "/loyalty/config/programs",
+      "required": [],
+      "enums": {
+        "sort_field": [
+          "name",
+          "created_at",
+          "updated_at"
+        ],
+        "sort": [
+          "asc",
+          "desc"
+        ]
+      },
+      "tags": [
+        "Program"
+      ]
+    },
+    {
+      "operationId": "createNewLP",
+      "method": "POST",
+      "pathTemplate": "/loyalty/config/programs",
+      "required": [
+        "name"
+      ],
+      "enums": {},
+      "tags": [
+        "Program"
+      ]
+    },
+    {
+      "operationId": "deleteLoyaltyProgram",
+      "method": "DELETE",
+      "pathTemplate": "/loyalty/config/programs/{pid}",
+      "required": [
+        "pid"
+      ],
+      "enums": {},
+      "tags": [
+        "Program"
+      ]
+    },
+    {
+      "operationId": "getLoyaltyProgramInfo",
+      "method": "GET",
+      "pathTemplate": "/loyalty/config/programs/{pid}",
+      "required": [
+        "pid"
+      ],
+      "enums": {},
+      "tags": [
+        "Program"
+      ]
+    },
+    {
+      "operationId": "partiallyUpdateLoyaltyProgram",
+      "method": "PATCH",
+      "pathTemplate": "/loyalty/config/programs/{pid}",
+      "required": [
+        "pid"
+      ],
+      "enums": {},
+      "tags": [
+        "Program"
+      ]
+    },
+    {
+      "operationId": "updateLoyaltyProgram",
+      "method": "PUT",
+      "pathTemplate": "/loyalty/config/programs/{pid}",
+      "required": [
+        "pid",
+        "name"
+      ],
+      "enums": {},
+      "tags": [
+        "Program"
+      ]
+    },
+    {
+      "operationId": "getParameterSubscriptionInfo",
+      "method": "GET",
+      "pathTemplate": "/loyalty/config/programs/{pid}/account-info",
+      "required": [
+        "pid"
+      ],
+      "enums": {},
+      "tags": [
+        "Program"
+      ]
+    },
+    {
+      "operationId": "deleteContactSubscription",
+      "method": "DELETE",
+      "pathTemplate": "/loyalty/config/programs/{pid}/contact/{cid}",
+      "required": [
+        "pid",
+        "cid"
+      ],
+      "enums": {},
+      "tags": [
+        "Program"
+      ]
+    },
+    {
+      "operationId": "publishLoyaltyProgram",
+      "method": "POST",
+      "pathTemplate": "/loyalty/config/programs/{pid}/publish",
+      "required": [
+        "pid"
+      ],
+      "enums": {},
+      "tags": [
+        "Program"
+      ]
+    },
+    {
+      "operationId": "deleteContactMembers",
+      "method": "DELETE",
+      "pathTemplate": "/loyalty/config/programs/{pid}/subscription-members",
+      "required": [
+        "pid",
+        "memberContactIds"
+      ],
+      "enums": {},
+      "tags": [
+        "Program"
+      ]
+    },
+    {
+      "operationId": "subscribeMemberToASubscription",
+      "method": "POST",
+      "pathTemplate": "/loyalty/config/programs/{pid}/subscription-members",
+      "required": [
+        "pid",
+        "memberContactIds"
+      ],
+      "enums": {},
+      "tags": [
+        "Program"
+      ]
+    },
+    {
+      "operationId": "subscribeToLoyaltyProgram",
+      "method": "POST",
+      "pathTemplate": "/loyalty/config/programs/{pid}/subscriptions",
+      "required": [
+        "pid",
+        "contactId"
+      ],
+      "enums": {},
+      "tags": [
+        "Program"
+      ]
+    },
+    {
+      "operationId": "getCodeCount",
+      "method": "GET",
+      "pathTemplate": "/loyalty/offer/programs/{pid}/code-pools/{cpid}/codes-count",
+      "required": [
+        "pid",
+        "cpid"
+      ],
+      "enums": {},
+      "tags": [
+        "Reward"
+      ]
+    },
+    {
+      "operationId": null,
+      "method": "GET",
+      "pathTemplate": "/loyalty/offer/programs/{pid}/offers",
+      "required": [
+        "pid"
+      ],
+      "enums": {
+        "version": [
+          "active",
+          "draft"
+        ]
+      },
+      "tags": [
+        "Reward"
+      ]
+    },
+    {
+      "operationId": "createReward",
+      "method": "POST",
+      "pathTemplate": "/loyalty/offer/programs/{pid}/offers",
+      "required": [
+        "pid",
+        "name"
+      ],
+      "enums": {},
+      "tags": [
+        "Reward"
+      ]
+    },
+    {
+      "operationId": "createVoucher",
+      "method": "POST",
+      "pathTemplate": "/loyalty/offer/programs/{pid}/rewards/attribute",
+      "required": [
+        "pid",
+        "rewardId"
+      ],
+      "enums": {},
+      "tags": [
+        "Reward"
+      ]
+    },
+    {
+      "operationId": "redeemVoucher",
+      "method": "POST",
+      "pathTemplate": "/loyalty/offer/programs/{pid}/rewards/redeem",
+      "required": [
+        "pid"
+      ],
+      "enums": {},
+      "tags": [
+        "Reward"
+      ]
+    },
+    {
+      "operationId": "completeRedeemTransaction",
+      "method": "POST",
+      "pathTemplate": "/loyalty/offer/programs/{pid}/rewards/redeem/{tid}/complete",
+      "required": [
+        "pid",
+        "tid"
+      ],
+      "enums": {},
+      "tags": [
+        "Reward"
+      ]
+    },
+    {
+      "operationId": "revokeVouchers",
+      "method": "DELETE",
+      "pathTemplate": "/loyalty/offer/programs/{pid}/rewards/revoke",
+      "required": [
+        "pid"
+      ],
+      "enums": {},
+      "tags": [
+        "Reward"
+      ]
+    },
+    {
+      "operationId": "validateReward",
+      "method": "POST",
+      "pathTemplate": "/loyalty/offer/programs/{pid}/rewards/validate",
+      "required": [
+        "pid"
+      ],
+      "enums": {},
+      "tags": [
+        "Reward"
+      ]
+    },
+    {
+      "operationId": null,
+      "method": "GET",
+      "pathTemplate": "/loyalty/offer/programs/{pid}/rewards/{rid}",
+      "required": [
+        "pid",
+        "rid"
+      ],
+      "enums": {
+        "version": [
+          "active",
+          "draft"
+        ]
+      },
+      "tags": [
+        "Reward"
+      ]
+    },
+    {
+      "operationId": null,
+      "method": "GET",
+      "pathTemplate": "/loyalty/offer/programs/{pid}/vouchers",
+      "required": [
+        "pid",
+        "contactId"
+      ],
+      "enums": {
+        "sort": [
+          "asc",
+          "desc"
+        ],
+        "sortField": [
+          "updatedAt",
+          "createdAt"
+        ]
+      },
+      "tags": [
+        "Reward"
+      ]
+    },
+    {
+      "operationId": "addSubscriptionToTier",
+      "method": "POST",
+      "pathTemplate": "/loyalty/tier/programs/{pid}/contacts/{cid}/tiers/{tid}",
+      "required": [
+        "pid",
+        "cid",
+        "tid"
+      ],
+      "enums": {},
+      "tags": [
+        "Tier"
+      ]
+    },
+    {
+      "operationId": "getListOfTierGroups",
+      "method": "GET",
+      "pathTemplate": "/loyalty/tier/programs/{pid}/tier-groups",
+      "required": [
+        "pid"
+      ],
+      "enums": {
+        "version": [
+          "active",
+          "draft"
+        ]
+      },
+      "tags": [
+        "Tier"
+      ]
+    },
+    {
+      "operationId": "createTierGroup",
+      "method": "POST",
+      "pathTemplate": "/loyalty/tier/programs/{pid}/tier-groups",
+      "required": [
+        "pid",
+        "name"
+      ],
+      "enums": {
+        "downgradeStrategy": [
+          "real_time",
+          "membership_anniversary",
+          "tier_anniversary"
+        ],
+        "upgradeStrategy": [
+          "real_time",
+          "membership_anniversary",
+          "tier_anniversary"
+        ]
+      },
+      "tags": [
+        "Tier"
+      ]
+    },
+    {
+      "operationId": "deleteTierGroup",
+      "method": "DELETE",
+      "pathTemplate": "/loyalty/tier/programs/{pid}/tier-groups/{gid}",
+      "required": [
+        "pid",
+        "gid"
+      ],
+      "enums": {},
+      "tags": [
+        "Tier"
+      ]
+    },
+    {
+      "operationId": "getTierGroup",
+      "method": "GET",
+      "pathTemplate": "/loyalty/tier/programs/{pid}/tier-groups/{gid}",
+      "required": [
+        "pid",
+        "gid"
+      ],
+      "enums": {
+        "version": [
+          "active",
+          "draft"
+        ]
+      },
+      "tags": [
+        "Tier"
+      ]
+    },
+    {
+      "operationId": "updateTierGroup",
+      "method": "PUT",
+      "pathTemplate": "/loyalty/tier/programs/{pid}/tier-groups/{gid}",
+      "required": [
+        "pid",
+        "gid",
+        "downgradeStrategy",
+        "name",
+        "tierOrder",
+        "upgradeStrategy"
+      ],
+      "enums": {
+        "downgradeStrategy": [
+          "real_time",
+          "membership_anniversary",
+          "tier_anniversary"
+        ],
+        "upgradeStrategy": [
+          "real_time",
+          "membership_anniversary",
+          "tier_anniversary"
+        ]
+      },
+      "tags": [
+        "Tier"
+      ]
+    },
+    {
+      "operationId": "createTierForTierGroup",
+      "method": "POST",
+      "pathTemplate": "/loyalty/tier/programs/{pid}/tier-groups/{gid}/tiers",
+      "required": [
+        "pid",
+        "gid",
+        "name",
+        "accessConditions"
+      ],
+      "enums": {},
+      "tags": [
+        "Tier"
+      ]
+    },
+    {
+      "operationId": "getLoyaltyProgramTier",
+      "method": "GET",
+      "pathTemplate": "/loyalty/tier/programs/{pid}/tiers",
+      "required": [
+        "pid"
+      ],
+      "enums": {
+        "version": [
+          "active",
+          "draft"
+        ]
+      },
+      "tags": [
+        "Tier"
+      ]
+    },
+    {
+      "operationId": "deleteTier",
+      "method": "DELETE",
+      "pathTemplate": "/loyalty/tier/programs/{pid}/tiers/{tid}",
+      "required": [
+        "pid",
+        "tid"
+      ],
+      "enums": {},
+      "tags": [
+        "Tier"
+      ]
+    },
+    {
+      "operationId": "updateTier",
+      "method": "PUT",
+      "pathTemplate": "/loyalty/tier/programs/{pid}/tiers/{tid}",
+      "required": [
+        "pid",
+        "tid",
+        "name",
+        "accessConditions",
+        "tierRewards"
+      ],
+      "enums": {},
+      "tags": [
+        "Tier"
+      ]
+    },
+    {
+      "operationId": "getWalletPassInstallUrl",
+      "method": "GET",
+      "pathTemplate": "/wallet/passes/{passId}/installUrl/{contactId}",
+      "required": [
+        "passId",
+        "contactId"
+      ],
+      "enums": {},
+      "tags": [
+        "Wallet"
+      ]
+    },
+    {
+      "operationId": "redeemWalletPass",
+      "method": "POST",
+      "pathTemplate": "/wallet/passes/{installationId}/redeem",
+      "required": [
+        "installationId"
+      ],
+      "enums": {},
+      "tags": [
+        "Wallet"
+      ]
+    },
+    {
+      "operationId": "getEmailCampaigns",
+      "method": "GET",
+      "pathTemplate": "/emailCampaigns",
+      "required": [],
+      "enums": {
+        "type": [
+          "classic",
+          "trigger"
+        ],
+        "status": [
+          "suspended",
+          "archive",
+          "sent",
+          "queued",
+          "draft",
+          "inProcess",
+          "inReview",
+          "cancelling",
+          "cancelled"
+        ],
+        "statistics": [
+          "globalStats",
+          "linksStats",
+          "statsByDomain"
+        ],
+        "sort": [
+          "asc",
+          "desc"
+        ]
+      },
+      "tags": [
+        "Email Campaigns"
+      ]
+    },
+    {
+      "operationId": "createEmailCampaign",
+      "method": "POST",
+      "pathTemplate": "/emailCampaigns",
+      "required": [
+        "name",
+        "sender"
+      ],
+      "enums": {
+        "winnerCriteria": [
+          "open",
+          "click"
+        ]
+      },
+      "tags": [
+        "Email Campaigns"
+      ]
+    },
+    {
+      "operationId": "uploadImageToGallery",
+      "method": "POST",
+      "pathTemplate": "/emailCampaigns/images",
+      "required": [
+        "imageUrl"
+      ],
+      "enums": {},
+      "tags": [
+        "Email Campaigns"
+      ]
+    },
+    {
+      "operationId": "deleteEmailCampaign",
+      "method": "DELETE",
+      "pathTemplate": "/emailCampaigns/{campaignId}",
+      "required": [
+        "campaignId"
+      ],
+      "enums": {},
+      "tags": [
+        "Email Campaigns"
+      ]
+    },
+    {
+      "operationId": "getEmailCampaign",
+      "method": "GET",
+      "pathTemplate": "/emailCampaigns/{campaignId}",
+      "required": [
+        "campaignId"
+      ],
+      "enums": {
+        "statistics": [
+          "globalStats",
+          "linksStats",
+          "statsByDomain",
+          "statsByDevice",
+          "statsByBrowser"
+        ]
+      },
+      "tags": [
+        "Email Campaigns"
+      ]
+    },
+    {
+      "operationId": "updateEmailCampaign",
+      "method": "PUT",
+      "pathTemplate": "/emailCampaigns/{campaignId}",
+      "required": [
+        "campaignId"
+      ],
+      "enums": {
+        "winnerCriteria": [
+          "open",
+          "click"
+        ]
+      },
+      "tags": [
+        "Email Campaigns"
+      ]
+    },
+    {
+      "operationId": "getAbTestCampaignResult",
+      "method": "GET",
+      "pathTemplate": "/emailCampaigns/{campaignId}/abTestCampaignResult",
+      "required": [
+        "campaignId"
+      ],
+      "enums": {},
+      "tags": [
+        "Email Campaigns"
+      ]
+    },
+    {
+      "operationId": "emailExportRecipients",
+      "method": "POST",
+      "pathTemplate": "/emailCampaigns/{campaignId}/exportRecipients",
+      "required": [
+        "campaignId",
+        "recipientsType"
+      ],
+      "enums": {
+        "recipientsType": [
+          "all",
+          "nonClickers",
+          "nonOpeners",
+          "clickers",
+          "openers",
+          "softBounces",
+          "hardBounces",
+          "unsubscribed"
+        ]
+      },
+      "tags": [
+        "Email Campaigns"
+      ]
+    },
+    {
+      "operationId": "sendEmailCampaignNow",
+      "method": "POST",
+      "pathTemplate": "/emailCampaigns/{campaignId}/sendNow",
+      "required": [
+        "campaignId"
+      ],
+      "enums": {},
+      "tags": [
+        "Email Campaigns"
+      ]
+    },
+    {
+      "operationId": "sendReport",
+      "method": "POST",
+      "pathTemplate": "/emailCampaigns/{campaignId}/sendReport",
+      "required": [
+        "campaignId"
+      ],
+      "enums": {},
+      "tags": [
+        "Email Campaigns"
+      ]
+    },
+    {
+      "operationId": "sendTestEmail",
+      "method": "POST",
+      "pathTemplate": "/emailCampaigns/{campaignId}/sendTest",
+      "required": [
+        "campaignId"
+      ],
+      "enums": {},
+      "tags": [
+        "Email Campaigns"
+      ]
+    },
+    {
+      "operationId": "getSharedTemplateUrl",
+      "method": "GET",
+      "pathTemplate": "/emailCampaigns/{campaignId}/sharedUrl",
+      "required": [
+        "campaignId"
+      ],
+      "enums": {},
+      "tags": [
+        "Email Campaigns"
+      ]
+    },
+    {
+      "operationId": "updateCampaignStatus",
+      "method": "PUT",
+      "pathTemplate": "/emailCampaigns/{campaignId}/status",
+      "required": [
+        "campaignId"
+      ],
+      "enums": {},
+      "tags": [
+        "Email Campaigns"
+      ]
+    },
+    {
+      "operationId": "getSmsCampaigns",
+      "method": "GET",
+      "pathTemplate": "/smsCampaigns",
+      "required": [],
+      "enums": {
+        "status": [
+          "suspended",
+          "archive",
+          "sent",
+          "queued",
+          "draft",
+          "inProcess"
+        ],
+        "sort": [
+          "asc",
+          "desc"
+        ]
+      },
+      "tags": [
+        "SMS Campaigns"
+      ]
+    },
+    {
+      "operationId": "createSmsCampaign",
+      "method": "POST",
+      "pathTemplate": "/smsCampaigns",
+      "required": [
+        "content",
+        "name",
+        "sender"
+      ],
+      "enums": {},
+      "tags": [
+        "SMS Campaigns"
+      ]
+    },
+    {
+      "operationId": "deleteSmsCampaign",
+      "method": "DELETE",
+      "pathTemplate": "/smsCampaigns/{campaignId}",
+      "required": [
+        "campaignId"
+      ],
+      "enums": {},
+      "tags": [
+        "SMS Campaigns"
+      ]
+    },
+    {
+      "operationId": "getSmsCampaign",
+      "method": "GET",
+      "pathTemplate": "/smsCampaigns/{campaignId}",
+      "required": [
+        "campaignId"
+      ],
+      "enums": {},
+      "tags": [
+        "SMS Campaigns"
+      ]
+    },
+    {
+      "operationId": "updateSmsCampaign",
+      "method": "PUT",
+      "pathTemplate": "/smsCampaigns/{campaignId}",
+      "required": [
+        "campaignId"
+      ],
+      "enums": {},
+      "tags": [
+        "SMS Campaigns"
+      ]
+    },
+    {
+      "operationId": "requestSmsRecipientExport",
+      "method": "POST",
+      "pathTemplate": "/smsCampaigns/{campaignId}/exportRecipients",
+      "required": [
+        "campaignId",
+        "recipientsType"
+      ],
+      "enums": {
+        "recipientsType": [
+          "all",
+          "delivered",
+          "answered",
+          "softBounces",
+          "hardBounces",
+          "unsubscribed"
+        ]
+      },
+      "tags": [
+        "SMS Campaigns"
+      ]
+    },
+    {
+      "operationId": "sendSmsCampaignNow",
+      "method": "POST",
+      "pathTemplate": "/smsCampaigns/{campaignId}/sendNow",
+      "required": [
+        "campaignId"
+      ],
+      "enums": {},
+      "tags": [
+        "SMS Campaigns"
+      ]
+    },
+    {
+      "operationId": "sendSmsReport",
+      "method": "POST",
+      "pathTemplate": "/smsCampaigns/{campaignId}/sendReport",
+      "required": [
+        "campaignId"
+      ],
+      "enums": {},
+      "tags": [
+        "SMS Campaigns"
+      ]
+    },
+    {
+      "operationId": "sendTestSms",
+      "method": "POST",
+      "pathTemplate": "/smsCampaigns/{campaignId}/sendTest",
+      "required": [
+        "campaignId"
+      ],
+      "enums": {},
+      "tags": [
+        "SMS Campaigns"
+      ]
+    },
+    {
+      "operationId": "updateSmsCampaignStatus",
+      "method": "PUT",
+      "pathTemplate": "/smsCampaigns/{campaignId}/status",
+      "required": [
+        "campaignId"
+      ],
+      "enums": {},
+      "tags": [
+        "SMS Campaigns"
+      ]
+    },
+    {
+      "operationId": "getWhatsAppCampaigns",
+      "method": "GET",
+      "pathTemplate": "/whatsappCampaigns",
+      "required": [],
+      "enums": {
+        "sort": [
+          "asc",
+          "desc"
+        ]
+      },
+      "tags": [
+        "WhatsApp Campaigns"
+      ]
+    },
+    {
+      "operationId": "createWhatsAppCampaign",
+      "method": "POST",
+      "pathTemplate": "/whatsappCampaigns",
+      "required": [
+        "name",
+        "templateId",
+        "scheduledAt",
+        "recipients"
+      ],
+      "enums": {},
+      "tags": [
+        "WhatsApp Campaigns"
+      ]
+    },
+    {
+      "operationId": "getWhatsAppConfig",
+      "method": "GET",
+      "pathTemplate": "/whatsappCampaigns/config",
+      "required": [],
+      "enums": {},
+      "tags": [
+        "WhatsApp Campaigns"
+      ]
+    },
+    {
+      "operationId": "createWhatsAppTemplate",
+      "method": "POST",
+      "pathTemplate": "/whatsappCampaigns/template",
+      "required": [
+        "name",
+        "language",
+        "category",
+        "bodyText"
+      ],
+      "enums": {
+        "category": [
+          "MARKETING",
+          "UTILITY"
+        ],
+        "source": [
+          "Automation",
+          "Conversations"
+        ]
+      },
+      "tags": [
+        "WhatsApp Campaigns"
+      ]
+    },
+    {
+      "operationId": "getWhatsAppTemplates",
+      "method": "GET",
+      "pathTemplate": "/whatsappCampaigns/template-list",
+      "required": [],
+      "enums": {
+        "sort": [
+          "asc",
+          "desc"
+        ],
+        "source": [
+          "Automation",
+          "Conversations"
+        ]
+      },
+      "tags": [
+        "WhatsApp Campaigns"
+      ]
+    },
+    {
+      "operationId": "sendWhatsAppTemplateApproval",
+      "method": "POST",
+      "pathTemplate": "/whatsappCampaigns/template/approval/{templateId}",
+      "required": [
+        "templateId"
+      ],
+      "enums": {},
+      "tags": [
+        "WhatsApp Campaigns"
+      ]
+    },
+    {
+      "operationId": "deleteWhatsAppCampaign",
+      "method": "DELETE",
+      "pathTemplate": "/whatsappCampaigns/{campaignId}",
+      "required": [
+        "campaignId"
+      ],
+      "enums": {},
+      "tags": [
+        "WhatsApp Campaigns"
+      ]
+    },
+    {
+      "operationId": "getWhatsAppCampaign",
+      "method": "GET",
+      "pathTemplate": "/whatsappCampaigns/{campaignId}",
+      "required": [
+        "campaignId"
+      ],
+      "enums": {},
+      "tags": [
+        "WhatsApp Campaigns"
+      ]
+    },
+    {
+      "operationId": "updateWhatsAppCampaign",
+      "method": "PUT",
+      "pathTemplate": "/whatsappCampaigns/{campaignId}",
+      "required": [
+        "campaignId"
+      ],
+      "enums": {
+        "campaignStatus": [
+          "scheduled",
+          "suspended"
+        ]
+      },
+      "tags": [
+        "WhatsApp Campaigns"
+      ]
+    },
+    {
+      "operationId": null,
+      "method": "GET",
+      "pathTemplate": "/companies",
+      "required": [],
+      "enums": {
+        "sort": [
+          "asc",
+          "desc"
+        ]
+      },
+      "tags": [
+        "Companies"
+      ]
+    },
+    {
+      "operationId": null,
+      "method": "POST",
+      "pathTemplate": "/companies",
+      "required": [
+        "name"
+      ],
+      "enums": {},
+      "tags": [
+        "Companies"
+      ]
+    },
+    {
+      "operationId": null,
+      "method": "POST",
+      "pathTemplate": "/companies/import",
+      "required": [],
+      "enums": {},
+      "tags": [
+        "Companies"
+      ]
+    },
+    {
+      "operationId": null,
+      "method": "PATCH",
+      "pathTemplate": "/companies/link-unlink/{id}",
+      "required": [
+        "id"
+      ],
+      "enums": {},
+      "tags": [
+        "Companies"
+      ]
+    },
+    {
+      "operationId": null,
+      "method": "DELETE",
+      "pathTemplate": "/companies/{id}",
+      "required": [
+        "id"
+      ],
+      "enums": {},
+      "tags": [
+        "Companies"
+      ]
+    },
+    {
+      "operationId": null,
+      "method": "GET",
+      "pathTemplate": "/companies/{id}",
+      "required": [
+        "id"
+      ],
+      "enums": {},
+      "tags": [
+        "Companies"
+      ]
+    },
+    {
+      "operationId": null,
+      "method": "PATCH",
+      "pathTemplate": "/companies/{id}",
+      "required": [
+        "id"
+      ],
+      "enums": {},
+      "tags": [
+        "Companies"
+      ]
+    },
+    {
+      "operationId": null,
+      "method": "POST",
+      "pathTemplate": "/crm/attributes",
+      "required": [
+        "label",
+        "attributeType",
+        "objectType"
+      ],
+      "enums": {
+        "attributeType": [
+          "text",
+          "user",
+          "number",
+          "single-select",
+          "date",
+          "boolean",
+          "multi-choice"
+        ],
+        "objectType": [
+          "companies",
+          "deals"
+        ]
+      },
+      "tags": [
+        "Companies",
+        "Deals"
+      ]
+    },
+    {
+      "operationId": null,
+      "method": "DELETE",
+      "pathTemplate": "/crm/attributes/{id}",
+      "required": [
+        "id"
+      ],
+      "enums": {},
+      "tags": [
+        "companies",
+        "deals"
+      ]
+    },
+    {
+      "operationId": null,
+      "method": "PATCH",
+      "pathTemplate": "/crm/attributes/{id}",
+      "required": [
+        "id"
+      ],
+      "enums": {
+        "objectType": [
+          "companies",
+          "deals"
+        ]
+      },
+      "tags": [
+        "companies",
+        "deals"
+      ]
+    },
+    {
+      "operationId": null,
+      "method": "GET",
+      "pathTemplate": "/crm/attributes/companies",
+      "required": [],
+      "enums": {},
+      "tags": [
+        "Companies"
+      ]
+    },
+    {
+      "operationId": null,
+      "method": "GET",
+      "pathTemplate": "/crm/attributes/deals",
+      "required": [],
+      "enums": {},
+      "tags": [
+        "Deals"
+      ]
+    },
+    {
+      "operationId": null,
+      "method": "GET",
+      "pathTemplate": "/crm/deals",
+      "required": [],
+      "enums": {
+        "sort": [
+          "asc",
+          "desc"
+        ]
+      },
+      "tags": [
+        "Deals"
+      ]
+    },
+    {
+      "operationId": null,
+      "method": "POST",
+      "pathTemplate": "/crm/deals",
+      "required": [
+        "name"
+      ],
+      "enums": {},
+      "tags": [
+        "Deals"
+      ]
+    },
+    {
+      "operationId": null,
+      "method": "POST",
+      "pathTemplate": "/crm/deals/import",
+      "required": [],
+      "enums": {},
+      "tags": [
+        "Deals"
+      ]
+    },
+    {
+      "operationId": null,
+      "method": "PATCH",
+      "pathTemplate": "/crm/deals/link-unlink/{id}",
+      "required": [
+        "id"
+      ],
+      "enums": {},
+      "tags": [
+        "Deals"
+      ]
+    },
+    {
+      "operationId": null,
+      "method": "DELETE",
+      "pathTemplate": "/crm/deals/{id}",
+      "required": [
+        "id"
+      ],
+      "enums": {},
+      "tags": [
+        "Deals"
+      ]
+    },
+    {
+      "operationId": null,
+      "method": "GET",
+      "pathTemplate": "/crm/deals/{id}",
+      "required": [
+        "id"
+      ],
+      "enums": {},
+      "tags": [
+        "Deals"
+      ]
+    },
+    {
+      "operationId": null,
+      "method": "PATCH",
+      "pathTemplate": "/crm/deals/{id}",
+      "required": [
+        "id"
+      ],
+      "enums": {},
+      "tags": [
+        "Deals"
+      ]
+    },
+    {
+      "operationId": null,
+      "method": "GET",
+      "pathTemplate": "/crm/files",
+      "required": [],
+      "enums": {
+        "entity": [
+          "companies",
+          "deals",
+          "contacts"
+        ],
+        "sort": [
+          "asc",
+          "desc"
+        ]
+      },
+      "tags": [
+        "Files"
+      ]
+    },
+    {
+      "operationId": null,
+      "method": "POST",
+      "pathTemplate": "/crm/files",
+      "required": [
+        "file"
+      ],
+      "enums": {},
+      "tags": [
+        "Files"
+      ]
+    },
+    {
+      "operationId": null,
+      "method": "DELETE",
+      "pathTemplate": "/crm/files/{id}",
+      "required": [
+        "id"
+      ],
+      "enums": {},
+      "tags": [
+        "Files"
+      ]
+    },
+    {
+      "operationId": null,
+      "method": "GET",
+      "pathTemplate": "/crm/files/{id}",
+      "required": [
+        "id"
+      ],
+      "enums": {},
+      "tags": [
+        "Files"
+      ]
+    },
+    {
+      "operationId": null,
+      "method": "GET",
+      "pathTemplate": "/crm/files/{id}/data",
+      "required": [
+        "id"
+      ],
+      "enums": {},
+      "tags": [
+        "Files"
+      ]
+    },
+    {
+      "operationId": null,
+      "method": "GET",
+      "pathTemplate": "/crm/notes",
+      "required": [],
+      "enums": {
+        "entity": [
+          "companies",
+          "deals",
+          "contacts"
+        ],
+        "sort": [
+          "asc",
+          "desc"
+        ]
+      },
+      "tags": [
+        "Notes"
+      ]
+    },
+    {
+      "operationId": null,
+      "method": "POST",
+      "pathTemplate": "/crm/notes",
+      "required": [],
+      "enums": {},
+      "tags": [
+        "Notes"
+      ]
+    },
+    {
+      "operationId": null,
+      "method": "DELETE",
+      "pathTemplate": "/crm/notes/{id}",
+      "required": [
+        "id"
+      ],
+      "enums": {},
+      "tags": [
+        "Notes"
+      ]
+    },
+    {
+      "operationId": null,
+      "method": "GET",
+      "pathTemplate": "/crm/notes/{id}",
+      "required": [
+        "id"
+      ],
+      "enums": {},
+      "tags": [
+        "Notes"
+      ]
+    },
+    {
+      "operationId": null,
+      "method": "PATCH",
+      "pathTemplate": "/crm/notes/{id}",
+      "required": [
+        "id"
+      ],
+      "enums": {},
+      "tags": [
+        "Notes"
+      ]
+    },
+    {
+      "operationId": null,
+      "method": "GET",
+      "pathTemplate": "/crm/pipeline/details",
+      "required": [],
+      "enums": {},
+      "tags": [
+        "Deals"
+      ]
+    },
+    {
+      "operationId": null,
+      "method": "GET",
+      "pathTemplate": "/crm/pipeline/details/all",
+      "required": [],
+      "enums": {},
+      "tags": [
+        "Deals"
+      ]
+    },
+    {
+      "operationId": null,
+      "method": "GET",
+      "pathTemplate": "/crm/pipeline/details/{pipelineID}",
+      "required": [
+        "pipelineID"
+      ],
+      "enums": {},
+      "tags": [
+        "Deals"
+      ]
+    },
+    {
+      "operationId": null,
+      "method": "GET",
+      "pathTemplate": "/crm/tasks",
+      "required": [],
+      "enums": {
+        "filter[status]": [
+          "done",
+          "undone"
+        ],
+        "filter[date]": [
+          "overdue",
+          "today",
+          "tomorrow",
+          "week",
+          "range"
+        ],
+        "sort": [
+          "asc",
+          "desc"
+        ]
+      },
+      "tags": [
+        "Tasks"
+      ]
+    },
+    {
+      "operationId": null,
+      "method": "POST",
+      "pathTemplate": "/crm/tasks",
+      "required": [
+        "name",
+        "taskTypeId",
+        "date"
+      ],
+      "enums": {},
+      "tags": [
+        "Tasks"
+      ]
+    },
+    {
+      "operationId": null,
+      "method": "DELETE",
+      "pathTemplate": "/crm/tasks/{id}",
+      "required": [
+        "id"
+      ],
+      "enums": {},
+      "tags": [
+        "Tasks"
+      ]
+    },
+    {
+      "operationId": null,
+      "method": "GET",
+      "pathTemplate": "/crm/tasks/{id}",
+      "required": [
+        "id"
+      ],
+      "enums": {},
+      "tags": [
+        "Tasks"
+      ]
+    },
+    {
+      "operationId": null,
+      "method": "PATCH",
+      "pathTemplate": "/crm/tasks/{id}",
+      "required": [
+        "id"
+      ],
+      "enums": {},
+      "tags": [
+        "Tasks"
+      ]
+    },
+    {
+      "operationId": null,
+      "method": "GET",
+      "pathTemplate": "/crm/tasktypes",
+      "required": [],
+      "enums": {},
+      "tags": [
+        "Tasks"
+      ]
+    },
+    {
+      "operationId": "sendWhatsappMessage",
+      "method": "POST",
+      "pathTemplate": "/whatsapp/sendMessage",
+      "required": [],
+      "enums": {},
+      "tags": [
+        "Transactional WhatsApp"
+      ]
+    },
+    {
+      "operationId": "getWhatsappEventReport",
+      "method": "GET",
+      "pathTemplate": "/whatsapp/statistics/events",
+      "required": [],
+      "enums": {
+        "event": [
+          "sent",
+          "delivered",
+          "read",
+          "error",
+          "unsubscribe",
+          "reply",
+          "soft-bounce"
+        ],
+        "sort": [
+          "asc",
+          "desc"
+        ]
+      },
+      "tags": [
+        "Transactional WhatsApp"
+      ]
+    },
+    {
+      "operationId": "getTransacBlockedContacts",
+      "method": "GET",
+      "pathTemplate": "/smtp/blockedContacts",
+      "required": [],
+      "enums": {
+        "sort": [
+          "asc",
+          "desc"
+        ]
+      },
+      "tags": [
+        "Transactional emails"
+      ]
+    },
+    {
+      "operationId": null,
+      "method": "DELETE",
+      "pathTemplate": "/smtp/blockedContacts/{email}",
+      "required": [
+        "email"
+      ],
+      "enums": {},
+      "tags": [
+        "Transactional emails"
+      ]
+    },
+    {
+      "operationId": "getBlockedDomains",
+      "method": "GET",
+      "pathTemplate": "/smtp/blockedDomains",
+      "required": [],
+      "enums": {},
+      "tags": [
+        "Transactional emails"
+      ]
+    },
+    {
+      "operationId": "blockNewDomain",
+      "method": "POST",
+      "pathTemplate": "/smtp/blockedDomains",
+      "required": [
+        "domain"
+      ],
+      "enums": {},
+      "tags": [
+        "Transactional emails"
+      ]
+    },
+    {
+      "operationId": "deleteBlockedDomain",
+      "method": "DELETE",
+      "pathTemplate": "/smtp/blockedDomains/{domain}",
+      "required": [
+        "domain"
+      ],
+      "enums": {},
+      "tags": [
+        "Transactional emails"
+      ]
+    },
+    {
+      "operationId": "deleteHardbounces",
+      "method": "POST",
+      "pathTemplate": "/smtp/deleteHardbounces",
+      "required": [],
+      "enums": {},
+      "tags": [
+        "Transactional emails"
+      ]
+    },
+    {
+      "operationId": "sendTransacEmail",
+      "method": "POST",
+      "pathTemplate": "/smtp/email",
+      "required": [],
+      "enums": {},
+      "tags": [
+        "Transactional emails"
+      ]
+    },
+    {
+      "operationId": "deleteScheduledEmailById",
+      "method": "DELETE",
+      "pathTemplate": "/smtp/email/{identifier}",
+      "required": [
+        "identifier"
+      ],
+      "enums": {},
+      "tags": [
+        "Transactional emails"
+      ]
+    },
+    {
+      "operationId": "getScheduledEmailById",
+      "method": "GET",
+      "pathTemplate": "/smtp/emailStatus/{identifier}",
+      "required": [
+        "identifier"
+      ],
+      "enums": {
+        "sort": [
+          "asc",
+          "desc"
+        ],
+        "status": [
+          "processed",
+          "inProgress",
+          "queued"
+        ]
+      },
+      "tags": [
+        "Transactional emails"
+      ]
+    },
+    {
+      "operationId": "getTransacEmailsList",
+      "method": "GET",
+      "pathTemplate": "/smtp/emails",
+      "required": [],
+      "enums": {
+        "sort": [
+          "asc",
+          "desc"
+        ]
+      },
+      "tags": [
+        "Transactional emails"
+      ]
+    },
+    {
+      "operationId": "getTransacEmailContent",
+      "method": "GET",
+      "pathTemplate": "/smtp/emails/{uuid}",
+      "required": [
+        "uuid"
+      ],
+      "enums": {},
+      "tags": [
+        "Transactional emails"
+      ]
+    },
+    {
+      "operationId": null,
+      "method": "DELETE",
+      "pathTemplate": "/smtp/log/{identifier}",
+      "required": [
+        "identifier"
+      ],
+      "enums": {},
+      "tags": [
+        "Transactional emails"
+      ]
+    },
+    {
+      "operationId": "getAggregatedSmtpReport",
+      "method": "GET",
+      "pathTemplate": "/smtp/statistics/aggregatedReport",
+      "required": [],
+      "enums": {},
+      "tags": [
+        "Transactional emails"
+      ]
+    },
+    {
+      "operationId": "getEmailEventReport",
+      "method": "GET",
+      "pathTemplate": "/smtp/statistics/events",
+      "required": [],
+      "enums": {
+        "event": [
+          "bounces",
+          "hardBounces",
+          "softBounces",
+          "delivered",
+          "spam",
+          "requests",
+          "opened",
+          "clicks",
+          "invalid",
+          "deferred",
+          "blocked",
+          "unsubscribed",
+          "error",
+          "loadedByProxy"
+        ],
+        "sort": [
+          "asc",
+          "desc"
+        ]
+      },
+      "tags": [
+        "Transactional emails"
+      ]
+    },
+    {
+      "operationId": "getSmtpReport",
+      "method": "GET",
+      "pathTemplate": "/smtp/statistics/reports",
+      "required": [],
+      "enums": {
+        "sort": [
+          "asc",
+          "desc"
+        ]
+      },
+      "tags": [
+        "Transactional emails"
+      ]
+    },
+    {
+      "operationId": "postPreviewSmtpEmailTemplates",
+      "method": "POST",
+      "pathTemplate": "/smtp/template/preview",
+      "required": [
+        "templateId"
+      ],
+      "enums": {},
+      "tags": [
+        "Transactional emails"
+      ]
+    },
+    {
+      "operationId": "getSmtpTemplates",
+      "method": "GET",
+      "pathTemplate": "/smtp/templates",
+      "required": [],
+      "enums": {
+        "sort": [
+          "asc",
+          "desc"
+        ],
+        "editorType": [
+          "richTextEditor"
+        ]
+      },
+      "tags": [
+        "Transactional emails"
+      ]
+    },
+    {
+      "operationId": "createSmtpTemplate",
+      "method": "POST",
+      "pathTemplate": "/smtp/templates",
+      "required": [
+        "sender",
+        "subject",
+        "templateName"
+      ],
+      "enums": {},
+      "tags": [
+        "Transactional emails"
+      ]
+    },
+    {
+      "operationId": "deleteSmtpTemplate",
+      "method": "DELETE",
+      "pathTemplate": "/smtp/templates/{templateId}",
+      "required": [
+        "templateId"
+      ],
+      "enums": {},
+      "tags": [
+        "Transactional emails"
+      ]
+    },
+    {
+      "operationId": "getSmtpTemplate",
+      "method": "GET",
+      "pathTemplate": "/smtp/templates/{templateId}",
+      "required": [
+        "templateId"
+      ],
+      "enums": {},
+      "tags": [
+        "Transactional emails"
+      ]
+    },
+    {
+      "operationId": "updateSmtpTemplate",
+      "method": "PUT",
+      "pathTemplate": "/smtp/templates/{templateId}",
+      "required": [
+        "templateId"
+      ],
+      "enums": {},
+      "tags": [
+        "Transactional emails"
+      ]
+    },
+    {
+      "operationId": "sendTestTemplate",
+      "method": "POST",
+      "pathTemplate": "/smtp/templates/{templateId}/sendTest",
+      "required": [
+        "templateId"
+      ],
+      "enums": {},
+      "tags": [
+        "Transactional emails"
+      ]
+    },
+    {
+      "operationId": "sendAsyncTransactionalSms",
+      "method": "POST",
+      "pathTemplate": "/transactionalSMS/send",
+      "required": [],
+      "enums": {},
+      "tags": [
+        "Transactional SMS"
+      ]
+    },
+    {
+      "operationId": "sendTransacSms",
+      "method": "POST",
+      "pathTemplate": "/transactionalSMS/sms",
+      "required": [],
+      "enums": {},
+      "tags": [
+        "Transactional SMS"
+      ]
+    },
+    {
+      "operationId": "getTransacAggregatedSmsReport",
+      "method": "GET",
+      "pathTemplate": "/transactionalSMS/statistics/aggregatedReport",
+      "required": [],
+      "enums": {},
+      "tags": [
+        "Transactional SMS"
+      ]
+    },
+    {
+      "operationId": "getSmsEvents",
+      "method": "GET",
+      "pathTemplate": "/transactionalSMS/statistics/events",
+      "required": [],
+      "enums": {
+        "event": [
+          "bounces",
+          "hardBounces",
+          "softBounces",
+          "delivered",
+          "sent",
+          "accepted",
+          "unsubscription",
+          "replies",
+          "blocked",
+          "rejected",
+          "skipped"
+        ],
+        "sort": [
+          "asc",
+          "desc"
+        ]
+      },
+      "tags": [
+        "Transactional SMS"
+      ]
+    },
+    {
+      "operationId": "getTransacSmsReport",
+      "method": "GET",
+      "pathTemplate": "/transactionalSMS/statistics/reports",
+      "required": [],
+      "enums": {
+        "sort": [
+          "asc",
+          "desc"
+        ]
+      },
+      "tags": [
+        "Transactional SMS"
+      ]
+    },
+    {
+      "operationId": "getSMSTemplates",
+      "method": "GET",
+      "pathTemplate": "/transactionalSMS/templates",
+      "required": [],
+      "enums": {
+        "sort": [
+          "asc",
+          "desc"
+        ]
+      },
+      "tags": [
+        "SMS Templates"
+      ]
+    }
+  ]
+}

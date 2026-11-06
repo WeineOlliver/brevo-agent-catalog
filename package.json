@@ -12,7 +12,8 @@
     "typecheck": "tsc --noEmit",
     "build:schema": "tsx scripts/build-schema.ts",
     "sanitize": "tsx scripts/sanitize.ts",
-    "scan": "tsx scripts/scan-secrets.ts"
+    "scan": "tsx scripts/scan-secrets.ts",
+    "fetch:openapi": "tsx scripts/fetch-openapi.ts"
   },
   "dependencies": {
     "ajv": "^8.17.1",

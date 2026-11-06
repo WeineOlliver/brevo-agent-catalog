@@ -1,0 +1,96 @@
+openapi: 3.0.1
+info:
+  title: Mini Brevo API (test fixture)
+  version: 3.0.0
+servers:
+  - url: https://api.brevo.com/v3
+paths:
+  /contacts:
+    get:
+      tags:
+        - Contacts
+      operationId: getContacts
+      parameters:
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+            maximum: 1000
+        - name: sort
+          in: query
+          required: false
+          schema:
+            type: string
+            default: desc
+            enum:
+              - asc
+              - desc
+    post:
+      tags:
+        - Contacts
+      operationId: createContact
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - email
+              properties:
+                email:
+                  type: string
+                emailBlacklisted:
+                  type: boolean
+                smtpBlacklistSender:
+                  type: string
+                  enum:
+                    - transactional
+                    - marketing
+  /contacts/lists:
+    get:
+      tags:
+        - Contacts
+      operationId: getLists
+      parameters:
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+  /contacts/{identifier}:
+    get:
+      tags:
+        - Contacts
+      operationId: getContactInfo
+      parameters:
+        - name: identifier
+          in: path
+          required: true
+          schema:
+            type: string
+    put:
+      tags:
+        - Contacts
+      operationId: updateContact
+      parameters:
+        - name: identifier
+          in: path
+          required: true
+          schema:
+            type: string
+  /webhooks/export:
+    post:
+      tags:
+        - Webhooks
+      summary: Export all webhook events
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                notifyUrl:
+                  type: string
