@@ -17,6 +17,11 @@ import { attachRecorder } from '../src/crawl/recorder.js';
 import { extractNavLinks, isSignInUrl, normalizeRoute } from '../src/crawl/links.js';
 import { waitForSignIn } from '../src/crawl/session.js';
 import { createLimiter } from '../src/util/rate-limit.js';
+import {
+  HEADED_VIEWPORT,
+  describePlacement,
+  headedLaunchArgs,
+} from '../src/browser/window.js';
 
 function argValue(name: string, fallback: string): string {
   const index = process.argv.indexOf(`--${name}`);
@@ -46,9 +51,13 @@ if (!liveLogin && !existsSync(statePath)) {
 }
 
 const limiter = createLimiter(1000);
-const browser = await chromium.launch({ headless: !liveLogin });
+// Placement only matters for the headed path; a headless run has no window.
+const launchArgs = liveLogin ? headedLaunchArgs(HEADED_VIEWPORT) : [];
+if (liveLogin) console.log(describePlacement(launchArgs));
+
+const browser = await chromium.launch({ headless: !liveLogin, args: launchArgs });
 const context = liveLogin
-  ? await browser.newContext({ viewport: { width: 1440, height: 900 } })
+  ? await browser.newContext({ viewport: HEADED_VIEWPORT })
   : await browser.newContext({ storageState: statePath });
 const page = await context.newPage();
 

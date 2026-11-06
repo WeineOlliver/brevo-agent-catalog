@@ -25,6 +25,11 @@ import { waitForSignIn } from '../src/crawl/session.js';
 import { createFixtureBag, type InteractionPass } from '../src/interact/types.js';
 import { contactsPass, listsPass, segmentsPass } from '../src/interact/contacts.js';
 import { campaignsPass, sendersPass, templatesPass } from '../src/interact/campaigns.js';
+import {
+  HEADED_VIEWPORT,
+  describePlacement,
+  headedLaunchArgs,
+} from '../src/browser/window.js';
 
 const PASSES: InteractionPass[] = [
   contactsPass,
@@ -52,8 +57,11 @@ if (selected.length === 0) {
   process.exit(1);
 }
 
-const browser = await chromium.launch({ headless: false });
-const context = await browser.newContext({ viewport: { width: 1440, height: 900 } });
+const launchArgs = headedLaunchArgs(HEADED_VIEWPORT);
+console.log(describePlacement(launchArgs));
+
+const browser = await chromium.launch({ headless: false, args: launchArgs });
+const context = await browser.newContext({ viewport: HEADED_VIEWPORT });
 const page = await context.newPage();
 
 await page.goto(config.appOrigin, { waitUntil: 'domcontentloaded' });

@@ -17,6 +17,11 @@ import { attachRecorder } from '../src/crawl/recorder.js';
 import { createFixtureBag } from '../src/interact/types.js';
 import { applyOutcome, assessOutcome, type VerifyRecipe } from '../src/verify/harness.js';
 import { contactsRecipes } from '../src/verify/recipes/contacts.js';
+import {
+  HEADED_VIEWPORT,
+  describePlacement,
+  headedLaunchArgs,
+} from '../src/browser/window.js';
 
 const RECIPES: VerifyRecipe[] = [...contactsRecipes];
 
@@ -43,7 +48,10 @@ if (selected.length === 0) {
   process.exit(1);
 }
 
-const browser = await chromium.launch({ headless: false });
+const launchArgs = headedLaunchArgs(HEADED_VIEWPORT);
+console.log(describePlacement(launchArgs));
+
+const browser = await chromium.launch({ headless: false, args: launchArgs });
 const context = await browser.newContext({ storageState: statePath });
 const page = await context.newPage();
 

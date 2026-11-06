@@ -24,6 +24,11 @@ import { waitForSignIn } from '../src/crawl/session.js';
 import { createFixtureBag } from '../src/interact/types.js';
 import { exploreRoute, type RouteExploration } from '../src/interact/explore.js';
 import type { ExplorePolicy } from '../src/interact/controls.js';
+import {
+  HEADED_VIEWPORT,
+  describePlacement,
+  headedLaunchArgs,
+} from '../src/browser/window.js';
 
 function argValue(name: string, fallback: string): string {
   const index = process.argv.indexOf(`--${name}`);
@@ -62,8 +67,10 @@ if (routes.length === 0) {
   process.exit(1);
 }
 
-const browser = await chromium.launch({ headless: false });
-const context = await browser.newContext({ viewport: { width: 1440, height: 900 } });
+const launchArgs = headedLaunchArgs(HEADED_VIEWPORT);
+
+const browser = await chromium.launch({ headless: false, args: launchArgs });
+const context = await browser.newContext({ viewport: HEADED_VIEWPORT });
 const page = await context.newPage();
 
 await page.goto(config.appOrigin, { waitUntil: 'domcontentloaded' });
@@ -74,6 +81,7 @@ Log in by hand, including the 2FA step. Exploration starts by itself afterwards.
 Policy for this run:
   destructive (delete, archive, send, publish): ${policy.allowDestructive ? 'ALLOWED' : 'blocked'}
   money (upgrade, purchase, plan, close account): ${policy.allowMoney ? 'ALLOWED' : 'blocked'}
+  ${describePlacement(launchArgs)}
 
 It fills and submits the forms it finds, creating records named "catalog-test-*".
 `);
@@ -133,10 +141,18 @@ for (const route of routes) {
   if (fresh.length > 0) writeCaptureFile(join(outDir, `${slugify(route)}.json`), fresh);
 
   const clicked = report.controls.filter((c) => c.clicked).length;
-  const skipped = report.controls.filter((c) => !c.clicked && c.kind !== 'navigate').length;
+  // Report what the policy actually refused, by category. The first version of
+  // this line called every skip "destructive", and every skip in the whole run
+  // was in fact a money control — a log that misreads its own safety decisions.
+  const refused = report.controls.filter((c) => !c.clicked && c.kind !== 'navigate');
+  const byKind = ['money', 'destructive', 'dismiss']
+    .map((kind) => ({ kind, n: refused.filter((c) => c.kind === kind).length }))
+    .filter((entry) => entry.n > 0)
+    .map((entry) => `${entry.n} ${entry.kind}`)
+    .join(' + ');
   console.log(
     `  ${route} — ${report.controls.length} control(s), clicked ${clicked}, ` +
-      `skipped ${skipped} destructive, ${report.formsSubmitted} form(s) submitted, ` +
+      `blocked ${byKind.length > 0 ? byKind : 'none'}, ${report.formsSubmitted} form(s) submitted, ` +
       `${fresh.length} request(s) / ${writes.length} write(s)`,
   );
   const labels = report.controls.map((c) => `${c.label} [${c.kind}]`).join(' | ');

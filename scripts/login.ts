@@ -17,6 +17,11 @@ import { join } from 'node:path';
 import { chromium } from 'playwright';
 import 'dotenv/config';
 import { loadConfig } from '../src/config.js';
+import {
+  HEADED_VIEWPORT,
+  describePlacement,
+  headedLaunchArgs,
+} from '../src/browser/window.js';
 
 const WAIT_TIMEOUT_MS = 25 * 60 * 1000;
 const POLL_INTERVAL_MS = 2000;
@@ -29,8 +34,11 @@ const statePath = join(config.paths.auth, 'state.json');
 
 mkdirSync(config.paths.auth, { recursive: true });
 
-const browser = await chromium.launch({ headless: false });
-const context = await browser.newContext({ viewport: { width: 1440, height: 900 } });
+const launchArgs = headedLaunchArgs(HEADED_VIEWPORT);
+console.log(describePlacement(launchArgs));
+
+const browser = await chromium.launch({ headless: false, args: launchArgs });
+const context = await browser.newContext({ viewport: HEADED_VIEWPORT });
 const page = await context.newPage();
 
 await page.goto(config.appOrigin, { waitUntil: 'domcontentloaded' });
