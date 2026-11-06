@@ -5,12 +5,8 @@
  * without mutating globals.
  */
 
-export type RedactionRules = {
-  /** Real email addresses belonging to the capture account. */
-  emails: string[];
-  /** Real account, list, campaign or template identifiers to replace. */
-  accountIds: string[];
-};
+export type { RedactionRules } from './sanitize/redact.js';
+import type { RedactionRules } from './sanitize/redact.js';
 
 export type Config = {
   groqApiKey: string | null;
