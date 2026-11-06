@@ -37,10 +37,18 @@ const SCHEMA_METHODS = new Set<string>(HTTP_METHODS);
  * were a large share of all candidates and not one of them is a business action.
  */
 const CHROME_HOSTS =
-  /^(?:sidebar-backend|notifications?-banner-api|marketing-notification|dt|metrics|get|fsrelay|rum)\./i;
+  /^(?:sidebar-backend|notifications?-banner-api|marketing-notification|dt|metrics|get|fsrelay|rum|ph)\./i;
 
-/** Beacon paths that appear on product hosts too. */
-const BEACON_PATH = /^\/(?:cdn-cgi|g\/collect|collect|banner-info|pr\/|events?\/collect)/i;
+/**
+ * Beacon paths that appear on product hosts too.
+ *
+ * `log-event` is here because it is served by `crm-backend-api`, a genuine
+ * product backend: the host cannot be excluded, only the path. Measured on the
+ * exploration run, where it and a PostHog flag poll were the only Brevo-owned
+ * telemetry that reached this filter.
+ */
+const BEACON_PATH =
+  /^\/(?:cdn-cgi|g\/collect|collect|banner-info|pr\/|events?\/collect|flags\b)|\/log-events?\b/i;
 
 const ASSET_PATH = /\.(?:css|js|mjs|map|woff2?|ttf|eot|svg|png|jpe?g|gif|webp|ico|avif)$/i;
 

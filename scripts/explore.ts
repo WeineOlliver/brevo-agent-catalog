@@ -29,6 +29,10 @@ import {
   describePlacement,
   headedLaunchArgs,
 } from '../src/browser/window.js';
+import { withDeadline } from '../src/util/deadline.js';
+
+/** Per-route time budget. Twenty routes at this budget is a 30-minute ceiling. */
+const ROUTE_BUDGET_MS = 90_000;
 
 function argValue(name: string, fallback: string): string {
   const index = process.argv.indexOf(`--${name}`);
@@ -110,6 +114,14 @@ let cursor = 0;
 let totalWrites = 0;
 const fixtures: string[] = [];
 
+function writeReport(entries: RouteExploration[]): void {
+  writeFileSync(
+    join(config.paths.data, 'exploration-report.json'),
+    `${JSON.stringify({ generated_at: new Date().toISOString(), reports: entries }, null, 2)}\n`,
+    'utf8',
+  );
+}
+
 function slugify(route: string): string {
   const slug = route.replace(/[^a-zA-Z0-9]+/g, '-').replace(/^-+|-+$/g, '');
   return slug.length === 0 ? 'root' : slug;
@@ -128,9 +140,21 @@ for (const route of routes) {
     continue;
   }
 
-  const report = await exploreRoute(page, url, route, fx, policy, settle);
+  // A route gets a hard budget. "Criar modelo" on /templates/listing opens the
+  // template editor and wedged a 20-route run for 97 minutes; one lost route is
+  // the cheaper failure.
+  let timedOut = false;
+  const report = await withDeadline(
+    exploreRoute(page, url, route, fx, policy, settle),
+    ROUTE_BUDGET_MS,
+    { route, controls: [], formsSubmitted: 0 } satisfies RouteExploration,
+    () => {
+      timedOut = true;
+    },
+  );
   reports.push(report);
   fixtures.push(...fx.created);
+  if (timedOut) console.log(`  ! ${route} — hit the ${ROUTE_BUDGET_MS / 1000}s budget, moving on`);
 
   await recorder.drain();
   const fresh = recorder.records.slice(cursor);
@@ -139,6 +163,10 @@ for (const route of routes) {
   totalWrites += writes.length;
 
   if (fresh.length > 0) writeCaptureFile(join(outDir, `${slugify(route)}.json`), fresh);
+
+  // Written after every route, not once at the end: a run that dies on route 20
+  // should still leave the audit trail for the nineteen that worked.
+  writeReport(reports);
 
   const clicked = report.controls.filter((c) => c.clicked).length;
   // Report what the policy actually refused, by category. The first version of
@@ -161,11 +189,7 @@ for (const route of routes) {
 
 await browser.close();
 
-writeFileSync(
-  join(config.paths.data, 'exploration-report.json'),
-  `${JSON.stringify({ generated_at: new Date().toISOString(), reports }, null, 2)}\n`,
-  'utf8',
-);
+writeReport(reports);
 
 console.log(
   `\nexplored ${reports.length} route(s), ${totalWrites} write request(s) captured -> ${outDir}`,

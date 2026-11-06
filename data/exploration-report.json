@@ -1,0 +1,332 @@
+{
+  "generated_at": "2026-11-06T23:25:34.441Z",
+  "reports": [
+    {
+      "route": "/analytics",
+      "controls": [
+        {
+          "label": "Atualizar",
+          "kind": "money",
+          "clicked": false
+        },
+        {
+          "label": "Selecione Professional",
+          "kind": "money",
+          "clicked": false
+        },
+        {
+          "label": "Fale conosco",
+          "kind": "unknown",
+          "clicked": true
+        }
+      ],
+      "formsSubmitted": 0
+    },
+    {
+      "route": "/automation/advanced",
+      "controls": [],
+      "formsSubmitted": 0
+    },
+    {
+      "route": "/automation/automations",
+      "controls": [
+        {
+          "label": "Aprenda a automatizar",
+          "kind": "unknown",
+          "clicked": true
+        },
+        {
+          "label": "Criar sua primeira automação",
+          "kind": "open",
+          "clicked": true
+        }
+      ],
+      "formsSubmitted": 0
+    },
+    {
+      "route": "/campaigns/listing",
+      "controls": [
+        {
+          "label": "Gerar e-mail com IA",
+          "kind": "open",
+          "clicked": true
+        },
+        {
+          "label": "E-mail",
+          "kind": "unknown",
+          "clicked": true
+        },
+        {
+          "label": "SMS",
+          "kind": "unknown",
+          "clicked": true
+        },
+        {
+          "label": "WhatsApp",
+          "kind": "unknown",
+          "clicked": true
+        },
+        {
+          "label": "Push",
+          "kind": "unknown",
+          "clicked": true
+        },
+        {
+          "label": "Pop-up",
+          "kind": "unknown",
+          "clicked": true
+        }
+      ],
+      "formsSubmitted": 0
+    },
+    {
+      "route": "/companies",
+      "controls": [],
+      "formsSubmitted": 0
+    },
+    {
+      "route": "/contact/forms-app/subscription",
+      "controls": [
+        {
+          "label": "Inscrição",
+          "kind": "unknown",
+          "clicked": true
+        },
+        {
+          "label": "Cancelamento de assinatura",
+          "kind": "unknown",
+          "clicked": true
+        },
+        {
+          "label": "Atualização de perfil",
+          "kind": "unknown",
+          "clicked": true
+        },
+        {
+          "label": "Criar um formulário de inscrição",
+          "kind": "open",
+          "clicked": true
+        }
+      ],
+      "formsSubmitted": 0
+    },
+    {
+      "route": "/contact/list",
+      "controls": [],
+      "formsSubmitted": 0
+    },
+    {
+      "route": "/contact/list-listing",
+      "controls": [
+        {
+          "label": "Introdução às listas e pastas",
+          "kind": "unknown",
+          "clicked": true
+        },
+        {
+          "label": "Listas x Segmentos",
+          "kind": "unknown",
+          "clicked": true
+        },
+        {
+          "label": "Recalcular agora",
+          "kind": "unknown",
+          "clicked": true
+        },
+        {
+          "label": "Todas as pastas (2 listas)",
+          "kind": "unknown",
+          "clicked": true
+        },
+        {
+          "label": "Sort column name",
+          "kind": "navigate",
+          "clicked": false
+        },
+        {
+          "label": "Sort column id",
+          "kind": "navigate",
+          "clicked": false
+        },
+        {
+          "label": "Sort column list_parent",
+          "kind": "navigate",
+          "clicked": false
+        },
+        {
+          "label": "Sort column count",
+          "kind": "navigate",
+          "clicked": false
+        },
+        {
+          "label": "Sort column entered",
+          "kind": "navigate",
+          "clicked": false
+        },
+        {
+          "label": "identified_contacts",
+          "kind": "unknown",
+          "clicked": true
+        },
+        {
+          "label": "more list actions",
+          "kind": "unknown",
+          "clicked": true
+        },
+        {
+          "label": "Your first list",
+          "kind": "unknown",
+          "clicked": true
+        },
+        {
+          "label": "20",
+          "kind": "unknown",
+          "clicked": true
+        },
+        {
+          "label": "1",
+          "kind": "unknown",
+          "clicked": true
+        }
+      ],
+      "formsSubmitted": 0
+    },
+    {
+      "route": "/contact/segment",
+      "controls": [],
+      "formsSubmitted": 0
+    },
+    {
+      "route": "/conversions/listing",
+      "controls": [
+        {
+          "label": "Atualizar",
+          "kind": "money",
+          "clicked": false
+        }
+      ],
+      "formsSubmitted": 0
+    },
+    {
+      "route": "/crm/deals",
+      "controls": [
+        {
+          "label": "Começar grátis",
+          "kind": "unknown",
+          "clicked": true
+        }
+      ],
+      "formsSubmitted": 1
+    },
+    {
+      "route": "/ecommerce",
+      "controls": [],
+      "formsSubmitted": 0
+    },
+    {
+      "route": "/loyalty",
+      "controls": [
+        {
+          "label": "Atualizar para Enterprise",
+          "kind": "money",
+          "clicked": false
+        },
+        {
+          "label": "Saiba mais",
+          "kind": "unknown",
+          "clicked": true
+        }
+      ],
+      "formsSubmitted": 0
+    },
+    {
+      "route": "/marketing-reports/statistics",
+      "controls": [],
+      "formsSubmitted": 0
+    },
+    {
+      "route": "/meetings/offer/all",
+      "controls": [],
+      "formsSubmitted": 0
+    },
+    {
+      "route": "/objects",
+      "controls": [
+        {
+          "label": "Atualizar",
+          "kind": "money",
+          "clicked": false
+        }
+      ],
+      "formsSubmitted": 0
+    },
+    {
+      "route": "/phone/onboarding",
+      "controls": [],
+      "formsSubmitted": 0
+    },
+    {
+      "route": "/security/authorised_ips",
+      "controls": [
+        {
+          "label": "Autenticação em dois fatores",
+          "kind": "unknown",
+          "clicked": true
+        },
+        {
+          "label": "IPs autorizados",
+          "kind": "unknown",
+          "clicked": true
+        },
+        {
+          "label": "Saiba mais sobre endereços IP autorizados",
+          "kind": "unknown",
+          "clicked": true
+        },
+        {
+          "label": "Exportar CSV",
+          "kind": "unknown",
+          "clicked": true
+        },
+        {
+          "label": "Sort column authorisation_date",
+          "kind": "navigate",
+          "clicked": false
+        }
+      ],
+      "formsSubmitted": 0
+    },
+    {
+      "route": "/tasks",
+      "controls": [
+        {
+          "label": "Começar grátis",
+          "kind": "unknown",
+          "clicked": true
+        }
+      ],
+      "formsSubmitted": 1
+    },
+    {
+      "route": "/templates/listing",
+      "controls": [
+        {
+          "label": "Criar pasta",
+          "kind": "open",
+          "clicked": true
+        },
+        {
+          "label": "Criar modelo",
+          "kind": "open",
+          "clicked": true
+        },
+        {
+          "label": "E-mail",
+          "kind": "unknown",
+          "clicked": true
+        }
+      ],
+      "formsSubmitted": 0
+    }
+  ]
+}

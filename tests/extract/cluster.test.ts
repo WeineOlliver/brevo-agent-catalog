@@ -137,3 +137,28 @@ describe('clusterCaptures', () => {
     );
   });
 });
+
+/**
+ * Measured on the 20-route exploration run: of 437 non-GET requests, all but
+ * two were telemetry. These are the Brevo-owned ones the filter let through —
+ * a feature-flag poll and an event log would both have become "actions".
+ */
+describe('clusterCaptures telemetry on Brevo-owned hosts', () => {
+  it('drops the PostHog feature-flag host', () => {
+    const record = capture({ url: 'https://ph.brevo.com/flags/?v=2' });
+    expect(clusterCaptures([record])).toHaveLength(0);
+  });
+
+  it('drops an event-logging endpoint on a product backend', () => {
+    const record = capture({ url: 'https://crm-backend-api.brevo.com/crm/backend/log-event' });
+    expect(clusterCaptures([record])).toHaveLength(0);
+  });
+
+  it('keeps the two real writes the same run found', () => {
+    const enable = capture({
+      url: 'https://account-app.brevo.com/account/apps/enable/sms-campaigns',
+    });
+    const sync = capture({ url: 'https://contacts-api-v2.brevo.com/lists/list-count-sync' });
+    expect(clusterCaptures([enable, sync])).toHaveLength(2);
+  });
+});
