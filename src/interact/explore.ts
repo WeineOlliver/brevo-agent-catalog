@@ -18,6 +18,7 @@ import {
   isExplorable,
   valueForField,
   type ControlKind,
+  type ExplorePolicy,
 } from './controls.js';
 
 export type ControlReport = { label: string; kind: ControlKind; clicked: boolean };
@@ -32,6 +33,13 @@ export type RouteExploration = {
 const CLICKABLE =
   'button, a[href], [role="button"], [role="tab"], [role="menuitem"], [data-testid*="button" i]';
 
+/**
+ * Global app chrome. Excluded because these controls appear on every route —
+ * clicking "Configurações" or the account menu navigates away from the route
+ * under exploration and discovers nothing new, 20 times over.
+ */
+const CHROME_CONTAINERS = 'header, nav, aside, [role="banner"], [role="navigation"]';
+
 const MAX_CONTROLS_PER_ROUTE = 14;
 const MAX_FIELDS_PER_FORM = 10;
 
@@ -39,13 +47,14 @@ type RawControl = { label: string; index: number };
 
 /** Reads every clickable control's visible label, in DOM order. */
 async function readControls(page: Page): Promise<RawControl[]> {
-  return page.evaluate((selector) => {
+  return page.evaluate(({ selector, chrome }) => {
     const seen = new Set<string>();
     const out: { label: string; index: number }[] = [];
     const nodes = Array.from(document.querySelectorAll(selector));
 
     nodes.forEach((node, index) => {
       const element = node as HTMLElement;
+      if (element.closest(chrome) !== null) return;
       const style = window.getComputedStyle(element);
       if (style.display === 'none' || style.visibility === 'hidden') return;
       if (element.offsetParent === null && style.position !== 'fixed') return;
@@ -67,7 +76,7 @@ async function readControls(page: Page): Promise<RawControl[]> {
     });
 
     return out;
-  }, CLICKABLE);
+  }, { selector: CLICKABLE, chrome: CHROME_CONTAINERS });
 }
 
 /** Fills whatever visible inputs are on screen with fixture values. */
@@ -141,6 +150,7 @@ export async function exploreRoute(
   url: string,
   route: string,
   fx: FixtureBag,
+  policy: ExplorePolicy,
   settle: (ms?: number) => Promise<void>,
 ): Promise<RouteExploration> {
   const report: RouteExploration = { route, controls: [], formsSubmitted: 0 };
@@ -149,7 +159,7 @@ export async function exploreRoute(
 
   for (const control of controls) {
     const kind = classifyControl(control.label);
-    const clickable = isExplorable(control.label) && kind !== 'navigate';
+    const clickable = isExplorable(control.label, policy) && kind !== 'navigate';
 
     report.controls.push({ label: control.label, kind, clicked: clickable });
     if (!clickable) continue;

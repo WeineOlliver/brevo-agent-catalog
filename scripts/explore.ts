@@ -23,6 +23,7 @@ import { attachRecorder } from '../src/crawl/recorder.js';
 import { waitForSignIn } from '../src/crawl/session.js';
 import { createFixtureBag } from '../src/interact/types.js';
 import { exploreRoute, type RouteExploration } from '../src/interact/explore.js';
+import type { ExplorePolicy } from '../src/interact/controls.js';
 
 function argValue(name: string, fallback: string): string {
   const index = process.argv.indexOf(`--${name}`);
@@ -32,6 +33,16 @@ function argValue(name: string, fallback: string): string {
 const config = loadConfig();
 const maxRoutes = Number(argValue('max-routes', '20'));
 const outDir = join(config.paths.raw, 'explore');
+
+/**
+ * Destructive flows are part of what a catalog of business actions is for, and
+ * the operator has granted them. Money is a separate grant: it bills a card or
+ * ends the account, and no amount of coverage is worth that by accident.
+ */
+const policy: ExplorePolicy = {
+  allowDestructive: !process.argv.includes('--no-destructive'),
+  allowMoney: process.argv.includes('--allow-money'),
+};
 
 const routesPath = join(config.paths.data, 'discovered-routes.json');
 if (!existsSync(routesPath)) {
@@ -60,9 +71,11 @@ console.log(`
 A browser window is open at ${config.appOrigin}.
 Log in by hand, including the 2FA step. Exploration starts by itself afterwards.
 
-It will click every control that is not destructive and submit the forms it
-finds, creating records named "catalog-test-*". It never clicks delete, send,
-publish or anything else it cannot undo. Nothing is deleted.
+Policy for this run:
+  destructive (delete, archive, send, publish): ${policy.allowDestructive ? 'ALLOWED' : 'blocked'}
+  money (upgrade, purchase, plan, close account): ${policy.allowMoney ? 'ALLOWED' : 'blocked'}
+
+It fills and submits the forms it finds, creating records named "catalog-test-*".
 `);
 
 const signedIn = await waitForSignIn(page, context, {
@@ -107,7 +120,7 @@ for (const route of routes) {
     continue;
   }
 
-  const report = await exploreRoute(page, url, route, fx, settle);
+  const report = await exploreRoute(page, url, route, fx, policy, settle);
   reports.push(report);
   fixtures.push(...fx.created);
 
@@ -120,7 +133,7 @@ for (const route of routes) {
   if (fresh.length > 0) writeCaptureFile(join(outDir, `${slugify(route)}.json`), fresh);
 
   const clicked = report.controls.filter((c) => c.clicked).length;
-  const skipped = report.controls.filter((c) => c.kind === 'destructive').length;
+  const skipped = report.controls.filter((c) => !c.clicked && c.kind !== 'navigate').length;
   console.log(
     `  ${route} — ${report.controls.length} control(s), clicked ${clicked}, ` +
       `skipped ${skipped} destructive, ${report.formsSubmitted} form(s) submitted, ` +

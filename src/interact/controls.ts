@@ -1,20 +1,29 @@
 /**
  * Classifying a control by its visible label.
  *
- * Guessing selectors per module failed outright: every hardcoded English label
- * missed, because the account's UI is not necessarily in English. So discovery
- * enumerates whatever controls a page actually has and decides what to do from
- * the label — which means this classification is the safety boundary, and it
- * covers both English and Portuguese.
+ * Guessing selectors per module failed outright, so discovery enumerates
+ * whatever controls a page actually has and decides what to do from the label.
+ * That makes this classification the safety boundary. It covers English and
+ * Portuguese, because Brevo renders this account in pt-BR.
  *
- * The rule is deliberately asymmetric. An unrecognised label is treated as
- * safe to click, because that is where undiscovered functionality lives. A
- * label that looks destructive is never clicked, even if that costs coverage,
- * unless it is scoped to a fixture this harness created.
+ * Two separate categories, because they carry very different costs:
+ *
+ * - **destructive** — deletes, archives, sends, publishes. Recoverable: the
+ *   data was `catalog-test-*` fixtures and can be recreated. Enabled by the
+ *   operator (`allowDestructive`), because these flows are a large part of what
+ *   a catalog of business actions is *for*.
+ * - **money** — upgrades, purchases, plan selection, closing the account.
+ *   Not recoverable by re-running anything: it bills a card or destroys the
+ *   account under test. Blocked unless explicitly allowed, separately.
+ *
+ * An unrecognised label is treated as clickable, because that is where
+ * undiscovered functionality lives.
  */
 
 export type ControlKind =
-  /** Never click: deletes, sends to a real audience, or cannot be undone. */
+  /** Bills the account or destroys it. Blocked unless `allowMoney`. */
+  | 'money'
+  /** Deletes, archives, sends, publishes. Blocked unless `allowDestructive`. */
   | 'destructive'
   /** Opens a form, panel or wizard — the interesting case. */
   | 'open'
@@ -28,26 +37,37 @@ export type ControlKind =
   | 'unknown';
 
 /**
- * Hard denylist. Matched before anything else and never clicked.
+ * Anything that could change what the account pays, or end the account.
  *
- * `sendNow`/`enviar agora` is here rather than under `submit`: sending a
- * campaign reaches real recipients and is not reversible.
+ * Found the hard way: an exploration run clicked "Selecione Professional" and
+ * "Atualizar" on a usage page before this group existed. `atualizar` is
+ * ambiguous in Portuguese — "refresh" or "upgrade" — and it appears on Brevo's
+ * plan pages, so it lives here. Losing a refresh click costs nothing.
  */
+const MONEY = [
+  /\b(?:upgrade|downgrade|subscribe|purchase|buy|checkout|billing|pay(?:ment)?)\b/i,
+  /\b(?:add|buy) credits\b/i,
+  /\bstart (?:a )?(?:free )?trial\b/i,
+  /\b(?:professional|enterprise|premium|business plan|starter plan)\b/i,
+  /\b(?:close|delete|cancel) (?:my )?(?:account|plan|subscription)\b/i,
+  /\b(?:atualizar|assinar|comprar|pagar|pagamento|contratar|cr[ée]ditos)\b/i,
+  /\bplano\b/i,
+  /\b(?:avalia[çc][ãa]o|teste) grat/i,
+  /\b(?:encerrar|excluir|cancelar) (?:minha )?(?:conta|assinatura)\b/i,
+];
+
+/** Destroys or dispatches data. Recoverable by recreating a fixture. */
 const DESTRUCTIVE = [
-  // English
   /\b(?:delete|remove|discard|erase|destroy|wipe|purge)\b/i,
   /\b(?:archive|deactivate|disable|revoke|unlink|disconnect|unsubscribe)\b/i,
   /\bsend\b(?!\s*(?:a\s*)?test)/i,
-  /\b(?:publish|go live|activate campaign|start (?:campaign|automation|workflow))\b/i,
-  /\b(?:close|cancel|downgrade|delete) (?:account|plan|subscription)\b/i,
+  /\b(?:publish|go live|activate)\b/i,
   /\b(?:reset|regenerate) (?:key|password|api)\b/i,
   /\bblock(?:list)?\b/i,
-  // Portuguese
   /\b(?:excluir|remover|apagar|deletar|descartar)\b/i,
   /\b(?:arquivar|desativar|desabilitar|revogar|desconectar|descadastrar)\b/i,
   /\benviar\b(?!\s*(?:um\s*)?teste)/i,
   /\b(?:publicar|ativar|iniciar)\b/i,
-  /\bcancelar (?:conta|plano|assinatura)\b/i,
   /\bbloquear\b/i,
 ];
 
@@ -71,7 +91,10 @@ const DISMISS = [
   /\b(?:cancelar|fechar|dispensar|pular|agora n[ãa]o|depois|sair)\b/i,
 ];
 
-/** The safety check, on its own so it can be asserted directly. */
+export function isMoneyLabel(label: string): boolean {
+  return MONEY.some((pattern) => pattern.test(label));
+}
+
 export function isDestructiveLabel(label: string): boolean {
   return DESTRUCTIVE.some((pattern) => pattern.test(label));
 }
@@ -80,7 +103,9 @@ export function classifyControl(label: string): ControlKind {
   const text = label.trim();
   if (text.length === 0) return 'unknown';
 
-  // Destructive wins over every other reading of the same label.
+  // Money outranks destructive, which outranks every other reading of the
+  // same label: "Save and send" is destructive, "Upgrade and save" is money.
+  if (isMoneyLabel(text)) return 'money';
   if (isDestructiveLabel(text)) return 'destructive';
   if (OPEN.some((p) => p.test(text))) return 'open';
   if (SUBMIT.some((p) => p.test(text))) return 'submit';
@@ -89,13 +114,21 @@ export function classifyControl(label: string): ControlKind {
   return 'unknown';
 }
 
-/**
- * A control is clickable during exploration unless it is destructive, or would
- * abandon a form we are in the middle of filling.
- */
-export function isExplorable(label: string): boolean {
+export type ExplorePolicy = {
+  /** Click deletes, archives, sends and publishes. */
+  allowDestructive: boolean;
+  /** Click upgrades, purchases and account closure. Separate on purpose. */
+  allowMoney: boolean;
+};
+
+export const CONSERVATIVE: ExplorePolicy = { allowDestructive: false, allowMoney: false };
+
+export function isExplorable(label: string, policy: ExplorePolicy): boolean {
   const kind = classifyControl(label);
-  return kind !== 'destructive' && kind !== 'dismiss';
+  if (kind === 'money') return policy.allowMoney;
+  if (kind === 'destructive') return policy.allowDestructive;
+  // Never abandon a form we are part-way through filling.
+  return kind !== 'dismiss';
 }
 
 export type FieldDescriptor = {
@@ -121,7 +154,6 @@ export function valueForField(
     return 'https://example.com';
   }
   if (field.type === 'date') return '2027-01-01';
-  // Checkboxes, radios, files and hidden inputs are left alone.
   if (['checkbox', 'radio', 'file', 'hidden', 'submit', 'button'].includes(field.type)) return null;
 
   return fx.listName();

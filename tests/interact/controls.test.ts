@@ -1,10 +1,15 @@
 import { describe, expect, it } from 'vitest';
 import {
+  CONSERVATIVE,
   classifyControl,
   isDestructiveLabel,
   isExplorable,
+  isMoneyLabel,
   valueForField,
 } from '../../src/interact/controls.js';
+
+const FULL = { allowDestructive: true, allowMoney: false };
+const EVERYTHING = { allowDestructive: true, allowMoney: true };
 
 const fx = { email: () => 'catalog-test-a@example.com', listName: () => 'catalog-test-list' };
 
@@ -20,7 +25,6 @@ describe('isDestructiveLabel', () => {
       'Send now',
       'Send campaign',
       'Publish',
-      'Close account',
       'Regenerate key',
       'Blocklist',
     ]) {
@@ -41,7 +45,6 @@ describe('isDestructiveLabel', () => {
       'Enviar agora',
       'Enviar campanha',
       'Publicar',
-      'Cancelar conta',
       'Bloquear',
     ]) {
       expect(isDestructiveLabel(label), label).toBe(true);
@@ -89,7 +92,7 @@ describe('classifyControl', () => {
 
   it('returns unknown for an unrecognised label, which is still explorable', () => {
     expect(classifyControl('Pipelines')).toBe('unknown');
-    expect(isExplorable('Pipelines')).toBe(true);
+    expect(isExplorable('Pipelines', CONSERVATIVE)).toBe(true);
   });
 
   it('lets destructive beat every other reading of the same label', () => {
@@ -103,16 +106,69 @@ describe('classifyControl', () => {
   });
 });
 
-describe('isExplorable', () => {
-  it('refuses destructive and dismiss controls', () => {
-    expect(isExplorable('Delete')).toBe(false);
-    expect(isExplorable('Excluir')).toBe(false);
-    expect(isExplorable('Cancel')).toBe(false);
+describe('isMoneyLabel', () => {
+  it('catches plan and payment controls in both languages', () => {
+    for (const label of [
+      'Upgrade',
+      'Selecione Professional',
+      'Buy credits',
+      'Start a free trial',
+      'Checkout',
+      'Close account',
+      'Atualizar',
+      'Uso e plano',
+      'Assinar',
+      'Comprar créditos',
+      'Encerrar minha conta',
+    ]) {
+      expect(isMoneyLabel(label), label).toBe(true);
+    }
   });
 
-  it('allows open, submit, navigate and unknown', () => {
-    for (const label of ['Add a contact', 'Save', 'Next page', 'Pipelines']) {
-      expect(isExplorable(label), label).toBe(true);
+  it('does not flag ordinary product controls as money', () => {
+    for (const label of ['Add a contact', 'Criar uma lista', 'Save', 'Delete list']) {
+      expect(isMoneyLabel(label), label).toBe(false);
+    }
+  });
+
+  it('outranks destructive when a label is both', () => {
+    expect(classifyControl('Cancel subscription')).toBe('money');
+    expect(classifyControl('Excluir minha conta')).toBe('money');
+  });
+});
+
+describe('isExplorable', () => {
+  it('refuses destructive under the conservative policy', () => {
+    expect(isExplorable('Delete', CONSERVATIVE)).toBe(false);
+    expect(isExplorable('Excluir', CONSERVATIVE)).toBe(false);
+  });
+
+  it('allows destructive when the operator has granted it', () => {
+    expect(isExplorable('Delete', FULL)).toBe(true);
+    expect(isExplorable('Excluir contato', FULL)).toBe(true);
+    expect(isExplorable('Enviar agora', FULL)).toBe(true);
+  });
+
+  it('still refuses money even with destructive granted', () => {
+    expect(isExplorable('Selecione Professional', FULL)).toBe(false);
+    expect(isExplorable('Atualizar', FULL)).toBe(false);
+    expect(isExplorable('Close account', FULL)).toBe(false);
+  });
+
+  it('allows money only when that is granted separately', () => {
+    expect(isExplorable('Upgrade', EVERYTHING)).toBe(true);
+  });
+
+  it('never clicks a dismiss control, under any policy', () => {
+    expect(isExplorable('Cancel', EVERYTHING)).toBe(false);
+    expect(isExplorable('Fechar', EVERYTHING)).toBe(false);
+  });
+
+  it('allows open, submit, navigate and unknown under every policy', () => {
+    for (const policy of [CONSERVATIVE, FULL, EVERYTHING]) {
+      for (const label of ['Add a contact', 'Save', 'Next page', 'Pipelines']) {
+        expect(isExplorable(label, policy), label).toBe(true);
+      }
     }
   });
 });
