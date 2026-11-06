@@ -1,56 +1,37 @@
 /**
- * Contacts write pass.
+ * Contacts and lists write passes.
  *
- * A link-only crawl sees GET traffic. The POST and PUT bodies behind "create a
- * contact" and "add to a list" — the actions the catalog is actually about —
- * only appear if something fills the form and submits it.
+ * The first real crawl captured 118 actions of which exactly one was a write:
+ * a navigation-only crawl sees `GET` traffic. The POST and PUT bodies behind
+ * "create a contact" and "add to a list" — the actions the catalog is actually
+ * about — only exist if something fills the form and submits it.
  *
- * Deliberately submits once with the required field empty first: the validation
- * response is the best evidence available for which fields are really required.
- *
- * Selectors are resilient-by-preference (roles and labels before CSS) because
- * Brevo's markup is not ours and will drift.
+ * Each pass deliberately submits once with the required field empty before
+ * filling it: the validation response is the best available evidence for which
+ * fields are really required, which is what agents get wrong most often.
  */
 
-import type { Page } from 'playwright';
-import type { FixtureBag, InteractionPass } from './types.js';
+import type { InteractionPass } from './types.js';
+import { SAVE_BUTTON, goto, settle, tryClick, tryFill } from './ui.js';
 
-const STEP_TIMEOUT = 15_000;
+const EMAIL_FIELD = [
+  'role=textbox[name=/email/i]',
+  'input[type="email"]',
+  'input[name*="email" i]',
+  'input[placeholder*="email" i]',
+];
 
-/** Best-effort click: a missing control is a layout change, not a crash. */
-async function tryClick(page: Page, candidates: string[]): Promise<boolean> {
-  for (const selector of candidates) {
-    const locator = page.locator(selector).first();
-    try {
-      await locator.waitFor({ state: 'visible', timeout: 3_000 });
-      await locator.click({ timeout: STEP_TIMEOUT });
-      return true;
-    } catch {
-      continue;
-    }
-  }
-  return false;
-}
-
-async function tryFill(page: Page, candidates: string[], value: string): Promise<boolean> {
-  for (const selector of candidates) {
-    const locator = page.locator(selector).first();
-    try {
-      await locator.waitFor({ state: 'visible', timeout: 3_000 });
-      await locator.fill(value, { timeout: STEP_TIMEOUT });
-      return true;
-    } catch {
-      continue;
-    }
-  }
-  return false;
-}
+const NAME_FIELD = [
+  'role=textbox[name=/name/i]',
+  'input[name*="name" i]',
+  'input[placeholder*="name" i]',
+];
 
 export const contactsPass: InteractionPass = {
   module: 'contacts',
 
-  async run(page: Page, fx: FixtureBag): Promise<void> {
-    await page.goto('https://app.brevo.com/contact/list', { waitUntil: 'networkidle' });
+  async run(page, fx): Promise<void> {
+    await goto(page, 'https://app.brevo.com/contact/list');
 
     const opened = await tryClick(page, [
       'role=button[name=/add a contact/i]',
@@ -58,49 +39,74 @@ export const contactsPass: InteractionPass = {
       'role=button[name=/add contact/i]',
       'text=/add a contact/i',
     ]);
-
     if (!opened) {
-      console.warn('  contacts: could not find an "add a contact" control — UI has changed');
+      console.warn('  contacts: no "add a contact" control found — UI has changed');
       return;
     }
 
-    // Submit empty first, so the validation response is captured.
-    await tryClick(page, [
-      'role=button[name=/save|create|add/i]',
-      'button[type="submit"]',
-    ]);
-    await page.waitForTimeout(1_000);
+    // Empty submit first, to capture the validation response.
+    await tryClick(page, SAVE_BUTTON);
+    await settle(page, 1500);
 
-    const filled = await tryFill(
-      page,
-      ['role=textbox[name=/email/i]', 'input[type="email"]', 'input[name*="email" i]'],
-      fx.email(),
-    );
-
-    if (!filled) {
-      console.warn('  contacts: could not find the email field — UI has changed');
+    if (!(await tryFill(page, EMAIL_FIELD, fx.email()))) {
+      console.warn('  contacts: no email field found — UI has changed');
       return;
     }
 
-    await tryClick(page, ['role=button[name=/save|create|add/i]', 'button[type="submit"]']);
-    await page.waitForTimeout(2_000);
+    await tryClick(page, SAVE_BUTTON);
+    await settle(page);
+  },
+};
 
-    // Lists: create one, which is the other half of "add a contact to a list".
-    await page.goto('https://app.brevo.com/contact/list', { waitUntil: 'networkidle' });
+export const listsPass: InteractionPass = {
+  module: 'lists',
 
-    const listOpened = await tryClick(page, [
-      'role=button[name=/create a list|new list|add a list/i]',
+  async run(page, fx): Promise<void> {
+    await goto(page, 'https://app.brevo.com/contact/list-listing');
+
+    const opened = await tryClick(page, [
+      'role=button[name=/create a list/i]',
+      'role=link[name=/create a list/i]',
+      'role=button[name=/new list|add a list/i]',
       'text=/create a list/i',
     ]);
-
-    if (listOpened) {
-      await tryFill(
-        page,
-        ['role=textbox[name=/name/i]', 'input[name*="name" i]'],
-        fx.listName(),
-      );
-      await tryClick(page, ['role=button[name=/save|create/i]', 'button[type="submit"]']);
-      await page.waitForTimeout(2_000);
+    if (!opened) {
+      console.warn('  lists: no "create a list" control found — UI has changed');
+      return;
     }
+
+    await tryClick(page, SAVE_BUTTON);
+    await settle(page, 1500);
+
+    if (!(await tryFill(page, NAME_FIELD, fx.listName()))) {
+      console.warn('  lists: no name field found — UI has changed');
+      return;
+    }
+
+    await tryClick(page, SAVE_BUTTON);
+    await settle(page);
+  },
+};
+
+export const segmentsPass: InteractionPass = {
+  module: 'segments',
+
+  async run(page, fx): Promise<void> {
+    await goto(page, 'https://app.brevo.com/contact/segment');
+
+    const opened = await tryClick(page, [
+      'role=button[name=/create a segment/i]',
+      'role=link[name=/create a segment/i]',
+      'role=button[name=/new segment/i]',
+      'text=/create a segment/i',
+    ]);
+    if (!opened) {
+      console.warn('  segments: no "create a segment" control found — UI has changed');
+      return;
+    }
+
+    await tryFill(page, NAME_FIELD, fx.listName());
+    await tryClick(page, SAVE_BUTTON);
+    await settle(page);
   },
 };

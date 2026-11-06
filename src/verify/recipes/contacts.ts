@@ -14,42 +14,13 @@
 import type { Page } from 'playwright';
 import type { FixtureBag } from '../../interact/types.js';
 import type { VerifyRecipe } from '../harness.js';
-
-const STEP_TIMEOUT = 15_000;
-
-async function tryClick(page: Page, candidates: string[]): Promise<boolean> {
-  for (const selector of candidates) {
-    try {
-      const locator = page.locator(selector).first();
-      await locator.waitFor({ state: 'visible', timeout: 3_000 });
-      await locator.click({ timeout: STEP_TIMEOUT });
-      return true;
-    } catch {
-      continue;
-    }
-  }
-  return false;
-}
-
-async function tryFill(page: Page, candidates: string[], value: string): Promise<boolean> {
-  for (const selector of candidates) {
-    try {
-      const locator = page.locator(selector).first();
-      await locator.waitFor({ state: 'visible', timeout: 3_000 });
-      await locator.fill(value, { timeout: STEP_TIMEOUT });
-      return true;
-    } catch {
-      continue;
-    }
-  }
-  return false;
-}
+import { SAVE_BUTTON, goto, settle, tryClick, tryFill } from '../../interact/ui.js';
 
 export const createContactRecipe: VerifyRecipe = {
   actionId: 'contacts.create_contact',
 
   async run(page: Page, fx: FixtureBag): Promise<void> {
-    await page.goto('https://app.brevo.com/contact/list', { waitUntil: 'networkidle' });
+    await goto(page, 'https://app.brevo.com/contact/list');
 
     const opened = await tryClick(page, [
       'role=button[name=/add a contact/i]',
@@ -65,13 +36,10 @@ export const createContactRecipe: VerifyRecipe = {
     );
     if (!filled) throw new Error('could not find the email field');
 
-    const saved = await tryClick(page, [
-      'role=button[name=/save|create|add/i]',
-      'button[type="submit"]',
-    ]);
+    const saved = await tryClick(page, SAVE_BUTTON);
     if (!saved) throw new Error('could not submit the form');
 
-    await page.waitForTimeout(3_000);
+    await settle(page, 3000);
   },
 };
 
