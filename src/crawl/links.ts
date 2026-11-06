@@ -41,9 +41,17 @@ function isIdentifierSegment(segment: string): boolean {
 /** Hosts that only ever serve authentication, never the application. */
 const SIGNIN_HOSTS = /^(?:login|onboarding|account-app)\./i;
 
-/** Sign-in paths, anchored so an app route merely containing the word is safe. */
+/**
+ * Sign-in paths, anchored to the start of the path so an application route that
+ * merely contains one of these words — `/senders/verify` is a real product
+ * action — is not mistaken for an auth screen.
+ *
+ * The second-factor group matters as much as the first: Brevo sends a new device
+ * to `/2fa/login/new-device/...` on app.brevo.com, and without it the wait
+ * declares success while the operator is still typing a code.
+ */
 const SIGNIN_PATH =
-  /^\/(?:login|signin|sign-in|account\/login|forgot-password|reset-password|signup|register)(?:\/|$)/i;
+  /^\/(?:login|signin|sign-in|account\/login|forgot-password|reset-password|signup|register|2fa|otp|mfa|two-factor|twofactor|challenge|authenticator|verify|verification|confirm-email)(?:\/|$)/i;
 
 /**
  * Whether a url is an authentication page rather than the application.

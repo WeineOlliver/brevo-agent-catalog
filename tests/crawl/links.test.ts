@@ -90,6 +90,27 @@ describe('isSignInUrl', () => {
     expect(isSignInUrl('https://app.brevo.com/campaigns/login-reminder')).toBe(false);
   });
 
+  it('recognises two-factor and device-verification screens', () => {
+    // The real URL Brevo used, which was previously read as "signed in" and set
+    // six write passes running against the 2FA page.
+    expect(
+      isSignInUrl(
+        'https://app.brevo.com/2fa/login/new-device/76bc6c547db8bdd37d82c7ea3b049436?target=https://app.brevo.com/',
+      ),
+    ).toBe(true);
+    expect(isSignInUrl('https://app.brevo.com/otp')).toBe(true);
+    expect(isSignInUrl('https://app.brevo.com/mfa/challenge')).toBe(true);
+    expect(isSignInUrl('https://app.brevo.com/two-factor')).toBe(true);
+    expect(isSignInUrl('https://app.brevo.com/verify')).toBe(true);
+    expect(isSignInUrl('https://app.brevo.com/authenticator/setup')).toBe(true);
+  });
+
+  it('does not treat an application route ending in verify as a sign-in screen', () => {
+    // A sender has a "verify" step; that is a product action, not an auth page.
+    expect(isSignInUrl('https://app.brevo.com/senders/verify')).toBe(false);
+    expect(isSignInUrl('https://app.brevo.com/settings/domains/verify')).toBe(false);
+  });
+
   it('treats an unparseable url as not a sign-in page rather than throwing', () => {
     expect(() => isSignInUrl('not a url')).not.toThrow();
     expect(isSignInUrl('not a url')).toBe(false);
