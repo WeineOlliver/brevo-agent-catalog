@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { extractNavLinks, normalizeRoute } from '../../src/crawl/links.js';
+import { extractNavLinks, isSignInUrl, normalizeRoute } from '../../src/crawl/links.js';
 
 const ORIGIN = 'https://app.brevo.com';
 
@@ -66,6 +66,33 @@ describe('extractNavLinks', () => {
 
   it('returns an empty array for markup with no links', () => {
     expect(extractNavLinks('<div>nothing here</div>', ORIGIN)).toEqual([]);
+  });
+});
+
+describe('isSignInUrl', () => {
+  it('recognises the dedicated sign-in host', () => {
+    expect(isSignInUrl('https://login.brevo.com/?target=https%3A%2F%2Fapp.brevo.com%2F')).toBe(
+      true,
+    );
+  });
+
+  it('recognises a sign-in path on the app host', () => {
+    expect(isSignInUrl('https://app.brevo.com/account/login')).toBe(true);
+    expect(isSignInUrl('https://app.brevo.com/forgot-password')).toBe(true);
+  });
+
+  it('does not mistake an application route for a sign-in page', () => {
+    expect(isSignInUrl('https://app.brevo.com/')).toBe(false);
+    expect(isSignInUrl('https://app.brevo.com/contacts/lists')).toBe(false);
+  });
+
+  it('does not mistake a route that merely contains the word for one', () => {
+    expect(isSignInUrl('https://app.brevo.com/campaigns/login-reminder')).toBe(false);
+  });
+
+  it('treats an unparseable url as not a sign-in page rather than throwing', () => {
+    expect(() => isSignInUrl('not a url')).not.toThrow();
+    expect(isSignInUrl('not a url')).toBe(false);
   });
 });
 

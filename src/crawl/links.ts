@@ -38,6 +38,29 @@ function isIdentifierSegment(segment: string): boolean {
   );
 }
 
+/** Hosts that only ever serve authentication, never the application. */
+const SIGNIN_HOSTS = /^(?:login|onboarding|account-app)\./i;
+
+/** Sign-in paths, anchored so an app route merely containing the word is safe. */
+const SIGNIN_PATH =
+  /^\/(?:login|signin|sign-in|account\/login|forgot-password|reset-password|signup|register)(?:\/|$)/i;
+
+/**
+ * Whether a url is an authentication page rather than the application.
+ *
+ * The crawler checks this on **every** route including the first. Skipping the
+ * first route is how an expired session reports as a successful one-route crawl
+ * instead of failing loudly — which is strictly worse than crashing.
+ */
+export function isSignInUrl(url: string): boolean {
+  try {
+    const parsed = new URL(url);
+    return SIGNIN_HOSTS.test(parsed.hostname) || SIGNIN_PATH.test(parsed.pathname);
+  } catch {
+    return false;
+  }
+}
+
 export function extractNavLinks(html: string, origin: string): string[] {
   const found = new Set<string>();
   const originUrl = new URL(origin);

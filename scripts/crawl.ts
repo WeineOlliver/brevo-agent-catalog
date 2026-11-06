@@ -14,7 +14,7 @@ import 'dotenv/config';
 import { loadConfig } from '../src/config.js';
 import { writeCaptureFile } from '../src/capture/store.js';
 import { attachRecorder } from '../src/crawl/recorder.js';
-import { extractNavLinks, normalizeRoute } from '../src/crawl/links.js';
+import { extractNavLinks, isSignInUrl, normalizeRoute } from '../src/crawl/links.js';
 import { createLimiter } from '../src/util/rate-limit.js';
 
 function argValue(name: string, fallback: string): string {
@@ -45,6 +45,7 @@ const visited = new Set<string>();
 const discovered = new Set<string>();
 let written = 0;
 let recordCursor = 0;
+let sessionDead = false;
 
 function slugify(route: string): string {
   const slug = route.replace(/[^a-zA-Z0-9]+/g, '-').replace(/^-+|-+$/g, '');
@@ -71,12 +72,19 @@ while (queue.length > 0 && visited.size < maxRoutes) {
     continue;
   }
 
-  // A redirect to a sign-in screen means the saved session has expired.
-  if (/\/(?:login|signin|account\/login)/i.test(page.url()) && route !== '/') {
+  // A redirect to a sign-in screen means the saved session has expired. Checked
+  // on every route, the first included: without that, a dead session crawls one
+  // login page and reports success.
+  if (isSignInUrl(page.url())) {
     console.error(
-      `\nRedirected to a sign-in page at ${page.url()}. The saved session has expired.\n` +
-        'Run "pnpm brevo:login" again, or export a HAR by hand and feed it through parseHar.',
+      `\nRedirected to a sign-in page at ${page.url()}.\n` +
+        (visited.size === 1
+          ? 'The saved session is not valid — nothing was crawled.\n'
+          : 'The saved session expired mid-crawl.\n') +
+        'Run "pnpm brevo:login" again and crawl straight away (Brevo sessions are short-lived),\n' +
+        'or export a HAR by hand and feed it through parseHar.',
     );
+    sessionDead = true;
     break;
   }
 
@@ -116,3 +124,6 @@ console.log(
 if (queue.length > 0) {
   console.log(`${queue.length} url(s) left unvisited — raise --max-routes to go further.`);
 }
+
+// A dead session must not look like a successful short crawl.
+if (sessionDead) process.exit(1);
