@@ -10,7 +10,7 @@ because the brief asks about the system, not only the output.
 
 | Pass | Model | Why |
 |---|---|---|
-| Breadth — draft an entry for every discovered route | **Groq** (`llama-3.3-70b-versatile` by default) | A throughput problem: ~200 candidates, cheap and fast, paced at ~28 req/min for the free tier |
+| Breadth — draft an entry for every discovered route | **Groq** (`openai/gpt-oss-120b` by default) | A throughput problem: ~200 candidates, cheap and fast, paced at ~28 req/min for the free tier |
 | Core — the judgment-heavy fields | **Headless Claude Code** (`claude -p`) | Disambiguating neighbouring actions, inferring preconditions, judging destructiveness. These are what Reliability is scored on |
 
 Both sit behind one interface (`src/providers/types.ts`) with injected

@@ -1,0 +1,887 @@
+{
+  "generated_at": "2026-11-06T18:30:14.490Z",
+  "failures": [
+    {
+      "key": "GET /feApi/liveUpdatesToken",
+      "errors": [
+        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+      ],
+      "raw": ""
+    },
+    {
+      "key": "GET /account",
+      "errors": [
+        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+      ],
+      "raw": ""
+    },
+    {
+      "key": "GET /v1/sidebar/deferredCount",
+      "errors": [
+        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+      ],
+      "raw": ""
+    },
+    {
+      "key": "GET /v1/workflow/metaInfo",
+      "errors": [
+        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+      ],
+      "raw": ""
+    },
+    {
+      "key": "GET /v1/workflow/bannerDetails",
+      "errors": [
+        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+      ],
+      "raw": ""
+    },
+    {
+      "key": "GET /v1/workflow/showDeferredNotification",
+      "errors": [
+        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+      ],
+      "raw": ""
+    },
+    {
+      "key": "GET /processing-details",
+      "errors": [
+        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+      ],
+      "raw": ""
+    },
+    {
+      "key": "GET /api/settings",
+      "errors": [
+        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+      ],
+      "raw": ""
+    },
+    {
+      "key": "GET /v1/sidebar/contactCount",
+      "errors": [
+        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+      ],
+      "raw": ""
+    },
+    {
+      "key": "GET /app/objects/plan",
+      "errors": [
+        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+      ],
+      "raw": ""
+    },
+    {
+      "key": "GET /app/objects/user/info",
+      "errors": [
+        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+      ],
+      "raw": ""
+    },
+    {
+      "key": "GET /app/objects/view",
+      "errors": [
+        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+      ],
+      "raw": ""
+    },
+    {
+      "key": "GET /email-campaign/api/campaigns",
+      "errors": [
+        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+      ],
+      "raw": ""
+    },
+    {
+      "key": "GET /tags",
+      "errors": [
+        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+      ],
+      "raw": ""
+    },
+    {
+      "key": "GET /getTotalUsersConfig",
+      "errors": [
+        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+      ],
+      "raw": ""
+    },
+    {
+      "key": "GET /feature-toggle/unleash",
+      "errors": [
+        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+      ],
+      "raw": ""
+    },
+    {
+      "key": "GET /settings/ai/agents",
+      "errors": [
+        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+      ],
+      "raw": ""
+    },
+    {
+      "key": "GET /email-campaign/api/config",
+      "errors": [
+        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+      ],
+      "raw": ""
+    },
+    {
+      "key": "GET /client/info",
+      "errors": [
+        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+      ],
+      "raw": ""
+    },
+    {
+      "key": "GET /client/feature-toggles",
+      "errors": [
+        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+      ],
+      "raw": ""
+    },
+    {
+      "key": "GET /client/upgrade-flags",
+      "errors": [
+        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+      ],
+      "raw": ""
+    },
+    {
+      "key": "GET /feature-toggle",
+      "errors": [
+        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+      ],
+      "raw": ""
+    },
+    {
+      "key": "GET /v1/consent-groups/status",
+      "errors": [
+        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+      ],
+      "raw": ""
+    },
+    {
+      "key": "GET /crm/backend/organization-info",
+      "errors": [
+        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+      ],
+      "raw": ""
+    },
+    {
+      "key": "GET /crm/backend/object-config/attribute-group-view",
+      "errors": [
+        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+      ],
+      "raw": ""
+    },
+    {
+      "key": "GET /crm/backend/pipeline/details",
+      "errors": [
+        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+      ],
+      "raw": ""
+    },
+    {
+      "key": "GET /crm/backend/plan-manager-info",
+      "errors": [
+        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+      ],
+      "raw": ""
+    },
+    {
+      "key": "GET /crm/backend/accounts",
+      "errors": [
+        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+      ],
+      "raw": ""
+    },
+    {
+      "key": "GET /crm/backend/account-settings",
+      "errors": [
+        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+      ],
+      "raw": ""
+    },
+    {
+      "key": "GET /crm/backend/organization/config",
+      "errors": [
+        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+      ],
+      "raw": ""
+    },
+    {
+      "key": "GET /crm/backend/attributes",
+      "errors": [
+        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+      ],
+      "raw": ""
+    },
+    {
+      "key": "GET /view/listing/visible",
+      "errors": [
+        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+      ],
+      "raw": ""
+    },
+    {
+      "key": "GET /crm/backend/companies",
+      "errors": [
+        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+      ],
+      "raw": ""
+    },
+    {
+      "key": "GET /crm/backend/attributes/rules",
+      "errors": [
+        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+      ],
+      "raw": ""
+    },
+    {
+      "key": "GET /view/listing/hidden",
+      "errors": [
+        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+      ],
+      "raw": ""
+    },
+    {
+      "key": "GET /forms-api/account",
+      "errors": [
+        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+      ],
+      "raw": ""
+    },
+    {
+      "key": "GET /forms-api/forms",
+      "errors": [
+        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+      ],
+      "raw": ""
+    },
+    {
+      "key": "GET /contact/backend/contacts/:id/header",
+      "errors": [
+        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+      ],
+      "raw": ""
+    },
+    {
+      "key": "GET /contact/backend/contacts/:id",
+      "errors": [
+        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+      ],
+      "raw": ""
+    },
+    {
+      "key": "GET /contact/backend/settings",
+      "errors": [
+        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+      ],
+      "raw": ""
+    },
+    {
+      "key": "GET /contact/backend/settings/crm-account",
+      "errors": [
+        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+      ],
+      "raw": ""
+    },
+    {
+      "key": "GET /contact/backend/contacts/:id/calc-attributes",
+      "errors": [
+        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+      ],
+      "raw": ""
+    },
+    {
+      "key": "GET /crm/backend/deals",
+      "errors": [
+        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+      ],
+      "raw": ""
+    },
+    {
+      "key": "GET /contact/backend/contacts/activities",
+      "errors": [
+        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+      ],
+      "raw": ""
+    },
+    {
+      "key": "GET /contact/backend/settings/task-types",
+      "errors": [
+        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+      ],
+      "raw": ""
+    },
+    {
+      "key": "GET /crm/backend/feature-accessibility",
+      "errors": [
+        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+      ],
+      "raw": ""
+    },
+    {
+      "key": "POST /contact/backend/contacts/lists",
+      "errors": [
+        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+      ],
+      "raw": ""
+    },
+    {
+      "key": "GET /crm/backend/crm-config/get-form-attributes",
+      "errors": [
+        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+      ],
+      "raw": ""
+    },
+    {
+      "key": "GET /contact/backend/transactional/senders/:id",
+      "errors": [
+        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+      ],
+      "raw": ""
+    },
+    {
+      "key": "GET /events/presentation_config",
+      "errors": [
+        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+      ],
+      "raw": ""
+    },
+    {
+      "key": "GET /feApi/orgFeaturesAndChannels",
+      "errors": [
+        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+      ],
+      "raw": ""
+    },
+    {
+      "key": "GET /organization",
+      "errors": [
+        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+      ],
+      "raw": ""
+    },
+    {
+      "key": "GET /v1/contact/:id/workflows",
+      "errors": [
+        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+      ],
+      "raw": ""
+    },
+    {
+      "key": "GET /app/objects/contact/object_id/:id",
+      "errors": [
+        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+      ],
+      "raw": ""
+    },
+    {
+      "key": "GET /api/settings/list-timezone",
+      "errors": [
+        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+      ],
+      "raw": ""
+    },
+    {
+      "key": "GET /extensibility/integrations",
+      "errors": [
+        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+      ],
+      "raw": ""
+    },
+    {
+      "key": "GET /v3/app/objects/contact/attributes",
+      "errors": [
+        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+      ],
+      "raw": ""
+    },
+    {
+      "key": "GET /lists/get-folders",
+      "errors": [
+        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+      ],
+      "raw": ""
+    },
+    {
+      "key": "GET /lists/get-lists",
+      "errors": [
+        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+      ],
+      "raw": ""
+    },
+    {
+      "key": "GET /contact/backend/settings/get-attributes",
+      "errors": [
+        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+      ],
+      "raw": ""
+    },
+    {
+      "key": "GET /contact/backend/contacts/lists_and_segments",
+      "errors": [
+        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+      ],
+      "raw": ""
+    },
+    {
+      "key": "POST /segment/count",
+      "errors": [
+        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+      ],
+      "raw": ""
+    },
+    {
+      "key": "POST /segment/query",
+      "errors": [
+        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+      ],
+      "raw": ""
+    },
+    {
+      "key": "POST /segment/paginated_count",
+      "errors": [
+        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+      ],
+      "raw": ""
+    },
+    {
+      "key": "GET /segment/lists",
+      "errors": [
+        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+      ],
+      "raw": ""
+    },
+    {
+      "key": "GET /categories",
+      "errors": [
+        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+      ],
+      "raw": ""
+    },
+    {
+      "key": "GET /segment/events/unified",
+      "errors": [
+        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+      ],
+      "raw": ""
+    },
+    {
+      "key": "GET /segment/all-contact-owners",
+      "errors": [
+        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+      ],
+      "raw": ""
+    },
+    {
+      "key": "GET /contact/backend/segment/properties",
+      "errors": [
+        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+      ],
+      "raw": ""
+    },
+    {
+      "key": "GET /segment/unified_object/paths/contact/associations",
+      "errors": [
+        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+      ],
+      "raw": ""
+    },
+    {
+      "key": "GET /segment/events/status",
+      "errors": [
+        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+      ],
+      "raw": ""
+    },
+    {
+      "key": "GET /contact/backend/settings/segment",
+      "errors": [
+        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+      ],
+      "raw": ""
+    },
+    {
+      "key": "GET /segment/folder/listing",
+      "errors": [
+        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+      ],
+      "raw": ""
+    },
+    {
+      "key": "GET /segment/listing",
+      "errors": [
+        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+      ],
+      "raw": ""
+    },
+    {
+      "key": "GET /conversions-goals/config",
+      "errors": [
+        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+      ],
+      "raw": ""
+    },
+    {
+      "key": "GET /settings",
+      "errors": [
+        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+      ],
+      "raw": ""
+    },
+    {
+      "key": "GET /v1/ecommerce-onboarding",
+      "errors": [
+        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+      ],
+      "raw": ""
+    },
+    {
+      "key": "GET /store/detection",
+      "errors": [
+        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+      ],
+      "raw": ""
+    },
+    {
+      "key": "GET /apps",
+      "errors": [
+        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+      ],
+      "raw": ""
+    },
+    {
+      "key": "GET /loyalty/programs",
+      "errors": [
+        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+      ],
+      "raw": ""
+    },
+    {
+      "key": "GET /loyalty/get-user-permissions",
+      "errors": [
+        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+      ],
+      "raw": ""
+    },
+    {
+      "key": "GET /campaigns/calendar",
+      "errors": [
+        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+      ],
+      "raw": ""
+    },
+    {
+      "key": "GET /campaigns/statistics",
+      "errors": [
+        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+      ],
+      "raw": ""
+    },
+    {
+      "key": "GET /users/expert",
+      "errors": [
+        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+      ],
+      "raw": ""
+    },
+    {
+      "key": "GET /plan",
+      "errors": [
+        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+      ],
+      "raw": ""
+    },
+    {
+      "key": "GET /assets/locales/en.json",
+      "errors": [
+        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+      ],
+      "raw": ""
+    },
+    {
+      "key": "GET /assets/locales/pt.json",
+      "errors": [
+        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+      ],
+      "raw": ""
+    },
+    {
+      "key": "GET /js/countries.json",
+      "errors": [
+        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+      ],
+      "raw": ""
+    },
+    {
+      "key": "GET /auth",
+      "errors": [
+        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+      ],
+      "raw": ""
+    },
+    {
+      "key": "GET /v2/FeatureToggle",
+      "errors": [
+        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+      ],
+      "raw": ""
+    },
+    {
+      "key": "GET /dashboard-information",
+      "errors": [
+        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+      ],
+      "raw": ""
+    },
+    {
+      "key": "GET /api/agent/organization",
+      "errors": [
+        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+      ],
+      "raw": ""
+    },
+    {
+      "key": "GET /homepage/user/widget/list",
+      "errors": [
+        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+      ],
+      "raw": ""
+    },
+    {
+      "key": "GET /crm/backend/tasktypes",
+      "errors": [
+        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+      ],
+      "raw": ""
+    },
+    {
+      "key": "GET /api/domain/list",
+      "errors": [
+        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+      ],
+      "raw": ""
+    },
+    {
+      "key": "GET /events/dates",
+      "errors": [
+        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+      ],
+      "raw": ""
+    },
+    {
+      "key": "GET /events/list",
+      "errors": [
+        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+      ],
+      "raw": ""
+    },
+    {
+      "key": "GET /homepage/widget/list",
+      "errors": [
+        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+      ],
+      "raw": ""
+    },
+    {
+      "key": "GET /dashboard-campaign-status",
+      "errors": [
+        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+      ],
+      "raw": ""
+    },
+    {
+      "key": "GET /scores-history",
+      "errors": [
+        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+      ],
+      "raw": ""
+    },
+    {
+      "key": "GET /scores-days",
+      "errors": [
+        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+      ],
+      "raw": ""
+    },
+    {
+      "key": "GET /dashboard-contacts",
+      "errors": [
+        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+      ],
+      "raw": ""
+    },
+    {
+      "key": "GET /dashboard-transactional-stats",
+      "errors": [
+        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+      ],
+      "raw": ""
+    },
+    {
+      "key": "GET /undefined",
+      "errors": [
+        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+      ],
+      "raw": ""
+    },
+    {
+      "key": "GET /account/apps/information",
+      "errors": [
+        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+      ],
+      "raw": ""
+    },
+    {
+      "key": "GET /user/feature-toggle",
+      "errors": [
+        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+      ],
+      "raw": ""
+    },
+    {
+      "key": "GET /ips/list",
+      "errors": [
+        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+      ],
+      "raw": ""
+    },
+    {
+      "key": "GET /js/countries-production.json",
+      "errors": [
+        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+      ],
+      "raw": ""
+    },
+    {
+      "key": "GET /phone/call-enabled",
+      "errors": [
+        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+      ],
+      "raw": ""
+    },
+    {
+      "key": "GET /api/keys/smtp",
+      "errors": [
+        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+      ],
+      "raw": ""
+    },
+    {
+      "key": "GET /sms/countries",
+      "errors": [
+        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+      ],
+      "raw": ""
+    },
+    {
+      "key": "GET /crm/backend/contact-attributes",
+      "errors": [
+        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+      ],
+      "raw": ""
+    },
+    {
+      "key": "GET /crm/backend/pipeline/pipeline-template",
+      "errors": [
+        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+      ],
+      "raw": ""
+    },
+    {
+      "key": "GET /billing/api/organization/currency",
+      "errors": [
+        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+      ],
+      "raw": ""
+    },
+    {
+      "key": "GET /marketing-campaign/api/client/toggle-features",
+      "errors": [
+        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+      ],
+      "raw": ""
+    },
+    {
+      "key": "GET /whatsapp-campaign/api/client/info",
+      "errors": [
+        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+      ],
+      "raw": ""
+    },
+    {
+      "key": "GET /email-template/api/templates",
+      "errors": [
+        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+      ],
+      "raw": ""
+    },
+    {
+      "key": "GET /api/notifications",
+      "errors": [
+        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+      ],
+      "raw": ""
+    },
+    {
+      "key": "GET /editor-api/localization/languages",
+      "errors": [
+        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+      ],
+      "raw": ""
+    },
+    {
+      "key": "GET /api/email/user/info",
+      "errors": [
+        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+      ],
+      "raw": ""
+    },
+    {
+      "key": "GET /api/email/realtime/wizard/status",
+      "errors": [
+        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+      ],
+      "raw": ""
+    },
+    {
+      "key": "GET /api/email/logs/filters/data",
+      "errors": [
+        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+      ],
+      "raw": ""
+    },
+    {
+      "key": "POST /api/email/logs",
+      "errors": [
+        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+      ],
+      "raw": ""
+    },
+    {
+      "key": "GET /api/email/realtime/smtp/credentials",
+      "errors": [
+        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+      ],
+      "raw": ""
+    },
+    {
+      "key": "GET /api/sms/realtime/wizard/status",
+      "errors": [
+        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+      ],
+      "raw": ""
+    },
+    {
+      "key": "POST /api/sms/logs",
+      "errors": [
+        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+      ],
+      "raw": ""
+    }
+  ]
+}

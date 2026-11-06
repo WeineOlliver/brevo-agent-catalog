@@ -10,6 +10,29 @@ describe('loadConfig', () => {
     expect(loadConfig({ GROQ_API_KEY: 'test-key' }).groqApiKey).toBe('test-key');
   });
 
+  it('treats an empty GROQ_API_KEY as absent, not as a key', () => {
+    // .env.example ships every value empty, so this is the state anyone who
+    // copies it starts from.
+    expect(loadConfig({ GROQ_API_KEY: '' }).groqApiKey).toBeNull();
+    expect(loadConfig({ GROQ_API_KEY: '   ' }).groqApiKey).toBeNull();
+  });
+
+  it('treats an empty GROQ_MODEL as unset and uses the default', () => {
+    expect(loadConfig({ GROQ_MODEL: '' }).groqModel).toBe(loadConfig({}).groqModel);
+    expect(loadConfig({ GROQ_MODEL: '' }).groqModel.length).toBeGreaterThan(0);
+  });
+
+  it('treats every other empty override as unset', () => {
+    const empty = loadConfig({ BREVO_APP_ORIGIN: '', BREVO_OPENAPI_URL: '', CLAUDE_BIN: '' });
+    expect(empty.appOrigin).toBe('https://app.brevo.com');
+    expect(empty.openApiUrl).toContain('swagger_definition_v3.yml');
+    expect(empty.claudeBin).toBe('claude');
+  });
+
+  it('trims a configured value', () => {
+    expect(loadConfig({ GROQ_MODEL: '  some-model  ' }).groqModel).toBe('some-model');
+  });
+
   it('defaults appOrigin to https://app.brevo.com', () => {
     expect(loadConfig({}).appOrigin).toBe('https://app.brevo.com');
   });
