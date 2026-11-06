@@ -15,6 +15,7 @@ import { loadConfig } from '../src/config.js';
 import { writeCaptureFile } from '../src/capture/store.js';
 import { attachRecorder } from '../src/crawl/recorder.js';
 import { extractNavLinks, isSignInUrl, normalizeRoute } from '../src/crawl/links.js';
+import { waitForSignIn } from '../src/crawl/session.js';
 import { createLimiter } from '../src/util/rate-limit.js';
 
 function argValue(name: string, fallback: string): string {
@@ -27,15 +28,54 @@ const maxRoutes = Number(argValue('max-routes', '60'));
 const outDir = argValue('out', config.paths.raw);
 const statePath = join(config.paths.auth, 'state.json');
 
-if (!existsSync(statePath)) {
-  console.error(`No saved session at ${statePath}. Run "pnpm brevo:login" first.`);
+/**
+ * Brevo's session does not survive serialisation: `storageState` carries cookies
+ * and localStorage but not `sessionStorage`, and a restored context lands back
+ * on login.brevo.com. `--login` therefore signs in and crawls in ONE context,
+ * which removes the restore step entirely.
+ */
+const liveLogin = process.argv.includes('--login');
+
+if (!liveLogin && !existsSync(statePath)) {
+  console.error(
+    `No saved session at ${statePath}.\n` +
+      'Use "pnpm crawl --login" to sign in and crawl in one browser session\n' +
+      '(recommended — a restored session does not work against Brevo).',
+  );
   process.exit(1);
 }
 
 const limiter = createLimiter(1000);
-const browser = await chromium.launch({ headless: true });
-const context = await browser.newContext({ storageState: statePath });
+const browser = await chromium.launch({ headless: !liveLogin });
+const context = liveLogin
+  ? await browser.newContext({ viewport: { width: 1440, height: 900 } })
+  : await browser.newContext({ storageState: statePath });
 const page = await context.newPage();
+
+if (liveLogin) {
+  await page.goto(config.appOrigin, { waitUntil: 'domcontentloaded' });
+  console.log(`
+A browser window is open at ${config.appOrigin}.
+Log in by hand. The crawl starts by itself in the same session the moment the
+dashboard appears — nothing is saved to disk and nothing has to be restored.
+`);
+
+  const outcome = await waitForSignIn(page, context, {
+    timeoutMs: 25 * 60 * 1000,
+    pollIntervalMs: 2000,
+  });
+
+  if (outcome === 'timeout') {
+    console.error('\nNo sign-in detected. Nothing crawled.');
+    await browser.close();
+    process.exit(1);
+  }
+
+  console.log(`signed in at ${page.url()} — crawling in this same session\n`);
+  // Saved opportunistically for the interact/verify stages; the crawl does not
+  // depend on it working.
+  await context.storageState({ path: statePath }).catch(() => undefined);
+}
 
 let currentRoute = '/';
 const recorder = attachRecorder(page, () => currentRoute);

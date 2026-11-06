@@ -121,7 +121,7 @@ Requires Node 20+ and pnpm. `pnpm install`, then:
 |---|---|---|
 | `pnpm fetch:openapi` | Download and index Brevo's public spec | nothing |
 | `pnpm brevo:login` | Save an authenticated session to `.auth/` | **a manual login by hand** |
-| `pnpm crawl` | BFS the app, record XHR to `captures/raw/` | a saved session |
+| `pnpm crawl --login` | Sign in, then BFS the app in the same session, recording XHR | **a manual login** |
 | `pnpm interact` | Write passes with throwaway fixtures | a saved session |
 | `pnpm sanitize` | `captures/raw` → `captures/clean`, redacted | captures |
 | `pnpm extract` | Draft catalog entries | clean captures + a provider |
