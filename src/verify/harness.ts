@@ -14,8 +14,12 @@
 import type { Action } from '../types.js';
 import type { CaptureRecord } from '../capture/types.js';
 import { normalizeRoute } from '../crawl/links.js';
+import { isBrevoHost } from '../util/hosts.js';
+import { redactText, type RedactionRules } from '../sanitize/redact.js';
 import type { Page } from 'playwright';
 import type { FixtureBag } from '../interact/types.js';
+
+const NO_REDACTION: RedactionRules = { emails: [], accountIds: [] };
 
 export type VerifyOutcome =
   | { status: 'verified'; evidence: string[]; verified_at: string }
@@ -31,6 +35,14 @@ export type VerifyRecipe = {
   cleanup?(page: Page, fx: FixtureBag): Promise<void>;
 };
 
+function hostOf(url: string): string {
+  try {
+    return new URL(url).hostname;
+  } catch {
+    return '(unparseable url)';
+  }
+}
+
 function pathOf(url: string): string {
   try {
     return new URL(url).pathname;
@@ -40,8 +52,19 @@ function pathOf(url: string): string {
   }
 }
 
-export function assessOutcome(action: Action, observed: CaptureRecord[]): VerifyOutcome {
+/**
+ * @param rules Redaction rules. Evidence produced here is written into
+ * `actions/*.json`, which is committed and public — and the sanitizer only ever
+ * touches `captures/`. So this path must redact for itself; a raw response body
+ * reaching an entry would publish whatever the server happened to echo back.
+ */
+export function assessOutcome(
+  action: Action,
+  observed: CaptureRecord[],
+  rules: RedactionRules = NO_REDACTION,
+): VerifyOutcome {
   const endpoint = action.internal_endpoint;
+  const clean = (text: string): string => redactText(text, rules);
 
   if (endpoint === null) {
     return {
@@ -53,16 +76,29 @@ export function assessOutcome(action: Action, observed: CaptureRecord[]): Verify
   }
 
   const wantedPath = normalizeRoute(endpoint.path);
-  const matches = observed.filter(
+  const pathMatches = observed.filter(
     (record) =>
       record.method === endpoint.method && normalizeRoute(pathOf(record.url)) === wantedPath,
   );
 
-  if (matches.length === 0) {
+  if (pathMatches.length === 0) {
     return {
       status: 'observed',
       evidence: [],
       reason: `No request matching ${endpoint.method} ${endpoint.path} was executed.`,
+    };
+  }
+
+  // Without this, a third-party widget answering the same path during the run
+  // is enough to stamp the action verified.
+  const matches = pathMatches.filter((record) => isBrevoHost(record.url));
+
+  if (matches.length === 0) {
+    const hosts = [...new Set(pathMatches.map((m) => hostOf(m.url)))].join(', ');
+    return {
+      status: 'observed',
+      evidence: [],
+      reason: `A request to ${endpoint.method} ${endpoint.path} was seen, but only on a non-Brevo host (${hosts}); that cannot verify a Brevo action.`,
     };
   }
 
@@ -72,7 +108,7 @@ export function assessOutcome(action: Action, observed: CaptureRecord[]): Verify
     const codes = [...new Set(matches.map((m) => m.status))].join(', ');
     return {
       status: 'observed',
-      evidence: matches.map((m) => `${m.method} ${pathOf(m.url)} -> ${m.status}`),
+      evidence: matches.map((m) => clean(`${m.method} ${pathOf(m.url)} -> ${m.status}`)),
       reason: `The request was executed but responded ${codes}; partial execution does not earn verified.`,
     };
   }
@@ -80,10 +116,11 @@ export function assessOutcome(action: Action, observed: CaptureRecord[]): Verify
   return {
     status: 'verified',
     evidence: [
-      `executed ${succeeded.method} ${pathOf(succeeded.url)} -> ${succeeded.status}`,
+      clean(`executed ${succeeded.method} ${pathOf(succeeded.url)} -> ${succeeded.status}`),
+      ...(succeeded.sourceFile === undefined ? [] : [succeeded.sourceFile]),
       ...(succeeded.responseBody === null
         ? []
-        : [`response: ${succeeded.responseBody.slice(0, 200)}`]),
+        : [clean(`response: ${succeeded.responseBody.slice(0, 200)}`)]),
     ],
     verified_at: new Date().toISOString(),
   };
@@ -95,6 +132,11 @@ export function applyOutcome(
   corrections: FlagCorrections = {},
 ): Action {
   const verified = outcome.status === 'verified';
+
+  // Never demote. A re-run that fails to re-prove an action — because Brevo's
+  // markup moved, or the recipe broke — has learned nothing about the original
+  // execution, and overwriting that evidence destroys it for no gain.
+  if (!verified && action.verification.status === 'verified') return action;
 
   return {
     ...action,

@@ -8,6 +8,8 @@
 
 import type { CaptureRecord } from '../capture/types.js';
 import { normalizeRoute } from '../crawl/links.js';
+import { isBrevoHost } from '../util/hosts.js';
+import { HTTP_METHODS } from '../types.js';
 
 export type ActionCandidate = {
   /** `METHOD /normalized/path` — the cluster key. */
@@ -25,8 +27,8 @@ const MAX_SAMPLES = 3;
 const VENDOR_HOSTS =
   /(?:segment\.(?:io|com)|datadoghq|sentry\.io|intercom|hotjar|google-analytics|googletagmanager|doubleclick|facebook\.(?:net|com)|fullstory|mixpanel|amplitude|launchdarkly|pusher|cloudflareinsights)/i;
 
-/** Brevo-owned hosts whose traffic is in scope, including its public API. */
-const BREVO_HOSTS = /(?:\.|^)(?:brevo\.com|sendinblue\.com)$/i;
+/** Methods the catalog schema can express. Anything else cannot be drafted. */
+const SCHEMA_METHODS = new Set<string>(HTTP_METHODS);
 
 const ASSET_PATH = /\.(?:css|js|mjs|map|woff2?|ttf|eot|svg|png|jpe?g|gif|webp|ico|avif)$/i;
 
@@ -54,9 +56,14 @@ function isNoise(record: CaptureRecord): boolean {
   if (host === null) return true;
 
   // Keep anything Brevo owns — api.brevo.com calls are the app's own traffic.
-  if (!BREVO_HOSTS.test(host)) return true;
+  if (!isBrevoHost(record.url)) return true;
   if (VENDOR_HOSTS.test(host)) return true;
   if (ASSET_PATH.test(pathOf(record.url))) return true;
+
+  // HEAD and OPTIONS are reads to us but are not in the schema's method enum,
+  // so every draft for one is rejected after two provider calls. Drop them here
+  // rather than burning a rate-limited budget on a guaranteed failure.
+  if (!SCHEMA_METHODS.has(record.method)) return true;
 
   // A server error tells us nothing reliable about the action's contract.
   if (record.status >= 500) return true;

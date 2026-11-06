@@ -6,7 +6,7 @@
  * happened, which is the material for the AI-usage write-up.
  */
 
-import { existsSync, readFileSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { chromium } from 'playwright';
 import 'dotenv/config';
@@ -33,7 +33,7 @@ const requested = argValue('actions', RECIPES.map((r) => r.actionId).join(','))
 
 const statePath = join(config.paths.auth, 'state.json');
 if (!existsSync(statePath)) {
-  console.error(`No saved session at ${statePath}. Run "pnpm login" first.`);
+  console.error(`No saved session at ${statePath}. Run "pnpm brevo:login" first.`);
   process.exit(1);
 }
 
@@ -46,6 +46,8 @@ if (selected.length === 0) {
 const browser = await chromium.launch({ headless: false });
 const context = await browser.newContext({ storageState: statePath });
 const page = await context.newPage();
+
+mkdirSync('test-results', { recursive: true });
 
 const fixtures: string[] = [];
 let verified = 0;
@@ -66,18 +68,24 @@ for (const recipe of selected) {
 
   const fx = createFixtureBag();
   const recorder = attachRecorder(page, () => `verify:${recipe.actionId}`);
+  const tracePath = join('test-results', `${recipe.actionId}.trace.zip`);
 
   console.log(`\n${recipe.actionId}: executing`);
+  await context.tracing.start({ screenshots: true, snapshots: true });
   try {
     await recipe.run(page, fx);
   } catch (error) {
     console.warn(`  ! run failed: ${String(error).split('\n')[0]}`);
   }
+  await context.tracing.stop({ path: tracePath });
 
   const observed = await recorder.drain();
   writeCaptureFile(join(config.paths.raw, 'verify', `${recipe.actionId}.json`), observed);
 
-  const outcome = assessOutcome(loaded.action, observed);
+  // Evidence is written into a committed artifact, so it is redacted here —
+  // the sanitizer only ever touches captures/.
+  const outcome = assessOutcome(loaded.action, observed, config.redact);
+  if (outcome.status === 'verified') outcome.evidence.push(`playwright trace: ${tracePath}`);
   const updated = applyOutcome(loaded.action, outcome);
 
   const revalidated = validateAction(updated);

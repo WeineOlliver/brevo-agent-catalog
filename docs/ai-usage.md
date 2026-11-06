@@ -95,7 +95,7 @@ three incompatible possible mechanisms and the document picked none; the
 redaction policy covered secrets but not identifiers; and the unverifiable risk
 flags had no defined default.
 
-**TDD throughout, with rulings recorded.** Every one of the 241 tests was written
+**TDD throughout, with rulings recorded.** Every one of the 268 tests was written
 and watched fail before its implementation. Where the plan turned out to be
 wrong — and it was wrong in several places, including a function signature that
 could not work and a library target that does not exist — the deviation was

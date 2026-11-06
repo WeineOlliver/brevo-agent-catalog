@@ -11,18 +11,18 @@
     "test": "vitest run",
     "typecheck": "tsc --noEmit",
     "build:schema": "tsx scripts/build-schema.ts",
-    "sanitize": "tsx scripts/sanitize.ts",
-    "scan": "tsx scripts/scan-secrets.ts",
     "fetch:openapi": "tsx scripts/fetch-openapi.ts",
-    "login": "tsx scripts/login.ts",
+    "brevo:login": "tsx scripts/login.ts",
     "crawl": "tsx scripts/crawl.ts",
+    "interact": "tsx scripts/interact.ts",
+    "sanitize": "tsx scripts/sanitize.ts",
     "extract": "tsx scripts/extract.ts",
     "validate": "tsx scripts/validate.ts",
     "build:index": "tsx scripts/build-index.ts",
-    "interact": "tsx scripts/interact.ts",
     "verify": "tsx scripts/verify.ts",
     "eval": "tsx scripts/eval-selection.ts",
-    "build:docs": "tsx scripts/build-modules-doc.ts"
+    "build:docs": "tsx scripts/build-modules-doc.ts",
+    "scan": "tsx scripts/scan-secrets.ts"
   },
   "dependencies": {
     "ajv": "^8.17.1",

@@ -74,7 +74,7 @@ deviation from the plan recorded as a ruling at the time it was made.
 
 ## Current state
 
-The pipeline is complete and tested — 241 tests, strict TypeScript, clean
+The pipeline is complete and tested — 268 tests, strict TypeScript, clean
 typecheck. The stages requiring an authenticated Brevo session have not run,
 because they need a manual login that only the account holder can perform. No
 document in this repository reports a number it has not measured; see

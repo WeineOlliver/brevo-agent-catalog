@@ -30,9 +30,14 @@ for (const file of files) {
 
   const leaks = scanForLeaks(JSON.stringify(cleaned), config.redact);
   if (leaks.length > 0) {
+    // Do not write a file we have just proved leaks. The push gate would catch
+    // it, but leaving it in the committed tree makes the next clean run lie.
     residual += leaks.length;
     const kinds = [...new Set(leaks.map((l) => l.kind))].join(', ');
-    console.error(`  ! ${file}: ${leaks.length} residual leak(s) after redaction [${kinds}]`);
+    console.error(
+      `  ! ${file}: ${leaks.length} residual leak(s) after redaction [${kinds}] — not written`,
+    );
+    continue;
   }
 
   writeCaptureFile(join(config.paths.clean, file), cleaned);

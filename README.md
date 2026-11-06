@@ -5,7 +5,7 @@ around the product — in a form an AI agent can act on without a human checking
 its work first.
 
 > **Status: pipeline complete and tested; not yet run against a live account.**
-> Every stage is implemented and covered by tests (241 passing). The stages that
+> Every stage is implemented and covered by tests (268 passing). The stages that
 > require an authenticated Brevo session — the crawl, the write passes and
 > verification — need a manual login and have not run, so `actions/` is empty.
 > See [Running it](#running-it). Nothing in this repository reports a result it
@@ -55,20 +55,26 @@ to uniform confidence.
 | `observed` | The action's internal endpoint was captured in **real traffic** — method, path and body shape are factual — but it was never executed, or only partly | A path into `captures/clean/` |
 | `inferred` | No captured traffic. Derived from UI affordances, the public OpenAPI spec, or model judgment | What it was derived from, named |
 
-Two rules that are enforced in code, not just stated here:
+Two rules hold, and `observed`/`verified` are enforced in code:
 
 - **Spec-derived does not beat `inferred`.** An entry whose inputs come from
   Brevo's published spec is still unexecuted. `public_api.exists` tells you the
-  inputs come from a published contract; it does not promote the status.
+  inputs come from a published contract; it does not promote the status. *(This
+  is currently a design rule rather than a code path: the extraction pipeline
+  only ever emits `observed`, because it only drafts from captured traffic.
+  `inferred` is reserved for UI-only actions discovered without a capture, which
+  nothing produces yet — see [docs/gaps.md](docs/gaps.md).)*
 - **Partial execution does not earn `verified`.** A request that ran and returned
-  4xx is `observed`, with the reason recorded.
+  4xx is `observed`, with the reason recorded. So is a request that matched the
+  path but came from a non-Brevo host. Both are enforced in
+  `src/verify/harness.ts`.
 
 ### The `destructive` and `idempotent` flags are fail-safe
 
 A harness uses `destructive` to decide whether to stop and ask a human, so a
 wrong value there is the most expensive error this catalog could carry. Until
 execution proves otherwise, **every non-read action is `destructive: true` and
-`idempotent: false`**. That is applied in code after schema validation, not
+`idempotent: false`**. That is applied in code before schema validation, not
 merely requested of the model. Only a `verified` outcome can relax either flag.
 
 If an entry is `inferred` and says `destructive: true`, that may mean "we know
@@ -114,7 +120,7 @@ Requires Node 20+ and pnpm. `pnpm install`, then:
 | Command | Stage | Needs |
 |---|---|---|
 | `pnpm fetch:openapi` | Download and index Brevo's public spec | nothing |
-| `pnpm login` | Save an authenticated session to `.auth/` | **a manual login by hand** |
+| `pnpm brevo:login` | Save an authenticated session to `.auth/` | **a manual login by hand** |
 | `pnpm crawl` | BFS the app, record XHR to `captures/raw/` | a saved session |
 | `pnpm interact` | Write passes with throwaway fixtures | a saved session |
 | `pnpm sanitize` | `captures/raw` → `captures/clean`, redacted | captures |
@@ -125,7 +131,7 @@ Requires Node 20+ and pnpm. `pnpm install`, then:
 | `pnpm eval` | Score whether a model picks the right action | a catalog index |
 | `pnpm build:docs` | Regenerate `docs/modules.md` | a catalog index |
 | `pnpm scan` | **Leak gate.** Run before any push | nothing |
-| `pnpm test` / `pnpm typecheck` | 241 tests, strict TypeScript | nothing |
+| `pnpm test` / `pnpm typecheck` | 268 tests, strict TypeScript | nothing |
 
 **Credentials.** Nothing in this repository contains any, and none is committed.
 `pnpm extract` with `--provider groq` wants `GROQ_API_KEY` in `.env` (see
@@ -134,9 +140,13 @@ authenticated `claude` CLI and needs no key at all. There is **no Brevo API key*
 anywhere — verification drives the real UI instead, which is the only way to
 reach the UI-only surfaces where this catalog is worth the most.
 
-**Reproducibility, honestly.** Stages 0 and 4–8 run offline for anyone from the
-committed spec and clean captures. The crawl stages need a Brevo account of your
-own, and are documented rather than runnable — which the brief explicitly allows.
+**Reproducibility, honestly.** Stage 0 runs offline for anyone, from the
+committed spec. Stages 4–8 are designed to run offline from committed clean
+captures, but **no captures are committed yet** because the crawl has not run, so
+today they exit with an instruction rather than a result. The crawl stages need a
+Brevo account of your own and are documented rather than runnable — which the
+brief explicitly allows. Once the crawl has run, `captures/clean/` is committed
+and stages 4–8 become reproducible by anyone.
 
 ## Safety
 

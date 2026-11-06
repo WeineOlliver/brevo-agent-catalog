@@ -16,10 +16,12 @@
 import type { CaptureRecord } from '../capture/types.js';
 import {
   API_KEY_SOURCE,
+  COOKIE_PAIR_SOURCE,
   COOKIE_SOURCE,
   DROPPED_HEADERS,
   DROPPED_HEADER_PATTERN,
   EMAIL_SOURCE,
+  FOREIGN_KEY_SOURCE,
   JWT_SOURCE,
   SECRET_ASSIGNMENT_SOURCE,
   escapeRegExp,
@@ -99,6 +101,8 @@ export function redactText(text: string, rules: RedactionRules): string {
   // Shaped credentials first, so later passes only ever see placeholders.
   out = out.replace(new RegExp(JWT_SOURCE, 'g'), '{{TOKEN}}');
   out = out.replace(new RegExp(API_KEY_SOURCE, 'g'), '{{API_KEY}}');
+  out = out.replace(new RegExp(FOREIGN_KEY_SOURCE, 'g'), '{{API_KEY}}');
+  out = out.replace(new RegExp(COOKIE_PAIR_SOURCE, 'gi'), '{{COOKIE}}');
   out = out.replace(new RegExp(SECRET_ASSIGNMENT_SOURCE, 'gi'), '$1{{TOKEN}}');
   out = out.replace(new RegExp(COOKIE_SOURCE, 'gi'), 'cookie: {{COOKIE}}');
 

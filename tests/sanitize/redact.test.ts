@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import type { CaptureRecord } from '../../src/capture/types.js';
 import { redactCapture, redactText } from '../../src/sanitize/redact.js';
+import { scanForLeaks } from '../../src/sanitize/scan.js';
 
 const rules = { accountIds: ['998877'], emails: ['weine@example.com'] };
 const empty = { accountIds: [], emails: [] };
@@ -138,6 +139,30 @@ describe('redactText', () => {
   it('is idempotent — redacting already-redacted text changes nothing', () => {
     const once = redactText('{"email":"weine@example.com","listIds":[998877]}', rules);
     expect(redactText(once, rules)).toBe(once);
+  });
+
+  it('produces output the independent scanner considers clean', () => {
+    // The gate must not fire on correctly redacted text, or it trains the
+    // operator to ignore it.
+    for (const input of [
+      'Set-Cookie: sib=abcdef123456; Secure',
+      '{"Cookie":"sib_session=abc123def456ghi789"}',
+      '{"email":"weine@example.com","listIds":[998877]}',
+      '{"token":"eyJhbGciOiJIUzI1NiJ9.e30.xyzsig"}',
+      '?api-key=xkeysib-0123456789abcdef0123',
+      'sessionid=9f8a7b6c5d4e3f2a1b0c; Path=/',
+    ]) {
+      expect(scanForLeaks(redactText(input, rules), rules), input).toEqual([]);
+    }
+  });
+
+  it('redacts a session value carried under an unusual key', () => {
+    expect(redactText('{"sid":"9f8a7b6c5d4e3f2a1b0c"}', empty)).not.toContain(
+      '9f8a7b6c5d4e3f2a1b0c',
+    );
+    expect(redactText('{"_csrf":"aB3dEfGh1jKlMnOpQrStUvWx"}', empty)).not.toContain(
+      'aB3dEfGh1jKlMnOpQrStUvWx',
+    );
   });
 
   it('leaves text with nothing sensitive untouched', () => {

@@ -75,6 +75,14 @@ describe('clusterCaptures', () => {
     expect(clusterCaptures([capture({ status: 422 })])).toHaveLength(1);
   });
 
+  it('drops methods the schema cannot express, instead of drafting them twice', () => {
+    // HEAD and OPTIONS are read methods to the clusterer but are not in the
+    // schema's method enum, so every draft for one is rejected after two
+    // provider calls.
+    expect(clusterCaptures([capture({ method: 'HEAD', responseBody: '{}' })])).toEqual([]);
+    expect(clusterCaptures([capture({ method: 'OPTIONS', responseBody: '{}' })])).toEqual([]);
+  });
+
   it('retains up to three samples per candidate and no more', () => {
     const many = Array.from({ length: 7 }, (_, i) => capture({ id: `id-${i}` }));
     expect(clusterCaptures(many)[0]?.samples).toHaveLength(3);

@@ -52,6 +52,64 @@ describe('scanForLeaks', () => {
     expect(leaks[0]?.match).toBe('real.person@gmail.com');
   });
 
+  it('finds a session value under a key the credential list did not originally cover', () => {
+    for (const body of [
+      '{"Cookie":"sib_session=abc123def456ghi789"}',
+      '{"sid":"9f8a7b6c5d4e3f2a1b0c"}',
+      '{"_csrf":"aB3dEfGh1jKlMnOpQrStUvWx"}',
+      '{"sessionid":"9f8a7b6c5d4e3f2a"}',
+      '{"jsessionid":"A1B2C3D4E5F6A7B8"}',
+      '?auth=aB3dEfGh1jKlMnOpQrSt',
+      '?signature=aB3dEfGh1jKlMnOpQrSt',
+      '{"nonce":"aB3dEfGh1jKlMnOpQrSt"}',
+    ]) {
+      expect(scanForLeaks(body, empty), body).not.toEqual([]);
+    }
+  });
+
+  it('finds a bare cookie name=value pair with no header prefix', () => {
+    expect(
+      scanForLeaks('sessionid=9f8a7b6c5d4e3f2a1b0c; Path=/; HttpOnly', empty),
+    ).not.toEqual([]);
+  });
+
+  it('finds other vendors’ key shapes, which a pasted example would carry', () => {
+    for (const secret of [
+      'AKIAIOSFODNN7EXAMPLE',
+      'ghp_abcdefghijklmnopqrstuvwxyz0123456789',
+      'sk_live_abcdefghijklmnopqrstuvwx',
+      'xoxb-123456789012-123456789012-abcdefghijklmnopqrstuvwx',
+      '-----BEGIN RSA PRIVATE KEY-----',
+    ]) {
+      expect(scanForLeaks(secret, empty), secret).not.toEqual([]);
+    }
+  });
+
+  it('does not let an empty assignment swallow the next line', () => {
+    // `.env.example` is a template of empty keys; a separator matching across a
+    // newline makes the following line look like the value.
+    expect(scanForLeaks('GROQ_API_KEY=\nGROQ_MODEL=\n', empty)).toEqual([]);
+    expect(scanForLeaks('token:\nsomething_else=1\n', empty)).toEqual([]);
+  });
+
+  it('does not flag source code that merely passes a credential around', () => {
+    // `apiKey: config.groqApiKey` is a property assignment, not a secret.
+    expect(scanForLeaks('apiKey: config.groqApiKey', empty)).toEqual([]);
+    expect(scanForLeaks('groqApiKey: env.GROQ_API_KEY ?? null', empty)).toEqual([]);
+    expect(scanForLeaks('Authorization: `Bearer ${opts.apiKey}`', empty)).toEqual([]);
+  });
+
+  it('still flags a quoted literal assigned to a credential key', () => {
+    expect(scanForLeaks('apiKey: "xkeysib-0123456789abcdef0123"', empty)).not.toEqual([]);
+    expect(scanForLeaks('token = "aB3dEfGh1jKlMnOpQrSt"', empty)).not.toEqual([]);
+  });
+
+  it('does not flag a placeholder the redactor itself produced', () => {
+    expect(scanForLeaks('cookie: {{COOKIE}}', empty)).toEqual([]);
+    expect(scanForLeaks('{"token":"{{TOKEN}}","key":"{{API_KEY}}"}', empty)).toEqual([]);
+    expect(scanForLeaks('{"sid":"{{TOKEN}}"}', empty)).toEqual([]);
+  });
+
   it('flags a configured email even on a reserved domain, because it is really ours', () => {
     expect(
       scanForLeaks('weine@example.com', { accountIds: [], emails: ['weine@example.com'] }).map(

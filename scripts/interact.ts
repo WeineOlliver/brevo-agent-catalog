@@ -32,7 +32,7 @@ const requested = argValue('modules', PASSES.map((p) => p.module).join(','))
 
 const statePath = join(config.paths.auth, 'state.json');
 if (!existsSync(statePath)) {
-  console.error(`No saved session at ${statePath}. Run "pnpm login" first.`);
+  console.error(`No saved session at ${statePath}. Run "pnpm brevo:login" first.`);
   process.exit(1);
 }
 

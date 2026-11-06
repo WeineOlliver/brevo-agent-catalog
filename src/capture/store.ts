@@ -33,10 +33,16 @@ export function readCaptureFile(path: string): CaptureRecord[] {
   if (!Array.isArray(parsed)) {
     throw new Error(`Capture file is not a JSON array of records: ${path}`);
   }
-  return parsed as CaptureRecord[];
+  // Provenance is attached on read, so every downstream citation can name a
+  // file a reviewer is able to open.
+  const sourceFile = path.split(sep).join(posix.sep);
+  return (parsed as CaptureRecord[]).map((record) => ({ ...record, sourceFile }));
 }
 
 export function writeCaptureFile(path: string, records: CaptureRecord[]): void {
   mkdirSync(dirname(path), { recursive: true });
-  writeFileSync(path, `${JSON.stringify(records, null, 2)}\n`, 'utf8');
+  // Provenance is derived on read; writing it would bake a stale path into the
+  // file and survive a move.
+  const onDisk = records.map(({ sourceFile: _ignored, ...record }) => record);
+  writeFileSync(path, `${JSON.stringify(onDisk, null, 2)}\n`, 'utf8');
 }

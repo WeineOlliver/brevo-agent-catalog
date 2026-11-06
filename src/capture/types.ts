@@ -27,6 +27,12 @@ export type CaptureRecord = {
   responseBody: string | null;
   truncated: boolean;
   capturedAt: string;
+  /**
+   * The capture file this record was read from, relative to the repo root.
+   * Set by `readCaptureFile`, not by the recorders — it is provenance, and it
+   * is what `verification.evidence` cites so a reviewer can open the proof.
+   */
+  sourceFile?: string;
 };
 
 /** Bodies larger than this are cut at capture time. */

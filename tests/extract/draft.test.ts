@@ -153,6 +153,19 @@ describe('draftAction', () => {
     expect(result.ok && result.action.verification.verified_at).toBeNull();
   });
 
+  it('cites the capture file as evidence, so the audit trail is followable', async () => {
+    // The README promises observed evidence is "a path into captures/clean/".
+    // A route label is not a path, and a reviewer cannot open it.
+    const withSource: ActionCandidate = {
+      ...candidate,
+      samples: [{ ...sample, sourceFile: 'captures/clean/contacts.json' }],
+    };
+    const result = await draftAction(withSource, operation, provider([modelDraft()]));
+    expect(result.ok && result.action.verification.evidence).toContain(
+      'captures/clean/contacts.json',
+    );
+  });
+
   it('retries once when the first response fails schema validation', async () => {
     const p = provider([modelDraft({ id: 'Not Snake Case' }), modelDraft()]);
     const result = await draftAction(candidate, operation, p);

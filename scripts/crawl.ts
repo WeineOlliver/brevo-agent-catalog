@@ -28,7 +28,7 @@ const outDir = argValue('out', config.paths.raw);
 const statePath = join(config.paths.auth, 'state.json');
 
 if (!existsSync(statePath)) {
-  console.error(`No saved session at ${statePath}. Run "pnpm login" first.`);
+  console.error(`No saved session at ${statePath}. Run "pnpm brevo:login" first.`);
   process.exit(1);
 }
 
@@ -75,7 +75,7 @@ while (queue.length > 0 && visited.size < maxRoutes) {
   if (/\/(?:login|signin|account\/login)/i.test(page.url()) && route !== '/') {
     console.error(
       `\nRedirected to a sign-in page at ${page.url()}. The saved session has expired.\n` +
-        'Run "pnpm login" again, or export a HAR by hand and feed it through parseHar.',
+        'Run "pnpm brevo:login" again, or export a HAR by hand and feed it through parseHar.',
     );
     break;
   }

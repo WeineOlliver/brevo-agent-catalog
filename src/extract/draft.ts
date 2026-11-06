@@ -53,7 +53,19 @@ function pickModelFields(value: unknown): Record<string, unknown> {
   return picked;
 }
 
+/**
+ * Evidence must be something a reviewer can open. A route label is not, so the
+ * capture file is cited whenever provenance is available, and the route label
+ * is only a fallback for records that never came off disk.
+ */
 function evidencePaths(candidate: ActionCandidate): string[] {
+  const files = new Set(
+    candidate.samples
+      .map((sample) => sample.sourceFile)
+      .filter((file): file is string => file !== undefined && file.length > 0),
+  );
+  if (files.size > 0) return [...files];
+
   const routes = new Set(candidate.samples.map((sample) => sample.route));
   return [...routes].map((route) => `observed on ${route}`);
 }

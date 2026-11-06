@@ -1,6 +1,6 @@
 import { mkdtempSync, mkdirSync, writeFileSync, readFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
-import { join } from 'node:path';
+import { join, sep } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { listCaptureFiles, readCaptureFile, writeCaptureFile } from '../../src/capture/store.js';
 import type { CaptureRecord } from '../../src/capture/types.js';
@@ -50,7 +50,23 @@ describe('readCaptureFile / writeCaptureFile', () => {
     const dir = tempDir();
     const path = join(dir, 'nested', 'route.json');
     writeCaptureFile(path, [record]);
-    expect(readCaptureFile(path)).toEqual([record]);
+    expect(readCaptureFile(path)).toEqual([
+      { ...record, sourceFile: path.split(sep).join('/') },
+    ]);
+  });
+
+  it('attaches the file it was read from, so evidence can cite something openable', () => {
+    const dir = tempDir();
+    const path = join(dir, 'contacts.json');
+    writeCaptureFile(path, [record]);
+    expect(readCaptureFile(path)[0]?.sourceFile).toBe(path.split(sep).join('/'));
+  });
+
+  it('does not write the provenance field back out', () => {
+    const dir = tempDir();
+    const path = join(dir, 'contacts.json');
+    writeCaptureFile(path, [{ ...record, sourceFile: 'somewhere/else.json' }]);
+    expect(JSON.parse(readFileSync(path, 'utf8'))[0]).not.toHaveProperty('sourceFile');
   });
 
   it('creates missing parent directories when writing', () => {

@@ -27,6 +27,7 @@ function argValue(name: string, fallback: string): string {
 const config = loadConfig();
 const providerName = argValue('provider', 'groq');
 const limit = Number(argValue('limit', '0'));
+const force = process.argv.includes('--force');
 
 function selectProvider(): { provider: LlmProvider; intervalMs: number } {
   if (providerName === 'claude') {
@@ -114,9 +115,22 @@ for (const candidate of candidates) {
     continue;
   }
 
+  // A file already on disk is a collision across runs, and overwriting it would
+  // silently discard a verification stamp and its evidence from an earlier pass.
+  const outPath = join(config.paths.actions, `${result.action.id}.json`);
+  if (existsSync(outPath) && !force) {
+    failures.push({
+      key: candidate.key,
+      errors: [`${outPath} already exists; re-run with --force to overwrite it`],
+      raw: '',
+    });
+    console.log(`  ! ${candidate.key} — ${result.action.id}.json already exists (use --force)`);
+    continue;
+  }
+
   writtenIds.set(result.action.id, candidate.key);
   writeFileSync(
-    join(config.paths.actions, `${result.action.id}.json`),
+    outPath,
     `${JSON.stringify(result.action, null, 2)}\n`,
     'utf8',
   );

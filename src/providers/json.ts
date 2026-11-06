@@ -64,7 +64,18 @@ export function extractJsonObject(raw: string): JsonExtraction {
   if (span) {
     const parsed = tryParse(text.slice(span.start, span.end));
     if (parsed.ok) return parsed;
-    return { ok: false, reason: 'found a JSON object but it did not parse (truncated?)' };
+    return { ok: false, reason: 'found a JSON object but it did not parse' };
+  }
+
+  // An object that opens and never closes is the likeliest real failure: the
+  // model hit its token ceiling. Saying "no JSON object found" sends the repair
+  // loop after the wrong problem, so name the actual one.
+  if (text.includes('{')) {
+    return {
+      ok: false,
+      reason:
+        'the response was truncated mid-object (it opens a JSON object but never closes it) — answer more briefly',
+    };
   }
 
   return { ok: false, reason: 'no JSON object found in the response' };

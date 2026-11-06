@@ -54,11 +54,17 @@ than `free` with suspicion.
 
 ## Structural limitations
 
-- **Reproducibility is partial by design.** Stages 0 and 4–8 run offline for
-  anyone from the committed spec and clean captures. The crawl stages need a
-  Brevo account of your own and are documented rather than runnable. The brief
-  explicitly permits this ("if something needs a key to run, describe it
-  instead").
+- **Reproducibility is partial by design, and currently thinner than intended.**
+  Stage 0 runs offline for anyone. Stages 4–8 are *built* to run offline from
+  committed clean captures, but none are committed yet — the crawl has not run —
+  so right now only stage 0 does anything for a third party. The crawl stages
+  need a Brevo account of your own and are documented rather than runnable,
+  which the brief explicitly permits ("if something needs a key to run, describe
+  it instead").
+- **`inferred` is unreachable today.** The extraction pipeline drafts only from
+  captured traffic, so every drafted entry is `observed`. The status exists for
+  UI-only actions discovered without a capture, and nothing produces those yet.
+  The schema, the index and the docs all support it; the producer does not.
 - **The Claude half of the pipeline needs an authenticated `claude` CLI.** No
   Anthropic API key is used. That is good for secret hygiene and bad for
   third-party reproduction.

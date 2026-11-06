@@ -97,4 +97,21 @@ describe('normalizeRoute', () => {
   it('accepts a bare path as well as a full url', () => {
     expect(normalizeRoute('/contacts/list/99')).toBe('/contacts/list/:id');
   });
+
+  it('masks an email-shaped segment, since Brevo keys contacts by email', () => {
+    expect(normalizeRoute('/v3/contacts/someone@example.com')).toBe('/v3/contacts/:id');
+  });
+
+  it('masks a redaction placeholder segment, raw or percent-encoded', () => {
+    expect(normalizeRoute('/contacts/{{CONTACT_ID}}')).toBe('/contacts/:id');
+    expect(normalizeRoute('/contacts/%7B%7BCONTACT_ID%7D%7D')).toBe('/contacts/:id');
+  });
+
+  it('collapses two different contact emails to one route', () => {
+    expect(
+      new Set(
+        ['/contacts/a@example.com', '/contacts/b@example.com'].map(normalizeRoute),
+      ).size,
+    ).toBe(1);
+  });
 });

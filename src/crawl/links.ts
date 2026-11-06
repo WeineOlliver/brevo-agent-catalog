@@ -16,6 +16,20 @@ const SESSION_ENDING = /(?:log|sign)[-_]?out|^\/logout\b/i;
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 const LONG_HEX = /^[0-9a-f]{12,}$/i;
 const NUMERIC = /^\d+$/;
+/** Brevo keys contacts by email, so an address is an identifier here. */
+const EMAILISH = /@/;
+/** A sanitizer placeholder, raw or percent-encoded. */
+const PLACEHOLDER = /\{\{|%7B%7B/i;
+
+function isIdentifierSegment(segment: string): boolean {
+  return (
+    NUMERIC.test(segment) ||
+    UUID.test(segment) ||
+    LONG_HEX.test(segment) ||
+    EMAILISH.test(segment) ||
+    PLACEHOLDER.test(segment)
+  );
+}
 
 export function extractNavLinks(html: string, origin: string): string[] {
   const found = new Set<string>();
@@ -55,9 +69,7 @@ export function normalizeRoute(urlOrPath: string): string {
 
   const masked = path
     .split('/')
-    .map((segment) =>
-      NUMERIC.test(segment) || UUID.test(segment) || LONG_HEX.test(segment) ? ':id' : segment,
-    )
+    .map((segment) => (isIdentifierSegment(segment) ? ':id' : segment))
     .join('/');
 
   const trimmed = masked.replace(/\/+$/, '');

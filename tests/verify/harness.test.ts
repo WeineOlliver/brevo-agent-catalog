@@ -129,4 +129,58 @@ describe('applyOutcome', () => {
     applyOutcome(action, assessOutcome(action, [capture()]));
     expect(action.verification.status).toBe('observed');
   });
+
+  it('never demotes an already-verified entry, because that destroys evidence', () => {
+    const alreadyVerified = applyOutcome(action, assessOutcome(action, [capture()]));
+    const reRun = applyOutcome(alreadyVerified, assessOutcome(alreadyVerified, []));
+
+    expect(reRun.verification.status).toBe('verified');
+    expect(reRun.verification.verified_at).toBe(alreadyVerified.verification.verified_at);
+    expect(reRun.verification.evidence).toEqual(alreadyVerified.verification.evidence);
+  });
+});
+
+describe('redaction of evidence', () => {
+  it('never writes a raw response body into the entry', () => {
+    // Evidence lands in actions/*.json, which is committed and public. The
+    // sanitizer only covers captures/, so this path must redact for itself.
+    const outcome = assessOutcome(
+      action,
+      [capture({ responseBody: '{"id":5512,"email":"weine@realdomain.com"}' })],
+      { accountIds: ['5512'], emails: ['weine@realdomain.com'] },
+    );
+    const joined = outcome.evidence.join(' ');
+    expect(joined).not.toContain('weine@realdomain.com');
+    expect(joined).not.toContain('5512');
+    expect(joined).toContain('{{EMAIL}}');
+  });
+
+  it('redacts a credential shape in the response even with no configured rules', () => {
+    const outcome = assessOutcome(action, [
+      capture({ responseBody: '{"csrf":"aB3dEfGh1jKlMnOpQrStUvWx"}' }),
+    ]);
+    expect(outcome.evidence.join(' ')).not.toContain('aB3dEfGh1jKlMnOpQrStUvWx');
+  });
+});
+
+describe('host matching', () => {
+  it('does not verify an action from a third-party host answering the same path', () => {
+    const outcome = assessOutcome(action, [
+      capture({ url: 'https://evil.example.com/contact/add' }),
+    ]);
+    expect(outcome.status).toBe('observed');
+  });
+
+  it('verifies from a brevo-owned host', () => {
+    expect(
+      assessOutcome(action, [capture({ url: 'https://api.brevo.com/contact/add' })]).status,
+    ).toBe('verified');
+  });
+
+  it('names the host problem in the reason, so the failure is diagnosable', () => {
+    const outcome = assessOutcome(action, [
+      capture({ url: 'https://evil.example.com/contact/add' }),
+    ]);
+    expect(outcome.status === 'observed' && outcome.reason).toMatch(/host/i);
+  });
 });

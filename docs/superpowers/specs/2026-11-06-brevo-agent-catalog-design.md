@@ -121,7 +121,7 @@ catalog and probes edge cases — so every entry must survive being questioned.
 - **Stack, decided:** TypeScript on Node 20, pnpm, Playwright, Zod, ajv.
 - **Language:** the entire repository is in **English**, without exception.
 - **Delivery:** public GitHub repository under the author's account; submission
-  is one email to the recruiter and `eduardo.godoy@testbox.com`.
+  is one email to the recruiter and the hiring manager (address redacted for publication).
 - **Crawl politeness:** same domain only, BFS, maximum 1 request per second. The
   automated link crawl does not click send/delete controls; all mutation happens
   in the separate, explicit interaction and verification stages.
