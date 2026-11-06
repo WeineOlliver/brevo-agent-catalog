@@ -4,12 +4,15 @@ A catalog of Brevo's **business actions** — everything a user can do by clicki
 around the product — in a form an AI agent can act on without a human checking
 its work first.
 
-> **Status: pipeline complete and tested; not yet run against a live account.**
-> Every stage is implemented and covered by tests (268 passing). The stages that
-> require an authenticated Brevo session — the crawl, the write passes and
-> verification — need a manual login and have not run, so `actions/` is empty.
-> See [Running it](#running-it). Nothing in this repository reports a result it
-> has not measured.
+> **Status: the pipeline has run; the catalog is read-only so far.**
+> 38 routes crawled, 1176 requests captured, **118 actions catalogued** — but 108
+> of those 118 are `get`/`list` and exactly one is a write, so the selection eval
+> scores **0 of 20** on the tasks a user would actually ask for. A crawl that
+> clicks nothing sees only reads. The six write passes that fix this are built
+> and tested but need an interactive login that has not happened yet. Nothing
+> here is `verified`. See [docs/gaps.md](docs/gaps.md) and
+> [docs/eval.md](docs/eval.md) — every number in this repository is measured, and
+> the uncomfortable ones are stated first.
 
 ## Why this exists
 

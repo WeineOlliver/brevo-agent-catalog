@@ -72,10 +72,36 @@ Both were fixed in the design rather than discovered in the implementation. The
 implementation plan that followed was executed task by task under TDD, with every
 deviation from the plan recorded as a ruling at the time it was made.
 
+## What running it actually taught
+
+Two findings changed how I'd describe this problem, and both only appeared once
+the pipeline ran against a real account.
+
+**The public API and the product are different APIs.** Not overlapping subsets —
+different. 2 of 126 captured endpoints map onto an operation in Brevo's published
+spec. The app runs on ~20 internal microservices the public `/v3` surface does
+not wrap. The brief's premise is not a hypothetical about legacy systems; it is
+true of a modern SaaS product with a well-documented API.
+
+**A crawl that clicks nothing produces a read-only catalog.** 118 actions
+captured, 108 of them `get` or `list`, exactly one write. The selection eval
+scored 0 of 20 against the tasks a user would ask for. This was predicted as a
+risk in review before any code was written, mitigated by designing the
+interaction stage in — and then it happened anyway at full strength, because the
+mitigation had not been run yet. The lesson I would carry forward is that for
+this class of problem, interaction is the coverage mechanism and crawling is
+only reconnaissance.
+
+The second finding is also the clearest argument for having built the eval. A
+coverage count would have reported 118 actions and read as success.
+
 ## Current state
 
-The pipeline is complete and tested — 268 tests, strict TypeScript, clean
-typecheck. The stages requiring an authenticated Brevo session have not run,
-because they need a manual login that only the account holder can perform. No
-document in this repository reports a number it has not measured; see
-[gaps.md](gaps.md).
+The pipeline is complete and tested — 308 tests, strict TypeScript, clean
+typecheck, leak gate clean across every tracked file. It has run end to end
+against a live account: 38 routes crawled, 1176 requests captured and sanitized,
+118 actions catalogued, validated and indexed.
+
+What is missing is the write coverage described above. No document here reports a
+number it has not measured; the ones that look bad are in
+[gaps.md](gaps.md) and [eval.md](eval.md) rather than omitted.

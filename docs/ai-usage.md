@@ -61,11 +61,27 @@ Two mechanisms exist specifically to catch the model being wrong:
   naturally-phrased task to the right entry with the right inputs. Each failure
   is a description an agent could not resolve.
 
-> **Not yet measured.** Both require a live account and a built catalog, and
-> neither has run. The error-rate numbers that belong here — how many drafted
-> entries had wrong required fields or invented preconditions, and what changed
-> in the prompts as a result — are the single most valuable thing missing from
-> this submission. See [gaps.md](gaps.md).
+### What the measurements actually said
+
+**The selection eval: 0 of 20.** Against the crawl-only catalog, not one task was
+resolvable — see [eval.md](eval.md). The finding was not about model quality at
+all; it was that the pipeline had been feeding the model read traffic. That
+reframed the project and caused the interaction stage to be rewritten from one
+module to six.
+
+**The fail-safe clamp: 0 violations across 127 entries.** Every non-read action
+came out `destructive: true, idempotent: false` as designed. Worth stating
+because it is the one place the code deliberately overrides the model, and on
+real data it held.
+
+**The model behaved well where it was asked to.** 116 of 126 candidates produced
+a schema-valid entry. The 10 failures were provider-side (9 exhausted rate-limit
+retries, 1 duplicate id), not malformed output. The ajv repair loop did its job:
+nothing half-valid reached `actions/`.
+
+**Verification error rate: still unmeasured.** Executing drafted entries and
+comparing what they claimed against what happened is the most valuable number
+missing from this submission, and it needs the write passes to run first.
 
 ## AI used to build this
 
@@ -104,7 +120,39 @@ patched.
 
 ### What had to be fixed by hand
 
-Honest list, from this build:
+Honest list. The second group is more interesting than the first, because those
+bugs only existed once real data arrived — no amount of unit testing would have
+produced them.
+
+**Found by running it against the live account:**
+
+- **`storageState` does not carry Brevo's session.** Login reported success,
+  then the crawl — seconds later, in a fresh context — landed on
+  `login.brevo.com`. Playwright serialises cookies and localStorage but not
+  `sessionStorage`. Fixed by crawling in the context that signed in, so nothing
+  is ever restored.
+- **The dead-session guard skipped the first route**, so an invalid session
+  crawled one login page and exited *successfully*, reporting "visited 1 route,
+  40 requests". A silent false success is worse than a crash — the next stage
+  would have extracted a catalog from login-page traffic.
+- **`loadConfig` used `??`**, which does not fall back on an empty string, and
+  `.env.example` ships every key blank. The pipeline requested the model named
+  `""` and got 126 identical 404s. Anyone copying the example file would have hit
+  it.
+- **The default Groq model did not exist for this account.** Picked from general
+  knowledge instead of asking the API; `/models` settled it in one call.
+- **The Groq free tier limits tokens per minute, not requests**, so pacing the
+  caller could never be sufficient: 97 of 126 drafts failed with 429 and 3 with
+  413 from 8 KiB captured bodies. Fixed by honouring `Retry-After` and capping
+  prompt evidence.
+- **Mixing two extraction runs left 127 files for 118 endpoints.** The model
+  named some endpoints differently the second time, so overwriting by id left
+  both. Two ids for one action is an agent choosing a synonym at random; fixed
+  with a tested normalisation step.
+- **The crawler followed `/forgot-password`**, which redirects to the login host
+  and tripped the expired-session guard, ending a run after two routes.
+
+**Found while building, before any real data:**
 
 - The plan specified `zod-to-json-schema`'s `jsonSchema2020-12` target, which
   does not exist. Resolved by generating at 2019-09, setting `$schema` to

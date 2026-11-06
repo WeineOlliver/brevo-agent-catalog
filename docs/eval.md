@@ -34,24 +34,61 @@ A provider that rate-limits or answers in prose is recorded as a scored failure
 with a note, never an exception. An eval that dies on one bad response measures
 nothing.
 
-## Results
+## Results — run 1, against the crawl-only catalog
 
-> **Not yet run.** This requires a built catalog (`pnpm build:index`), which
-> requires the crawl, which requires a manual login. Nothing is reported here
-> because nothing has been measured.
+| | Result |
+|---|---|
+| Tasks | 20 |
+| Correct action selected | **0** |
+| Unscoreable (expected id absent from the catalog) | **20** |
 
-When it runs, this section should contain, in order:
+Not a single task was even scoreable. The catalog held 118 entries and none of
+them was any of the twenty things a user would ask for.
 
-| | Before description fixes | After |
-|---|---|---|
-| Correct action selected | — | — |
-| Correct inputs (of tasks declaring them) | — | — |
-| Unscoreable (expected id not in catalog) | — | — |
+The reason is visible the moment you count verbs across those 118 entries:
 
-Plus, for each failure: the task, the action chosen instead, and what changed in
-the description. The **before/after pair is the point** — a single number says
-how good the catalog happened to be, while the pair says the pipeline has a
-working feedback loop, which is the more interesting claim.
+| Leading verb | Count |
+|---|---|
+| `get` | 75 |
+| `list` | 33 |
+| `fetch` | 2 |
+| everything else | 7 |
+| **writes** | **1** |
+
+**A navigation-only crawl produces a read-only catalog.** The crawler follows
+links and clicks nothing, so it observes `GET` traffic almost exclusively. Every
+action the brief itself names as an example — create a contact, add a contact to
+a list, create an email campaign — exists only in the request a form submission
+causes. None of them was ever on the wire.
+
+### Why this is the most useful number in the submission
+
+A coverage count would have reported 118 actions and looked like success. The
+eval is what turned "118 entries" into "0 of 20 tasks", and that reframed the
+whole project: the write passes stopped being a supporting stage and became the
+coverage mechanism. The entire interaction stage was rewritten in response —
+from one module to six, covering exactly where these twenty tasks live.
+
+This is also precisely the failure the design reviewer predicted before any code
+was written: *"a read-only link crawl does not observe the POST/PUT calls, which
+are precisely the business actions the catalog is about."* It was recorded as a
+known risk, the mitigation was designed in, and the eval then proved the risk was
+real rather than theoretical.
+
+## Results — run 2, after the write passes
+
+> **Not yet run.** The write passes need an interactive login that only the
+> account holder can perform, and that has not happened yet. Nothing is reported
+> here because nothing has been measured. See [gaps.md](gaps.md).
+
+The comparison to fill in, which is the interesting claim — not the absolute
+score but whether the feedback loop works:
+
+| | Crawl only | After write passes | After description fixes |
+|---|---|---|---|
+| Correct action selected | 0 / 20 | — | — |
+| Correct inputs | — | — | — |
+| Unscoreable | 20 / 20 | — | — |
 
 ## What the failures will mean
 

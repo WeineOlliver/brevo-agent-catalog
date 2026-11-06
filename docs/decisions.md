@@ -205,3 +205,45 @@ written beforehand would have been a guess dressed as a requirement.
 
 **Cost accepted:** Verified coverage cannot be planned or promised in advance,
 and the verify recipe set starts almost empty.
+
+---
+
+## 10. Crawl in the signed-in browser context, not from a saved session
+
+**Decided:** `pnpm crawl --login` and `pnpm interact` sign in and work in one
+browser context. Nothing is serialised and restored.
+
+**Rejected:** Playwright's `storageState`, which is the obvious approach and was
+the original design.
+
+**Why:** It does not work against Brevo. Login detected the dashboard and saved
+state; the crawl, starting seconds later in a fresh context, landed on
+`login.brevo.com`. `storageState` carries cookies and localStorage but **not
+`sessionStorage`**. Rather than reverse-engineer which token Brevo keeps where —
+interesting, but not what this project is about — the restore step was removed.
+
+**Cost accepted:** The crawl must run headed and attended, and cannot be
+scheduled. For a stage that requires a human login anyway, that was already true.
+
+---
+
+## 11. Interaction is the coverage mechanism; crawling is reconnaissance
+
+**Decided:** Six write passes (contacts, lists, segments, campaigns, templates,
+senders) are the primary source of business actions. The crawl's job is to map
+the route surface and the read API.
+
+**Rejected:** Treating the crawl as the main discovery mechanism with write
+passes as a supplement, which is how the original plan was weighted.
+
+**Why:** Measured. The crawl produced 118 actions of which 108 are `get`/`list`
+and one is a write, and the selection eval scored 0 of 20 on the tasks a user
+would actually ask for. A crawler that follows links and clicks nothing observes
+`GET` traffic; every action the brief names as an example lives behind a form
+submission. This was flagged as a risk in design review before any code existed,
+and then occurred at full strength because the mitigation had not been run.
+
+**Cost accepted:** Coverage now depends on hand-written interaction passes, which
+do not scale and break when Brevo's markup drifts. Each new module is a
+development task, not a crawl parameter. That is a real ceiling on Coverage and
+it is the honest trade: a smaller catalog of actions that are actually actions.
