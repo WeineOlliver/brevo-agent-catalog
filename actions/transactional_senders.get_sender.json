@@ -1,0 +1,79 @@
+{
+  "id": "transactional_senders.get_sender",
+  "module": "transactional_senders",
+  "name": "Get transactional sender",
+  "description": "Call this when you need to retrieve the details of a specific transactional sender identified by its email address. Use a list‑senders action instead if you need to enumerate all senders.",
+  "preconditions": [
+    "A transactional sender with the given email must already exist."
+  ],
+  "inputs": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "string",
+        "description": "The email address that identifies the transactional sender."
+      }
+    },
+    "required": [
+      "id"
+    ],
+    "additionalProperties": false
+  },
+  "outputs": {
+    "type": "object",
+    "description": "A map keyed by the internal sender ID containing the sender details.",
+    "additionalProperties": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string",
+          "description": "The sender's email address."
+        },
+        "from": {
+          "type": "string",
+          "description": "The display name used as the sender."
+        },
+        "blocked": {
+          "type": "integer",
+          "enum": [
+            0,
+            1
+          ],
+          "description": "Whether the sender is blocked (1) or active (0)."
+        }
+      },
+      "required": [
+        "email",
+        "from",
+        "blocked"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "side_effects": [],
+  "destructive": false,
+  "idempotent": true,
+  "ui_path": [
+    "Contacts",
+    "Transactional",
+    "Senders",
+    "View sender"
+  ],
+  "internal_endpoint": {
+    "method": "GET",
+    "path": "/contact/backend/transactional/senders/:id",
+    "body_example": null
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/contact-index-id.json"
+    ],
+    "verified_at": null
+  }
+}

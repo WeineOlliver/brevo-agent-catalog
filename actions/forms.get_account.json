@@ -1,0 +1,167 @@
+{
+  "id": "forms.get_account",
+  "module": "forms",
+  "name": "Get account information",
+  "description": "Call this when you need to retrieve the account configuration and current user details for the Forms application, such as organization name, plan, locale, and other settings. Use the forms.get_form action instead if you only need details about a specific form.",
+  "preconditions": [
+    "A valid authentication token must be provided."
+  ],
+  "inputs": {
+    "type": "object",
+    "properties": {},
+    "required": []
+  },
+  "outputs": {
+    "type": "object",
+    "properties": {
+      "organizationConfig": {
+        "type": "object",
+        "description": "Configuration of the organization.",
+        "properties": {
+          "organisationName": {
+            "type": "string",
+            "description": "The name of the organization."
+          },
+          "planTag": {
+            "type": "string",
+            "description": "The plan tag of the organization.",
+            "enum": [
+              "FREE",
+              "STARTER",
+              "PREMIUM",
+              "ENTERPRISE"
+            ]
+          }
+        },
+        "required": [
+          "organisationName",
+          "planTag"
+        ]
+      },
+      "currentAccount": {
+        "type": "object",
+        "description": "Details of the currently authenticated account.",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Account identifier."
+          },
+          "email": {
+            "type": "string",
+            "description": "Account email address."
+          },
+          "locale": {
+            "type": "string",
+            "description": "Locale of the account, e.g., en_US."
+          },
+          "timezone": {
+            "type": "string",
+            "description": "Timezone of the account."
+          },
+          "name": {
+            "type": "string",
+            "description": "Full name of the account holder."
+          },
+          "rank": {
+            "type": "string",
+            "description": "Rank of the user within the organization."
+          },
+          "mySqlId": {
+            "type": "string",
+            "description": "Internal MySQL identifier."
+          }
+        },
+        "required": [
+          "id",
+          "email",
+          "locale",
+          "timezone",
+          "name",
+          "rank",
+          "mySqlId"
+        ]
+      },
+      "timezone": {
+        "type": "string",
+        "description": "Default timezone for the account."
+      },
+      "isSMTPEnabled": {
+        "type": "boolean",
+        "description": "Indicates if SMTP is enabled."
+      },
+      "transactionalStatus": {
+        "type": "string",
+        "description": "Status of transactional email verification.",
+        "enum": [
+          "phone_not_verified",
+          "phone_verified",
+          "email_not_verified",
+          "email_verified"
+        ]
+      },
+      "isSenderAvailable": {
+        "type": "boolean",
+        "description": "Indicates if a sender address is available."
+      },
+      "defaultCountryCode": {
+        "type": "string",
+        "description": "Default country code for the account."
+      },
+      "auth_token": {
+        "type": "string",
+        "description": "Authentication token for the session."
+      },
+      "pricingVersion": {
+        "type": "string",
+        "description": "Version of the pricing model."
+      },
+      "companyIntegrationEnabled": {
+        "type": "boolean",
+        "description": "Indicates if company integration features are enabled."
+      },
+      "features": {
+        "type": "object",
+        "description": "Feature flags for the account.",
+        "additionalProperties": true
+      }
+    },
+    "required": [
+      "organizationConfig",
+      "currentAccount",
+      "timezone",
+      "isSMTPEnabled",
+      "transactionalStatus",
+      "isSenderAvailable",
+      "defaultCountryCode",
+      "auth_token",
+      "pricingVersion",
+      "companyIntegrationEnabled",
+      "features"
+    ]
+  },
+  "side_effects": [],
+  "destructive": false,
+  "idempotent": true,
+  "ui_path": [
+    "Contact",
+    "Forms",
+    "Subscription"
+  ],
+  "internal_endpoint": {
+    "method": "GET",
+    "path": "/forms-api/account",
+    "body_example": null
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "free",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/contact-forms-app-subscription.json"
+    ],
+    "verified_at": null
+  }
+}

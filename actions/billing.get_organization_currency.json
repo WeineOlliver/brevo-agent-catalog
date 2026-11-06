@@ -1,0 +1,49 @@
+{
+  "id": "billing.get_organization_currency",
+  "module": "billing",
+  "name": "Get organization currency",
+  "description": "Call this when you need to retrieve the currency code used for the organization's billing (e.g., to display amounts in the correct currency). Use a broader organization‑details action instead when you also need other organization information.",
+  "preconditions": [],
+  "inputs": {
+    "type": "object",
+    "properties": {},
+    "required": []
+  },
+  "outputs": {
+    "type": "object",
+    "properties": {
+      "currency_code": {
+        "type": "string",
+        "description": "ISO 4217 currency code (e.g., \"BRL\")."
+      }
+    },
+    "required": [
+      "currency_code"
+    ]
+  },
+  "side_effects": [],
+  "destructive": false,
+  "idempotent": true,
+  "ui_path": [
+    "Tasks",
+    "Organization",
+    "Currency"
+  ],
+  "internal_endpoint": {
+    "method": "GET",
+    "path": "/billing/api/organization/currency",
+    "body_example": null
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/tasks.json"
+    ],
+    "verified_at": null
+  }
+}

@@ -1,0 +1,55 @@
+{
+  "id": "analytics.get_live_updates_token",
+  "module": "analytics",
+  "name": "Get live updates token",
+  "description": "Call this when you need to obtain a token for receiving live updates in analytics or automation dashboards. If the user does not have any active integrations, the response will contain an error; in that case, use the action to configure or activate an integration instead.",
+  "preconditions": [
+    "The user must have at least one active integration."
+  ],
+  "inputs": {
+    "type": "object",
+    "properties": {},
+    "required": []
+  },
+  "outputs": {
+    "type": "object",
+    "properties": {
+      "error": {
+        "type": "string",
+        "description": "Error message when no active integrations are present."
+      },
+      "token": {
+        "type": "string",
+        "description": "A JWT or similar token used for live update connections."
+      }
+    },
+    "required": []
+  },
+  "side_effects": [],
+  "destructive": false,
+  "idempotent": true,
+  "ui_path": [
+    "Analytics",
+    "Live updates",
+    "Refresh token"
+  ],
+  "internal_endpoint": {
+    "method": "GET",
+    "path": "/feApi/liveUpdatesToken",
+    "body_example": null
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/analytics.json",
+      "captures/clean/automation-advanced.json",
+      "captures/clean/automation-automations.json"
+    ],
+    "verified_at": null
+  }
+}

@@ -1,0 +1,168 @@
+{
+  "id": "marketing_campaign.get_features",
+  "module": "marketing_campaign",
+  "name": "Get feature toggles",
+  "description": "Call this when you need to retrieve the current set of feature flags enabled for the client in the Marketing Campaign module. Use the (hypothetical) \"marketing_campaign.update_features\" action if you need to modify any of these flags instead.",
+  "preconditions": [],
+  "inputs": {
+    "type": "object",
+    "properties": {},
+    "required": []
+  },
+  "outputs": {
+    "type": "object",
+    "properties": {
+      "old-flow-migration": {
+        "type": "boolean",
+        "description": "Whether the old flow migration feature is enabled."
+      },
+      "plan-management-service": {
+        "type": "boolean",
+        "description": "Whether the plan management service feature is enabled."
+      },
+      "email-campaign-duplicate": {
+        "type": "boolean",
+        "description": "Whether the email campaign duplicate feature is enabled."
+      },
+      "new-campaign-dashboard": {
+        "type": "boolean",
+        "description": "Whether the new campaign dashboard feature is enabled."
+      },
+      "compliance-allowed": {
+        "type": "boolean",
+        "description": "Whether compliance is allowed."
+      },
+      "marketing-subject-ai-disabled": {
+        "type": "boolean",
+        "description": "Whether the AI-generated marketing subject is disabled."
+      },
+      "preview-on-email-clients": {
+        "type": "boolean",
+        "description": "Whether preview on email clients is enabled."
+      },
+      "editor-beta": {
+        "type": "boolean",
+        "description": "Whether the editor beta feature is enabled."
+      },
+      "email-campaigns-limit-disabled": {
+        "type": "boolean",
+        "description": "Whether the email campaigns limit is disabled."
+      },
+      "email-campaign-frequency-cap": {
+        "type": "boolean",
+        "description": "Whether the email campaign frequency cap feature is enabled."
+      },
+      "es-new-sender-domain": {
+        "type": "boolean",
+        "description": "Whether the new sender domain feature for ES is enabled."
+      },
+      "ent-users-push-experiment": {
+        "type": "boolean",
+        "description": "Whether the enterprise users push experiment is enabled."
+      },
+      "self-serve-users-push-experiment": {
+        "type": "boolean",
+        "description": "Whether the self‑serve users push experiment is enabled."
+      },
+      "duplicate-identifiers": {
+        "type": "boolean",
+        "description": "Whether duplicate identifiers handling is enabled."
+      },
+      "dedup-customization-enabled": {
+        "type": "boolean",
+        "description": "Whether deduplication customization is enabled."
+      },
+      "show-nova-agent": {
+        "type": "boolean",
+        "description": "Whether the Nova agent is shown."
+      },
+      "email-subject-alternate-use-ai-text": {
+        "type": "boolean",
+        "description": "Whether alternate AI text for email subject is used."
+      },
+      "editor-ai-subject-email-campaigns": {
+        "type": "boolean",
+        "description": "Whether AI‑assisted subject editing for email campaigns is enabled."
+      },
+      "multilingual-email-campaigns": {
+        "type": "boolean",
+        "description": "Whether multilingual email campaigns are enabled."
+      },
+      "new-conversions": {
+        "type": "boolean",
+        "description": "Whether the new conversions feature is enabled."
+      },
+      "mkt-editor-aigen": {
+        "type": "boolean",
+        "description": "Whether the marketing editor AI generation feature is enabled."
+      },
+      "mkt-editor-aigen-force-enable": {
+        "type": "boolean",
+        "description": "Whether the marketing editor AI generation is forced enabled."
+      },
+      "enable-custom-utms": {
+        "type": "boolean",
+        "description": "Whether custom UTMs are enabled."
+      },
+      "new-signup-flow": {
+        "type": "boolean",
+        "description": "Whether the new signup flow is enabled."
+      },
+      "seg-predictive-list": {
+        "type": "boolean",
+        "description": "Whether predictive segment lists are enabled."
+      }
+    },
+    "required": [
+      "old-flow-migration",
+      "plan-management-service",
+      "email-campaign-duplicate",
+      "new-campaign-dashboard",
+      "compliance-allowed",
+      "marketing-subject-ai-disabled",
+      "preview-on-email-clients",
+      "editor-beta",
+      "email-campaigns-limit-disabled",
+      "email-campaign-frequency-cap",
+      "es-new-sender-domain",
+      "ent-users-push-experiment",
+      "self-serve-users-push-experiment",
+      "duplicate-identifiers",
+      "dedup-customization-enabled",
+      "show-nova-agent",
+      "email-subject-alternate-use-ai-text",
+      "editor-ai-subject-email-campaigns",
+      "multilingual-email-campaigns",
+      "new-conversions",
+      "mkt-editor-aigen",
+      "mkt-editor-aigen-force-enable",
+      "enable-custom-utms",
+      "new-signup-flow",
+      "seg-predictive-list"
+    ]
+  },
+  "side_effects": [],
+  "destructive": false,
+  "idempotent": true,
+  "ui_path": [
+    "Templates",
+    "Listing"
+  ],
+  "internal_endpoint": {
+    "method": "GET",
+    "path": "/marketing-campaign/api/client/toggle-features",
+    "body_example": null
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/templates-listing.json"
+    ],
+    "verified_at": null
+  }
+}

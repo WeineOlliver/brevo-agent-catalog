@@ -1,0 +1,120 @@
+{
+  "id": "accounts.list_accounts",
+  "module": "accounts",
+  "name": "List accounts",
+  "description": "Call this when you need to retrieve the full list of accounts (companies) visible to the current user, including their email, name details, timezone, locale, memberships, login status and activity flag. Use the 'accounts.get_account' action if you only need a single account by its ID instead.",
+  "preconditions": [],
+  "inputs": {
+    "type": "object",
+    "properties": {},
+    "required": []
+  },
+  "outputs": {
+    "type": "array",
+    "items": {
+      "type": "object",
+      "properties": {
+        "_id": {
+          "type": "string",
+          "description": "Unique identifier of the account."
+        },
+        "email": {
+          "type": "string",
+          "format": "email",
+          "description": "Primary email address of the account."
+        },
+        "name": {
+          "type": "object",
+          "properties": {
+            "familyName": {
+              "type": "string",
+              "description": "Family (last) name of the account holder."
+            },
+            "givenName": {
+              "type": "string",
+              "description": "Given (first) name of the account holder."
+            }
+          },
+          "required": [
+            "familyName",
+            "givenName"
+          ],
+          "description": "Full name of the account holder."
+        },
+        "timezone": {
+          "type": "string",
+          "description": "IANA timezone identifier for the account."
+        },
+        "locale": {
+          "type": "string",
+          "description": "Locale code for the account (e.g., en_US)."
+        },
+        "memberships": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "organization": {
+                "type": "string",
+                "description": "Identifier of the organization the account belongs to."
+              },
+              "rank": {
+                "type": "string",
+                "description": "Rank or role of the account within the organization."
+              }
+            },
+            "required": [
+              "organization",
+              "rank"
+            ]
+          },
+          "description": "List of organization memberships for the account."
+        },
+        "loginStatus": {
+          "type": "boolean",
+          "description": "Whether the account is currently logged in."
+        },
+        "inactive": {
+          "type": "boolean",
+          "description": "Flag indicating if the account is inactive."
+        }
+      },
+      "required": [
+        "_id",
+        "email",
+        "name",
+        "timezone",
+        "locale",
+        "memberships",
+        "loginStatus",
+        "inactive"
+      ]
+    }
+  },
+  "side_effects": [],
+  "destructive": false,
+  "idempotent": true,
+  "ui_path": [
+    "Companies",
+    "Settings"
+  ],
+  "internal_endpoint": {
+    "method": "GET",
+    "path": "/crm/backend/accounts",
+    "body_example": null
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/companies-settings.json",
+      "captures/clean/companies.json",
+      "captures/clean/contact-index-id.json"
+    ],
+    "verified_at": null
+  }
+}

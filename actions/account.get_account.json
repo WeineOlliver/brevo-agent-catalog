@@ -1,0 +1,68 @@
+{
+  "id": "account.get_account",
+  "module": "account",
+  "name": "Get account",
+  "description": "Call this when you need to retrieve the current analytics plan, pricing version, and enabled status for the Brevo account. Use an account update action instead if you need to modify any of these settings.",
+  "preconditions": [],
+  "inputs": {
+    "type": "object",
+    "properties": {},
+    "required": []
+  },
+  "outputs": {
+    "type": "object",
+    "properties": {
+      "org_id": {
+        "type": "string",
+        "description": "The unique identifier of the organization."
+      },
+      "analytics_plan_type": {
+        "type": "string",
+        "description": "The type of analytics plan assigned to the account."
+      },
+      "plan_name": {
+        "type": "string",
+        "description": "Human‑readable name of the plan."
+      },
+      "pricing_version": {
+        "type": "string",
+        "description": "Version of the pricing model in effect."
+      },
+      "analytics_enabled": {
+        "type": "boolean",
+        "description": "Indicates whether analytics features are enabled for the account."
+      }
+    },
+    "required": [
+      "org_id",
+      "analytics_plan_type",
+      "plan_name",
+      "pricing_version",
+      "analytics_enabled"
+    ]
+  },
+  "side_effects": [],
+  "destructive": false,
+  "idempotent": true,
+  "ui_path": [
+    "Analytics",
+    "Account"
+  ],
+  "internal_endpoint": {
+    "method": "GET",
+    "path": "/account",
+    "body_example": null
+  },
+  "public_api": {
+    "exists": true,
+    "operationId": "getAccount"
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/analytics.json"
+    ],
+    "verified_at": null
+  }
+}

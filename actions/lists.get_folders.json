@@ -1,0 +1,86 @@
+{
+  "id": "lists.get_folders",
+  "module": "lists",
+  "name": "Get list folders",
+  "description": "Call this when you need to retrieve the folder hierarchy that groups contact lists in the UI. Use the \"lists.get_lists\" action instead if you need the actual lists within a folder rather than the folder metadata.",
+  "preconditions": [],
+  "inputs": {
+    "type": "object",
+    "properties": {},
+    "required": []
+  },
+  "outputs": {
+    "type": "object",
+    "properties": {
+      "folders_data": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "folder_id": {
+              "type": "integer",
+              "description": "Unique identifier of the folder."
+            },
+            "folder_name": {
+              "type": "string",
+              "description": "Name of the folder."
+            },
+            "list_count": {
+              "type": "integer",
+              "description": "Number of static lists contained in the folder."
+            },
+            "is_default": {
+              "type": "boolean",
+              "description": "Indicates whether this folder is the default folder."
+            }
+          },
+          "required": [
+            "folder_id",
+            "folder_name",
+            "list_count",
+            "is_default"
+          ]
+        },
+        "description": "Array of folder metadata."
+      },
+      "total_list_count": {
+        "type": "integer",
+        "description": "Total number of static lists across all folders."
+      },
+      "total_dynamic_list_count": {
+        "type": "integer",
+        "description": "Total number of dynamic lists across all folders."
+      }
+    },
+    "required": [
+      "folders_data",
+      "total_list_count",
+      "total_dynamic_list_count"
+    ]
+  },
+  "side_effects": [],
+  "destructive": false,
+  "idempotent": true,
+  "ui_path": [
+    "Contacts",
+    "List listing",
+    "Folders"
+  ],
+  "internal_endpoint": {
+    "method": "GET",
+    "path": "/lists/get-folders",
+    "body_example": null
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/contact-list-listing.json"
+    ],
+    "verified_at": null
+  }
+}

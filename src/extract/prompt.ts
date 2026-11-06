@@ -79,16 +79,43 @@ the web app, so the catalog entry is the only description of it that exists.`;
   return lines.join('\n');
 }
 
+/**
+ * Captured bodies are up to 8 KiB each. Sending them whole blew the provider's
+ * per-request size limit outright and its tokens-per-minute limit almost
+ * everywhere else, so evidence is capped: a body's shape is what matters here,
+ * and the first few hundred characters carry it.
+ */
+const MAX_BODY_CHARS = 700;
+const MAX_SAMPLES = 2;
+
+function shorten(body: string): { text: string; shortened: boolean } {
+  if (body.length <= MAX_BODY_CHARS) return { text: body, shortened: false };
+  return { text: body.slice(0, MAX_BODY_CHARS), shortened: true };
+}
+
 function describeSamples(candidate: ActionCandidate): string {
   return candidate.samples
+    .slice(0, MAX_SAMPLES)
     .map((sample, i) => {
       const parts = [
         `Example ${i + 1}: ${sample.method} ${sample.url} -> ${sample.status}`,
         `  seen on app route: ${sample.route}`,
       ];
-      if (sample.requestBody !== null) parts.push(`  request body: ${sample.requestBody}`);
-      if (sample.responseBody !== null) parts.push(`  response body: ${sample.responseBody}`);
-      if (sample.truncated) parts.push(`  (bodies above are truncated)`);
+
+      let shortened = sample.truncated;
+      if (sample.requestBody !== null) {
+        const body = shorten(sample.requestBody);
+        shortened = shortened || body.shortened;
+        parts.push(`  request body: ${body.text}`);
+      }
+      if (sample.responseBody !== null) {
+        const body = shorten(sample.responseBody);
+        shortened = shortened || body.shortened;
+        parts.push(`  response body: ${body.text}`);
+      }
+      if (shortened) {
+        parts.push('  (bodies above are shortened — infer the shape, not the full contents)');
+      }
       return parts.join('\n');
     })
     .join('\n\n');

@@ -1,0 +1,51 @@
+{
+  "id": "sms.get_realtime_wizard_status",
+  "module": "sms",
+  "name": "Get realtime SMS wizard status",
+  "description": "Call this when you need to know whether any SMS has been sent during the current realtime wizard session. Use the broader statistics endpoint instead if you need aggregate SMS metrics over a longer period.",
+  "preconditions": [],
+  "inputs": {
+    "type": "object",
+    "properties": {},
+    "required": []
+  },
+  "outputs": {
+    "type": "object",
+    "properties": {
+      "has_sent_sms": {
+        "type": "boolean",
+        "description": "Indicates whether an SMS has been sent in the realtime wizard."
+      }
+    },
+    "required": [
+      "has_sent_sms"
+    ]
+  },
+  "side_effects": [],
+  "destructive": false,
+  "idempotent": true,
+  "ui_path": [
+    "Transactional",
+    "SMS",
+    "Logs"
+  ],
+  "internal_endpoint": {
+    "method": "GET",
+    "path": "/api/sms/realtime/wizard/status",
+    "body_example": null
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/transactional-sms-logs.json",
+      "captures/clean/transactional-sms-real-time.json",
+      "captures/clean/transactional-sms-statistics.json"
+    ],
+    "verified_at": null
+  }
+}

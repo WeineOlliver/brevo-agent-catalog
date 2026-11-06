@@ -1,0 +1,240 @@
+{
+  "id": "lists.get_lists_and_segments",
+  "module": "lists",
+  "name": "Get lists and segments",
+  "description": "Call this when you need to retrieve the full hierarchy of contact folders, lists, segments, and categories as shown on the Contacts → List page. If you only need the simple list of contact lists without folder or segment information, use the \"List contact lists\" action instead.",
+  "preconditions": [],
+  "inputs": {
+    "type": "object",
+    "properties": {},
+    "required": []
+  },
+  "outputs": {
+    "type": "object",
+    "properties": {
+      "folder": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "_id": {
+              "type": "object",
+              "properties": {
+                "timestamp": {
+                  "type": "integer",
+                  "description": "Timestamp component of the identifier."
+                }
+              },
+              "required": [
+                "timestamp"
+              ]
+            },
+            "id": {
+              "type": "integer",
+              "description": "Folder identifier."
+            },
+            "name": {
+              "type": "string",
+              "description": "Folder name."
+            },
+            "entered": {
+              "type": "string",
+              "description": "Creation date and time."
+            },
+            "listorder": {
+              "type": "integer",
+              "description": "Order of the folder."
+            },
+            "list_parent": {
+              "type": "integer",
+              "description": "Parent folder identifier (0 if none)."
+            },
+            "clientid": {
+              "type": "integer",
+              "description": "Client identifier."
+            },
+            "is_folder": {
+              "type": "integer",
+              "enum": [
+                0,
+                1
+              ],
+              "description": "Flag indicating this is a folder (1) or not (0)."
+            },
+            "blacklisted": {
+              "type": "integer",
+              "enum": [
+                0,
+                1
+              ],
+              "description": "Flag indicating if the folder is blacklisted."
+            },
+            "count": {
+              "type": "integer",
+              "description": "Number of contacts in the folder."
+            },
+            "is_default_folder": {
+              "type": "boolean",
+              "description": "True if this is the default folder."
+            }
+          },
+          "required": [
+            "_id",
+            "id",
+            "name",
+            "entered",
+            "listorder",
+            "list_parent",
+            "clientid",
+            "is_folder",
+            "blacklisted",
+            "count",
+            "is_default_folder"
+          ]
+        }
+      },
+      "list": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "_id": {
+              "type": "object",
+              "properties": {
+                "timestamp": {
+                  "type": "integer",
+                  "description": "Timestamp component of the identifier."
+                }
+              },
+              "required": [
+                "timestamp"
+              ]
+            },
+            "id": {
+              "type": "integer",
+              "description": "List identifier."
+            },
+            "name": {
+              "type": "string",
+              "description": "List name."
+            },
+            "entered": {
+              "type": "string",
+              "description": "Creation date and time."
+            },
+            "listorder": {
+              "type": "integer",
+              "description": "Order of the list."
+            },
+            "list_parent": {
+              "type": "integer",
+              "description": "Parent folder identifier."
+            },
+            "parent_name": {
+              "type": "string",
+              "description": "Name of the parent folder."
+            },
+            "clientid": {
+              "type": "integer",
+              "description": "Client identifier."
+            },
+            "is_folder": {
+              "type": "integer",
+              "enum": [
+                0,
+                1
+              ],
+              "description": "Flag indicating this is a folder (1) or a list (0)."
+            },
+            "blacklisted": {
+              "type": "integer",
+              "enum": [
+                0,
+                1
+              ],
+              "description": "Flag indicating if the list is blacklisted."
+            },
+            "count": {
+              "type": "integer",
+              "description": "Number of contacts in the list."
+            }
+          },
+          "required": [
+            "_id",
+            "id",
+            "name",
+            "entered",
+            "listorder",
+            "list_parent",
+            "parent_name",
+            "clientid",
+            "is_folder",
+            "blacklisted",
+            "count"
+          ]
+        }
+      },
+      "segment": {
+        "type": "array",
+        "items": {
+          "type": "object"
+        }
+      },
+      "category": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "description": "Category identifier."
+            },
+            "name": {
+              "type": "string",
+              "description": "Category name."
+            },
+            "default": {
+              "type": "boolean",
+              "description": "True if this is the default category."
+            }
+          },
+          "required": [
+            "id",
+            "name",
+            "default"
+          ]
+        }
+      }
+    },
+    "required": [
+      "folder",
+      "list",
+      "segment",
+      "category"
+    ]
+  },
+  "side_effects": [],
+  "destructive": false,
+  "idempotent": true,
+  "ui_path": [
+    "Contacts",
+    "Lists"
+  ],
+  "internal_endpoint": {
+    "method": "GET",
+    "path": "/contact/backend/contacts/lists_and_segments",
+    "body_example": null
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/contact-list.json"
+    ],
+    "verified_at": null
+  }
+}

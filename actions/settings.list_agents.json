@@ -1,0 +1,95 @@
+{
+  "id": "settings.list_agents",
+  "module": "settings",
+  "name": "List AI agents",
+  "description": "Call this when you need to retrieve the current AI agents configuration for the account. Use a more specific endpoint (if one existed) to fetch details for a single agent instead of the whole list.",
+  "preconditions": [],
+  "inputs": {
+    "type": "object",
+    "properties": {},
+    "required": []
+  },
+  "outputs": {
+    "type": "array",
+    "items": {
+      "type": "object",
+      "properties": {
+        "parent": {
+          "type": "string",
+          "description": "The parent group identifier for the AI agents."
+        },
+        "status": {
+          "type": "boolean",
+          "description": "Overall status of the AI agents feature."
+        },
+        "agents": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string",
+                "description": "Identifier of the agent (e.g., marketing, sales)."
+              },
+              "badge_name": {
+                "type": "string",
+                "enum": [
+                  "free",
+                  "pro"
+                ],
+                "description": "Subscription tier badge associated with the agent."
+              },
+              "app_enabled": {
+                "type": "boolean",
+                "description": "Whether the agent is enabled in the application UI."
+              },
+              "status": {
+                "type": "boolean",
+                "description": "Operational status of the specific agent."
+              }
+            },
+            "required": [
+              "name",
+              "badge_name",
+              "app_enabled",
+              "status"
+            ]
+          },
+          "description": "List of AI agents with their configuration."
+        }
+      },
+      "required": [
+        "parent",
+        "status",
+        "agents"
+      ]
+    }
+  },
+  "side_effects": [],
+  "destructive": false,
+  "idempotent": true,
+  "ui_path": [
+    "Settings",
+    "AI",
+    "Agents"
+  ],
+  "internal_endpoint": {
+    "method": "GET",
+    "path": "/settings/ai/agents",
+    "body_example": null
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/campaigns-listing.json",
+      "captures/clean/companies-settings.json",
+      "captures/clean/companies.json"
+    ],
+    "verified_at": null
+  }
+}

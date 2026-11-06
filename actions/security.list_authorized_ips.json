@@ -1,0 +1,75 @@
+{
+  "id": "security.list_authorized_ips",
+  "module": "security",
+  "name": "List authorized IPs",
+  "description": "Call this when you need to retrieve the current list of IP addresses authorized for the account. If you need to add, update, or remove an IP address, use the corresponding security.add_authorized_ip or security.remove_authorized_ip actions instead.",
+  "preconditions": [],
+  "inputs": {
+    "type": "object",
+    "properties": {
+      "type": {
+        "type": "string",
+        "description": "Optional filter for IP status. Example values: \"detected\", \"undetected\"."
+      },
+      "limit": {
+        "type": "integer",
+        "description": "Maximum number of IP records to return per page. Defaults to 20."
+      },
+      "offset": {
+        "type": "integer",
+        "description": "Number of records to skip for pagination. Defaults to 0."
+      }
+    },
+    "required": []
+  },
+  "outputs": {
+    "type": "object",
+    "properties": {
+      "ips": {
+        "type": "array",
+        "description": "Array of authorized IP address entries.",
+        "items": {
+          "type": "string"
+        }
+      },
+      "count": {
+        "type": "integer",
+        "description": "Number of IP entries returned in this response."
+      },
+      "total_count": {
+        "type": "integer",
+        "description": "Total number of authorized IP entries across all pages."
+      }
+    },
+    "required": [
+      "ips",
+      "count",
+      "total_count"
+    ]
+  },
+  "side_effects": [],
+  "destructive": false,
+  "idempotent": true,
+  "ui_path": [
+    "Security",
+    "Authorized IPs",
+    "List"
+  ],
+  "internal_endpoint": {
+    "method": "GET",
+    "path": "/ips/list",
+    "body_example": null
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/security-authorised-ips.json"
+    ],
+    "verified_at": null
+  }
+}

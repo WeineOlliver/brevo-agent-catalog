@@ -1,0 +1,78 @@
+{
+  "id": "transactional.get_email_log_filters",
+  "module": "transactional",
+  "name": "Get email log filters",
+  "description": "Call this when you need to retrieve the list of tags and sender identities that can be used to filter transactional email logs in the UI. Use the separate action to fetch the actual logs (e.g., get_email_logs) when you need the log entries themselves.",
+  "preconditions": [],
+  "inputs": {
+    "type": "object",
+    "properties": {},
+    "required": []
+  },
+  "outputs": {
+    "type": "object",
+    "properties": {
+      "tags": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        },
+        "description": "Available tag strings for filtering email logs."
+      },
+      "senders": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "description": "Display name of the sender."
+            },
+            "email": {
+              "type": "string",
+              "format": "email",
+              "description": "Email address of the sender."
+            }
+          },
+          "required": [
+            "name",
+            "email"
+          ],
+          "additionalProperties": false
+        },
+        "description": "List of sender objects that can be used to filter logs."
+      }
+    },
+    "required": [
+      "tags",
+      "senders"
+    ],
+    "additionalProperties": false
+  },
+  "side_effects": [],
+  "destructive": false,
+  "idempotent": true,
+  "ui_path": [
+    "Transactional",
+    "Email",
+    "Logs",
+    "Filters"
+  ],
+  "internal_endpoint": {
+    "method": "GET",
+    "path": "/api/email/logs/filters/data",
+    "body_example": null
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/transactional-email-logs.json"
+    ],
+    "verified_at": null
+  }
+}

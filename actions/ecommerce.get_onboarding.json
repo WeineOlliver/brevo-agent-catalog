@@ -1,0 +1,67 @@
+{
+  "id": "ecommerce.get_onboarding",
+  "module": "ecommerce",
+  "name": "Get eCommerce onboarding status",
+  "description": "Call this when you need to retrieve the current onboarding status for the eCommerce integration, including whether a store is connected and if the account is eligible for onboarding. Use the \"ecommerce.start_onboarding\" action instead if you need to initiate the onboarding process.",
+  "preconditions": [],
+  "inputs": {
+    "type": "object",
+    "properties": {},
+    "required": []
+  },
+  "outputs": {
+    "type": "object",
+    "properties": {
+      "store_connected": {
+        "type": "boolean",
+        "description": "Indicates whether a store is currently connected."
+      },
+      "onboarding_eligible": {
+        "type": "boolean",
+        "description": "Indicates whether the account is eligible to start onboarding."
+      },
+      "onboarding_ineligibility_reason": {
+        "type": "string",
+        "description": "Reason why onboarding is not eligible, if applicable."
+      },
+      "onboarding": {
+        "type": [
+          "object",
+          "null"
+        ],
+        "description": "Details of the onboarding process if it has been started; null otherwise."
+      }
+    },
+    "required": [
+      "store_connected",
+      "onboarding_eligible",
+      "onboarding_ineligibility_reason",
+      "onboarding"
+    ]
+  },
+  "side_effects": [],
+  "destructive": false,
+  "idempotent": true,
+  "ui_path": [
+    "E-commerce",
+    "Settings"
+  ],
+  "internal_endpoint": {
+    "method": "GET",
+    "path": "/v1/ecommerce-onboarding",
+    "body_example": null
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/ecommerce-settings.json",
+      "captures/clean/ecommerce.json"
+    ],
+    "verified_at": null
+  }
+}

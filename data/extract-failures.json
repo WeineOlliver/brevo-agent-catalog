@@ -1,885 +1,703 @@
 {
-  "generated_at": "2026-11-06T18:30:14.490Z",
+  "generated_at": "2026-11-06T18:36:03.365Z",
   "failures": [
-    {
-      "key": "GET /feApi/liveUpdatesToken",
-      "errors": [
-        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
-      ],
-      "raw": ""
-    },
-    {
-      "key": "GET /account",
-      "errors": [
-        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
-      ],
-      "raw": ""
-    },
-    {
-      "key": "GET /v1/sidebar/deferredCount",
-      "errors": [
-        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
-      ],
-      "raw": ""
-    },
     {
       "key": "GET /v1/workflow/metaInfo",
       "errors": [
-        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
-      ],
-      "raw": ""
-    },
-    {
-      "key": "GET /v1/workflow/bannerDetails",
-      "errors": [
-        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+        "Error: Groq request failed with HTTP 429: Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m519ravcek1sbyx3wrpt9jke` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 6253, Requested 2449. Please try again in 5.265s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing"
       ],
       "raw": ""
     },
     {
       "key": "GET /v1/workflow/showDeferredNotification",
       "errors": [
-        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+        "Error: Groq request failed with HTTP 429: Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m519ravcek1sbyx3wrpt9jke` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 7448, Requested 1224. Please try again in 5.04s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing"
       ],
       "raw": ""
     },
     {
       "key": "GET /processing-details",
       "errors": [
-        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+        "Error: Groq request failed with HTTP 429: Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m519ravcek1sbyx3wrpt9jke` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 7168, Requested 1454. Please try again in 4.665s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing"
       ],
       "raw": ""
     },
     {
       "key": "GET /api/settings",
       "errors": [
-        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+        "Error: Groq request failed with HTTP 429: Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m519ravcek1sbyx3wrpt9jke` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 6888, Requested 1855. Please try again in 5.5725s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing"
       ],
       "raw": ""
     },
     {
       "key": "GET /v1/sidebar/contactCount",
       "errors": [
-        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+        "Error: Groq request failed with HTTP 429: Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m519ravcek1sbyx3wrpt9jke` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 6607, Requested 1428. Please try again in 262.5ms. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing"
       ],
       "raw": ""
     },
     {
       "key": "GET /app/objects/plan",
       "errors": [
-        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
-      ],
-      "raw": ""
-    },
-    {
-      "key": "GET /app/objects/user/info",
-      "errors": [
-        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+        "Error: Groq request failed with HTTP 429: Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m519ravcek1sbyx3wrpt9jke` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 6328, Requested 1717. Please try again in 337.499999ms. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing"
       ],
       "raw": ""
     },
     {
       "key": "GET /app/objects/view",
       "errors": [
-        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+        "Error: Groq request failed with HTTP 429: Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m519ravcek1sbyx3wrpt9jke` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 7243, Requested 2798. Please try again in 15.3075s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing"
       ],
       "raw": ""
     },
     {
       "key": "GET /email-campaign/api/campaigns",
       "errors": [
-        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+        "Error: Groq request failed with HTTP 429: Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m519ravcek1sbyx3wrpt9jke` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 6962, Requested 1681. Please try again in 4.8225s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing"
       ],
       "raw": ""
     },
     {
       "key": "GET /tags",
       "errors": [
-        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+        "Error: Groq request failed with HTTP 429: Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m519ravcek1sbyx3wrpt9jke` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 6682, Requested 2775. Please try again in 10.9275s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing"
       ],
       "raw": ""
     },
     {
       "key": "GET /getTotalUsersConfig",
       "errors": [
-        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+        "Error: Groq request failed with HTTP 429: Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m519ravcek1sbyx3wrpt9jke` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 6402, Requested 2949. Please try again in 10.1325s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing"
       ],
       "raw": ""
     },
     {
       "key": "GET /feature-toggle/unleash",
       "errors": [
-        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
-      ],
-      "raw": ""
-    },
-    {
-      "key": "GET /settings/ai/agents",
-      "errors": [
-        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+        "Error: Groq request failed with HTTP 429: Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m519ravcek1sbyx3wrpt9jke` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 6122, Requested 2870. Please try again in 7.439999999s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing"
       ],
       "raw": ""
     },
     {
       "key": "GET /email-campaign/api/config",
       "errors": [
-        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+        "Error: Groq request failed with HTTP 429: Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m519ravcek1sbyx3wrpt9jke` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 6868, Requested 3553. Please try again in 18.1575s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing"
       ],
       "raw": ""
     },
     {
       "key": "GET /client/info",
       "errors": [
-        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
-      ],
-      "raw": ""
-    },
-    {
-      "key": "GET /client/feature-toggles",
-      "errors": [
-        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+        "Error: Groq request failed with HTTP 429: Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m519ravcek1sbyx3wrpt9jke` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 6588, Requested 2888. Please try again in 11.07s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing"
       ],
       "raw": ""
     },
     {
       "key": "GET /client/upgrade-flags",
       "errors": [
-        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+        "Error: Groq request failed with HTTP 429: Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m519ravcek1sbyx3wrpt9jke` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 7998, Requested 2794. Please try again in 20.939999999s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing"
       ],
       "raw": ""
     },
     {
       "key": "GET /feature-toggle",
       "errors": [
-        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+        "Error: Groq request failed with HTTP 429: Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m519ravcek1sbyx3wrpt9jke` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 7718, Requested 3031. Please try again in 20.6175s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing"
       ],
       "raw": ""
     },
     {
       "key": "GET /v1/consent-groups/status",
       "errors": [
-        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+        "Error: Groq request failed with HTTP 429: Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m519ravcek1sbyx3wrpt9jke` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 7437, Requested 2336. Please try again in 13.2975s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing"
       ],
       "raw": ""
     },
     {
       "key": "GET /crm/backend/organization-info",
       "errors": [
-        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+        "Error: Groq request failed with HTTP 429: Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m519ravcek1sbyx3wrpt9jke` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 7157, Requested 3845. Please try again in 22.514999999s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing"
       ],
       "raw": ""
     },
     {
       "key": "GET /crm/backend/object-config/attribute-group-view",
       "errors": [
-        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+        "Error: Groq request failed with HTTP 429: Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m519ravcek1sbyx3wrpt9jke` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 6877, Requested 2144. Please try again in 7.657499999s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing"
       ],
       "raw": ""
     },
     {
       "key": "GET /crm/backend/pipeline/details",
       "errors": [
-        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+        "Error: Groq request failed with HTTP 413: Request too large for model `openai/gpt-oss-120b` in organization `org_01m519ravcek1sbyx3wrpt9jke` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Requested 10742, please reduce your message size and try again. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing"
       ],
       "raw": ""
     },
     {
       "key": "GET /crm/backend/plan-manager-info",
       "errors": [
-        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
-      ],
-      "raw": ""
-    },
-    {
-      "key": "GET /crm/backend/accounts",
-      "errors": [
-        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+        "Error: Groq request failed with HTTP 429: Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m519ravcek1sbyx3wrpt9jke` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 6316, Requested 2014. Please try again in 2.475s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing"
       ],
       "raw": ""
     },
     {
       "key": "GET /crm/backend/account-settings",
       "errors": [
-        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+        "Error: Groq request failed with HTTP 429: Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m519ravcek1sbyx3wrpt9jke` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 7233, Requested 2175. Please try again in 10.559999999s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing"
       ],
       "raw": ""
     },
     {
       "key": "GET /crm/backend/organization/config",
       "errors": [
-        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+        "Error: Groq request failed with HTTP 429: Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m519ravcek1sbyx3wrpt9jke` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 6953, Requested 3128. Please try again in 15.6075s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing"
       ],
       "raw": ""
     },
     {
       "key": "GET /crm/backend/attributes",
       "errors": [
-        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+        "Error: Groq request failed with HTTP 429: Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m519ravcek1sbyx3wrpt9jke` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 6672, Requested 7623. Please try again in 47.2125s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing"
       ],
       "raw": ""
     },
     {
       "key": "GET /view/listing/visible",
       "errors": [
-        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+        "Error: Groq request failed with HTTP 429: Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m519ravcek1sbyx3wrpt9jke` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 6392, Requested 2175. Please try again in 4.252499999s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing"
       ],
       "raw": ""
     },
     {
       "key": "GET /crm/backend/companies",
       "errors": [
-        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+        "Error: Groq request failed with HTTP 429: Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m519ravcek1sbyx3wrpt9jke` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 6113, Requested 2375. Please try again in 3.66s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing"
       ],
       "raw": ""
     },
     {
       "key": "GET /crm/backend/attributes/rules",
       "errors": [
-        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+        "Error: Groq request failed with HTTP 429: Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m519ravcek1sbyx3wrpt9jke` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 5832, Requested 2256. Please try again in 659.999999ms. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing"
       ],
       "raw": ""
     },
     {
       "key": "GET /view/listing/hidden",
       "errors": [
-        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
-      ],
-      "raw": ""
-    },
-    {
-      "key": "GET /forms-api/account",
-      "errors": [
-        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+        "Error: Groq request failed with HTTP 429: Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m519ravcek1sbyx3wrpt9jke` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 5553, Requested 2895. Please try again in 3.36s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing"
       ],
       "raw": ""
     },
     {
       "key": "GET /forms-api/forms",
       "errors": [
-        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+        "Error: Groq request failed with HTTP 429: Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m519ravcek1sbyx3wrpt9jke` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 7199, Requested 2144. Please try again in 10.0725s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing"
       ],
       "raw": ""
     },
     {
       "key": "GET /contact/backend/contacts/:id/header",
       "errors": [
-        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+        "Error: Groq request failed with HTTP 429: Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m519ravcek1sbyx3wrpt9jke` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 6919, Requested 1883. Please try again in 6.015s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing"
       ],
       "raw": ""
     },
     {
       "key": "GET /contact/backend/contacts/:id",
       "errors": [
-        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+        "Error: Groq request failed with HTTP 429: Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m519ravcek1sbyx3wrpt9jke` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 6638, Requested 3120. Please try again in 13.185s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing"
       ],
       "raw": ""
     },
     {
       "key": "GET /contact/backend/settings",
       "errors": [
-        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+        "Error: Groq request failed with HTTP 429: Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m519ravcek1sbyx3wrpt9jke` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 6358, Requested 4403. Please try again in 20.7075s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing"
       ],
       "raw": ""
     },
     {
       "key": "GET /contact/backend/settings/crm-account",
       "errors": [
-        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+        "Error: Groq request failed with HTTP 429: Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m519ravcek1sbyx3wrpt9jke` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 6078, Requested 2638. Please try again in 5.37s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing"
       ],
       "raw": ""
     },
     {
       "key": "GET /contact/backend/contacts/:id/calc-attributes",
       "errors": [
-        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
-      ],
-      "raw": ""
-    },
-    {
-      "key": "GET /crm/backend/deals",
-      "errors": [
-        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+        "Error: Groq request failed with HTTP 429: Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m519ravcek1sbyx3wrpt9jke` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 5798, Requested 2277. Please try again in 562.5ms. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing"
       ],
       "raw": ""
     },
     {
       "key": "GET /contact/backend/contacts/activities",
       "errors": [
-        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+        "Error: Groq request failed with HTTP 429: Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m519ravcek1sbyx3wrpt9jke` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 7054, Requested 2834. Please try again in 14.16s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing"
       ],
       "raw": ""
     },
     {
       "key": "GET /contact/backend/settings/task-types",
       "errors": [
-        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+        "Error: Groq request failed with HTTP 429: Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m519ravcek1sbyx3wrpt9jke` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 6774, Requested 2327. Please try again in 8.2575s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing"
       ],
       "raw": ""
     },
     {
       "key": "GET /crm/backend/feature-accessibility",
       "errors": [
-        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+        "Error: Groq request failed with HTTP 429: Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m519ravcek1sbyx3wrpt9jke` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 6493, Requested 2215. Please try again in 5.31s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing"
       ],
       "raw": ""
     },
     {
       "key": "POST /contact/backend/contacts/lists",
       "errors": [
-        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+        "Error: Groq request failed with HTTP 429: Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m519ravcek1sbyx3wrpt9jke` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 6214, Requested 2899. Please try again in 8.3475s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing"
       ],
       "raw": ""
     },
     {
       "key": "GET /crm/backend/crm-config/get-form-attributes",
       "errors": [
-        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
-      ],
-      "raw": ""
-    },
-    {
-      "key": "GET /contact/backend/transactional/senders/:id",
-      "errors": [
-        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+        "Error: Groq request failed with HTTP 429: Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m519ravcek1sbyx3wrpt9jke` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 5934, Requested 2898. Please try again in 6.239999999s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing"
       ],
       "raw": ""
     },
     {
       "key": "GET /events/presentation_config",
       "errors": [
-        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+        "Error: Groq request failed with HTTP 429: Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m519ravcek1sbyx3wrpt9jke` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 6991, Requested 2782. Please try again in 13.2975s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing"
       ],
       "raw": ""
     },
     {
       "key": "GET /feApi/orgFeaturesAndChannels",
       "errors": [
-        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+        "Error: Groq request failed with HTTP 429: Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m519ravcek1sbyx3wrpt9jke` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 6711, Requested 3183. Please try again in 14.205s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing"
       ],
       "raw": ""
     },
     {
       "key": "GET /organization",
       "errors": [
-        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+        "Error: Groq request failed with HTTP 429: Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m519ravcek1sbyx3wrpt9jke` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 6427, Requested 2838. Please try again in 9.487499999s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing"
       ],
       "raw": ""
     },
     {
       "key": "GET /v1/contact/:id/workflows",
       "errors": [
-        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+        "Error: Groq request failed with HTTP 429: Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m519ravcek1sbyx3wrpt9jke` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 6151, Requested 2954. Please try again in 8.2875s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing"
       ],
       "raw": ""
     },
     {
       "key": "GET /app/objects/contact/object_id/:id",
       "errors": [
-        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+        "Error: Groq request failed with HTTP 429: Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m519ravcek1sbyx3wrpt9jke` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 5870, Requested 2635. Please try again in 3.7875s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing"
       ],
       "raw": ""
     },
     {
       "key": "GET /api/settings/list-timezone",
       "errors": [
-        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+        "Error: Groq request failed with HTTP 413: Request too large for model `openai/gpt-oss-120b` in organization `org_01m519ravcek1sbyx3wrpt9jke` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Requested 8275, please reduce your message size and try again. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing"
       ],
       "raw": ""
     },
     {
       "key": "GET /extensibility/integrations",
       "errors": [
-        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+        "Error: Groq request failed with HTTP 429: Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m519ravcek1sbyx3wrpt9jke` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 5310, Requested 2803. Please try again in 847.5ms. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing"
       ],
       "raw": ""
     },
     {
       "key": "GET /v3/app/objects/contact/attributes",
       "errors": [
-        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
-      ],
-      "raw": ""
-    },
-    {
-      "key": "GET /lists/get-folders",
-      "errors": [
-        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+        "Error: Groq request failed with HTTP 429: Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m519ravcek1sbyx3wrpt9jke` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 5030, Requested 6694. Please try again in 27.93s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing"
       ],
       "raw": ""
     },
     {
       "key": "GET /lists/get-lists",
       "errors": [
-        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+        "Error: Groq request failed with HTTP 429: Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m519ravcek1sbyx3wrpt9jke` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 5935, Requested 2852. Please try again in 5.9025s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing"
       ],
       "raw": ""
     },
     {
       "key": "GET /contact/backend/settings/get-attributes",
       "errors": [
-        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
-      ],
-      "raw": ""
-    },
-    {
-      "key": "GET /contact/backend/contacts/lists_and_segments",
-      "errors": [
-        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+        "Error: Groq request failed with HTTP 429: Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m519ravcek1sbyx3wrpt9jke` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 5655, Requested 2515. Please try again in 1.275s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing"
       ],
       "raw": ""
     },
     {
       "key": "POST /segment/count",
       "errors": [
-        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+        "Error: Groq request failed with HTTP 429: Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m519ravcek1sbyx3wrpt9jke` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 7388, Requested 2272. Please try again in 12.45s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing"
       ],
       "raw": ""
     },
     {
       "key": "POST /segment/query",
       "errors": [
-        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+        "Error: Groq request failed with HTTP 429: Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m519ravcek1sbyx3wrpt9jke` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 7108, Requested 2474. Please try again in 11.865s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing"
       ],
       "raw": ""
     },
     {
       "key": "POST /segment/paginated_count",
       "errors": [
-        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+        "Error: Groq request failed with HTTP 429: Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m519ravcek1sbyx3wrpt9jke` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 6828, Requested 2338. Please try again in 8.745s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing"
       ],
       "raw": ""
     },
     {
       "key": "GET /segment/lists",
       "errors": [
-        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+        "Error: Groq request failed with HTTP 429: Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m519ravcek1sbyx3wrpt9jke` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 6547, Requested 2275. Please try again in 6.165s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing"
       ],
       "raw": ""
     },
     {
       "key": "GET /categories",
       "errors": [
-        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+        "Error: Groq request failed with HTTP 429: Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m519ravcek1sbyx3wrpt9jke` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 6267, Requested 2677. Please try again in 7.08s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing"
       ],
       "raw": ""
     },
     {
       "key": "GET /segment/events/unified",
       "errors": [
-        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+        "Error: Groq request failed with HTTP 429: Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m519ravcek1sbyx3wrpt9jke` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 5987, Requested 2732. Please try again in 5.3925s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing"
       ],
       "raw": ""
     },
     {
       "key": "GET /segment/all-contact-owners",
       "errors": [
-        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+        "Error: Groq request failed with HTTP 429: Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m519ravcek1sbyx3wrpt9jke` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 5708, Requested 2349. Please try again in 427.5ms. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing"
       ],
       "raw": ""
     },
     {
       "key": "GET /contact/backend/segment/properties",
       "errors": [
-        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+        "Error: Groq request failed with HTTP 429: Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m519ravcek1sbyx3wrpt9jke` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 5427, Requested 4663. Please try again in 15.674999999s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing"
       ],
       "raw": ""
     },
     {
       "key": "GET /segment/unified_object/paths/contact/associations",
       "errors": [
-        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
-      ],
-      "raw": ""
-    },
-    {
-      "key": "GET /segment/events/status",
-      "errors": [
-        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+        "Error: Groq request failed with HTTP 429: Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m519ravcek1sbyx3wrpt9jke` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 5147, Requested 4536. Please try again in 12.6225s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing"
       ],
       "raw": ""
     },
     {
       "key": "GET /contact/backend/settings/segment",
       "errors": [
-        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
-      ],
-      "raw": ""
-    },
-    {
-      "key": "GET /segment/folder/listing",
-      "errors": [
-        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+        "Error: Groq request failed with HTTP 429: Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m519ravcek1sbyx3wrpt9jke` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 5357, Requested 2879. Please try again in 1.77s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing"
       ],
       "raw": ""
     },
     {
       "key": "GET /segment/listing",
       "errors": [
-        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+        "Error: Groq request failed with HTTP 429: Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m519ravcek1sbyx3wrpt9jke` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 6391, Requested 2300. Please try again in 5.182499999s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing"
       ],
       "raw": ""
     },
     {
       "key": "GET /conversions-goals/config",
       "errors": [
-        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+        "Error: Groq request failed with HTTP 429: Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m519ravcek1sbyx3wrpt9jke` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 6111, Requested 2845. Please try again in 7.17s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing"
       ],
       "raw": ""
     },
     {
       "key": "GET /settings",
       "errors": [
-        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
-      ],
-      "raw": ""
-    },
-    {
-      "key": "GET /v1/ecommerce-onboarding",
-      "errors": [
-        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+        "Error: Groq request failed with HTTP 429: Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m519ravcek1sbyx3wrpt9jke` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 5831, Requested 2408. Please try again in 1.7925s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing"
       ],
       "raw": ""
     },
     {
       "key": "GET /store/detection",
       "errors": [
-        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+        "Error: Groq request failed with HTTP 429: Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m519ravcek1sbyx3wrpt9jke` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 6213, Requested 2313. Please try again in 3.945s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing"
       ],
       "raw": ""
     },
     {
       "key": "GET /apps",
       "errors": [
-        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+        "Error: Groq request failed with HTTP 429: Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m519ravcek1sbyx3wrpt9jke` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 5933, Requested 3966. Please try again in 14.2425s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing"
       ],
       "raw": ""
     },
     {
       "key": "GET /loyalty/programs",
       "errors": [
-        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
-      ],
-      "raw": ""
-    },
-    {
-      "key": "GET /loyalty/get-user-permissions",
-      "errors": [
-        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+        "Error: Groq request failed with HTTP 429: Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m519ravcek1sbyx3wrpt9jke` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 5653, Requested 2785. Please try again in 3.285s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing"
       ],
       "raw": ""
     },
     {
       "key": "GET /campaigns/calendar",
       "errors": [
-        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+        "Error: Groq request failed with HTTP 429: Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m519ravcek1sbyx3wrpt9jke` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 6454, Requested 2341. Please try again in 5.9625s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing"
       ],
       "raw": ""
     },
     {
       "key": "GET /campaigns/statistics",
       "errors": [
-        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+        "Error: Groq request failed with HTTP 429: Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m519ravcek1sbyx3wrpt9jke` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 6174, Requested 3573. Please try again in 13.1025s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing"
       ],
       "raw": ""
     },
     {
       "key": "GET /users/expert",
       "errors": [
-        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+        "Error: Groq request failed with HTTP 429: Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m519ravcek1sbyx3wrpt9jke` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 5893, Requested 4037. Please try again in 14.475s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing"
       ],
       "raw": ""
     },
     {
       "key": "GET /plan",
       "errors": [
-        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+        "Error: Groq request failed with HTTP 429: Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m519ravcek1sbyx3wrpt9jke` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 5613, Requested 2476. Please try again in 667.5ms. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing"
       ],
       "raw": ""
     },
     {
       "key": "GET /assets/locales/en.json",
       "errors": [
-        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+        "Error: Groq request failed with HTTP 429: Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m519ravcek1sbyx3wrpt9jke` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 5333, Requested 4555. Please try again in 14.16s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing"
       ],
       "raw": ""
     },
     {
       "key": "GET /assets/locales/pt.json",
       "errors": [
-        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+        "Error: Groq request failed with HTTP 429: Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m519ravcek1sbyx3wrpt9jke` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 5053, Requested 5156. Please try again in 16.567499999s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing"
       ],
       "raw": ""
     },
     {
       "key": "GET /js/countries.json",
       "errors": [
-        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
-      ],
-      "raw": ""
-    },
-    {
-      "key": "GET /auth",
-      "errors": [
-        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+        "Error: Groq request failed with HTTP 429: Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m519ravcek1sbyx3wrpt9jke` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 4773, Requested 4471. Please try again in 9.33s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing"
       ],
       "raw": ""
     },
     {
       "key": "GET /v2/FeatureToggle",
       "errors": [
-        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+        "Error: Groq request failed with HTTP 429: Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m519ravcek1sbyx3wrpt9jke` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 6372, Requested 2477. Please try again in 6.3675s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing"
       ],
       "raw": ""
     },
     {
       "key": "GET /dashboard-information",
       "errors": [
-        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+        "Error: Groq request failed with HTTP 429: Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m519ravcek1sbyx3wrpt9jke` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 6093, Requested 2491. Please try again in 4.38s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing"
       ],
       "raw": ""
     },
     {
       "key": "GET /api/agent/organization",
       "errors": [
-        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+        "Error: Groq request failed with HTTP 429: Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m519ravcek1sbyx3wrpt9jke` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 5812, Requested 2262. Please try again in 554.999999ms. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing"
       ],
       "raw": ""
     },
     {
       "key": "GET /homepage/user/widget/list",
       "errors": [
-        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
-      ],
-      "raw": ""
-    },
-    {
-      "key": "GET /crm/backend/tasktypes",
-      "errors": [
-        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+        "Error: Groq request failed with HTTP 429: Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m519ravcek1sbyx3wrpt9jke` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 5533, Requested 3578. Please try again in 8.3325s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing"
       ],
       "raw": ""
     },
     {
       "key": "GET /api/domain/list",
       "errors": [
-        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+        "Error: Groq request failed with HTTP 429: Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m519ravcek1sbyx3wrpt9jke` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 6237, Requested 2849. Please try again in 8.145s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing"
       ],
       "raw": ""
     },
     {
       "key": "GET /events/dates",
       "errors": [
-        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+        "Error: Groq request failed with HTTP 429: Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m519ravcek1sbyx3wrpt9jke` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 5957, Requested 2930. Please try again in 6.6525s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing"
       ],
       "raw": ""
     },
     {
       "key": "GET /events/list",
       "errors": [
-        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+        "Error: Groq request failed with HTTP 429: Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m519ravcek1sbyx3wrpt9jke` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 5676, Requested 2489. Please try again in 1.2375s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing"
       ],
       "raw": ""
     },
     {
       "key": "GET /homepage/widget/list",
       "errors": [
-        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
-      ],
-      "raw": ""
-    },
-    {
-      "key": "GET /dashboard-campaign-status",
-      "errors": [
-        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+        "Error: Groq request failed with HTTP 429: Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m519ravcek1sbyx3wrpt9jke` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 5396, Requested 3270. Please try again in 4.995s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing"
       ],
       "raw": ""
     },
     {
       "key": "GET /scores-history",
       "errors": [
-        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
-      ],
-      "raw": ""
-    },
-    {
-      "key": "GET /scores-days",
-      "errors": [
-        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+        "Error: Groq request failed with HTTP 429: Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m519ravcek1sbyx3wrpt9jke` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 5962, Requested 2320. Please try again in 2.114999999s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing"
       ],
       "raw": ""
     },
     {
       "key": "GET /dashboard-contacts",
       "errors": [
-        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+        "Error: Groq request failed with HTTP 429: Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m519ravcek1sbyx3wrpt9jke` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 6680, Requested 2393. Please try again in 8.047499999s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing"
       ],
       "raw": ""
     },
     {
       "key": "GET /dashboard-transactional-stats",
       "errors": [
-        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+        "Error: Groq request failed with HTTP 429: Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m519ravcek1sbyx3wrpt9jke` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 6400, Requested 2801. Please try again in 9.0075s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing"
       ],
       "raw": ""
     },
     {
       "key": "GET /undefined",
       "errors": [
-        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+        "Error: Groq request failed with HTTP 413: Request too large for model `openai/gpt-oss-120b` in organization `org_01m519ravcek1sbyx3wrpt9jke` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Requested 9961, please reduce your message size and try again. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing"
       ],
       "raw": ""
     },
     {
       "key": "GET /account/apps/information",
       "errors": [
-        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+        "Error: Groq request failed with HTTP 429: Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m519ravcek1sbyx3wrpt9jke` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 5839, Requested 3536. Please try again in 10.3125s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing"
       ],
       "raw": ""
     },
     {
       "key": "GET /user/feature-toggle",
       "errors": [
-        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
-      ],
-      "raw": ""
-    },
-    {
-      "key": "GET /ips/list",
-      "errors": [
-        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+        "Error: Groq request failed with HTTP 429: Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m519ravcek1sbyx3wrpt9jke` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 5559, Requested 2444. Please try again in 22.5ms. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing"
       ],
       "raw": ""
     },
     {
       "key": "GET /js/countries-production.json",
       "errors": [
-        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+        "Error: Groq request failed with HTTP 429: Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m519ravcek1sbyx3wrpt9jke` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 6551, Requested 4509. Please try again in 22.95s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing"
       ],
       "raw": ""
     },
     {
       "key": "GET /phone/call-enabled",
       "errors": [
-        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+        "Error: Groq request failed with HTTP 429: Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m519ravcek1sbyx3wrpt9jke` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 6272, Requested 2267. Please try again in 4.0425s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing"
       ],
       "raw": ""
     },
     {
       "key": "GET /api/keys/smtp",
       "errors": [
-        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+        "Error: Groq request failed with HTTP 429: Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m519ravcek1sbyx3wrpt9jke` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 5991, Requested 2311. Please try again in 2.265s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing"
       ],
       "raw": ""
     },
     {
       "key": "GET /sms/countries",
       "errors": [
-        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+        "Error: Groq request failed with HTTP 429: Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m519ravcek1sbyx3wrpt9jke` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 5711, Requested 4499. Please try again in 16.575s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing"
       ],
       "raw": ""
     },
     {
       "key": "GET /crm/backend/contact-attributes",
       "errors": [
-        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+        "Error: Groq request failed with HTTP 429: Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m519ravcek1sbyx3wrpt9jke` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 5431, Requested 5026. Please try again in 18.4275s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing"
       ],
       "raw": ""
     },
     {
       "key": "GET /crm/backend/pipeline/pipeline-template",
       "errors": [
-        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
-      ],
-      "raw": ""
-    },
-    {
-      "key": "GET /billing/api/organization/currency",
-      "errors": [
-        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
-      ],
-      "raw": ""
-    },
-    {
-      "key": "GET /marketing-campaign/api/client/toggle-features",
-      "errors": [
-        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+        "Error: Groq request failed with HTTP 429: Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m519ravcek1sbyx3wrpt9jke` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 5151, Requested 3104. Please try again in 1.9125s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing"
       ],
       "raw": ""
     },
     {
       "key": "GET /whatsapp-campaign/api/client/info",
       "errors": [
-        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+        "Error: Groq request failed with HTTP 429: Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m519ravcek1sbyx3wrpt9jke` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 6945, Requested 2490. Please try again in 10.7625s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing"
       ],
       "raw": ""
     },
     {
       "key": "GET /email-template/api/templates",
       "errors": [
-        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+        "Error: Groq request failed with HTTP 429: Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m519ravcek1sbyx3wrpt9jke` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 6665, Requested 2806. Please try again in 11.0325s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing"
       ],
       "raw": ""
     },
     {
       "key": "GET /api/notifications",
       "errors": [
-        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+        "Error: Groq request failed with HTTP 429: Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m519ravcek1sbyx3wrpt9jke` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 6385, Requested 2583. Please try again in 7.26s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing"
       ],
       "raw": ""
     },
     {
       "key": "GET /editor-api/localization/languages",
       "errors": [
-        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+        "Error: Groq request failed with HTTP 429: Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m519ravcek1sbyx3wrpt9jke` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 6104, Requested 3685. Please try again in 13.417499999s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing"
       ],
       "raw": ""
     },
     {
       "key": "GET /api/email/user/info",
       "errors": [
-        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+        "Error: Groq request failed with HTTP 429: Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m519ravcek1sbyx3wrpt9jke` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 5824, Requested 3351. Please try again in 8.8125s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing"
       ],
       "raw": ""
     },
     {
       "key": "GET /api/email/realtime/wizard/status",
       "errors": [
-        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
-      ],
-      "raw": ""
-    },
-    {
-      "key": "GET /api/email/logs/filters/data",
-      "errors": [
-        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+        "Error: Groq request failed with HTTP 429: Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m519ravcek1sbyx3wrpt9jke` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 5544, Requested 2693. Please try again in 1.777499999s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing"
       ],
       "raw": ""
     },
     {
       "key": "POST /api/email/logs",
       "errors": [
-        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+        "Error: Groq request failed with HTTP 429: Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m519ravcek1sbyx3wrpt9jke` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 5877, Requested 2648. Please try again in 3.9375s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing"
       ],
       "raw": ""
     },
     {
       "key": "GET /api/email/realtime/smtp/credentials",
       "errors": [
-        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
-      ],
-      "raw": ""
-    },
-    {
-      "key": "GET /api/sms/realtime/wizard/status",
-      "errors": [
-        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+        "Error: Groq request failed with HTTP 429: Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m519ravcek1sbyx3wrpt9jke` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 5597, Requested 2700. Please try again in 2.2275s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing"
       ],
       "raw": ""
     },
     {
       "key": "POST /api/sms/logs",
       "errors": [
-        "Error: Groq request failed with HTTP 404: The model `` does not exist or you do not have access to it."
+        "Error: Groq request failed with HTTP 429: Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m519ravcek1sbyx3wrpt9jke` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 6438, Requested 2653. Please try again in 8.182499999s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing"
       ],
       "raw": ""
     }

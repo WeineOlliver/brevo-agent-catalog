@@ -1,0 +1,52 @@
+{
+  "id": "segments.get_event_status",
+  "module": "segments",
+  "name": "Get segment event status",
+  "description": "Call this when you need to retrieve the list of event types that are currently enabled for segment filtering (e.g., \"email\"). If you need detailed metadata about each event type, use the action that lists events instead.",
+  "preconditions": [],
+  "inputs": {
+    "type": "object",
+    "properties": {},
+    "required": []
+  },
+  "outputs": {
+    "type": "object",
+    "properties": {
+      "data": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "description": "An event type identifier, such as \"email\"."
+        },
+        "description": "Array of enabled event type identifiers."
+      }
+    },
+    "required": [
+      "data"
+    ]
+  },
+  "side_effects": [],
+  "destructive": false,
+  "idempotent": true,
+  "ui_path": [
+    "Segments",
+    "Event status"
+  ],
+  "internal_endpoint": {
+    "method": "GET",
+    "path": "/segment/events/status",
+    "body_example": null
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/contact-list.json"
+    ],
+    "verified_at": null
+  }
+}

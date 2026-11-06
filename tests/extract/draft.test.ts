@@ -116,6 +116,35 @@ describe('buildDraftPrompt', () => {
   it('names the allowed plan_tier values so the enum is satisfiable', () => {
     expect(buildDraftPrompt(candidate, null).system).toContain('unknown');
   });
+
+  it('caps evidence size, because the provider rejects oversized requests', () => {
+    // Measured: 3 of 126 real drafts failed with HTTP 413, and most of the rest
+    // with 429 on a tokens-per-minute limit. An 8 KiB captured body is the cause.
+    const huge: ActionCandidate = {
+      ...candidate,
+      samples: [1, 2, 3, 4, 5].map(() => ({
+        ...sample,
+        requestBody: 'x'.repeat(8192),
+        responseBody: 'y'.repeat(8192),
+      })),
+    };
+    expect(buildDraftPrompt(huge, operation).user.length).toBeLessThan(6000);
+  });
+
+  it('uses at most two samples, since a third rarely adds evidence', () => {
+    const many: ActionCandidate = { ...candidate, samples: [sample, sample, sample] };
+    const prompt = buildDraftPrompt(many, null).user;
+    expect(prompt).toContain('Example 2');
+    expect(prompt).not.toContain('Example 3');
+  });
+
+  it('says when a body was shortened, so the model does not treat it as complete', () => {
+    const long: ActionCandidate = {
+      ...candidate,
+      samples: [{ ...sample, responseBody: 'y'.repeat(5000) }],
+    };
+    expect(buildDraftPrompt(long, null).user).toMatch(/shortened|truncated/i);
+  });
 });
 
 describe('draftAction', () => {

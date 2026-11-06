@@ -1,0 +1,122 @@
+{
+  "id": "deals.list",
+  "module": "deals",
+  "name": "List deals",
+  "description": "Call this when you need to retrieve the list of deals linked to a specific contact. Use the \"deals.get\" action instead when you need details of a single deal, or \"deals.create\" when you need to add a new deal.",
+  "preconditions": [
+    "The contact with the given ID exists."
+  ],
+  "inputs": {
+    "type": "object",
+    "properties": {
+      "filters[linkedContactsIds]": {
+        "type": "integer",
+        "description": "The ID of the contact whose linked deals should be returned."
+      },
+      "sort": {
+        "type": "string",
+        "enum": [
+          "asc",
+          "desc"
+        ],
+        "description": "Direction to sort the results."
+      },
+      "sortBy": {
+        "type": "string",
+        "description": "Field name to sort by, e.g., \"attributes.created_at\"."
+      },
+      "limit": {
+        "type": "integer",
+        "description": "Maximum number of deals to return per page."
+      }
+    },
+    "required": [
+      "filters[linkedContactsIds]"
+    ]
+  },
+  "outputs": {
+    "type": "object",
+    "properties": {
+      "items": {
+        "type": "array",
+        "description": "Array of deal objects.",
+        "items": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      },
+      "pager": {
+        "type": "object",
+        "description": "Pagination information.",
+        "properties": {
+          "current": {
+            "type": "integer"
+          },
+          "limit": {
+            "type": "integer"
+          },
+          "from": {
+            "type": "integer"
+          },
+          "to": {
+            "type": "integer"
+          },
+          "count": {
+            "type": "integer"
+          },
+          "total": {
+            "type": "integer"
+          },
+          "max": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "current",
+          "limit",
+          "from",
+          "to",
+          "count",
+          "total",
+          "max"
+        ]
+      },
+      "refs": {
+        "type": "object",
+        "description": "Reference data for the response.",
+        "additionalProperties": true
+      }
+    },
+    "required": [
+      "items",
+      "pager",
+      "refs"
+    ]
+  },
+  "side_effects": [],
+  "destructive": false,
+  "idempotent": true,
+  "ui_path": [
+    "Contacts",
+    "Contact details",
+    "Deals",
+    "List"
+  ],
+  "internal_endpoint": {
+    "method": "GET",
+    "path": "/crm/backend/deals",
+    "body_example": null
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/contact-index-id.json"
+    ],
+    "verified_at": null
+  }
+}

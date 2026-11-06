@@ -1,0 +1,66 @@
+{
+  "id": "loyalty.get_user_permissions",
+  "module": "loyalty",
+  "name": "Get user permissions",
+  "description": "Call this when you need to retrieve the list of actions the current authenticated user can perform in the Loyalty module and whether they are the owner. Use a program‑specific endpoint (e.g., get‑program‑details) if you only need information about a particular loyalty program rather than the full permission set.",
+  "preconditions": [
+    "The user must be authenticated."
+  ],
+  "inputs": {
+    "type": "object",
+    "properties": {},
+    "required": []
+  },
+  "outputs": {
+    "type": "object",
+    "properties": {
+      "actions": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "enum": [
+            "manage_program",
+            "publish_program",
+            "manage_balance",
+            "manage_tier",
+            "manage_rewards",
+            "manage_rules"
+          ]
+        },
+        "description": "Permissions granted to the user."
+      },
+      "is_owner": {
+        "type": "boolean",
+        "description": "True if the user is the owner of the loyalty program."
+      }
+    },
+    "required": [
+      "actions",
+      "is_owner"
+    ]
+  },
+  "side_effects": [],
+  "destructive": false,
+  "idempotent": true,
+  "ui_path": [
+    "Loyalty",
+    "User permissions"
+  ],
+  "internal_endpoint": {
+    "method": "GET",
+    "path": "/loyalty/get-user-permissions",
+    "body_example": null
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/loyalty.json"
+    ],
+    "verified_at": null
+  }
+}

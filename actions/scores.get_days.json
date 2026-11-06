@@ -1,0 +1,59 @@
+{
+  "id": "scores.get_days",
+  "module": "scores",
+  "name": "Get Scores Days",
+  "description": "Call this when you need to retrieve the daily scoring data for the current organization. If you only need a high‑level summary of scores, use the neighbouring action that fetches the summary instead.",
+  "preconditions": [],
+  "inputs": {
+    "type": "object",
+    "properties": {},
+    "required": []
+  },
+  "outputs": {
+    "type": "object",
+    "properties": {
+      "status": {
+        "type": "string",
+        "description": "Result status of the request."
+      },
+      "organization_id": {
+        "type": "string",
+        "description": "Identifier of the organization for which the scores are returned."
+      },
+      "data": {
+        "type": "object",
+        "description": "Container for the daily scores data. Structure may vary."
+      }
+    },
+    "required": [
+      "status",
+      "organization_id",
+      "data"
+    ]
+  },
+  "side_effects": [],
+  "destructive": false,
+  "idempotent": true,
+  "ui_path": [
+    "Dashboard",
+    "Scores",
+    "Daily Scores"
+  ],
+  "internal_endpoint": {
+    "method": "GET",
+    "path": "/scores-days",
+    "body_example": null
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/root.json"
+    ],
+    "verified_at": null
+  }
+}

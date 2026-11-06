@@ -1,0 +1,66 @@
+{
+  "id": "automation.get_banner_details",
+  "module": "automation",
+  "name": "Get banner details",
+  "description": "Call this when the Automation UI needs to display the status banner (e.g., marketing email status, profile completeness, or account warnings). Use a more specific account‑status endpoint if you only need the marketing email status without the full banner payload.",
+  "preconditions": [
+    "The user must be authenticated and have access to the Automation feature."
+  ],
+  "inputs": {
+    "type": "object",
+    "properties": {},
+    "required": []
+  },
+  "outputs": {
+    "type": "object",
+    "properties": {
+      "marketing_email_status": {
+        "type": "string",
+        "enum": [
+          "enabled",
+          "disabled"
+        ],
+        "description": "Whether marketing emails are enabled for the account."
+      },
+      "is_profile_complete": {
+        "type": "integer",
+        "description": "1 if the account profile is complete, 0 otherwise."
+      },
+      "err_msg": {
+        "type": "string",
+        "description": "Message key describing any account‑level warning shown on the banner."
+      }
+    },
+    "required": [
+      "marketing_email_status",
+      "is_profile_complete",
+      "err_msg"
+    ]
+  },
+  "side_effects": [],
+  "destructive": false,
+  "idempotent": true,
+  "ui_path": [
+    "Automation",
+    "Advanced",
+    "Load banner details"
+  ],
+  "internal_endpoint": {
+    "method": "GET",
+    "path": "/v1/workflow/bannerDetails",
+    "body_example": null
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/automation-advanced.json",
+      "captures/clean/automation-automations.json"
+    ],
+    "verified_at": null
+  }
+}

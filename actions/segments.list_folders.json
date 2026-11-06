@@ -1,0 +1,90 @@
+{
+  "id": "segments.list_folders",
+  "module": "segments",
+  "name": "List segment folders",
+  "description": "Call this when you need to retrieve the list of segment folders available for contacts. Use the \"segments.list\" action instead if you need the individual segments inside a folder.",
+  "preconditions": [],
+  "inputs": {
+    "type": "object",
+    "properties": {},
+    "required": []
+  },
+  "outputs": {
+    "type": "object",
+    "properties": {
+      "data": {
+        "type": "array",
+        "description": "Array of segment folder objects.",
+        "items": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "description": "Unique identifier of the folder."
+            },
+            "name": {
+              "type": "string",
+              "description": "Name of the folder."
+            },
+            "default": {
+              "type": "boolean",
+              "description": "Indicates whether this folder is the default folder."
+            }
+          },
+          "required": [
+            "id",
+            "name",
+            "default"
+          ]
+        }
+      },
+      "metadata": {
+        "type": "object",
+        "description": "Additional information about the listing.",
+        "properties": {
+          "is_archived_list": {
+            "type": "boolean",
+            "description": "Whether the list is an archived list."
+          },
+          "is_dynamic_list": {
+            "type": "boolean",
+            "description": "Whether the list is a dynamic list."
+          }
+        },
+        "required": [
+          "is_archived_list",
+          "is_dynamic_list"
+        ]
+      }
+    },
+    "required": [
+      "data",
+      "metadata"
+    ]
+  },
+  "side_effects": [],
+  "destructive": false,
+  "idempotent": true,
+  "ui_path": [
+    "Contacts",
+    "Segments",
+    "Folder list"
+  ],
+  "internal_endpoint": {
+    "method": "GET",
+    "path": "/segment/folder/listing",
+    "body_example": null
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/contact-segment.json"
+    ],
+    "verified_at": null
+  }
+}

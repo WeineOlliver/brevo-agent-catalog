@@ -1,0 +1,90 @@
+{
+  "id": "automation.get_deferred_count",
+  "module": "automation",
+  "name": "Get deferred email count",
+  "description": "Call this when you need the current number of deferred emails for automation processing, together with the processing status, rate limits, and any configured delay. Use the automation status endpoint instead if you only need the processing status without the deferred count details.",
+  "preconditions": [],
+  "inputs": {
+    "type": "object",
+    "properties": {},
+    "required": []
+  },
+  "outputs": {
+    "type": "object",
+    "properties": {
+      "processingStatus": {
+        "type": "string",
+        "description": "Overall processing health status for automation.",
+        "enum": [
+          "Excellent",
+          "Good",
+          "Warning",
+          "Critical"
+        ]
+      },
+      "deferredEmailCount": {
+        "type": "integer",
+        "description": "Number of emails currently deferred."
+      },
+      "rateLimit": {
+        "type": "integer",
+        "description": "Maximum number of requests allowed per time window."
+      },
+      "maxDelay": {
+        "type": "integer",
+        "description": "Maximum delay in seconds before processing resumes."
+      },
+      "delay": {
+        "type": "object",
+        "description": "Current configured delay before processing.",
+        "properties": {
+          "hours": {
+            "type": "integer",
+            "description": "Delay hours component."
+          },
+          "minutes": {
+            "type": "integer",
+            "description": "Delay minutes component."
+          }
+        },
+        "required": [
+          "hours",
+          "minutes"
+        ]
+      }
+    },
+    "required": [
+      "processingStatus",
+      "deferredEmailCount",
+      "rateLimit",
+      "maxDelay",
+      "delay"
+    ]
+  },
+  "side_effects": [],
+  "destructive": false,
+  "idempotent": true,
+  "ui_path": [
+    "Automation",
+    "Advanced",
+    "View deferred email count"
+  ],
+  "internal_endpoint": {
+    "method": "GET",
+    "path": "/v1/sidebar/deferredCount",
+    "body_example": null
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/automation-advanced.json",
+      "captures/clean/automation-automations.json"
+    ],
+    "verified_at": null
+  }
+}

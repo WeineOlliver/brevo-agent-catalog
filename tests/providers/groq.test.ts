@@ -50,14 +50,14 @@ describe('createGroqProvider', () => {
     expect(result).toBe('hello');
   });
 
-  it('throws an error naming the status on a non-2xx response', async () => {
-    const { impl } = stubFetch(429, { error: { message: 'rate limited' } });
+  it('throws an error naming the status on a non-retryable response', async () => {
+    const { impl } = stubFetch(400, { error: { message: 'bad request' } });
     await expect(
       createGroqProvider({ apiKey: 'k', model: 'm', fetchImpl: impl }).complete({
         system: 's',
         user: 'u',
       }),
-    ).rejects.toThrow(/429/);
+    ).rejects.toThrow(/400/);
   });
 
   it('throws when the response carries no choices', async () => {
@@ -78,6 +78,81 @@ describe('createGroqProvider', () => {
       maxTokens: 512,
     });
     expect(JSON.parse(String(calls[0]?.init.body)).max_tokens).toBe(512);
+  });
+
+  it('retries a 429 after the Retry-After delay and then succeeds', async () => {
+    let calls = 0;
+    const waits: number[] = [];
+    const impl = (async () => {
+      calls += 1;
+      if (calls === 1) {
+        return new Response(JSON.stringify({ error: { message: 'rate limited' } }), {
+          status: 429,
+          headers: { 'retry-after': '3' },
+        });
+      }
+      return new Response(JSON.stringify(ok), { status: 200 });
+    }) as unknown as typeof fetch;
+
+    const result = await createGroqProvider({
+      apiKey: 'k',
+      model: 'm',
+      fetchImpl: impl,
+      sleep: async (ms) => void waits.push(ms),
+    }).complete({ system: 's', user: 'u' });
+
+    expect(result).toBe('hello');
+    expect(calls).toBe(2);
+    expect(waits[0]).toBeGreaterThanOrEqual(3000);
+  });
+
+  it('backs off without a Retry-After header', async () => {
+    let calls = 0;
+    const waits: number[] = [];
+    const impl = (async () => {
+      calls += 1;
+      return calls < 3
+        ? new Response('{}', { status: 429 })
+        : new Response(JSON.stringify(ok), { status: 200 });
+    }) as unknown as typeof fetch;
+
+    await createGroqProvider({
+      apiKey: 'k',
+      model: 'm',
+      fetchImpl: impl,
+      sleep: async (ms) => void waits.push(ms),
+    }).complete({ system: 's', user: 'u' });
+
+    expect(calls).toBe(3);
+    expect(waits.length).toBe(2);
+    expect(waits[1]).toBeGreaterThan(waits[0] ?? 0);
+  });
+
+  it('gives up after the retry budget and reports the rate limit', async () => {
+    const impl = (async () => new Response('{}', { status: 429 })) as unknown as typeof fetch;
+    await expect(
+      createGroqProvider({
+        apiKey: 'k',
+        model: 'm',
+        fetchImpl: impl,
+        sleep: async () => undefined,
+        maxRetries: 2,
+      }).complete({ system: 's', user: 'u' }),
+    ).rejects.toThrow(/429/);
+  });
+
+  it('does not retry a 404, which will never succeed', async () => {
+    let calls = 0;
+    const impl = (async () => {
+      calls += 1;
+      return new Response(JSON.stringify({ error: { message: 'no such model' } }), { status: 404 });
+    }) as unknown as typeof fetch;
+
+    await expect(
+      createGroqProvider({ apiKey: 'k', model: 'm', fetchImpl: impl, sleep: async () => undefined })
+        .complete({ system: 's', user: 'u' }),
+    ).rejects.toThrow(/404/);
+    expect(calls).toBe(1);
   });
 
   it('names itself so the ledger and reports can say which model drafted an entry', () => {

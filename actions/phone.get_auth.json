@@ -1,0 +1,196 @@
+{
+  "id": "phone.get_auth",
+  "module": "phone",
+  "name": "Get authentication and organization info",
+  "description": "Call this when you need to retrieve the current organization and account details during the phone onboarding flow. If you only need basic organization metadata without the account sub‑object, use the dedicated \"phone.get_organization\" action instead.",
+  "preconditions": [],
+  "inputs": {
+    "type": "object",
+    "properties": {},
+    "required": []
+  },
+  "outputs": {
+    "type": "object",
+    "properties": {
+      "organization": {
+        "type": "object",
+        "description": "Metadata about the Brevo organization linked to the phone service.",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Organization UUID."
+          },
+          "sib_organization_id": {
+            "type": "string",
+            "description": "Internal Brevo organization identifier."
+          },
+          "sib_int_organization_id": {
+            "type": "string",
+            "description": "Placeholder for the account ID."
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "When the organization record was created."
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "When the organization record was last updated."
+          },
+          "onboarded_at": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time",
+            "description": "Timestamp when onboarding completed, or null if not yet done."
+          },
+          "block_provisioning": {
+            "type": "boolean",
+            "description": "Whether provisioning of new phone numbers is blocked."
+          },
+          "experiment": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Experiment flag, if any."
+          },
+          "show_trial_ended": {
+            "type": "boolean",
+            "description": "Whether to display trial‑ended UI."
+          },
+          "feature_flags": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Enabled feature flags."
+          },
+          "is_corporate": {
+            "type": "boolean",
+            "description": "Whether the organization is corporate."
+          },
+          "extra_endpoints": {
+            "type": "integer",
+            "description": "Number of extra endpoints allocated."
+          },
+          "default_phone_country_code": {
+            "type": "string",
+            "description": "Default country code for phone numbers."
+          },
+          "address_country_code": {
+            "type": "string",
+            "description": "Country code for the organization address."
+          },
+          "onboarding_started": {
+            "type": "boolean",
+            "description": "Whether onboarding has been started."
+          }
+        },
+        "required": [
+          "id",
+          "sib_organization_id",
+          "sib_int_organization_id",
+          "created_at",
+          "updated_at",
+          "block_provisioning",
+          "show_trial_ended",
+          "feature_flags",
+          "is_corporate",
+          "extra_endpoints",
+          "default_phone_country_code",
+          "address_country_code",
+          "onboarding_started"
+        ]
+      },
+      "organization_account": {
+        "type": "object",
+        "description": "Details of the account that performed the authentication.",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Account UUID."
+          },
+          "sib_account_id": {
+            "type": "string",
+            "description": "Internal Brevo account identifier."
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "When the account was created."
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "When the account was last updated."
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "description": "Contact email for the account."
+          },
+          "first_name": {
+            "type": "string",
+            "description": "First name of the account holder."
+          },
+          "last_name": {
+            "type": "string",
+            "description": "Last name of the account holder."
+          },
+          "locale_code": {
+            "type": "string",
+            "description": "Locale code (e.g., \"en\")."
+          },
+          "long_locale_code": {
+            "type": "string",
+            "description": "Full locale code (e.g., \"en_US\")."
+          }
+        },
+        "required": [
+          "id",
+          "sib_account_id",
+          "created_at",
+          "updated_at",
+          "email",
+          "first_name",
+          "last_name",
+          "locale_code",
+          "long_locale_code"
+        ]
+      }
+    },
+    "required": [
+      "organization",
+      "organization_account"
+    ]
+  },
+  "side_effects": [],
+  "destructive": false,
+  "idempotent": true,
+  "ui_path": [
+    "Phone",
+    "Onboarding",
+    "Status",
+    "Refresh"
+  ],
+  "internal_endpoint": {
+    "method": "GET",
+    "path": "/auth",
+    "body_example": null
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/phone-onboarding.json"
+    ],
+    "verified_at": null
+  }
+}
