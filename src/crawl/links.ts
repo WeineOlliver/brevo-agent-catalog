@@ -10,8 +10,15 @@ const HREF_PATTERN = /<a\b[^>]*?\bhref\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s">]+))/
 
 const EXCLUDED_SCHEMES = /^(?:mailto|tel|javascript|data|blob):/i;
 
-/** Paths that would end the authenticated session, so never followed. */
-const SESSION_ENDING = /(?:log|sign)[-_]?out|^\/logout\b/i;
+/**
+ * Paths that leave the authenticated application, so never followed.
+ *
+ * Logging out ends the session outright. Password-reset and sign-up links are
+ * just as fatal in practice: they redirect to `login.brevo.com`, which the
+ * crawler reads — correctly — as an expired session, aborting the entire run.
+ */
+const LEAVES_APP =
+  /(?:log|sign)[-_]?out|^\/logout\b|forgot[-_]?password|reset[-_]?password|(?:^|\/)sign[-_]?up\b|(?:^|\/)register\b|(?:^|\/)login\b|(?:^|\/)signin\b/i;
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 const LONG_HEX = /^[0-9a-f]{12,}$/i;
@@ -49,7 +56,7 @@ export function extractNavLinks(html: string, origin: string): string[] {
     }
 
     if (resolved.origin !== originUrl.origin) continue;
-    if (SESSION_ENDING.test(resolved.pathname)) continue;
+    if (LEAVES_APP.test(resolved.pathname)) continue;
 
     found.add(`${resolved.origin}${resolved.pathname}${resolved.search}`);
   }

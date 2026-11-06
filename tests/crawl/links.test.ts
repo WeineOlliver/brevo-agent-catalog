@@ -47,6 +47,18 @@ describe('extractNavLinks', () => {
     ]);
   });
 
+  it('ignores auth links that navigate away from the authenticated app', () => {
+    // Following /forgot-password redirects to login.brevo.com, which the crawler
+    // correctly reads as an expired session and aborts the whole run.
+    const html = `
+      <a href="/forgot-password">Forgot password</a>
+      <a href="/reset-password?token=x">Reset</a>
+      <a href="/signup">Sign up</a>
+      <a href="/account/login">Log in</a>
+    `;
+    expect(extractNavLinks(html, ORIGIN)).toEqual([]);
+  });
+
   it('ignores logout and sign-out links, which would end the crawl session', () => {
     const html = '<a href="/logout">Log out</a><a href="/account/signout">Sign out</a>';
     expect(extractNavLinks(html, ORIGIN)).toEqual([]);
