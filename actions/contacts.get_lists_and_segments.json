@@ -2,7 +2,7 @@
   "id": "contacts.get_lists_and_segments",
   "module": "contacts",
   "name": "Get lists and segments",
-  "description": "Call this when you need to retrieve the hierarchy of folders, contact lists, segments, and categories displayed on the Contact → Lists page. Use the action to populate UI selectors or to sync local copies. If you only need a single list's details, use the dedicated list‑fetch operation instead.",
+  "description": "Call this to retrieve the whole Contact → Lists navigation hierarchy in one request: folders, lists, segments and categories together. It takes no parameters and does not paginate, so it is for populating selectors and mirroring that page, not for enumerating lists. Use lists.get_lists instead when the question is only about contact lists and you need paging, counts or folder filtering; use segments.list_segments for segments alone.",
   "preconditions": [],
   "inputs": {
     "type": "object",

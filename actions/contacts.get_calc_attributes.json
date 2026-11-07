@@ -1,8 +1,8 @@
 {
-  "id": "contacts.calculate_attributes",
+  "id": "contacts.get_calc_attributes",
   "module": "contacts",
-  "name": "Calculate contact attributes",
-  "description": "Call this when you need to compute derived attributes for a specific contact, such as transaction count and whether a particular attribute is present. Use the Get Contact action instead if you only need basic contact information.",
+  "name": "Get calculated attributes",
+  "description": "Call this when you need to retrieve the calculated attributes for a specific contact, such as transaction count and whether a particular attribute is present. Use the standard contact detail endpoint instead if you only need basic contact information.",
   "preconditions": [
     "The contact with the given ID must exist."
   ],
@@ -30,13 +30,14 @@
           },
           "has_attribute": {
             "type": "boolean",
-            "description": "Indicates whether the contact has the specific calculated attribute."
+            "description": "Indicates whether the contact has the calculated attribute."
           }
         },
         "required": [
           "count",
           "has_attribute"
-        ]
+        ],
+        "description": "Summary of transaction-related calculated attributes."
       }
     },
     "required": [
@@ -48,8 +49,8 @@
   "idempotent": true,
   "ui_path": [
     "Contacts",
-    "View contact",
-    "Calculate attributes"
+    "Contact details",
+    "Calculated attributes"
   ],
   "internal_endpoint": {
     "method": "GET",

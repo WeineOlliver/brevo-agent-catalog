@@ -121,7 +121,7 @@
   "side_effects": [
     "The contact is added to the specified list(s)."
   ],
-  "destructive": true,
+  "destructive": false,
   "idempotent": false,
   "ui_path": [
     "Contacts",

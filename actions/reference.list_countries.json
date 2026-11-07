@@ -1,0 +1,62 @@
+{
+  "id": "reference.list_countries",
+  "module": "reference",
+  "name": "List countries",
+  "description": "Call this when you need the canonical country reference data the Brevo web app uses to populate country and phone-prefix pickers — for example to resolve a country name to its ISO code, its international calling code, or Brevo's internal numeric country_id before filling a form that expects one of those values. This is static reference data served from Brevo's CDN, not account data; for the account's own country or address settings use the organization/account details action instead, and for a contact's country attribute use the contacts actions.",
+  "preconditions": [],
+  "inputs": {
+    "type": "object",
+    "properties": {},
+    "required": []
+  },
+  "outputs": {
+    "type": "array",
+    "description": "Array of country reference records, one per country or territory.",
+    "items": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "English display name of the country or territory, e.g. \"Afghanistan\"."
+        },
+        "code": {
+          "type": "string",
+          "description": "Two-letter country code, e.g. \"AF\". Observed values follow ISO 3166-1 alpha-2, and may be shared by related territories (e.g. Ascension uses \"SH\")."
+        },
+        "calling_code": {
+          "type": "string",
+          "description": "International dialling prefix including the leading plus sign, e.g. \"+93\"."
+        },
+        "country_id": {
+          "type": "integer",
+          "description": "Brevo's internal numeric identifier for the country, used by forms that expect a country id."
+        }
+      }
+    }
+  },
+  "side_effects": [],
+  "destructive": false,
+  "idempotent": true,
+  "ui_path": [
+    "Settings",
+    "SMTP & API",
+    "Keys"
+  ],
+  "internal_endpoint": {
+    "method": "GET",
+    "path": "/js/countries-production.json",
+    "body_example": null
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/settings-keys-smtp.json"
+    ],
+    "verified_at": null
+  }
+}

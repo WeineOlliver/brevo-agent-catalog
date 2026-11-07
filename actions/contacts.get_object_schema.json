@@ -1,0 +1,127 @@
+{
+  "id": "contacts.get_object_schema",
+  "module": "contacts",
+  "name": "Get contact object schema",
+  "description": "Call this when you need the metadata that describes the contact object itself — its display labels, which attribute acts as the record's primary label, and which other object types (deal, company, product) contacts can be associated with and with what cardinality. Use it before building or interpreting a contact form, association picker, or table of contacts, so you know what the fields and links mean. This returns the schema, not people: to read or list actual contact records use the contacts listing or single-contact retrieval actions instead, and to discover the per-attribute definitions of contact fields use the contact attributes action.",
+  "preconditions": [
+    "The session must be authenticated against a Brevo account.",
+    "An object definition with the given numeric object_id must exist in the account."
+  ],
+  "inputs": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "integer",
+        "description": "Numeric internal object_id of the contact object definition, taken from the app route (observed as 1)."
+      },
+      "include_association_attributes": {
+        "type": "string",
+        "description": "Controls whether attribute details for associated object types are expanded in the response. Only the value \"all\" was observed.",
+        "enum": [
+          "all"
+        ]
+      }
+    },
+    "required": [
+      "id"
+    ]
+  },
+  "outputs": {
+    "type": "object",
+    "properties": {
+      "organization_id": {
+        "type": "string",
+        "description": "Identifier of the Brevo account that owns the object definition."
+      },
+      "id": {
+        "type": "integer",
+        "description": "Numeric internal id of the object definition."
+      },
+      "object_type": {
+        "type": "string",
+        "description": "Machine name of the object, observed as \"contact\"."
+      },
+      "primary_attribute": {
+        "type": "string",
+        "description": "Name of the attribute used as the record's primary display label."
+      },
+      "singular_label": {
+        "type": "string",
+        "description": "Human-readable singular label, e.g. \"Contact\"."
+      },
+      "plural_label": {
+        "type": "string",
+        "description": "Human-readable plural label, e.g. \"Contacts\"."
+      },
+      "created_at": {
+        "type": "string",
+        "description": "Creation timestamp of the object definition (RFC 3339)."
+      },
+      "updated_at": {
+        "type": "string",
+        "description": "Last-update timestamp of the object definition (RFC 3339)."
+      },
+      "attributes": {
+        "type": "object",
+        "description": "Map of attribute names to values for the object, e.g. {\"email\": \"...\"}."
+      },
+      "associations": {
+        "type": "array",
+        "description": "Object types this object can be linked to.",
+        "items": {
+          "type": "object",
+          "properties": {
+            "object_type": {
+              "type": "string",
+              "description": "Machine name of the associated object, e.g. \"deal\", \"company\", \"product\"."
+            },
+            "cardinality": {
+              "type": "string",
+              "description": "Relationship cardinality between the two object types; observed as \"n-n\"."
+            },
+            "singular_label": {
+              "type": "string",
+              "description": "Human-readable singular label of the associated object."
+            },
+            "plural_label": {
+              "type": "string",
+              "description": "Human-readable plural label of the associated object."
+            },
+            "primary_attribute": {
+              "type": "string",
+              "description": "Name of the associated object's primary display attribute."
+            },
+            "is_system": {
+              "type": "boolean",
+              "description": "True when the association is built into Brevo rather than user-defined."
+            }
+          }
+        }
+      }
+    }
+  },
+  "side_effects": [],
+  "destructive": false,
+  "idempotent": true,
+  "ui_path": [
+    "Contacts",
+    "Open a contact record"
+  ],
+  "internal_endpoint": {
+    "method": "GET",
+    "path": "/app/objects/contact/object_id/:id",
+    "body_example": null
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/contact-index-id.json"
+    ],
+    "verified_at": null
+  }
+}

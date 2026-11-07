@@ -1,0 +1,74 @@
+{
+  "id": "account.get_client_config",
+  "module": "account",
+  "name": "Get client config",
+  "description": "Call this when you need the signed-in account's display and locale context — organization name, timezone, time format — or to check whether a given app (e.g. SMS campaigns) is already activated before driving a campaign flow, since the response reports activation state per app. Use this as the read-only check that pairs with the separate app-activation action (account.enable_sms_campaigns_app) when activation turns out to be needed; prefer the organization details action (organization.get_details) when you need fuller organization metadata rather than app activation and formatting flags.",
+  "preconditions": [
+    "An authenticated Brevo web session (the endpoint resolves the account from the session, not from a path parameter).",
+    "Any app named in app_to_activate must correspond to an app Brevo recognises for the account."
+  ],
+  "inputs": {
+    "type": "object",
+    "properties": {
+      "app_to_activate": {
+        "type": "string",
+        "description": "Name of the app whose activation state should be reflected in the app_activated map of the response, as observed on the campaigns listing route. Observed value: \"sms-campaigns\".",
+        "enum": [
+          "sms-campaigns"
+        ]
+      }
+    },
+    "required": []
+  },
+  "outputs": {
+    "type": "object",
+    "properties": {
+      "organization_name": {
+        "type": "string",
+        "description": "Display name of the organization owning the session, e.g. \"TestBoxTest\"."
+      },
+      "timezone": {
+        "type": "string",
+        "description": "IANA timezone the account's dates and schedules are rendered in, e.g. \"America/Sao_Paulo\"."
+      },
+      "timeformat": {
+        "type": "string",
+        "description": "Clock format the UI uses for times, e.g. \"24\"."
+      },
+      "app_activated": {
+        "type": "object",
+        "description": "Map of app name to whether that app is activated for the account. Keys observed reflect the app_to_activate query value.",
+        "additionalProperties": {
+          "type": "boolean"
+        }
+      },
+      "marketing_sms_link_shortening_enabled": {
+        "type": "boolean",
+        "description": "Whether link shortening is enabled for marketing SMS on this account."
+      }
+    }
+  },
+  "side_effects": [],
+  "destructive": false,
+  "idempotent": true,
+  "ui_path": [
+    "Campaigns"
+  ],
+  "internal_endpoint": {
+    "method": "GET",
+    "path": "/client/config",
+    "body_example": null
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/explore/campaigns-listing.json"
+    ],
+    "verified_at": null
+  }
+}

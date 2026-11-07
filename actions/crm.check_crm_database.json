@@ -1,0 +1,52 @@
+{
+  "id": "crm.check_crm_database",
+  "module": "crm",
+  "name": "Check CRM database availability",
+  "description": "Call this when you need to confirm the CRM module is provisioned for the signed-in account and obtain the organization id that CRM-scoped calls belong to, before loading deals, tasks, or other CRM data. It is a lightweight readiness probe, not a source of account detail — use the organization details action for name, plan, or settings, and the CRM plan info action for CRM entitlements.",
+  "preconditions": [
+    "A signed-in Brevo web session whose credentials are sent to crm-backend-api.brevo.com.",
+    "The account has access to the CRM module."
+  ],
+  "inputs": {
+    "type": "object",
+    "properties": {},
+    "required": []
+  },
+  "outputs": {
+    "type": "object",
+    "properties": {
+      "organization_id": {
+        "type": "string",
+        "description": "Identifier of the organization whose CRM database backs the session; used to scope subsequent CRM requests."
+      }
+    },
+    "required": [
+      "organization_id"
+    ]
+  },
+  "side_effects": [],
+  "destructive": false,
+  "idempotent": true,
+  "ui_path": [
+    "CRM",
+    "Deals"
+  ],
+  "internal_endpoint": {
+    "method": "GET",
+    "path": "/crm/backend/check-crm-db",
+    "body_example": null
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/explore/crm-deals.json",
+      "captures/clean/explore/tasks.json"
+    ],
+    "verified_at": null
+  }
+}

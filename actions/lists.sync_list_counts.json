@@ -1,0 +1,49 @@
+{
+  "id": "lists.sync_list_counts",
+  "module": "lists",
+  "name": "Sync list contact counts",
+  "description": "Call this when the contact counts shown for lists are stale or suspect — for example after a bulk import, bulk delete, or large segmentation change — and you need the stored per-list totals recomputed before reading them. This only refreshes the cached counts; call it before, not instead of, the action that lists lists and returns their counts, and do not use it to read any count itself since the response carries no body. It is not a way to change list membership — use the add-contacts-to-list or remove-contacts-from-list actions for that.",
+  "preconditions": [
+    "The session must be authenticated against the contacts API for the account whose lists are being recounted.",
+    "At least one list must exist in the account for the recount to have any effect."
+  ],
+  "inputs": {
+    "type": "object",
+    "properties": {},
+    "required": [],
+    "description": "No parameters. The observed request body is an empty JSON object; the account is resolved from the authenticated session."
+  },
+  "outputs": {
+    "type": "object",
+    "properties": {},
+    "required": [],
+    "description": "Empty response body on HTTP 200. Success is signalled by the status code alone; read the refreshed counts through the list-listing action afterwards."
+  },
+  "side_effects": [
+    "The stored contact-count values for the account's lists are recomputed and overwritten with freshly calculated totals.",
+    "Counts displayed on the list-listing screen change to the recomputed values."
+  ],
+  "destructive": false,
+  "idempotent": false,
+  "ui_path": [
+    "Contacts",
+    "Lists"
+  ],
+  "internal_endpoint": {
+    "method": "POST",
+    "path": "/lists/list-count-sync",
+    "body_example": "{}"
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/explore/contact-list-listing.json"
+    ],
+    "verified_at": null
+  }
+}

@@ -1,0 +1,66 @@
+{
+  "id": "templates.get_asset_sharing_notifications",
+  "module": "templates",
+  "name": "Get asset sharing notifications",
+  "description": "Call this when you need to know whether cross-account asset sharing is enabled for a given asset type (such as email templates) and whether there are any pending sharing notifications to surface before working in the template listing. Use it as a capability check that gates sharing-related UI and follow-up calls: if is_sharing_enabled is false, treat sharing as unavailable for the account and do not attempt share or accept flows. It reports only sharing notification state, so use the template listing action to enumerate actual templates, and the account or feature-toggle actions to inspect broader plan entitlements.",
+  "preconditions": [
+    "An authenticated Brevo web session whose cookies are valid for the asset-sharing service host.",
+    "The asset_type query parameter must name an asset type the asset-sharing service recognises, e.g. \"email-template\"."
+  ],
+  "inputs": {
+    "type": "object",
+    "properties": {
+      "asset_type": {
+        "type": "string",
+        "description": "The kind of asset whose sharing notifications are requested. Only \"email-template\" has been observed.",
+        "enum": [
+          "email-template"
+        ]
+      }
+    },
+    "required": [
+      "asset_type"
+    ]
+  },
+  "outputs": {
+    "type": "object",
+    "properties": {
+      "is_sharing_enabled": {
+        "type": "boolean",
+        "description": "Whether asset sharing is enabled for this account and asset type. Observed as false, which came back with an empty data object."
+      },
+      "data": {
+        "type": "object",
+        "description": "Notification payload keyed by notification identifier. Observed empty ({}) when sharing is disabled; the shape of individual entries was not observed."
+      }
+    },
+    "required": [
+      "is_sharing_enabled",
+      "data"
+    ]
+  },
+  "side_effects": [],
+  "destructive": false,
+  "idempotent": true,
+  "ui_path": [
+    "Campaigns",
+    "Templates"
+  ],
+  "internal_endpoint": {
+    "method": "GET",
+    "path": "/api/notifications",
+    "body_example": null
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/explore/templates-listing.json"
+    ],
+    "verified_at": null
+  }
+}

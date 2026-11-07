@@ -2,7 +2,7 @@
   "id": "segments.query_contacts",
   "module": "segments",
   "name": "Query segment contacts",
-  "description": "Call this when you need to retrieve the contacts that belong to a specific segment, with pagination and optional forced refresh of the segment calculation. Use the standard contacts list endpoint instead if you only need a simple, unfiltered list of contacts.",
+  "description": "Call this when you need to list contacts — either everyone in the account or the members of one segment. An empty `fe_query` returns the whole contact base, which is how the product renders its main contacts table; pass a segment query to narrow it. Supports pagination and an optional forced refresh of the segment calculation. Use the contact-detail action instead when you already know which single contact you want.",
   "preconditions": [
     "The segment being queried must already exist."
   ],
@@ -183,8 +183,8 @@
     ]
   },
   "side_effects": [],
-  "destructive": true,
-  "idempotent": false,
+  "destructive": false,
+  "idempotent": true,
   "ui_path": [
     "Contacts",
     "Segments",

@@ -1,8 +1,8 @@
 {
-  "id": "tags.list_tags",
-  "module": "tags",
+  "id": "campaigns.list_tags",
+  "module": "campaigns",
   "name": "List tags",
-  "description": "Call this when you need to retrieve the complete list of tags used across campaigns. If you only need tags for a specific campaign, use the campaign‑specific tag retrieval action instead.",
+  "description": "Call this when you need to retrieve the collection of tags displayed on the campaign listing page. Use the contacts.list_tags action instead if you need tags associated with contacts rather than campaigns.",
   "preconditions": [],
   "inputs": {
     "type": "object",
@@ -12,8 +12,7 @@
   "outputs": {
     "type": "array",
     "items": {
-      "type": "object",
-      "description": "A tag object. The exact fields are not documented in the web app."
+      "type": "object"
     }
   },
   "side_effects": [],
@@ -37,7 +36,8 @@
   "verification": {
     "status": "observed",
     "evidence": [
-      "captures/clean/campaigns-listing.json"
+      "captures/clean/campaigns-listing.json",
+      "captures/clean/explore/campaigns-listing.json"
     ],
     "verified_at": null
   }

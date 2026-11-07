@@ -1,12 +1,20 @@
 {
-  "generated_at": "2026-11-06T20:12:14.472Z",
-  "count": 118,
+  "generated_at": "2026-11-07T03:36:18.760Z",
+  "count": 136,
   "by_status": {
     "verified": 0,
-    "observed": 118,
+    "observed": 136,
     "inferred": 0
   },
   "actions": [
+    {
+      "id": "account.enable_sms_campaigns_app",
+      "module": "account",
+      "name": "Enable SMS Campaigns app",
+      "description": "Call this when an account needs the SMS Campaigns feature turned on before SMS work can begin — for example a campaigns listing shows SMS as unavailable or locked, or a subsequent SMS campaign call fails because the app is not enabled. This only flips the account-level app entitlement; to create, edit, or send an actual SMS campaign, use the SMS campaign actions instead, and to read which apps are already on, use the feature-toggle read action rather than calling this to find out.",
+      "status": "observed",
+      "destructive": false
+    },
     {
       "id": "account.get_account",
       "module": "account",
@@ -24,6 +32,22 @@
       "destructive": false
     },
     {
+      "id": "account.get_client_config",
+      "module": "account",
+      "name": "Get client config",
+      "description": "Call this when you need the signed-in account's display and locale context — organization name, timezone, time format — or to check whether a given app (e.g. SMS campaigns) is already activated before driving a campaign flow, since the response reports activation state per app. Use this as the read-only check that pairs with the separate app-activation action (account.enable_sms_campaigns_app) when activation turns out to be needed; prefer the organization details action (organization.get_details) when you need fuller organization metadata rather than app activation and formatting flags.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
+      "id": "account.get_info",
+      "module": "account",
+      "name": "Get account info",
+      "description": "Call this when you need the current Brevo account's basic details such as ID, name, email and enabled applications. Use a more specific user‑management action (e.g. get contacts) if you need detailed contact data instead.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
       "id": "account.get_plan_info",
       "module": "account",
       "name": "Get plan information",
@@ -36,6 +60,14 @@
       "module": "account",
       "name": "Get account settings",
       "description": "Call this when you need to read the current account configuration such as timezone, date format, locale and notification preferences. If you need to change any of these values, use the neighbouring action `account.update_settings` instead.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
+      "id": "account.get_transactional_email_user_info",
+      "module": "account",
+      "name": "Get transactional email user info",
+      "description": "Call this when you need the transactional-email context for the signed-in user before working in the Transactional > Email area: which applications are activated, whether the transactional email privileges list grants access, and the display conventions (timezone, date and time format) needed to interpret or render email log timestamps. Use it to decide whether a transactional email feature is reachable at all before calling a logs or real-time events action, and to learn the timezone those timestamps should be read in. For general account or organization details outside transactional email, prefer organization.get_details or crm.get_organization_info; for product-wide flags prefer features.get_feature_toggles.",
       "status": "observed",
       "destructive": false
     },
@@ -88,14 +120,6 @@
       "destructive": false
     },
     {
-      "id": "automation.get_contact_count",
-      "module": "automation",
-      "name": "Get contact count",
-      "description": "Call this when you need to retrieve the number of contacts displayed in the Automation sidebar. Use the automation list action instead if you only need to enumerate automations without needing the sidebar count.",
-      "status": "observed",
-      "destructive": false
-    },
-    {
       "id": "automation.get_deferred_count",
       "module": "automation",
       "name": "Get deferred email count",
@@ -116,6 +140,22 @@
       "module": "automation",
       "name": "Get processing details",
       "description": "Call this when you need to retrieve the current processing status, pending counts, and rate limits of the automation engine. Use a summary endpoint (e.g., automation.get_automation_summary) instead if you only need high‑level automation information.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
+      "id": "automation.get_sidebar_contact_count",
+      "module": "automation",
+      "name": "Get sidebar contact count",
+      "description": "Call this when you need the contact count shown in the automation sidebar for the currently viewed automation. If you need a reliable count of contacts for a list or segment, use the contacts count endpoint instead.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
+      "id": "automation.show_deferred_notification",
+      "module": "automation",
+      "name": "Show Deferred Notification",
+      "description": "Call this when you need to retrieve the server‑side details of a deferred notification for a specific workflow automation. If you only need to list or inspect the automation itself, use the standard automation retrieval actions instead.",
       "status": "observed",
       "destructive": false
     },
@@ -160,6 +200,14 @@
       "destructive": false
     },
     {
+      "id": "campaigns.get_sms_flow_status",
+      "module": "campaigns",
+      "name": "Get SMS creation flow status",
+      "description": "Call this when you need to know which SMS campaign creation experience the account is on before building or editing an SMS campaign, so you can pick the right follow-on action or UI route. The response also tells you whether a sender phone number is configured. This only reports flow configuration — to list or read actual SMS campaigns, use the campaigns listing action instead, and to create one, use the SMS campaign creation action.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
       "id": "campaigns.get_statistics",
       "module": "campaigns",
       "name": "Get campaign statistics",
@@ -184,6 +232,14 @@
       "destructive": false
     },
     {
+      "id": "campaigns.list_ai_agent_sessions",
+      "module": "campaigns",
+      "name": "List email campaign AI agent sessions",
+      "description": "Call this when you need to know whether the user already has in-progress or past AI email-campaign-agent sessions before starting or resuming AI-assisted campaign creation — for example to decide between resuming an existing session and opening a new one, or to surface a session identifier that a later agent call needs. An empty list means no AI agent session exists for this account yet, so nothing can be resumed. This only reports sessions; use the regular campaign listing action to enumerate actual email campaigns, and the campaign creation action to build a campaign without the AI agent.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
       "id": "campaigns.list_campaigns",
       "module": "campaigns",
       "name": "List campaigns",
@@ -192,18 +248,18 @@
       "destructive": false
     },
     {
-      "id": "client.get_feature_toggles",
-      "module": "client",
-      "name": "Get feature toggles",
-      "description": "Call this when you need to know which feature flags are enabled for the current Brevo account, for example to adjust UI behavior. Use a more specific feature‑check endpoint if one exists for the particular capability you are interested in.",
+      "id": "campaigns.list_tags",
+      "module": "campaigns",
+      "name": "List tags",
+      "description": "Call this when you need to retrieve the collection of tags displayed on the campaign listing page. Use the contacts.list_tags action instead if you need tags associated with contacts rather than campaigns.",
       "status": "observed",
       "destructive": false
     },
     {
-      "id": "client.get_info",
+      "id": "client.get_feature_toggles",
       "module": "client",
-      "name": "Get client info",
-      "description": "Call this when you need to retrieve the logged‑in user's basic account details such as name, email, activated applications and visible channel listings. If you only need a subset of this data (e.g., just activated applications), use a more specific endpoint instead.",
+      "name": "Get feature toggles",
+      "description": "Call this when you need to know which feature flags are enabled for the current Brevo account, for example to adjust UI behavior. Use a more specific feature‑check endpoint if one exists for the particular capability you are interested in.",
       "status": "observed",
       "destructive": false
     },
@@ -220,14 +276,6 @@
       "module": "companies",
       "name": "Get organization config",
       "description": "Call this when you need to retrieve the CRM organization settings such as the company name, onboarding status, folder ID and the list of attribute definitions. Use a configuration‑update action instead if you intend to modify these values.",
-      "status": "observed",
-      "destructive": false
-    },
-    {
-      "id": "companies.get_organization_info",
-      "module": "companies",
-      "name": "Get organization info",
-      "description": "Call this when you need to retrieve the current organization's activated applications and feature toggles from the Brevo CRM. If you only need specific feature toggle values, consider using a more focused endpoint (if available) rather than this comprehensive call.",
       "status": "observed",
       "destructive": false
     },
@@ -261,13 +309,21 @@
       "name": "Add contact to lists",
       "description": "Call this when you need to add the currently viewed contact to one or more existing lists. Use the remove contact from lists action instead when you want to detach the contact from a list.",
       "status": "observed",
-      "destructive": true
+      "destructive": false
     },
     {
-      "id": "contacts.calculate_attributes",
+      "id": "contacts.check_duplicate_contact",
       "module": "contacts",
-      "name": "Calculate contact attributes",
-      "description": "Call this when you need to compute derived attributes for a specific contact, such as transaction count and whether a particular attribute is present. Use the Get Contact action instead if you only need basic contact information.",
+      "name": "Check duplicate contact",
+      "description": "Call this when you need to know whether a contact identifier (email, SMS number, WhatsApp number, landline number, or external ID) is already taken in the account, typically before attempting to create a contact so you can avoid a collision or decide to update instead. Supply at least one identifier; the endpoint rejects a call where all of them are empty. This only answers the duplicate question — use the contact creation action to actually add the contact, the contact update action to modify the existing one, or a contact search/listing action when you need the stored attributes of the matching contact rather than a yes/no answer.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
+      "id": "contacts.create_contact",
+      "module": "contacts",
+      "name": "Create contact",
+      "description": "Call this when you need to add a single new contact to the account from an email address, optionally placing it on lists and setting attribute values at the same time. The response returns the new contact's internal numeric id, so call this when a later step needs that id. Check first with contacts.check_duplicate_contact if you are unsure whether the email already exists, since this endpoint's behaviour for an existing email is not established by the evidence. For adding many contacts at once prefer the account's import flow rather than looping this action, and to put an already-existing contact onto a list use the list-membership action instead of re-creating it.",
       "status": "observed",
       "destructive": false
     },
@@ -292,6 +348,14 @@
       "module": "contacts",
       "name": "Get backend settings",
       "description": "Call this when you need to retrieve the organization configuration and the current account details displayed in the contacts UI. Use a more specific endpoint such as \"contacts.get_current_account\" if you only require the current account information without the organization config.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
+      "id": "contacts.get_calc_attributes",
+      "module": "contacts",
+      "name": "Get calculated attributes",
+      "description": "Call this when you need to retrieve the calculated attributes for a specific contact, such as transaction count and whether a particular attribute is present. Use the standard contact detail endpoint instead if you only need basic contact information.",
       "status": "observed",
       "destructive": false
     },
@@ -339,7 +403,15 @@
       "id": "contacts.get_lists_and_segments",
       "module": "contacts",
       "name": "Get lists and segments",
-      "description": "Call this when you need to retrieve the hierarchy of folders, contact lists, segments, and categories displayed on the Contact → Lists page. Use the action to populate UI selectors or to sync local copies. If you only need a single list's details, use the dedicated list‑fetch operation instead.",
+      "description": "Call this to retrieve the whole Contact → Lists navigation hierarchy in one request: folders, lists, segments and categories together. It takes no parameters and does not paginate, so it is for populating selectors and mirroring that page, not for enumerating lists. Use lists.get_lists instead when the question is only about contact lists and you need paging, counts or folder filtering; use segments.list_segments for segments alone.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
+      "id": "contacts.get_object_schema",
+      "module": "contacts",
+      "name": "Get contact object schema",
+      "description": "Call this when you need the metadata that describes the contact object itself — its display labels, which attribute acts as the record's primary label, and which other object types (deal, company, product) contacts can be associated with and with what cardinality. Use it before building or interpreting a contact form, association picker, or table of contacts, so you know what the fields and links mean. This returns the schema, not people: to read or list actual contact records use the contacts listing or single-contact retrieval actions instead, and to discover the per-attribute definitions of contact fields use the contact attributes action.",
       "status": "observed",
       "destructive": false
     },
@@ -400,6 +472,14 @@
       "destructive": false
     },
     {
+      "id": "crm.check_crm_database",
+      "module": "crm",
+      "name": "Check CRM database availability",
+      "description": "Call this when you need to confirm the CRM module is provisioned for the signed-in account and obtain the organization id that CRM-scoped calls belong to, before loading deals, tasks, or other CRM data. It is a lightweight readiness probe, not a source of account detail — use the organization details action for name, plan, or settings, and the CRM plan info action for CRM entitlements.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
       "id": "crm.get_account_settings",
       "module": "crm",
       "name": "Get account settings",
@@ -412,6 +492,22 @@
       "module": "crm",
       "name": "Get CRM form attributes",
       "description": "Call this when you need to retrieve the configuration attributes for the contact form in the CRM, such as the default pipeline, deal currency and synchronization settings. Use an update‑form‑attributes action instead when you need to modify these settings.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
+      "id": "crm.get_organization_info",
+      "module": "crm",
+      "name": "Get organization info",
+      "description": "Call this when you need to retrieve the list of activated applications and the current feature toggles for the organization. Use the \"crm.update_organization_settings\" action instead if you need to modify these settings.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
+      "id": "crm.list_contact_attributes",
+      "module": "crm",
+      "name": "List CRM contact attributes",
+      "description": "Call this when you need the schema of contact fields the CRM knows about — their keys, labels, value types, and whether each is a system field or read-only — before reading or writing contact data on deals, pipelines, or CRM forms. Use it to resolve a human-facing field label to the attribute key other calls expect, and to find out which fields must be left alone because they are system-owned or read-only. This returns definitions of fields, not any contact's values: to read or change values on a specific contact, use the contacts actions instead; to fetch the attribute definitions for a non-contact CRM object such as a deal or a company, use the equivalent object-schema action for that object type.",
       "status": "observed",
       "destructive": false
     },
@@ -579,7 +675,15 @@
       "id": "lists.get_lists",
       "module": "lists",
       "name": "Get lists",
-      "description": "Call this when you need to retrieve a paginated collection of contact lists, optionally filtered by folder and sorted. Use the list‑details endpoint (if available) when you need information about a single list or its members.",
+      "description": "Call this to enumerate the account’s contact lists themselves — the answer to \"what lists do we have\". Returns one page of lists with their names, ids and contact counts, optionally filtered by folder and sorted. Use contacts.get_lists_and_segments instead when you need segments and folders in the same call, for example to populate a picker; use the list-details endpoint for one list’s members.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
+      "id": "lists.sync_list_counts",
+      "module": "lists",
+      "name": "Sync list contact counts",
+      "description": "Call this when the contact counts shown for lists are stale or suspect — for example after a bulk import, bulk delete, or large segmentation change — and you need the stored per-list totals recomputed before reading them. This only refreshes the cached counts; call it before, not instead of, the action that lists lists and returns their counts, and do not use it to read any count itself since the response carries no body. It is not a way to change list membership — use the add-contacts-to-list or remove-contacts-from-list actions for that.",
       "status": "observed",
       "destructive": false
     },
@@ -624,6 +728,14 @@
       "destructive": false
     },
     {
+      "id": "marketing_site.get_footer",
+      "module": "marketing_site",
+      "name": "Get marketing footer content",
+      "description": "Call this when you need the Brevo marketing website's footer content — the social media links and footer navigation menus rendered at the bottom of app and corporate pages — for a given language locale. This serves presentation chrome from Brevo's WordPress corporate backend, not account data: it returns nothing about the signed-in user, their contacts, campaigns, or statistics. For the in-app navigation menus use navigation.get_header_menu instead; for the account's own details use organization.get_details.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
       "id": "meetings.get_expert_user",
       "module": "meetings",
       "name": "Get expert user",
@@ -644,6 +756,14 @@
       "module": "meetings",
       "name": "Get plan",
       "description": "Call this when you need to determine whether the account has a paid Meetings plan and which feature flags are enabled. Use the upgrade plan action instead if the user wants to change to a paid plan.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
+      "id": "navigation.get_header_menu",
+      "module": "navigation",
+      "name": "Get marketing site header menu",
+      "description": "Call this when an agent needs the marketing/corporate website's top navigation tree — menu tab names, item titles, slugs and link URLs — for example to resolve where a public Brevo page lives before navigating to it. This serves the public corp site chrome, not the logged-in product UI: it carries no account, contact or campaign data, so use a contacts, campaigns or lists read action instead for anything account-specific, and use the feature-toggle or plan-info reads instead to learn what the current account can access.",
       "status": "observed",
       "destructive": false
     },
@@ -712,6 +832,14 @@
       "destructive": false
     },
     {
+      "id": "reference.list_countries",
+      "module": "reference",
+      "name": "List countries",
+      "description": "Call this when you need the canonical country reference data the Brevo web app uses to populate country and phone-prefix pickers — for example to resolve a country name to its ISO code, its international calling code, or Brevo's internal numeric country_id before filling a form that expects one of those values. This is static reference data served from Brevo's CDN, not account data; for the account's own country or address settings use the organization/account details action instead, and for a contact's country attribute use the contacts actions.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
       "id": "scores.get_days",
       "module": "scores",
       "name": "Get Scores Days",
@@ -741,7 +869,7 @@
       "name": "Get segment count",
       "description": "Call this when you need to know how many contacts match a given segment query without retrieving the contacts themselves. If you need the actual contact records, use the contacts listing action instead.",
       "status": "observed",
-      "destructive": true
+      "destructive": false
     },
     {
       "id": "segments.get_events_status",
@@ -811,9 +939,9 @@
       "id": "segments.query_contacts",
       "module": "segments",
       "name": "Query segment contacts",
-      "description": "Call this when you need to retrieve the contacts that belong to a specific segment, with pagination and optional forced refresh of the segment calculation. Use the standard contacts list endpoint instead if you only need a simple, unfiltered list of contacts.",
+      "description": "Call this when you need to list contacts — either everyone in the account or the members of one segment. An empty `fe_query` returns the whole contact base, which is how the product renders its main contacts table; pass a segment query to narrow it. Supports pagination and an optional forced refresh of the segment calculation. Use the contact-detail action instead when you already know which single contact you want.",
       "status": "observed",
-      "destructive": true
+      "destructive": false
     },
     {
       "id": "settings.get_phone_call_enabled",
@@ -864,18 +992,18 @@
       "destructive": false
     },
     {
-      "id": "tags.list_tags",
-      "module": "tags",
-      "name": "List tags",
-      "description": "Call this when you need to retrieve the complete list of tags used across campaigns. If you only need tags for a specific campaign, use the campaign‑specific tag retrieval action instead.",
-      "status": "observed",
-      "destructive": false
-    },
-    {
       "id": "tasks.list_tasktypes",
       "module": "tasks",
       "name": "List task types",
       "description": "Call this when you need to retrieve the list of predefined task types (e.g., Email, Call, Meeting) that can be used when creating or filtering tasks. Use tasks.create_task if you need to create a new task instead.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
+      "id": "templates.get_asset_sharing_notifications",
+      "module": "templates",
+      "name": "Get asset sharing notifications",
+      "description": "Call this when you need to know whether cross-account asset sharing is enabled for a given asset type (such as email templates) and whether there are any pending sharing notifications to surface before working in the template listing. Use it as a capability check that gates sharing-related UI and follow-up calls: if is_sharing_enabled is false, treat sharing as unavailable for the account and do not attempt share or accept flows. It reports only sharing notification state, so use the template listing action to enumerate actual templates, and the account or feature-toggle actions to inspect broader plan entitlements.",
       "status": "observed",
       "destructive": false
     },
@@ -893,13 +1021,29 @@
       "name": "Fetch email logs",
       "description": "Call this when you need to retrieve a paginated list of transactional email logs for a specific date range. Use a GET‑based logs endpoint (if available) instead when you only need to read logs without submitting a request body.",
       "status": "observed",
-      "destructive": true
+      "destructive": false
     },
     {
       "id": "transactional.get_email_log_filters",
       "module": "transactional",
       "name": "Get email log filters",
       "description": "Call this when you need to retrieve the list of tags and sender identities that can be used to filter transactional email logs in the UI. Use the separate action to fetch the actual logs (e.g., get_email_logs) when you need the log entries themselves.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
+      "id": "transactional.get_smtp_credentials",
+      "module": "transactional",
+      "name": "Get SMTP relay credentials",
+      "description": "Call this when an agent needs the SMTP relay connection details (server host, port, and login identity) to configure an external application or mail client to send transactional email through Brevo. Use this only to read the connection settings; it returns no SMTP password or API key, so if a sending secret is required, obtain it from the SMTP & API key management area instead. For statistics on email already sent, use the transactional email statistics actions rather than this one.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
+      "id": "transactional.search_sms_logs",
+      "module": "transactional",
+      "name": "Search SMS logs",
+      "description": "Call this when you need the per-message SMS sending history for an account over a date range — the individual transactional SMS events behind the Logs screen, paged. This is a search that happens to be expressed as a POST: the criteria travel in the body. Use it to answer \"was this SMS delivered\", \"what went out last week\", or to page through recent sends. It reads only; to send an SMS or to inspect aggregate SMS statistics rather than individual log rows, use the corresponding send or statistics action instead. Note that the response envelope reports totalCount, so a first call with a small limit is the cheap way to size a range before paging it.",
       "status": "observed",
       "destructive": false
     },
@@ -936,18 +1080,18 @@
       "destructive": false
     },
     {
-      "id": "widgets.list",
-      "module": "widgets",
-      "name": "List homepage widgets",
-      "description": "Call this when you need to retrieve the collection of widgets that are available on the homepage for display or configuration. Use a specific widget‑detail action (e.g., widgets.get) if you only need information about a single widget.",
+      "id": "whatsapp.get_client_info",
+      "module": "whatsapp",
+      "name": "Get WhatsApp client info",
+      "description": "Call this when you need the WhatsApp-specific account context before working with WhatsApp templates or campaigns: the account id, the WhatsApp auth token used by the WhatsApp API host, whether WhatsApp is disabled for the account, the template-level privileges (create/edit, send, share), the remaining free message allowance, and the account time zone and time format. Use it to decide up front whether a WhatsApp template action is permitted at all, rather than attempting the action and handling a rejection. For general account or plan details not specific to WhatsApp, use the account/organization details action instead; for the app-wide feature toggle list, use the feature toggles action instead — the feature_toggle map here only carries WhatsApp-related flags.",
       "status": "observed",
       "destructive": false
     },
     {
-      "id": "workflow.show_deferred_notification",
-      "module": "workflow",
-      "name": "Show Deferred Notification",
-      "description": "Call this when you need to retrieve the details of a deferred notification for an automation workflow, typically to diagnose why a workflow execution was postponed or failed. Use the standard workflow retrieval actions (e.g., workflow.get) instead if you only need general workflow information.",
+      "id": "widgets.list",
+      "module": "widgets",
+      "name": "List homepage widgets",
+      "description": "Call this when you need to retrieve the collection of widgets that are available on the homepage for display or configuration. Use a specific widget‑detail action (e.g., widgets.get) if you only need information about a single widget.",
       "status": "observed",
       "destructive": false
     }

@@ -1,0 +1,55 @@
+{
+  "id": "campaigns.get_sms_flow_status",
+  "module": "campaigns",
+  "name": "Get SMS creation flow status",
+  "description": "Call this when you need to know which SMS campaign creation experience the account is on before building or editing an SMS campaign, so you can pick the right follow-on action or UI route. The response also tells you whether a sender phone number is configured. This only reports flow configuration — to list or read actual SMS campaigns, use the campaigns listing action instead, and to create one, use the SMS campaign creation action.",
+  "preconditions": [
+    "An authenticated Brevo web app session is required.",
+    "The request is served by the unified-campaign-creation.brevo.com host, not the public API host."
+  ],
+  "inputs": {
+    "type": "object",
+    "properties": {},
+    "required": []
+  },
+  "outputs": {
+    "type": "object",
+    "properties": {
+      "unified_sms_creation_flow_enabled": {
+        "type": "boolean",
+        "description": "True when the account uses the unified SMS campaign creation flow; false when it uses the legacy flow."
+      },
+      "phone_number": {
+        "type": "string",
+        "description": "The phone number associated with the SMS flow for this account. Empty string when none is configured."
+      }
+    },
+    "required": [
+      "unified_sms_creation_flow_enabled",
+      "phone_number"
+    ]
+  },
+  "side_effects": [],
+  "destructive": false,
+  "idempotent": true,
+  "ui_path": [
+    "Campaigns"
+  ],
+  "internal_endpoint": {
+    "method": "GET",
+    "path": "/marketing-sms/flow/status",
+    "body_example": null
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/explore/campaigns-listing.json"
+    ],
+    "verified_at": null
+  }
+}

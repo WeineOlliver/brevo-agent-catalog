@@ -1,0 +1,151 @@
+{
+  "id": "whatsapp.get_client_info",
+  "module": "whatsapp",
+  "name": "Get WhatsApp client info",
+  "description": "Call this when you need the WhatsApp-specific account context before working with WhatsApp templates or campaigns: the account id, the WhatsApp auth token used by the WhatsApp API host, whether WhatsApp is disabled for the account, the template-level privileges (create/edit, send, share), the remaining free message allowance, and the account time zone and time format. Use it to decide up front whether a WhatsApp template action is permitted at all, rather than attempting the action and handling a rejection. For general account or plan details not specific to WhatsApp, use the account/organization details action instead; for the app-wide feature toggle list, use the feature toggles action instead — the feature_toggle map here only carries WhatsApp-related flags.",
+  "preconditions": [
+    "An authenticated Brevo web app session is required.",
+    "The WhatsApp API host (whatsapp-api.brevo.com) must be reachable; this endpoint is not part of the public Brevo API."
+  ],
+  "inputs": {
+    "type": "object",
+    "properties": {},
+    "required": []
+  },
+  "outputs": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "string",
+        "description": "Identifier of the WhatsApp client record for the current user."
+      },
+      "account_id": {
+        "type": "string",
+        "description": "Brevo account identifier the WhatsApp client belongs to."
+      },
+      "name": {
+        "type": "string",
+        "description": "Display name of the account owner."
+      },
+      "auth_token": {
+        "type": "string",
+        "description": "Token the web app uses for subsequent WhatsApp API calls. Treat as a secret."
+      },
+      "email": {
+        "type": "string",
+        "description": "Email address on the account."
+      },
+      "activated_applications": {
+        "type": "array",
+        "description": "Brevo applications activated for this account, as observed: automation, email-campaigns, transactional-emails, crm, whatsapp, phone, meetings, sms-campaigns.",
+        "items": {
+          "type": "string"
+        }
+      },
+      "feature_toggle": {
+        "type": "object",
+        "description": "WhatsApp-related feature flags keyed by flag name with boolean values. Observed keys: dedup-customization-enabled, whatsapp-editor-ai.",
+        "properties": {
+          "dedup-customization-enabled": {
+            "type": "boolean",
+            "description": "Whether deduplication customization is enabled."
+          },
+          "whatsapp-editor-ai": {
+            "type": "boolean",
+            "description": "Whether AI assistance in the WhatsApp editor is enabled."
+          }
+        }
+      },
+      "free_messages": {
+        "type": "string",
+        "description": "Remaining free WhatsApp message allowance, returned as a string."
+      },
+      "time_zone": {
+        "type": "string",
+        "description": "IANA time zone of the account, e.g. America/Sao_Paulo."
+      },
+      "time_format": {
+        "type": "string",
+        "description": "Clock format preference for the account, e.g. \"24\"."
+      },
+      "email_account_invalidated": {
+        "type": "boolean",
+        "description": "Whether the account email has been invalidated."
+      },
+      "privileges": {
+        "type": "object",
+        "description": "What the current user may do with WhatsApp templates.",
+        "properties": {
+          "template_crud": {
+            "type": "boolean",
+            "description": "Whether the user may create, edit and delete WhatsApp templates."
+          },
+          "template_send": {
+            "type": "boolean",
+            "description": "Whether the user may send using WhatsApp templates."
+          },
+          "template_share": {
+            "type": "boolean",
+            "description": "Whether the user may share WhatsApp templates."
+          }
+        }
+      },
+      "whatsapp_disabled": {
+        "type": "boolean",
+        "description": "Whether WhatsApp is disabled for this account."
+      },
+      "is_enterprise": {
+        "type": "boolean",
+        "description": "Whether the account is an enterprise account."
+      },
+      "is_corporate_subaccount": {
+        "type": "boolean",
+        "description": "Whether the account is a subaccount of a corporate parent."
+      },
+      "excluded_conversion_user": {
+        "type": "boolean",
+        "description": "Whether the user is excluded from conversion tracking."
+      },
+      "newSignupFlow": {
+        "type": "boolean",
+        "description": "Whether the account went through the newer signup flow."
+      },
+      "phoneNumber": {
+        "type": "string",
+        "description": "WhatsApp sender phone number on the account; empty when none is configured."
+      }
+    },
+    "required": [
+      "id",
+      "account_id",
+      "activated_applications",
+      "privileges",
+      "whatsapp_disabled"
+    ]
+  },
+  "side_effects": [],
+  "destructive": false,
+  "idempotent": true,
+  "ui_path": [
+    "Campaigns",
+    "WhatsApp",
+    "Templates"
+  ],
+  "internal_endpoint": {
+    "method": "GET",
+    "path": "/whatsapp-campaign/api/client/info",
+    "body_example": null
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/explore/templates-listing.json"
+    ],
+    "verified_at": null
+  }
+}

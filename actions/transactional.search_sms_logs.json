@@ -1,0 +1,99 @@
+{
+  "id": "transactional.search_sms_logs",
+  "module": "transactional",
+  "name": "Search SMS logs",
+  "description": "Call this when you need the per-message SMS sending history for an account over a date range — the individual transactional SMS events behind the Logs screen, paged. This is a search that happens to be expressed as a POST: the criteria travel in the body. Use it to answer \"was this SMS delivered\", \"what went out last week\", or to page through recent sends. It reads only; to send an SMS or to inspect aggregate SMS statistics rather than individual log rows, use the corresponding send or statistics action instead. Note that the response envelope reports totalCount, so a first call with a small limit is the cheap way to size a range before paging it.",
+  "preconditions": [
+    "The session must be authenticated against the transactional SMS backend (transactional-app-backend-sms.brevo.com).",
+    "The account must have transactional SMS available for any log rows to exist; an account that has never sent SMS returns an empty data array."
+  ],
+  "inputs": {
+    "type": "object",
+    "properties": {
+      "startDate": {
+        "type": "string",
+        "description": "Inclusive start of the window to search, as an ISO 8601 UTC timestamp, e.g. \"2026-10-30T03:00:00.000Z\". Observed as the start of a 7-day window."
+      },
+      "endDate": {
+        "type": "string",
+        "description": "Inclusive end of the window to search, as an ISO 8601 UTC timestamp, e.g. \"2026-11-06T18:19:50.026Z\". Observed set to the moment of the request."
+      },
+      "limit": {
+        "type": "integer",
+        "description": "Maximum number of log rows to return in this page. Observed as 20; no maximum is documented, so do not assume one above what you have seen."
+      },
+      "page": {
+        "type": "integer",
+        "description": "1-based page number within the result set. Observed as 1."
+      }
+    },
+    "required": [
+      "startDate",
+      "endDate",
+      "limit",
+      "page"
+    ]
+  },
+  "outputs": {
+    "type": "object",
+    "properties": {
+      "data": {
+        "type": "array",
+        "description": "The SMS log rows for the requested page. Empty when the account has no SMS activity in the window. The per-row field shape was not observed — only an empty array was seen — so do not assume field names.",
+        "items": {
+          "type": "object"
+        }
+      },
+      "skip": {
+        "type": "integer",
+        "description": "Number of rows skipped before this page, derived from page and limit."
+      },
+      "limit": {
+        "type": "integer",
+        "description": "The page size echoed back from the request."
+      },
+      "page": {
+        "type": "integer",
+        "description": "The page number echoed back from the request."
+      },
+      "totalCount": {
+        "type": "integer",
+        "description": "Total number of log rows matching the date range across all pages."
+      }
+    },
+    "required": [
+      "data",
+      "skip",
+      "limit",
+      "page",
+      "totalCount"
+    ]
+  },
+  "side_effects": [
+    "None observed: the call returns SMS log rows and does not alter account data. It is a POST only because the search criteria are sent in the body, and it answers 201 rather than 200."
+  ],
+  "destructive": false,
+  "idempotent": true,
+  "ui_path": [
+    "Transactional",
+    "SMS",
+    "Logs"
+  ],
+  "internal_endpoint": {
+    "method": "POST",
+    "path": "/api/sms/logs",
+    "body_example": "{\"startDate\":\"2026-10-30T03:00:00.000Z\",\"endDate\":\"2026-11-06T18:19:50.026Z\",\"limit\":20,\"page\":1}"
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/transactional-sms-logs.json"
+    ],
+    "verified_at": null
+  }
+}

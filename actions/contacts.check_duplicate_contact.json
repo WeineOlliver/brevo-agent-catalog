@@ -1,0 +1,71 @@
+{
+  "id": "contacts.check_duplicate_contact",
+  "module": "contacts",
+  "name": "Check duplicate contact",
+  "description": "Call this when you need to know whether a contact identifier (email, SMS number, WhatsApp number, landline number, or external ID) is already taken in the account, typically before attempting to create a contact so you can avoid a collision or decide to update instead. Supply at least one identifier; the endpoint rejects a call where all of them are empty. This only answers the duplicate question — use the contact creation action to actually add the contact, the contact update action to modify the existing one, or a contact search/listing action when you need the stored attributes of the matching contact rather than a yes/no answer.",
+  "preconditions": [
+    "The caller must be authenticated as a user of the Brevo account whose contacts are being checked.",
+    "At least one of email, sms, whatsapp, landline_number or ext_id must be supplied and non-empty, otherwise the request fails with HTTP 400."
+  ],
+  "inputs": {
+    "type": "object",
+    "properties": {
+      "email": {
+        "type": "string",
+        "description": "Email address to test for an existing contact. May be sent empty if another identifier is supplied."
+      },
+      "sms": {
+        "type": "string",
+        "description": "SMS phone number to test for an existing contact. May be sent empty if another identifier is supplied."
+      },
+      "whatsapp": {
+        "type": "string",
+        "description": "WhatsApp phone number to test for an existing contact. May be sent empty if another identifier is supplied."
+      },
+      "landline_number": {
+        "type": "string",
+        "description": "Landline phone number to test for an existing contact. May be sent empty if another identifier is supplied."
+      },
+      "ext_id": {
+        "type": "string",
+        "description": "External identifier (your own system's contact ID) to test for an existing contact. May be sent empty if another identifier is supplied."
+      }
+    },
+    "required": []
+  },
+  "outputs": {
+    "type": "object",
+    "properties": {
+      "message": {
+        "type": "string",
+        "description": "Response payload. In the observed HTTP 400 case this is a JSON-encoded string containing a \"response\" field with the validation error, e.g. \"Expected Email, sms, whatsapp, landline_number or ext_id all can not be empty.\". The shape of a successful 200 response was not observed."
+      }
+    },
+    "required": []
+  },
+  "side_effects": [],
+  "destructive": false,
+  "idempotent": true,
+  "ui_path": [
+    "Contacts",
+    "Add a contact",
+    "Enter email or phone number"
+  ],
+  "internal_endpoint": {
+    "method": "GET",
+    "path": "/contact/backend/contacts/is_duplicate_contact",
+    "body_example": null
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/interact/contacts.json"
+    ],
+    "verified_at": null
+  }
+}

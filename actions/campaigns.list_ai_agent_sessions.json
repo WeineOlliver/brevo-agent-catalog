@@ -1,0 +1,55 @@
+{
+  "id": "campaigns.list_ai_agent_sessions",
+  "module": "campaigns",
+  "name": "List email campaign AI agent sessions",
+  "description": "Call this when you need to know whether the user already has in-progress or past AI email-campaign-agent sessions before starting or resuming AI-assisted campaign creation — for example to decide between resuming an existing session and opening a new one, or to surface a session identifier that a later agent call needs. An empty list means no AI agent session exists for this account yet, so nothing can be resumed. This only reports sessions; use the regular campaign listing action to enumerate actual email campaigns, and the campaign creation action to build a campaign without the AI agent.",
+  "preconditions": [
+    "The caller must be authenticated to a Brevo account with an active web-app session (the endpoint lives on the internal editor-api host, not the public API host).",
+    "The account must have access to the AI email campaign agent feature in the campaigns area."
+  ],
+  "inputs": {
+    "type": "object",
+    "properties": {},
+    "required": []
+  },
+  "outputs": {
+    "type": "object",
+    "properties": {
+      "sessions": {
+        "type": "array",
+        "description": "The AI email-campaign-agent sessions belonging to the authenticated account. Observed empty ([]) for an account with no sessions; the shape of a populated entry was not observed and must not be assumed.",
+        "items": {
+          "type": "object",
+          "description": "One AI email-campaign-agent session. No fields were observed, so treat the entry as opaque and read it rather than assuming keys."
+        }
+      }
+    },
+    "required": [
+      "sessions"
+    ]
+  },
+  "side_effects": [],
+  "destructive": false,
+  "idempotent": true,
+  "ui_path": [
+    "Campaigns",
+    "Email"
+  ],
+  "internal_endpoint": {
+    "method": "GET",
+    "path": "/editor-api/ai/email-campaign-agent/sessions",
+    "body_example": null
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/explore/campaigns-listing.json"
+    ],
+    "verified_at": null
+  }
+}

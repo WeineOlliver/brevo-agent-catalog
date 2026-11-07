@@ -71,8 +71,8 @@
     ]
   },
   "side_effects": [],
-  "destructive": true,
-  "idempotent": false,
+  "destructive": false,
+  "idempotent": true,
   "ui_path": [
     "Transactional",
     "Email",

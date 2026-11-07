@@ -1,0 +1,112 @@
+{
+  "id": "navigation.get_header_menu",
+  "module": "navigation",
+  "name": "Get marketing site header menu",
+  "description": "Call this when an agent needs the marketing/corporate website's top navigation tree — menu tab names, item titles, slugs and link URLs — for example to resolve where a public Brevo page lives before navigating to it. This serves the public corp site chrome, not the logged-in product UI: it carries no account, contact or campaign data, so use a contacts, campaigns or lists read action instead for anything account-specific, and use the feature-toggle or plan-info reads instead to learn what the current account can access.",
+  "preconditions": [],
+  "inputs": {
+    "type": "object",
+    "properties": {
+      "locale": {
+        "type": "string",
+        "description": "Language/locale path segment that prefixes the WordPress REST route and selects the translated menu, observed as \"pt\" in the path /pt/wp-json/brevo/v1/header/. Titles in the response come back in this language."
+      }
+    },
+    "required": [
+      "locale"
+    ]
+  },
+  "outputs": {
+    "type": "object",
+    "properties": {
+      "menu": {
+        "type": "array",
+        "description": "Top-level navigation entries, in display order.",
+        "items": {
+          "type": "object",
+          "properties": {
+            "ID": {
+              "type": "integer",
+              "description": "WordPress post ID of the menu entry."
+            },
+            "title": {
+              "type": "string",
+              "description": "Display label for the entry, in the requested locale."
+            },
+            "post_title": {
+              "type": "string",
+              "description": "Underlying WordPress post title, usually the same as title."
+            },
+            "post_name": {
+              "type": "string",
+              "description": "Slug of the menu entry, e.g. \"platform\" or \"capabilities\"."
+            },
+            "description": {
+              "type": "string",
+              "description": "Optional descriptive text shown under the entry; empty string when unset."
+            },
+            "url": {
+              "type": "string",
+              "description": "Destination link for the entry; empty string for entries that only open a submenu."
+            },
+            "icon": {
+              "description": "Icon for the entry, false when none is configured."
+            },
+            "superscript_label": {
+              "type": "string",
+              "description": "Small badge text shown beside the label, e.g. for \"new\"; empty string when unset."
+            },
+            "enable_item_descriptions_row_layout": {
+              "type": "boolean",
+              "description": "Layout flag: render child items as rows showing their descriptions."
+            },
+            "enable_without_description_column_layout": {
+              "type": "boolean",
+              "description": "Layout flag: render child items as columns without descriptions."
+            },
+            "number_of_items_to_display": {
+              "type": "string",
+              "description": "How many child items to show, as a string, e.g. \"4\"."
+            },
+            "hide_on_smaller_screens": {
+              "type": "boolean",
+              "description": "Whether the entry is hidden on narrow viewports."
+            },
+            "menu_tab_name": {
+              "type": "string",
+              "description": "Name of the mega-menu tab this entry belongs to, e.g. \"platform\" or \"default\"."
+            },
+            "child_items": {
+              "type": "array",
+              "description": "Nested menu entries with the same shape, recursively."
+            }
+          }
+        }
+      }
+    }
+  },
+  "side_effects": [],
+  "destructive": false,
+  "idempotent": true,
+  "ui_path": [
+    "Open the Brevo marketing site",
+    "Read the top navigation bar"
+  ],
+  "internal_endpoint": {
+    "method": "GET",
+    "path": "/pt/wp-json/brevo/v1/header",
+    "body_example": null
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/explore/analytics.json"
+    ],
+    "verified_at": null
+  }
+}

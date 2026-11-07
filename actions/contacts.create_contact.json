@@ -1,0 +1,77 @@
+{
+  "id": "contacts.create_contact",
+  "module": "contacts",
+  "name": "Create contact",
+  "description": "Call this when you need to add a single new contact to the account from an email address, optionally placing it on lists and setting attribute values at the same time. The response returns the new contact's internal numeric id, so call this when a later step needs that id. Check first with contacts.check_duplicate_contact if you are unsure whether the email already exists, since this endpoint's behaviour for an existing email is not established by the evidence. For adding many contacts at once prefer the account's import flow rather than looping this action, and to put an already-existing contact onto a list use the list-membership action instead of re-creating it.",
+  "preconditions": [
+    "Any list id passed in listIds must already exist in the account.",
+    "Any attribute name passed in attributes must already be defined as a contact attribute in the account.",
+    "The session must be authenticated against the Brevo web app."
+  ],
+  "inputs": {
+    "type": "object",
+    "properties": {
+      "email": {
+        "type": "string",
+        "description": "Email address of the contact to create. This is the contact's identifier in the web app."
+      },
+      "listIds": {
+        "type": "array",
+        "items": {
+          "type": "integer"
+        },
+        "description": "Numeric ids of existing lists the new contact should be added to. Observed as an empty array when the contact is created without any list membership."
+      },
+      "attributes": {
+        "type": "object",
+        "description": "Contact attribute values, keyed by attribute name as defined in the account (for example FIRSTNAME). Observed as an empty object when no attributes are set.",
+        "additionalProperties": true
+      }
+    },
+    "required": [
+      "email"
+    ]
+  },
+  "outputs": {
+    "type": "object",
+    "properties": {
+      "contact_id": {
+        "type": "integer",
+        "description": "Internal numeric id of the newly created contact."
+      }
+    },
+    "required": [
+      "contact_id"
+    ]
+  },
+  "side_effects": [
+    "A new contact record is created in the account.",
+    "The contact is added to each list named in listIds, which changes those lists' contact counts.",
+    "Any automation or workflow that triggers on contact creation or on joining one of those lists may start for this contact."
+  ],
+  "destructive": false,
+  "idempotent": false,
+  "ui_path": [
+    "Contacts",
+    "Add a contact",
+    "Enter email address",
+    "Save"
+  ],
+  "internal_endpoint": {
+    "method": "POST",
+    "path": "/contact/backend/contacts/add-contact",
+    "body_example": "{\"email\":\"{{EMAIL}}\",\"listIds\":[],\"attributes\":{}}"
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/interact/contacts.json"
+    ],
+    "verified_at": null
+  }
+}

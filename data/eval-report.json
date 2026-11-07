@@ -1,0 +1,109 @@
+{
+  "generated_at": "2026-11-07T04:12:36.636Z",
+  "provider": "claude-code-cli",
+  "unscoreable": [
+    {
+      "prompt": "john@example.com is already in Brevo but his first name is spelled wrong — fix it to Jonathan",
+      "expectedActionId": "contacts.update_contact"
+    },
+    {
+      "prompt": "I need a new audience group called Black Friday 2026",
+      "expectedActionId": "lists.create_list"
+    },
+    {
+      "prompt": "put everyone from the Black Friday list into the VIP list too",
+      "expectedActionId": "lists.add_contacts_to_list"
+    },
+    {
+      "prompt": "take maria@example.com off the Black Friday list but keep her in Brevo",
+      "expectedActionId": "lists.remove_contact_from_list"
+    },
+    {
+      "prompt": "maria@example.com asked to stop receiving everything from us",
+      "expectedActionId": "contacts.unsubscribe_contact"
+    },
+    {
+      "prompt": "remove maria@example.com from Brevo entirely, she exercised her right to erasure",
+      "expectedActionId": "contacts.delete_contact"
+    },
+    {
+      "prompt": "start a new email blast for the spring sale",
+      "expectedActionId": "campaigns.create_email_campaign"
+    },
+    {
+      "prompt": "the spring sale email is ready — push it out to everyone right now",
+      "expectedActionId": "campaigns.send_campaign"
+    },
+    {
+      "prompt": "queue the spring sale email to go out Friday at 9am instead of now",
+      "expectedActionId": "campaigns.schedule_campaign"
+    },
+    {
+      "prompt": "before we send it, let me see the spring sale email in my own inbox",
+      "expectedActionId": "campaigns.send_test_email"
+    },
+    {
+      "prompt": "how did the spring sale email do — opens, clicks, that sort of thing",
+      "expectedActionId": "campaigns.get_campaign_report"
+    },
+    {
+      "prompt": "I want a reusable design I can start future emails from",
+      "expectedActionId": "templates.create_template"
+    },
+    {
+      "prompt": "I have a spreadsheet of 2000 subscribers to get into Brevo",
+      "expectedActionId": "contacts.import_contacts"
+    },
+    {
+      "prompt": "export our whole subscriber base so I can back it up",
+      "expectedActionId": "contacts.export_contacts"
+    },
+    {
+      "prompt": "we need a new From address — set up marketing@example.com so we can send from it",
+      "expectedActionId": "senders.create_sender"
+    },
+    {
+      "prompt": "add a field on contacts for which plan the customer is on",
+      "expectedActionId": "contacts.create_attribute"
+    },
+    {
+      "prompt": "build me a segment of people who opened the last email but didn't click",
+      "expectedActionId": "contacts.create_segment"
+    }
+  ],
+  "total": 3,
+  "correct": 2,
+  "inputsCorrect": 1,
+  "cases": [
+    {
+      "task": {
+        "prompt": "add john@example.com to my newsletter list",
+        "expectedActionId": "contacts.create_contact",
+        "expectedInputs": {
+          "email": "john@example.com"
+        }
+      },
+      "chosenActionId": "contacts.create_contact",
+      "correct": true,
+      "inputsCorrect": true
+    },
+    {
+      "task": {
+        "prompt": "show me everyone currently in Brevo",
+        "expectedActionId": "segments.query_contacts"
+      },
+      "chosenActionId": "segments.query_contacts",
+      "correct": true,
+      "inputsCorrect": null
+    },
+    {
+      "task": {
+        "prompt": "what audience groups do we have",
+        "expectedActionId": "lists.get_lists"
+      },
+      "chosenActionId": "contacts.get_lists_and_segments",
+      "correct": false,
+      "inputsCorrect": null
+    }
+  ]
+}

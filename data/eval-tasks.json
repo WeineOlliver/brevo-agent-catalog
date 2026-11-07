@@ -58,11 +58,11 @@
     },
     {
       "prompt": "show me everyone currently in Brevo",
-      "expectedActionId": "contacts.list_contacts"
+      "expectedActionId": "segments.query_contacts"
     },
     {
       "prompt": "what audience groups do we have",
-      "expectedActionId": "lists.list_lists"
+      "expectedActionId": "lists.get_lists"
     },
     {
       "prompt": "I want a reusable design I can start future emails from",

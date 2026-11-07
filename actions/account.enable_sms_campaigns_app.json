@@ -1,0 +1,55 @@
+{
+  "id": "account.enable_sms_campaigns_app",
+  "module": "account",
+  "name": "Enable SMS Campaigns app",
+  "description": "Call this when an account needs the SMS Campaigns feature turned on before SMS work can begin — for example a campaigns listing shows SMS as unavailable or locked, or a subsequent SMS campaign call fails because the app is not enabled. This only flips the account-level app entitlement; to create, edit, or send an actual SMS campaign, use the SMS campaign actions instead, and to read which apps are already on, use the feature-toggle read action rather than calling this to find out.",
+  "preconditions": [
+    "The user must be authenticated against account-app.brevo.com with an active session for the target account.",
+    "The acting user must have permission to change account-level application settings."
+  ],
+  "inputs": {
+    "type": "object",
+    "properties": {},
+    "required": []
+  },
+  "outputs": {
+    "type": "object",
+    "properties": {
+      "updatedApplications": {
+        "type": "string",
+        "description": "Identifier of the application whose enabled state was updated, observed as \"sms-campaigns\"."
+      }
+    },
+    "required": [
+      "updatedApplications"
+    ]
+  },
+  "side_effects": [
+    "The SMS Campaigns application becomes enabled for the account.",
+    "SMS campaign features and navigation entries become available in the web app for all users of the account."
+  ],
+  "destructive": false,
+  "idempotent": false,
+  "ui_path": [
+    "Campaigns",
+    "SMS",
+    "Enable SMS Campaigns"
+  ],
+  "internal_endpoint": {
+    "method": "POST",
+    "path": "/account/apps/enable/sms-campaigns",
+    "body_example": null
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/explore/campaigns-listing.json"
+    ],
+    "verified_at": null
+  }
+}

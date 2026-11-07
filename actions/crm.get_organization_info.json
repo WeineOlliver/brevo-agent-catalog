@@ -1,0 +1,194 @@
+{
+  "id": "crm.get_organization_info",
+  "module": "crm",
+  "name": "Get organization info",
+  "description": "Call this when you need to retrieve the list of activated applications and the current feature toggles for the organization. Use the \"crm.update_organization_settings\" action instead if you need to modify these settings.",
+  "preconditions": [],
+  "inputs": {
+    "type": "object",
+    "properties": {},
+    "required": []
+  },
+  "outputs": {
+    "type": "object",
+    "properties": {
+      "activatedApplications": {
+        "type": "object",
+        "properties": {
+          "ID": {
+            "type": "string",
+            "description": "Unique identifier of the organization."
+          },
+          "Username": {
+            "type": "string",
+            "description": "Username associated with the organization."
+          },
+          "ActivatedApplications": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "description": "Name of an activated Brevo application."
+            },
+            "description": "Array of application identifiers that are enabled for the organization."
+          },
+          "ClientID": {
+            "type": "integer",
+            "description": "Numeric client identifier."
+          },
+          "DateFormat": {
+            "type": "string",
+            "description": "Preferred date format string for the organization."
+          },
+          "Locked": {
+            "type": "boolean",
+            "description": "Indicates whether the organization configuration is locked."
+          }
+        },
+        "required": [
+          "ID",
+          "Username",
+          "ActivatedApplications",
+          "ClientID",
+          "DateFormat",
+          "Locked"
+        ]
+      },
+      "featureToggle": {
+        "type": "object",
+        "properties": {
+          "automatic-company-creation": {
+            "type": "string",
+            "enum": [
+              "enabled",
+              "disabled"
+            ],
+            "description": "Feature toggle for automatic company creation."
+          },
+          "brevo-navigation-and-settings-v2": {
+            "type": "string",
+            "enum": [
+              "enabled",
+              "disabled"
+            ],
+            "description": "Toggle for the new navigation and settings UI version."
+          },
+          "companies-movement-to-contacts": {
+            "type": "string",
+            "enum": [
+              "enabled",
+              "disabled"
+            ],
+            "description": "Toggle for moving companies to contacts."
+          },
+          "company-deduplication-check": {
+            "type": "string",
+            "enum": [
+              "enabled",
+              "disabled"
+            ],
+            "description": "Toggle for company deduplication checks."
+          },
+          "company-summary-rollout": {
+            "type": "string",
+            "enum": [
+              "enabled",
+              "disabled"
+            ],
+            "description": "Toggle for company summary rollout."
+          },
+          "contact-summary-rollout": {
+            "type": "string",
+            "enum": [
+              "enabled",
+              "disabled"
+            ],
+            "description": "Toggle for contact summary rollout."
+          },
+          "crm-multi-choice-attribute": {
+            "type": "string",
+            "enum": [
+              "enabled",
+              "disabled"
+            ],
+            "description": "Toggle for multi‑choice attributes in CRM."
+          },
+          "crm-new-task-listing": {
+            "type": "string",
+            "enum": [
+              "enabled",
+              "disabled"
+            ],
+            "description": "Toggle for the new task listing UI."
+          },
+          "crm-task-sequences": {
+            "type": "string",
+            "enum": [
+              "enabled",
+              "disabled"
+            ],
+            "description": "Toggle for task sequences feature."
+          },
+          "deal-summary-rollout": {
+            "type": "string",
+            "enum": [
+              "enabled",
+              "disabled"
+            ],
+            "description": "Toggle for deal summary rollout."
+          },
+          "domain-duplication-check": {
+            "type": "string",
+            "enum": [
+              "enabled",
+              "disabled"
+            ],
+            "description": "Toggle for domain duplication checks."
+          },
+          "enable-event-filters-ui": {
+            "type": "string",
+            "enum": [
+              "enabled",
+              "disabled"
+            ],
+            "description": "Toggle for the event filters UI."
+          }
+        },
+        "additionalProperties": {
+          "type": "string",
+          "description": "Other feature toggles not explicitly listed."
+        },
+        "required": []
+      }
+    },
+    "required": [
+      "activatedApplications",
+      "featureToggle"
+    ]
+  },
+  "side_effects": [],
+  "destructive": false,
+  "idempotent": true,
+  "ui_path": [
+    "Companies",
+    "Settings"
+  ],
+  "internal_endpoint": {
+    "method": "GET",
+    "path": "/crm/backend/organization-info",
+    "body_example": null
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/companies-settings.json",
+      "captures/clean/companies.json",
+      "captures/clean/crm-settings.json"
+    ],
+    "verified_at": null
+  }
+}

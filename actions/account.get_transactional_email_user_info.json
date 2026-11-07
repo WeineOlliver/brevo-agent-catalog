@@ -1,0 +1,172 @@
+{
+  "id": "account.get_transactional_email_user_info",
+  "module": "account",
+  "name": "Get transactional email user info",
+  "description": "Call this when you need the transactional-email context for the signed-in user before working in the Transactional > Email area: which applications are activated, whether the transactional email privileges list grants access, and the display conventions (timezone, date and time format) needed to interpret or render email log timestamps. Use it to decide whether a transactional email feature is reachable at all before calling a logs or real-time events action, and to learn the timezone those timestamps should be read in. For general account or organization details outside transactional email, prefer organization.get_details or crm.get_organization_info; for product-wide flags prefer features.get_feature_toggles.",
+  "preconditions": [
+    "A browser session authenticated to the Brevo web app must be present; the endpoint returns info for the currently signed-in user.",
+    "The account must have the transactional email application available in order for \"transactional-emails\" to appear in activatedApplications."
+  ],
+  "inputs": {
+    "type": "object",
+    "properties": {},
+    "required": []
+  },
+  "outputs": {
+    "type": "object",
+    "properties": {
+      "account": {
+        "type": "object",
+        "description": "The signed-in user's account identity.",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Internal account identifier."
+          },
+          "email": {
+            "type": "string",
+            "description": "Email address of the signed-in user."
+          },
+          "isOwner": {
+            "type": "boolean",
+            "description": "True when this user owns the account rather than being an invited user."
+          },
+          "locale": {
+            "type": "string",
+            "description": "User locale, e.g. \"en_US\"."
+          }
+        }
+      },
+      "organization": {
+        "type": "object",
+        "description": "The organization the account belongs to.",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Organization identifier."
+          },
+          "language": {
+            "type": "string",
+            "description": "Organization language code, e.g. \"en\"."
+          },
+          "isReseller": {
+            "type": "boolean",
+            "description": "True when the organization is a reseller account."
+          },
+          "pricingVersion": {
+            "type": "string",
+            "description": "Pricing model version applied to the organization, e.g. \"v5\"."
+          },
+          "isEnterprise": {
+            "type": "boolean",
+            "description": "True when the organization is on an enterprise plan."
+          },
+          "countryCode": {
+            "type": "string",
+            "description": "Organization country code; may be an empty string when unset."
+          },
+          "tfnStatus": {
+            "type": "boolean",
+            "description": "Toll-free number status flag for the organization."
+          }
+        }
+      },
+      "activatedApplications": {
+        "type": "array",
+        "description": "Product applications activated for this account, e.g. \"transactional-emails\".",
+        "items": {
+          "type": "string"
+        }
+      },
+      "anonymisation": {
+        "type": "boolean",
+        "description": "True when log data is anonymised for this account."
+      },
+      "config": {
+        "type": "object",
+        "description": "Display and behaviour settings used by the transactional email UI.",
+        "properties": {
+          "timeFormat": {
+            "type": "string",
+            "description": "Clock format used to display times, e.g. \"24\"."
+          },
+          "dateFormat": {
+            "type": "string",
+            "description": "Date format used to display dates, e.g. \"dd-mm-yyyy\"."
+          },
+          "timezone": {
+            "type": "string",
+            "description": "IANA timezone used to display log timestamps, e.g. \"America/Sao_Paulo\"."
+          },
+          "isNewUIEnabled": {
+            "type": "boolean",
+            "description": "True when the new transactional UI is enabled."
+          },
+          "allowResendBlockedEvents": {
+            "type": "boolean",
+            "description": "True when resending emails for blocked events is permitted."
+          },
+          "isTransarchiveEnabled": {
+            "type": "boolean",
+            "description": "True when transactional email archiving is enabled."
+          },
+          "transSMSReply": {
+            "type": "number",
+            "description": "Transactional SMS reply setting."
+          },
+          "isTransactionalPermissionsRevampEnabled": {
+            "type": "boolean",
+            "description": "True when the revamped transactional permissions model applies."
+          }
+        }
+      },
+      "privileges": {
+        "type": "object",
+        "description": "Per-application privilege grants for the signed-in user.",
+        "properties": {
+          "transactional_emails": {
+            "type": "array",
+            "description": "Privilege identifiers granted on transactional emails; empty for an account owner with implicit full access.",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "required": [
+      "account",
+      "organization",
+      "activatedApplications",
+      "config",
+      "privileges"
+    ]
+  },
+  "side_effects": [],
+  "destructive": false,
+  "idempotent": true,
+  "ui_path": [
+    "Transactional",
+    "Email",
+    "Logs"
+  ],
+  "internal_endpoint": {
+    "method": "GET",
+    "path": "/api/email/user/info",
+    "body_example": null
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/transactional-email-logs.json",
+      "captures/clean/transactional-email-real-time.json",
+      "captures/clean/transactional-email-settings.json"
+    ],
+    "verified_at": null
+  }
+}

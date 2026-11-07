@@ -1,0 +1,111 @@
+{
+  "id": "marketing_site.get_footer",
+  "module": "marketing_site",
+  "name": "Get marketing footer content",
+  "description": "Call this when you need the Brevo marketing website's footer content — the social media links and footer navigation menus rendered at the bottom of app and corporate pages — for a given language locale. This serves presentation chrome from Brevo's WordPress corporate backend, not account data: it returns nothing about the signed-in user, their contacts, campaigns, or statistics. For the in-app navigation menus use navigation.get_header_menu instead; for the account's own details use organization.get_details.",
+  "preconditions": [
+    "The locale path segment must correspond to a language site published on the corporate WordPress backend (observed: \"pt\")."
+  ],
+  "inputs": {
+    "type": "object",
+    "properties": {
+      "locale": {
+        "type": "string",
+        "description": "Language/locale path segment selecting which corporate site's footer to return, taken from the URL path before /wp-json (observed value: \"pt\")."
+      }
+    },
+    "required": [
+      "locale"
+    ]
+  },
+  "outputs": {
+    "type": "object",
+    "properties": {
+      "social_menu": {
+        "type": "array",
+        "description": "Social media links shown in the footer.",
+        "items": {
+          "type": "object",
+          "properties": {
+            "ID": {
+              "type": "integer",
+              "description": "WordPress menu item identifier."
+            },
+            "title": {
+              "type": "string",
+              "description": "Display label for the link, e.g. \"Twitter\"."
+            },
+            "post_title": {
+              "type": "string",
+              "description": "WordPress post title of the menu item, usually equal to title."
+            },
+            "post_name": {
+              "type": "string",
+              "description": "WordPress slug of the menu item, e.g. \"twitter\"."
+            },
+            "description": {
+              "type": "string",
+              "description": "Optional descriptive text for the item; empty when unused."
+            },
+            "url": {
+              "type": "string",
+              "description": "Destination URL of the social profile."
+            },
+            "icon": {
+              "type": "string",
+              "description": "Absolute URL of the item's icon asset hosted on the corporate backend."
+            },
+            "superscript_label": {
+              "type": "string",
+              "description": "Optional small badge label rendered beside the title; empty when unused."
+            },
+            "enable_item_descriptions_row_layout": {
+              "type": "boolean",
+              "description": "Layout flag: render items in a row with their descriptions."
+            },
+            "enable_without_description_column_layout": {
+              "type": "boolean",
+              "description": "Layout flag: render items in a column without descriptions."
+            },
+            "number_of_items_to_display": {
+              "type": "string",
+              "description": "Number of items the renderer should display, carried as a string."
+            },
+            "hide_on_smaller_screens": {
+              "type": "boolean",
+              "description": "Whether the renderer hides this item on small viewports."
+            },
+            "menu_tab_name": {
+              "type": "string",
+              "description": "Name of the footer menu tab this item belongs to, e.g. \"default\"."
+            }
+          }
+        }
+      }
+    }
+  },
+  "side_effects": [],
+  "destructive": false,
+  "idempotent": true,
+  "ui_path": [
+    "Analytics",
+    "Scroll to the page footer"
+  ],
+  "internal_endpoint": {
+    "method": "GET",
+    "path": "/pt/wp-json/brevo/v1/footer",
+    "body_example": null
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/explore/analytics.json"
+    ],
+    "verified_at": null
+  }
+}

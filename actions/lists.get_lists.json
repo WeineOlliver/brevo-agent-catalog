@@ -2,7 +2,7 @@
   "id": "lists.get_lists",
   "module": "lists",
   "name": "Get lists",
-  "description": "Call this when you need to retrieve a paginated collection of contact lists, optionally filtered by folder and sorted. Use the list‑details endpoint (if available) when you need information about a single list or its members.",
+  "description": "Call this to enumerate the account’s contact lists themselves — the answer to \"what lists do we have\". Returns one page of lists with their names, ids and contact counts, optionally filtered by folder and sorted. Use contacts.get_lists_and_segments instead when you need segments and folders in the same call, for example to populate a picker; use the list-details endpoint for one list’s members.",
   "preconditions": [],
   "inputs": {
     "type": "object",
