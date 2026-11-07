@@ -27,7 +27,7 @@ for (const file of files) {
   actions.push(result.action);
 }
 
-const { actions: normalized, merged, renamed } = normalizeCatalog(actions);
+const { actions: normalized, merged, renamed, reclassified } = normalizeCatalog(actions);
 
 console.log(`${actions.length} entr(ies) in -> ${normalized.length} out`);
 
@@ -41,7 +41,18 @@ if (renamed.length > 0) {
   for (const r of renamed) console.log(`  ${r.from} -> ${r.to}`);
 }
 
-if (merged.length === 0 && renamed.length === 0) console.log('\nnothing to normalise.');
+if (reclassified.length > 0) {
+  console.log(
+    `\ncorrected risk on ${reclassified.length} field(s) — the flag a consuming agent acts on:`,
+  );
+  for (const r of reclassified) {
+    console.log(`  ${r.id}: ${r.field} ${r.from} -> ${r.to}  (${r.reason})`);
+  }
+}
+
+if (merged.length === 0 && renamed.length === 0 && reclassified.length === 0) {
+  console.log('\nnothing to normalise.');
+}
 
 if (dryRun) {
   console.log('\n--dry-run: no files written.');

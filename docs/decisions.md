@@ -247,3 +247,46 @@ and then occurred at full strength because the mitigation had not been run.
 do not scale and break when Brevo's markup drifts. Each new module is a
 development task, not a crawl parameter. That is a real ceiling on Coverage and
 it is the honest trade: a smaller catalog of actions that are actually actions.
+
+---
+
+## 12. Risk is a fact about the product, not a property of the HTTP method
+
+**Decided:** `destructive` means **irreversible or observable outside the
+account**, and is derived in normalisation from the action's verb
+(`src/catalog/risk.ts`), with precedence rather than position: the most
+dangerous verb in an id wins. Our crawler's permission to click destructive
+controls (`ExplorePolicy`) is a separate decision and stays separate.
+
+**Rejected:** Deriving it from the method, which decision #5 effectively did —
+anything not `GET` was `destructive: true` until execution proved otherwise.
+
+**Why:** Measured, twice over. Brevo reads through POST, so the first extraction
+produced `segments.get_count`, `segments.paginated_count`,
+`segments.query_contacts` and `transactional.fetch_email_logs` all flagged
+destructive — an agent obeying the flag refuses four harmless reads, and an
+agent that learns to ignore it on reads will ignore it on `delete`. The method
+rule also fails in the opposite direction: `create_contact` mutates and is safe
+(reversible, our own data), while `send_campaign` creates nothing and is the
+most dangerous action in the product, because it mails real people and has no
+undo. "Not a read" and "destructive" are not the same question.
+
+The account under test is disposable, which removes the risk from *our* clicking
+but not from the flag: the catalog is the contract the final product maps, so the
+flag has to be true of Brevo regardless of which account observed it.
+
+**Cost accepted:** Three, all stated rather than hidden.
+
+1. The verb table is hardcoded, which every other rule in `normalize.ts`
+   deliberately avoids. Risk cannot be derived from the catalog's shape — no
+   amount of captured traffic says that a send cannot be taken back.
+2. Ambiguous verbs are over-flagged on purpose. `remove` is reversible for a
+   list membership and not for a contact, so it counts as destructive. A
+   needless confirmation costs a click; a missing one costs data.
+3. **`contacts.add_contact_to_lists` is classified reversible, and that is
+   arguably wrong.** Adding a contact to a list can trigger a Brevo automation,
+   which sends real email — an external effect by this decision's own
+   definition. It stays reversible because the effect depends on the account
+   having an active workflow, which is not a property of the action; the right
+   home for it is `side_effects`, not the flag. This is the clearest known hole
+   in the rule.

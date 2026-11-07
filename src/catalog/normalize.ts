@@ -7,7 +7,13 @@
  * 1. **Two ids for one endpoint.** `deals.list` and `deals.list_for_contact`
  *    were both `GET /crm/backend/deals`. An agent choosing between synonyms is
  *    choosing at random.
- * 2. **Singular and plural module names side by side** — `organization` and
+ * 2. **Risk derived from the HTTP method.** Brevo reads through POST, so
+ *    `segments.get_count` was drafted `destructive: true`. Risk is a fact
+ *    about the product, not about the verb Brevo's front end happened to use,
+ *    and it is corrected here from the action's own verb — see `risk.ts` for
+ *    why that table is deliberately hardcoded while everything else here is
+ *    derived from the catalog's shape.
+ * 3. **Singular and plural module names side by side** — `organization` and
  *    `organizations`, `feature` and `features`. The model names a module per
  *    endpoint; a catalog needs one name per product area.
  *
@@ -16,14 +22,23 @@
  */
 
 import type { Action } from '../types.js';
+import { classifyRisk } from './risk.js';
 
 export type MergeRecord = { endpoint: string; kept: string; dropped: string };
 export type RenameRecord = { from: string; to: string };
+export type RiskRecord = {
+  id: string;
+  field: 'destructive' | 'idempotent';
+  from: boolean;
+  to: boolean;
+  reason: string;
+};
 
 export type NormalizeResult = {
   actions: Action[];
   merged: MergeRecord[];
   renamed: RenameRecord[];
+  reclassified: RiskRecord[];
 };
 
 function endpointKey(action: Action): string | null {
@@ -125,6 +140,34 @@ export function normalizeCatalog(input: Action[]): NormalizeResult {
     return { ...action, id: candidate, module: canonical };
   });
 
-  actions.sort((a, b) => a.id.localeCompare(b.id));
-  return { actions, merged, renamed };
+  // Risk last, so it is decided on the canonical id a consumer will see.
+  const reclassified: RiskRecord[] = [];
+  const scored = actions.map((action) => {
+    const risk = classifyRisk(action.id);
+    if (risk === null) return action;
+
+    if (action.destructive !== risk.destructive) {
+      reclassified.push({
+        id: action.id,
+        field: 'destructive',
+        from: action.destructive,
+        to: risk.destructive,
+        reason: risk.reason,
+      });
+    }
+    if (action.idempotent !== risk.idempotent) {
+      reclassified.push({
+        id: action.id,
+        field: 'idempotent',
+        from: action.idempotent,
+        to: risk.idempotent,
+        reason: risk.reason,
+      });
+    }
+
+    return { ...action, destructive: risk.destructive, idempotent: risk.idempotent };
+  });
+
+  scored.sort((a, b) => a.id.localeCompare(b.id));
+  return { actions: scored, merged, renamed, reclassified };
 }
