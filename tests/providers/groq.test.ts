@@ -159,3 +159,48 @@ describe('createGroqProvider', () => {
     expect(createGroqProvider({ apiKey: 'k', model: 'test-model' }).name).toContain('test-model');
   });
 });
+
+describe('a request that never answers', () => {
+  it('aborts the attempt instead of waiting forever', async () => {
+    // The failure that cost eighty minutes: no status code, so none of the
+    // retry checks above can see it. Without a signal, `fetch` never returns
+    // and the five retries never engage.
+    let calls = 0;
+    const hangs: typeof fetch = (_url, init) => {
+      calls += 1;
+      return new Promise((_resolve, reject) => {
+        init?.signal?.addEventListener('abort', () => reject(new Error('aborted')));
+      });
+    };
+
+    const provider = createGroqProvider({
+      apiKey: 'k',
+      model: 'm',
+      fetchImpl: hangs,
+      timeoutMs: 20,
+      maxRetries: 2,
+      sleep: async () => {},
+    });
+
+    await expect(provider.complete({ system: 's', user: 'u' })).rejects.toThrow(/failed/i);
+    // Every attempt was made, which is the point: it retried rather than hung.
+    expect(calls).toBe(3);
+  });
+
+  it('passes an abort signal on every attempt', async () => {
+    const signals: (AbortSignal | null | undefined)[] = [];
+    const ok: typeof fetch = (_url, init) => {
+      signals.push(init?.signal);
+      return Promise.resolve(
+        new Response(JSON.stringify({ choices: [{ message: { content: 'x' } }] }), {
+          status: 200,
+        }),
+      );
+    };
+
+    const provider = createGroqProvider({ apiKey: 'k', model: 'm', fetchImpl: ok });
+    await provider.complete({ system: 's', user: 'u' });
+    expect(signals).toHaveLength(1);
+    expect(signals[0]).toBeInstanceOf(AbortSignal);
+  });
+});
