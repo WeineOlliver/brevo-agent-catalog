@@ -19,6 +19,7 @@ import { chromium } from 'playwright';
 import 'dotenv/config';
 import { loadConfig } from '../src/config.js';
 import { writeCaptureFile } from '../src/capture/store.js';
+import { isWriteTraffic } from '../src/util/hosts.js';
 import { attachRecorder } from '../src/crawl/recorder.js';
 import { waitForSignIn } from '../src/crawl/session.js';
 import { createFixtureBag } from '../src/interact/types.js';
@@ -27,8 +28,8 @@ import type { ExplorePolicy } from '../src/interact/controls.js';
 import {
   HEADED_VIEWPORT,
   describePlacement,
-  headedLaunchArgs,
 } from '../src/browser/window.js';
+import { appContextOptions, appLaunchArgs } from '../src/browser/context.js';
 import { withDeadline } from '../src/util/deadline.js';
 
 /** Per-route time budget. Twenty routes at this budget is a 30-minute ceiling. */
@@ -71,10 +72,10 @@ if (routes.length === 0) {
   process.exit(1);
 }
 
-const launchArgs = headedLaunchArgs(HEADED_VIEWPORT);
+const launchArgs = appLaunchArgs(HEADED_VIEWPORT);
 
 const browser = await chromium.launch({ headless: false, args: launchArgs });
-const context = await browser.newContext({ viewport: HEADED_VIEWPORT });
+const context = await browser.newContext(appContextOptions({ viewport: HEADED_VIEWPORT }));
 const page = await context.newPage();
 
 await page.goto(config.appOrigin, { waitUntil: 'domcontentloaded' });
@@ -153,13 +154,14 @@ for (const route of routes) {
     },
   );
   reports.push(report);
-  fixtures.push(...fx.created);
+  fixtures.push(...fx.names);
   if (timedOut) console.log(`  ! ${route} — hit the ${ROUTE_BUDGET_MS / 1000}s budget, moving on`);
 
   await recorder.drain();
   const fresh = recorder.records.slice(cursor);
   cursor = recorder.records.length;
-  const writes = fresh.filter((r) => !['GET', 'HEAD', 'OPTIONS'].includes(r.method));
+  // Brevo's product surface only — see scripts/interact.ts.
+  const writes = fresh.filter((r) => isWriteTraffic(r.url, r.method));
   totalWrites += writes.length;
 
   if (fresh.length > 0) writeCaptureFile(join(outDir, `${slugify(route)}.json`), fresh);

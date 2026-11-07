@@ -16,24 +16,34 @@ export type FixtureBag = {
   email(): string;
   /** A fresh list or campaign name, namespaced. */
   listName(): string;
-  /** Everything this bag handed out, for cleanup and for the run report. */
-  created: string[];
+/**
+   * Every name this bag handed out.
+   *
+   * A name here was *used*, not necessarily created: the bag records it the
+   * moment it is generated, before anything is typed or submitted. An
+   * exploration run once reported sixteen created lists while no list-creation
+   * request existed in any capture, because a silently failed click still
+   * consumed a name. What was really created is in the captured traffic, which
+   * is what the runs now report; this list is for cleanup, where guessing wide
+   * is the safe direction.
+   */
+  names: string[];
 };
 
 export function createFixtureBag(seed = randomBytes(3).toString('hex')): FixtureBag {
   let counter = 0;
-  const created: string[] = [];
+  const names: string[] = [];
 
   const next = (value: string): string => {
     counter += 1;
-    created.push(value);
+    names.push(value);
     return value;
   };
 
   return {
     email: () => next(`${FIXTURE_PREFIX}${seed}-${counter + 1}@example.com`),
     listName: () => next(`${FIXTURE_PREFIX}${seed}-list-${counter + 1}`),
-    created,
+    names,
   };
 }
 

@@ -20,6 +20,7 @@ import { chromium } from 'playwright';
 import 'dotenv/config';
 import { loadConfig } from '../src/config.js';
 import { writeCaptureFile } from '../src/capture/store.js';
+import { isWriteTraffic } from '../src/util/hosts.js';
 import { attachRecorder } from '../src/crawl/recorder.js';
 import { waitForSignIn } from '../src/crawl/session.js';
 import { createFixtureBag, type InteractionPass } from '../src/interact/types.js';
@@ -28,8 +29,8 @@ import { campaignsPass, sendersPass, templatesPass } from '../src/interact/campa
 import {
   HEADED_VIEWPORT,
   describePlacement,
-  headedLaunchArgs,
 } from '../src/browser/window.js';
+import { appContextOptions, appLaunchArgs } from '../src/browser/context.js';
 
 const PASSES: InteractionPass[] = [
   contactsPass,
@@ -57,11 +58,11 @@ if (selected.length === 0) {
   process.exit(1);
 }
 
-const launchArgs = headedLaunchArgs(HEADED_VIEWPORT);
+const launchArgs = appLaunchArgs(HEADED_VIEWPORT);
 console.log(describePlacement(launchArgs));
 
 const browser = await chromium.launch({ headless: false, args: launchArgs });
-const context = await browser.newContext({ viewport: HEADED_VIEWPORT });
+const context = await browser.newContext(appContextOptions({ viewport: HEADED_VIEWPORT }));
 const page = await context.newPage();
 
 await page.goto(config.appOrigin, { waitUntil: 'domcontentloaded' });
@@ -102,17 +103,31 @@ for (const pass of selected) {
   }
 
   const records = await recorder.drain();
-  const writeRecords = records.filter((r) => !['GET', 'HEAD', 'OPTIONS'].includes(r.method));
+  // Brevo's product surface only: a non-GET to Clarity or Amplitude is not a
+  // write, and counting one is how two empty runs looked like progress.
+  const writeRecords = records.filter((r) => isWriteTraffic(r.url, r.method));
 
   writeCaptureFile(join(config.paths.raw, 'interact', `${pass.module}.json`), records);
   written += records.length;
   writes += writeRecords.length;
-  fixtures.push(...fx.created);
+  fixtures.push(...fx.names);
 
   console.log(
     `  ${records.length} request(s), ${writeRecords.length} write(s)` +
-      (fx.created.length > 0 ? `; created ${fx.created.join(', ')}` : ''),
+      (fx.names.length > 0 ? `; used ${fx.names.join(', ')}` : ''),
   );
+  // What was actually created is on the wire, not in the fixture bag. Printed
+  // per pass because it is the only trustworthy success signal a run has.
+  for (const record of writeRecords) {
+    const path = (() => {
+      try {
+        return new URL(record.url).pathname;
+      } catch {
+        return record.url;
+      }
+    })();
+    console.log(`      ${record.method} ${record.status} ${path}`);
+  }
 }
 
 await browser.close();
@@ -122,7 +137,7 @@ console.log(
 );
 if (fixtures.length > 0) {
   console.log(
-    `\nFixtures left in your account (delete by hand; nothing here deletes account data):\n  ${fixtures.join('\n  ')}`,
+    `\nFixture names used (delete by hand; a name may have been typed into a form that never submitted, so some will not exist):\n  ${fixtures.join('\n  ')}`,
   );
 }
 console.log('\nNext: pnpm sanitize && pnpm extract --provider groq && pnpm normalize');

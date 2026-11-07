@@ -20,8 +20,8 @@ import { loadConfig } from '../src/config.js';
 import {
   HEADED_VIEWPORT,
   describePlacement,
-  headedLaunchArgs,
 } from '../src/browser/window.js';
+import { appContextOptions, appLaunchArgs } from '../src/browser/context.js';
 
 const WAIT_TIMEOUT_MS = 25 * 60 * 1000;
 const POLL_INTERVAL_MS = 2000;
@@ -34,11 +34,11 @@ const statePath = join(config.paths.auth, 'state.json');
 
 mkdirSync(config.paths.auth, { recursive: true });
 
-const launchArgs = headedLaunchArgs(HEADED_VIEWPORT);
+const launchArgs = appLaunchArgs(HEADED_VIEWPORT);
 console.log(describePlacement(launchArgs));
 
 const browser = await chromium.launch({ headless: false, args: launchArgs });
-const context = await browser.newContext({ viewport: HEADED_VIEWPORT });
+const context = await browser.newContext(appContextOptions({ viewport: HEADED_VIEWPORT }));
 const page = await context.newPage();
 
 await page.goto(config.appOrigin, { waitUntil: 'domcontentloaded' });

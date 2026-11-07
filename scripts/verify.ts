@@ -20,8 +20,8 @@ import { contactsRecipes } from '../src/verify/recipes/contacts.js';
 import {
   HEADED_VIEWPORT,
   describePlacement,
-  headedLaunchArgs,
 } from '../src/browser/window.js';
+import { appContextOptions, appLaunchArgs } from '../src/browser/context.js';
 
 const RECIPES: VerifyRecipe[] = [...contactsRecipes];
 
@@ -48,11 +48,11 @@ if (selected.length === 0) {
   process.exit(1);
 }
 
-const launchArgs = headedLaunchArgs(HEADED_VIEWPORT);
+const launchArgs = appLaunchArgs(HEADED_VIEWPORT);
 console.log(describePlacement(launchArgs));
 
 const browser = await chromium.launch({ headless: false, args: launchArgs });
-const context = await browser.newContext({ storageState: statePath });
+const context = await browser.newContext(appContextOptions({ storageState: statePath }));
 const page = await context.newPage();
 
 mkdirSync('test-results', { recursive: true });
@@ -103,7 +103,7 @@ for (const recipe of selected) {
   }
 
   writeFileSync(actionPath, `${JSON.stringify(updated, null, 2)}\n`, 'utf8');
-  fixtures.push(...fx.created);
+  fixtures.push(...fx.names);
 
   if (outcome.status === 'verified') {
     verified += 1;
