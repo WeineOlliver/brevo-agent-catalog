@@ -1,0 +1,2212 @@
+[
+  {
+    "route": "/contact/list",
+    "controls": [
+      {
+        "tag": "button",
+        "role": "",
+        "label": "Usage and plan",
+        "testid": "sib-button-testId"
+      },
+      {
+        "tag": "button",
+        "role": "",
+        "label": "help",
+        "testid": "sib-button-testId"
+      },
+      {
+        "tag": "button",
+        "role": "",
+        "label": "notification",
+        "testid": "sib-button-testId"
+      },
+      {
+        "tag": "a",
+        "role": "",
+        "label": "Brevo",
+        "testid": ""
+      },
+      {
+        "tag": "button",
+        "role": "",
+        "label": "Minimize menu",
+        "testid": "sib-button-testId"
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Home",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "CRM",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Contacts",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Lists",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Segments",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Companies",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Deals",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Tasks",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Custom objects",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Marketing",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Campaigns",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Landing pages",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Forms",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Statistics",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Templates",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Automations",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Workflows",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Messages",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Logs",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Event logs",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Transactional",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Email",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Real time",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Statistics",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Logs",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Templates",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "SMS",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Real time",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Statistics",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Logs",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Conversations",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Inbox",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Phone",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Meetings",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Commerce",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "E-commerce",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Loyalty",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Library",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Media",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Analytics",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Conversions",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Analytics studio",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "",
+        "label": "Settings",
+        "testid": ""
+      },
+      {
+        "tag": "button",
+        "role": "",
+        "label": "WOTestBoxTest",
+        "testid": "sib-button-testId"
+      },
+      {
+        "tag": "button",
+        "role": "",
+        "label": "info button",
+        "testid": "sib-button-testId"
+      },
+      {
+        "tag": "button",
+        "role": "",
+        "label": "Create a contact",
+        "testid": "createContactBtn"
+      },
+      {
+        "tag": "button",
+        "role": "",
+        "label": "Import contacts",
+        "testid": "sib-button-testId"
+      },
+      {
+        "tag": "button",
+        "role": "tab",
+        "label": "All contacts",
+        "testid": "tab-default_tab"
+      },
+      {
+        "tag": "button",
+        "role": "",
+        "label": "button",
+        "testid": "sib-button-testId"
+      },
+      {
+        "tag": "button",
+        "role": "",
+        "label": "button",
+        "testid": "sib-button-testId"
+      },
+      {
+        "tag": "button",
+        "role": "",
+        "label": "Load a list or a segment",
+        "testid": "sib-button-testId"
+      },
+      {
+        "tag": "button",
+        "role": "",
+        "label": "Add filter",
+        "testid": "seg-add-a-filter-categorized"
+      },
+      {
+        "tag": "button",
+        "role": "",
+        "label": "Contact count cache information",
+        "testid": "sib-button-testId"
+      },
+      {
+        "tag": "button",
+        "role": "",
+        "label": "Customize columns",
+        "testid": "sib-button-testId"
+      },
+      {
+        "tag": "button",
+        "role": "",
+        "label": "Add to a list(s)",
+        "testid": "sib-button-testId"
+      },
+      {
+        "tag": "a",
+        "role": "",
+        "label": "weineolliver@gmail.com",
+        "testid": ""
+      },
+      {
+        "tag": "button",
+        "role": "",
+        "label": "20",
+        "testid": "sib-button-testId"
+      },
+      {
+        "tag": "button",
+        "role": "",
+        "label": "1",
+        "testid": "sib-button-testId"
+      },
+      {
+        "tag": "button",
+        "role": "",
+        "label": "Previous page",
+        "testid": "sib-button-testId"
+      },
+      {
+        "tag": "button",
+        "role": "",
+        "label": "Next page",
+        "testid": "sib-button-testId"
+      }
+    ],
+    "candidates": [
+      {
+        "tag": "button",
+        "role": "",
+        "label": "Create a contact",
+        "testid": "createContactBtn"
+      },
+      {
+        "tag": "button",
+        "role": "",
+        "label": "Import contacts",
+        "testid": "sib-button-testId"
+      },
+      {
+        "tag": "button",
+        "role": "",
+        "label": "Add filter",
+        "testid": "seg-add-a-filter-categorized"
+      },
+      {
+        "tag": "button",
+        "role": "",
+        "label": "Add to a list(s)",
+        "testid": "sib-button-testId"
+      }
+    ],
+    "afterClick": {
+      "clicked": "Create a contact",
+      "urlBefore": "https://app.brevo.com/contact/list",
+      "urlAfter": "https://app.brevo.com/contact/list?action=create_contact",
+      "dialogs": 1,
+      "fields": [
+        {
+          "tag": "input",
+          "type": "search",
+          "name": "contact search",
+          "placeholder": "Search",
+          "label": "",
+          "aria": "",
+          "disabled": false
+        },
+        {
+          "tag": "input",
+          "type": "checkbox",
+          "name": "checkbox_name",
+          "placeholder": "",
+          "label": "",
+          "aria": "master-checkbox",
+          "disabled": false
+        },
+        {
+          "tag": "input",
+          "type": "checkbox",
+          "name": "checkbox_name",
+          "placeholder": "",
+          "label": "",
+          "aria": "master-checkbox",
+          "disabled": false
+        },
+        {
+          "tag": "input",
+          "type": "checkbox",
+          "name": "",
+          "placeholder": "",
+          "label": "",
+          "aria": "Row data checkbox",
+          "disabled": false
+        },
+        {
+          "tag": "input",
+          "type": "text",
+          "name": "FIRSTNAME",
+          "placeholder": "Enter the FIRSTNAME",
+          "label": "FIRSTNAME",
+          "aria": "",
+          "disabled": false
+        },
+        {
+          "tag": "input",
+          "type": "text",
+          "name": "LASTNAME",
+          "placeholder": "Enter the LASTNAME",
+          "label": "LASTNAME",
+          "aria": "",
+          "disabled": false
+        },
+        {
+          "tag": "input",
+          "type": "text",
+          "name": "email",
+          "placeholder": "Enter the email address",
+          "label": "EMAIL",
+          "aria": "",
+          "disabled": false
+        },
+        {
+          "tag": "input",
+          "type": "text",
+          "name": "",
+          "placeholder": "",
+          "label": "SMS",
+          "aria": "",
+          "disabled": false
+        },
+        {
+          "tag": "input",
+          "type": "text",
+          "name": "",
+          "placeholder": "",
+          "label": "WHATSAPP",
+          "aria": "",
+          "disabled": false
+        },
+        {
+          "tag": "input",
+          "type": "text",
+          "name": "",
+          "placeholder": "",
+          "label": "LANDLINE_NUMBER",
+          "aria": "",
+          "disabled": false
+        },
+        {
+          "tag": "input",
+          "type": "text",
+          "name": "EXT_ID",
+          "placeholder": "Some text here",
+          "label": "EXT_ID",
+          "aria": "",
+          "disabled": false
+        },
+        {
+          "tag": "input",
+          "type": "text",
+          "name": "",
+          "placeholder": "",
+          "label": "COUNTRY",
+          "aria": "",
+          "disabled": false
+        },
+        {
+          "tag": "input",
+          "type": "text",
+          "name": "",
+          "placeholder": "Select lists",
+          "label": "LISTS",
+          "aria": "",
+          "disabled": false
+        },
+        {
+          "tag": "input",
+          "type": "text",
+          "name": "",
+          "placeholder": "Select a company",
+          "label": "ASSOCIATED TO COMPANIES",
+          "aria": "",
+          "disabled": false
+        },
+        {
+          "tag": "input",
+          "type": "text",
+          "name": "",
+          "placeholder": "",
+          "label": "CONTACT_TIMEZONE",
+          "aria": "",
+          "disabled": false
+        },
+        {
+          "tag": "input",
+          "type": "text",
+          "name": "JOB_TITLE",
+          "placeholder": "Some text here",
+          "label": "JOB_TITLE",
+          "aria": "",
+          "disabled": false
+        },
+        {
+          "tag": "input",
+          "type": "text",
+          "name": "LINKEDIN",
+          "placeholder": "Some text here",
+          "label": "LINKEDIN",
+          "aria": "",
+          "disabled": false
+        },
+        {
+          "tag": "input",
+          "type": "text",
+          "name": "",
+          "placeholder": "",
+          "label": "DETECTED LANGUAGE",
+          "aria": "",
+          "disabled": false
+        }
+      ],
+      "submits": [
+        {
+          "tag": "button",
+          "role": "",
+          "label": "Create a contact",
+          "testid": "createContactBtn"
+        },
+        {
+          "tag": "button",
+          "role": "",
+          "label": "Import contacts",
+          "testid": "sib-button-testId"
+        },
+        {
+          "tag": "button",
+          "role": "",
+          "label": "Add filter",
+          "testid": "seg-add-a-filter-categorized"
+        },
+        {
+          "tag": "button",
+          "role": "",
+          "label": "Add to a list(s)",
+          "testid": "sib-button-testId"
+        },
+        {
+          "tag": "button",
+          "role": "",
+          "label": "Next page",
+          "testid": "sib-button-testId"
+        },
+        {
+          "tag": "button",
+          "role": "",
+          "label": "Create",
+          "testid": "cont_creation_form_create_btn"
+        }
+      ]
+    }
+  },
+  {
+    "route": "/contact/list-listing",
+    "controls": [
+      {
+        "tag": "button",
+        "role": "",
+        "label": "Usage and plan",
+        "testid": "sib-button-testId"
+      },
+      {
+        "tag": "button",
+        "role": "",
+        "label": "help",
+        "testid": "sib-button-testId"
+      },
+      {
+        "tag": "button",
+        "role": "",
+        "label": "notification",
+        "testid": "sib-button-testId"
+      },
+      {
+        "tag": "a",
+        "role": "",
+        "label": "Brevo",
+        "testid": ""
+      },
+      {
+        "tag": "button",
+        "role": "",
+        "label": "Minimize menu",
+        "testid": "sib-button-testId"
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Home",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "CRM",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Contacts",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Lists",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Segments",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Companies",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Deals",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Tasks",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Custom objects",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Marketing",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Campaigns",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Landing pages",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Forms",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Statistics",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Templates",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Automations",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Workflows",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Messages",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Logs",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Event logs",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Transactional",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Email",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Real time",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Statistics",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Logs",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Templates",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "SMS",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Real time",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Statistics",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Logs",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Conversations",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Inbox",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Phone",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Meetings",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Commerce",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "E-commerce",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Loyalty",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Library",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Media",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Analytics",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Conversions",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Analytics studio",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "",
+        "label": "Settings",
+        "testid": ""
+      },
+      {
+        "tag": "button",
+        "role": "",
+        "label": "WOTestBoxTest",
+        "testid": "sib-button-testId"
+      },
+      {
+        "tag": "button",
+        "role": "",
+        "label": "Create a list",
+        "testid": "sib-button-testId"
+      },
+      {
+        "tag": "a",
+        "role": "",
+        "label": "Get started with Lists and Folders",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "",
+        "label": "Lists vs Segments",
+        "testid": ""
+      },
+      {
+        "tag": "button",
+        "role": "",
+        "label": "Recalculate now",
+        "testid": "sib-button-testId"
+      },
+      {
+        "tag": "div",
+        "role": "button",
+        "label": "All folders (2 lists)",
+        "testid": ""
+      },
+      {
+        "tag": "button",
+        "role": "",
+        "label": "Sort column name",
+        "testid": "sorting-buttonname"
+      },
+      {
+        "tag": "button",
+        "role": "",
+        "label": "Sort column id",
+        "testid": "sorting-buttonid"
+      },
+      {
+        "tag": "button",
+        "role": "",
+        "label": "Sort column list_parent",
+        "testid": "sorting-buttonlist_parent"
+      },
+      {
+        "tag": "button",
+        "role": "",
+        "label": "Sort column count",
+        "testid": "sorting-buttoncount"
+      },
+      {
+        "tag": "button",
+        "role": "",
+        "label": "Sort column entered",
+        "testid": "sorting-buttonentered"
+      },
+      {
+        "tag": "a",
+        "role": "",
+        "label": "identified_contacts",
+        "testid": ""
+      },
+      {
+        "tag": "button",
+        "role": "",
+        "label": "more list actions",
+        "testid": "sib-button-testId"
+      },
+      {
+        "tag": "a",
+        "role": "",
+        "label": "Your first list",
+        "testid": ""
+      },
+      {
+        "tag": "button",
+        "role": "",
+        "label": "more list actions",
+        "testid": "sib-button-testId"
+      },
+      {
+        "tag": "button",
+        "role": "",
+        "label": "20",
+        "testid": "sib-button-testId"
+      },
+      {
+        "tag": "button",
+        "role": "",
+        "label": "1",
+        "testid": "sib-button-testId"
+      },
+      {
+        "tag": "button",
+        "role": "",
+        "label": "Previous page",
+        "testid": "sib-button-testId"
+      },
+      {
+        "tag": "button",
+        "role": "",
+        "label": "Next page",
+        "testid": "sib-button-testId"
+      }
+    ],
+    "candidates": [
+      {
+        "tag": "button",
+        "role": "",
+        "label": "Create a list",
+        "testid": "sib-button-testId"
+      }
+    ],
+    "afterClick": {
+      "clicked": "Create a list",
+      "urlBefore": "https://app.brevo.com/contact/list-listing",
+      "urlAfter": "https://app.brevo.com/contact/list-listing",
+      "dialogs": 1,
+      "fields": [
+        {
+          "tag": "input",
+          "type": "search",
+          "name": "",
+          "placeholder": "Search a list name or ID",
+          "label": "",
+          "aria": "",
+          "disabled": false
+        },
+        {
+          "tag": "input",
+          "type": "text",
+          "name": "",
+          "placeholder": "",
+          "label": "",
+          "aria": "",
+          "disabled": false
+        },
+        {
+          "tag": "input",
+          "type": "text",
+          "name": "create-listName",
+          "placeholder": "Enter a list name",
+          "label": "Name of the listName of the list*",
+          "aria": "",
+          "disabled": false
+        },
+        {
+          "tag": "input",
+          "type": "text",
+          "name": "",
+          "placeholder": "",
+          "label": "",
+          "aria": "",
+          "disabled": false
+        }
+      ],
+      "submits": [
+        {
+          "tag": "button",
+          "role": "",
+          "label": "Create a list",
+          "testid": "sib-button-testId"
+        },
+        {
+          "tag": "button",
+          "role": "",
+          "label": "Next page",
+          "testid": "sib-button-testId"
+        },
+        {
+          "tag": "button",
+          "role": "",
+          "label": "Create list",
+          "testid": "sib-button-testId"
+        }
+      ]
+    }
+  },
+  {
+    "route": "/contact/segment",
+    "controls": [
+      {
+        "tag": "button",
+        "role": "",
+        "label": "Usage and plan",
+        "testid": "sib-button-testId"
+      },
+      {
+        "tag": "button",
+        "role": "",
+        "label": "help",
+        "testid": "sib-button-testId"
+      },
+      {
+        "tag": "button",
+        "role": "",
+        "label": "notification",
+        "testid": "sib-button-testId"
+      },
+      {
+        "tag": "a",
+        "role": "",
+        "label": "Brevo",
+        "testid": ""
+      },
+      {
+        "tag": "button",
+        "role": "",
+        "label": "Minimize menu",
+        "testid": "sib-button-testId"
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Home",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "CRM",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Contacts",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Lists",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Segments",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Companies",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Deals",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Tasks",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Custom objects",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Marketing",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Campaigns",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Landing pages",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Forms",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Statistics",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Templates",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Automations",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Workflows",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Messages",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Logs",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Event logs",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Transactional",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Email",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Real time",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Statistics",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Logs",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Templates",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "SMS",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Real time",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Statistics",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Logs",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Conversations",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Inbox",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Phone",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Meetings",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Commerce",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "E-commerce",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Loyalty",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Library",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Media",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Analytics",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Conversions",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Analytics studio",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "",
+        "label": "Settings",
+        "testid": ""
+      },
+      {
+        "tag": "button",
+        "role": "",
+        "label": "WOTestBoxTest",
+        "testid": "sib-button-testId"
+      },
+      {
+        "tag": "button",
+        "role": "",
+        "label": "Create a segment",
+        "testid": "sib-button-testId"
+      },
+      {
+        "tag": "a",
+        "role": "",
+        "label": "Understanding filters and segmentation",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "",
+        "label": "Differences between Lists and Segments",
+        "testid": ""
+      },
+      {
+        "tag": "div",
+        "role": "button",
+        "label": "All folders (0 segment)",
+        "testid": ""
+      }
+    ],
+    "candidates": [
+      {
+        "tag": "button",
+        "role": "",
+        "label": "Create a segment",
+        "testid": "sib-button-testId"
+      }
+    ],
+    "afterClick": {
+      "clicked": "Create a segment",
+      "urlBefore": "https://app.brevo.com/contact/segment",
+      "urlAfter": "https://app.brevo.com/contact/segment/templates",
+      "dialogs": 0,
+      "fields": [],
+      "submits": [
+        {
+          "tag": "div",
+          "role": "button",
+          "label": "Create segment from scratchAdd filters one by one.",
+          "testid": "seg-startFromScratch"
+        }
+      ]
+    }
+  },
+  {
+    "route": "/campaigns/listing",
+    "controls": [
+      {
+        "tag": "a",
+        "role": "",
+        "label": "Campaigns",
+        "testid": ""
+      },
+      {
+        "tag": "button",
+        "role": "",
+        "label": "Usage and plan",
+        "testid": "sib-button-testId"
+      },
+      {
+        "tag": "button",
+        "role": "",
+        "label": "help",
+        "testid": "sib-button-testId"
+      },
+      {
+        "tag": "button",
+        "role": "",
+        "label": "notification",
+        "testid": "sib-button-testId"
+      },
+      {
+        "tag": "a",
+        "role": "",
+        "label": "Brevo",
+        "testid": ""
+      },
+      {
+        "tag": "button",
+        "role": "",
+        "label": "Minimize menu",
+        "testid": "sib-button-testId"
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Home",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "CRM",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Contacts",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Lists",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Segments",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Companies",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Deals",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Tasks",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Custom objects",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Marketing",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Campaigns",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Landing pages",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Forms",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Statistics",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Templates",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Automations",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Workflows",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Messages",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Logs",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Event logs",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Transactional",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Email",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Real time",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Statistics",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Logs",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Templates",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "SMS",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Real time",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Statistics",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Logs",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Conversations",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Inbox",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Phone",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Meetings",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Commerce",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "E-commerce",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Loyalty",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Library",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Media",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Analytics",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Conversions",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Analytics studio",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "",
+        "label": "Settings",
+        "testid": ""
+      },
+      {
+        "tag": "button",
+        "role": "",
+        "label": "WOTestBoxTest",
+        "testid": "sib-button-testId"
+      },
+      {
+        "tag": "div",
+        "role": "button",
+        "label": "Generate email with AI",
+        "testid": ""
+      },
+      {
+        "tag": "div",
+        "role": "button",
+        "label": "Email",
+        "testid": ""
+      },
+      {
+        "tag": "div",
+        "role": "button",
+        "label": "SMS",
+        "testid": ""
+      },
+      {
+        "tag": "div",
+        "role": "button",
+        "label": "WhatsApp",
+        "testid": ""
+      },
+      {
+        "tag": "div",
+        "role": "button",
+        "label": "Push",
+        "testid": ""
+      },
+      {
+        "tag": "div",
+        "role": "button",
+        "label": "Pop-up",
+        "testid": ""
+      }
+    ],
+    "candidates": [],
+    "afterClick": null
+  },
+  {
+    "route": "/templates/listing",
+    "controls": [
+      {
+        "tag": "a",
+        "role": "",
+        "label": "Templates",
+        "testid": ""
+      },
+      {
+        "tag": "button",
+        "role": "",
+        "label": "Usage and plan",
+        "testid": "sib-button-testId"
+      },
+      {
+        "tag": "button",
+        "role": "",
+        "label": "help",
+        "testid": "sib-button-testId"
+      },
+      {
+        "tag": "button",
+        "role": "",
+        "label": "notification",
+        "testid": "sib-button-testId"
+      },
+      {
+        "tag": "a",
+        "role": "",
+        "label": "Brevo",
+        "testid": ""
+      },
+      {
+        "tag": "button",
+        "role": "",
+        "label": "Minimize menu",
+        "testid": "sib-button-testId"
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Home",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "CRM",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Contacts",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Lists",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Segments",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Companies",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Deals",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Tasks",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Custom objects",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Marketing",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Campaigns",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Landing pages",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Forms",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Statistics",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Templates",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Automations",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Workflows",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Messages",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Logs",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Event logs",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Transactional",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Email",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Real time",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Statistics",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Logs",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Templates",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "SMS",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Real time",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Statistics",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Logs",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Conversations",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Inbox",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Phone",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Meetings",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Commerce",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "E-commerce",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Loyalty",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Library",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Media",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Analytics",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Conversions",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "menuitem",
+        "label": "Analytics studio",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "",
+        "label": "Settings",
+        "testid": ""
+      },
+      {
+        "tag": "button",
+        "role": "",
+        "label": "WOTestBoxTest",
+        "testid": "sib-button-testId"
+      },
+      {
+        "tag": "button",
+        "role": "",
+        "label": "Create folder",
+        "testid": "sib-button-testId"
+      },
+      {
+        "tag": "button",
+        "role": "",
+        "label": "Create template",
+        "testid": "sib-button-testId"
+      },
+      {
+        "tag": "button",
+        "role": "tab",
+        "label": "Email",
+        "testid": "tab-tab-email"
+      }
+    ],
+    "candidates": [
+      {
+        "tag": "button",
+        "role": "",
+        "label": "Create folder",
+        "testid": "sib-button-testId"
+      },
+      {
+        "tag": "button",
+        "role": "",
+        "label": "Create template",
+        "testid": "sib-button-testId"
+      }
+    ],
+    "afterClick": {
+      "clicked": "Create folder",
+      "urlBefore": "https://app.brevo.com/templates/listing",
+      "urlAfter": "https://app.brevo.com/templates/listing",
+      "dialogs": 1,
+      "fields": [],
+      "submits": [
+        {
+          "tag": "button",
+          "role": "",
+          "label": "Create folder",
+          "testid": "sib-button-testId"
+        },
+        {
+          "tag": "button",
+          "role": "",
+          "label": "Create template",
+          "testid": "sib-button-testId"
+        }
+      ]
+    }
+  },
+  {
+    "route": "/settings/senders",
+    "controls": [
+      {
+        "tag": "button",
+        "role": "",
+        "label": "Usage and plan",
+        "testid": "sib-button-testId"
+      },
+      {
+        "tag": "button",
+        "role": "",
+        "label": "help",
+        "testid": "sib-button-testId"
+      },
+      {
+        "tag": "button",
+        "role": "",
+        "label": "notification",
+        "testid": "sib-button-testId"
+      },
+      {
+        "tag": "a",
+        "role": "",
+        "label": "Brevo",
+        "testid": ""
+      },
+      {
+        "tag": "a",
+        "role": "",
+        "label": "Settings",
+        "testid": ""
+      },
+      {
+        "tag": "button",
+        "role": "",
+        "label": "TestBoxTest",
+        "testid": "sib-button-testId"
+      },
+      {
+        "tag": "a",
+        "role": "",
+        "label": "contact our Support team",
+        "testid": ""
+      },
+      {
+        "tag": "button",
+        "role": "",
+        "label": "Go to Home",
+        "testid": "go-to-home-cta"
+      }
+    ],
+    "candidates": [],
+    "afterClick": null
+  }
+]
