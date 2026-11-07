@@ -128,3 +128,54 @@ describe('scoreSelection', () => {
     expect(seen).not.toContain('body_example');
   });
 });
+
+describe('a provider failure is not a description defect', () => {
+  const throws: LlmProvider = {
+    name: 'fake-dead',
+    async complete() {
+      throw new Error('claude CLI exited 1: usage limit reached');
+    },
+  };
+
+  it('excludes a task the provider never answered from the denominator', async () => {
+    // A real run hit a usage limit mid-way and reported 1 of 3, with two
+    // "misses" whose token counts were zero. Read as a quality signal that is
+    // noise dressed as regression, so those tasks are not scored.
+    const report = await scoreSelection([task, task], index, throws);
+    expect(report.total).toBe(2);
+    expect(report.scored).toBe(0);
+    expect(report.providerFailures).toBe(2);
+  });
+
+  it('marks the case so the report can say why', async () => {
+    const report = await scoreSelection([task], index, throws);
+    expect(report.cases[0]?.providerFailed).toBe(true);
+    expect(report.cases[0]?.note).toMatch(/never answered/i);
+    expect(report.cases[0]?.correct).toBe(false);
+  });
+
+  it('still scores prose, because the model did answer — badly', async () => {
+    const report = await scoreSelection([task], index, alwaysProse);
+    expect(report.scored).toBe(1);
+    expect(report.providerFailures).toBe(0);
+    expect(report.cases[0]?.providerFailed).toBeUndefined();
+    expect(report.cases[0]?.correct).toBe(false);
+  });
+
+  it('counts only the failures, leaving good answers scored', async () => {
+    let call = 0;
+    const flaky: LlmProvider = {
+      name: 'fake-flaky',
+      async complete() {
+        call += 1;
+        if (call === 2) throw new Error('usage limit reached');
+        return JSON.stringify({ action_id: 'contacts.create_contact', inputs: {} });
+      },
+    };
+
+    const report = await scoreSelection([task, task, task], index, flaky);
+    expect(report.scored).toBe(2);
+    expect(report.correct).toBe(2);
+    expect(report.providerFailures).toBe(1);
+  });
+});

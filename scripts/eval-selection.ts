@@ -4,6 +4,18 @@
  * Reports a score and every failure. Each failure is a description that needs
  * fixing; re-run after fixing and record both numbers in docs/eval.md. The
  * before/after pair is the most informative line in the whole write-up.
+ *
+ * Defaults to Claude, unlike extraction, which defaults to Groq. Decision #3
+ * splits the two providers by job — throughput against judgment — and choosing
+ * the right action from a hundred-odd descriptions is the judgment half. It is
+ * also twenty calls rather than a hundred and thirty-six, so the cost argument
+ * that governs extraction does not apply.
+ *
+ * The sharper reason is measurement: this stage exists to grade descriptions,
+ * and a rate-limited provider contributes failures that say nothing about any
+ * description. Those are now excluded from the denominator rather than counted
+ * as misses, but the cleanest version of the number comes from a provider that
+ * answers every time. `--provider groq` stays available for when quota is out.
  */
 
 import { existsSync, readFileSync, writeFileSync } from 'node:fs';
@@ -22,7 +34,7 @@ function argValue(name: string, fallback: string): string {
 }
 
 const config = loadConfig();
-const providerName = argValue('provider', 'groq');
+const providerName = argValue('provider', 'claude');
 
 const indexPath = join(config.paths.actions, 'index.json');
 if (!existsSync(indexPath)) {
@@ -73,6 +85,13 @@ for (const result of report.cases) {
     console.log(`  ✓ ${result.task.expectedActionId}`);
     continue;
   }
+  if (result.providerFailed === true) {
+    console.log(`  ! "${result.task.prompt}"`);
+    console.log(`      ${result.note ?? 'provider never answered'}`);
+    console.log('      not scored — this says nothing about the description');
+    continue;
+  }
+
   console.log(`  × "${result.task.prompt}"`);
   console.log(`      expected ${result.task.expectedActionId}, chose ${result.chosenActionId ?? '(nothing parseable)'}`);
   if (result.inputsCorrect === false && result.correct) {
@@ -90,7 +109,10 @@ writeFileSync(
 );
 
 console.log(
-  `\nselection: ${report.correct}/${report.total}` +
+  `\nselection: ${report.correct}/${report.scored} scored` +
     (withInputs > 0 ? `   inputs: ${report.inputsCorrect}/${withInputs}` : '') +
+    (report.providerFailures > 0
+      ? `\n${report.providerFailures} task(s) excluded: the provider never answered, which measures nothing about the catalog. Re-run those.`
+      : '') +
     `\nEvery miss above is a description an agent could not resolve. Fix the description, re-run, record both numbers.`,
 );

@@ -8,8 +8,19 @@
  * Every failure here is a Reliability bug in a description, not a curiosity:
  * if a model cannot find the action, an agent in production will not either.
  *
- * A provider that errors or answers in prose is a scored failure, never a
- * thrown exception — an eval that dies on one bad response measures nothing.
+ * A provider that errors or answers in prose is never a thrown exception — an
+ * eval that dies on one bad response measures nothing. But those two are not
+ * the same failure, and counting them together makes the number lie:
+ *
+ * - **Prose instead of JSON** is the model answering badly. It is scored, and
+ *   it is a real defect in the catalog or the prompt.
+ * - **The provider never answering** — quota exhausted, timeout, crash — says
+ *   nothing about any description. A run hit a usage limit mid-way and reported
+ *   1 of 3 with two "misses" whose token counts were zero; read as a quality
+ *   signal, that is noise presented as regression.
+ *
+ * So provider failures are recorded, excluded from the denominator, and always
+ * printed. Excluding them silently would be the worse error of the two.
  */
 
 import { extractJsonObject } from '../providers/json.js';
@@ -29,12 +40,18 @@ export type EvalCase = {
   /** Null when the task declares no expected inputs. */
   inputsCorrect: boolean | null;
   note?: string;
+  /** The provider never answered. Not evidence about any description. */
+  providerFailed?: boolean;
 };
 
 export type EvalReport = {
   total: number;
+  /** Tasks the provider actually answered: the denominator that means something. */
+  scored: number;
   correct: number;
   inputsCorrect: number;
+  /** Tasks excluded because the provider never answered. Always reported. */
+  providerFailures: number;
   cases: EvalCase[];
 };
 
@@ -81,6 +98,7 @@ export async function scoreSelection(
     let chosenActionId: string | null = null;
     let actualInputs: Record<string, unknown> = {};
     let note: string | undefined;
+    let providerFailed = false;
 
     try {
       const raw = await provider.complete({
@@ -100,7 +118,9 @@ export async function scoreSelection(
         note = extracted.reason;
       }
     } catch (error) {
-      note = `provider error: ${String(error)}`;
+      // Infrastructure, not comprehension: quota, timeout, a crashed CLI.
+      providerFailed = true;
+      note = `provider never answered: ${String(error).slice(0, 180)}`;
     }
 
     const correct = chosenActionId === task.expectedActionId;
@@ -109,13 +129,24 @@ export async function scoreSelection(
         ? null
         : correct && inputsMatch(task.expectedInputs, actualInputs);
 
-    cases.push({ task, chosenActionId, correct, inputsCorrect, ...(note ? { note } : {}) });
+    cases.push({
+      task,
+      chosenActionId,
+      correct,
+      inputsCorrect,
+      ...(note ? { note } : {}),
+      ...(providerFailed ? { providerFailed: true } : {}),
+    });
   }
+
+  const providerFailures = cases.filter((c) => c.providerFailed === true).length;
 
   return {
     total: cases.length,
+    scored: cases.length - providerFailures,
     correct: cases.filter((c) => c.correct).length,
     inputsCorrect: cases.filter((c) => c.inputsCorrect === true).length,
+    providerFailures,
     cases,
   };
 }
