@@ -14,6 +14,7 @@ import { listCaptureFiles, readCaptureFile } from '../src/capture/store.js';
 import { buildPublicApiIndex } from '../src/openapi/index.js';
 import { clusterCaptures } from '../src/extract/cluster.js';
 import { draftAction } from '../src/extract/draft.js';
+import { createProgress } from '../src/util/progress.js';
 import { createGroqProvider } from '../src/providers/groq.js';
 import { createClaudeCliProvider } from '../src/providers/claude-cli.js';
 import { createLimiter } from '../src/util/rate-limit.js';
@@ -85,7 +86,20 @@ const failures: Failure[] = [];
 const writtenIds = new Map<string, string>();
 let matched = 0;
 
+// One bar instead of a line per candidate: the per-candidate lines said what
+// happened but never how much was left, and this stage runs for minutes behind
+// a rate limiter. Failures still print, above the bar, because those need reading.
+const progress = createProgress(candidates.length);
+
+/** Prints a line above the bar, so a failure is not overwritten by the redraw. */
+function note(line: string): void {
+  progress.finish(line);
+}
+
 for (const candidate of candidates) {
+  // Ticked on entry, so every `continue` below is still counted.
+  progress.tick(candidate.key);
+
   const operation = publicApi.lookup(candidate.method, candidate.pathTemplate);
   if (operation !== null) matched += 1;
 
@@ -94,13 +108,13 @@ for (const candidate of candidates) {
     result = await limiter(() => draftAction(candidate, operation, provider));
   } catch (error) {
     failures.push({ key: candidate.key, errors: [String(error)], raw: '' });
-    console.log(`  ! ${candidate.key} — provider error`);
+    note(`  ! ${candidate.key} — provider error`);
     continue;
   }
 
   if (!result.ok) {
     failures.push({ key: candidate.key, errors: result.errors, raw: result.raw });
-    console.log(`  ! ${candidate.key} — ${result.errors[0] ?? 'rejected'}`);
+    note(`  ! ${candidate.key} — ${result.errors[0] ?? 'rejected'}`);
     continue;
   }
 
@@ -111,7 +125,7 @@ for (const candidate of candidates) {
       errors: [`id "${result.action.id}" already drafted from ${existing}`],
       raw: '',
     });
-    console.log(`  ! ${candidate.key} — duplicate id ${result.action.id} (from ${existing})`);
+    note(`  ! ${candidate.key} — duplicate id ${result.action.id} (from ${existing})`);
     continue;
   }
 
@@ -124,7 +138,7 @@ for (const candidate of candidates) {
       errors: [`${outPath} already exists; re-run with --force to overwrite it`],
       raw: '',
     });
-    console.log(`  ! ${candidate.key} — ${result.action.id}.json already exists (use --force)`);
+    note(`  ! ${candidate.key} — ${result.action.id}.json already exists (use --force)`);
     continue;
   }
 
@@ -134,8 +148,9 @@ for (const candidate of candidates) {
     `${JSON.stringify(result.action, null, 2)}\n`,
     'utf8',
   );
-  console.log(`  ✓ ${result.action.id}${operation === null ? '' : ' (public api matched)'}`);
 }
+
+progress.finish();
 
 writeFileSync(
   join(config.paths.data, 'extract-failures.json'),

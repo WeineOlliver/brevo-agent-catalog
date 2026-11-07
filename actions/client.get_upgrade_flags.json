@@ -1,0 +1,54 @@
+{
+  "id": "client.get_upgrade_flags",
+  "module": "client",
+  "name": "Get upgrade flags",
+  "description": "Call this when you need to know whether the UI should show upgrade prompts for tags or folders in the campaign listing. If you only need overall subscription or plan information, use the neighbouring action client.get_subscription instead.",
+  "preconditions": [],
+  "inputs": {
+    "type": "object",
+    "properties": {},
+    "required": []
+  },
+  "outputs": {
+    "type": "object",
+    "properties": {
+      "show_tag_upgrade": {
+        "type": "boolean",
+        "description": "Whether the UI should display an upgrade prompt for tags."
+      },
+      "show_folder_upgrade": {
+        "type": "boolean",
+        "description": "Whether the UI should display an upgrade prompt for folders."
+      }
+    },
+    "required": [
+      "show_tag_upgrade",
+      "show_folder_upgrade"
+    ]
+  },
+  "side_effects": [],
+  "destructive": false,
+  "idempotent": true,
+  "ui_path": [
+    "Campaigns",
+    "Listing"
+  ],
+  "internal_endpoint": {
+    "method": "GET",
+    "path": "/client/upgrade-flags",
+    "body_example": null
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/campaigns-listing.json",
+      "captures/clean/explore/campaigns-listing.json"
+    ],
+    "verified_at": null
+  }
+}

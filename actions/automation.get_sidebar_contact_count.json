@@ -1,0 +1,54 @@
+{
+  "id": "automation.get_sidebar_contact_count",
+  "module": "automation",
+  "name": "Get sidebar contact count",
+  "description": "Call this when you need the contact count shown in the automation sidebar for the currently viewed automation. If you need a reliable count of contacts for a list or segment, use the contacts count endpoint instead.",
+  "preconditions": [
+    "The user must be viewing an automation in the Brevo UI (e.g., /automation/advanced or /automation/automations).",
+    "A valid automation ID must be present in the request context."
+  ],
+  "inputs": {
+    "type": "object",
+    "properties": {},
+    "required": []
+  },
+  "outputs": {
+    "type": "object",
+    "properties": {
+      "error": {
+        "type": "string",
+        "description": "Error message describing why the contact count could not be retrieved."
+      }
+    },
+    "required": [
+      "error"
+    ]
+  },
+  "side_effects": [],
+  "destructive": false,
+  "idempotent": true,
+  "ui_path": [
+    "Automation",
+    "Advanced",
+    "Sidebar contact count"
+  ],
+  "internal_endpoint": {
+    "method": "GET",
+    "path": "/v1/sidebar/contactCount",
+    "body_example": null
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/automation-advanced.json",
+      "captures/clean/automation-automations.json",
+      "captures/clean/explore/automation-advanced.json"
+    ],
+    "verified_at": null
+  }
+}

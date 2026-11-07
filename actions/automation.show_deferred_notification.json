@@ -1,0 +1,51 @@
+{
+  "id": "automation.show_deferred_notification",
+  "module": "automation",
+  "name": "Show Deferred Notification",
+  "description": "Call this when you need to retrieve the server‑side details of a deferred notification for a specific workflow automation. If you only need to list or inspect the automation itself, use the standard automation retrieval actions instead.",
+  "preconditions": [],
+  "inputs": {
+    "type": "object",
+    "properties": {},
+    "required": []
+  },
+  "outputs": {
+    "type": "object",
+    "properties": {
+      "error": {
+        "type": "string",
+        "description": "Error message returned when the deferred notification cannot be fetched."
+      }
+    },
+    "required": [
+      "error"
+    ]
+  },
+  "side_effects": [],
+  "destructive": false,
+  "idempotent": true,
+  "ui_path": [
+    "Automation",
+    "Advanced",
+    "Show Deferred Notification"
+  ],
+  "internal_endpoint": {
+    "method": "GET",
+    "path": "/v1/workflow/showDeferredNotification",
+    "body_example": null
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/automation-advanced.json",
+      "captures/clean/automation-automations.json",
+      "captures/clean/explore/automation-automations.json"
+    ],
+    "verified_at": null
+  }
+}
