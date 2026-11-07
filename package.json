@@ -24,7 +24,8 @@
     "build:docs": "tsx scripts/build-modules-doc.ts",
     "scan": "tsx scripts/scan-secrets.ts",
     "normalize": "tsx scripts/normalize-catalog.ts",
-    "explore": "tsx scripts/explore.ts"
+    "explore": "tsx scripts/explore.ts",
+    "import:har": "tsx scripts/import-har.ts"
   },
   "dependencies": {
     "ajv": "^8.17.1",
