@@ -2,30 +2,43 @@
 
 What this does not do, stated plainly, and what more time would buy.
 
-## The catalog is almost entirely read actions
+## The catalog is still mostly read actions
 
 This is the largest gap by far, and it is measured rather than suspected.
 
-The crawl ran: 38 routes, 1176 requests, 118 catalogued actions. But of those
-118, **75 begin `get`, 33 begin `list`, and exactly one is a write.** The
-selection eval scored **0 of 20** — the catalog contains none of the twenty
-tasks a user would actually ask for.
+136 catalogued actions from 3097 captured requests, of which **4 are writes**:
+`contacts.create_contact`, `contacts.add_contact_to_lists`,
+`account.enable_sms_campaigns_app` and `lists.sync_list_counts`. The rest are 85
+`get` and 36 `list`. Of the eval's 20 tasks, 17 name an action that does not
+exist here, and nearly all of those are writes.
 
-The cause is structural. The crawler follows links and deliberately clicks
-nothing, so it sees `GET` traffic. Creating a contact, adding one to a list,
-creating a campaign — the brief's own examples — exist only in the request a
-form submission causes.
+The cause is no longer a missing login — that happened, and the write passes have
+run three times. The cause is that **driving writes by selector only works on
+flat forms.** Reconnaissance over the six targeted routes measured it:
 
-**The fix is built and not yet run.** Six interaction passes (contacts, lists,
-segments, campaigns, templates, senders) drive the real UI and capture those
-write requests. They need an interactive login that only the account holder can
-perform, and that has not happened yet. Until it does:
+| Route | What a create control opens | Usable by a pass? |
+|---|---|---|
+| `/contact/list` | dialog, `email` field, submit `Create` | yes |
+| `/contact/list-listing` | dialog, `create-listName` field | yes |
+| `/contact/segment` | navigates to a multi-step builder | no |
+| `/campaigns/listing` | channel split-button, no create control matched | no |
+| `/templates/listing` | opens the drag-and-drop editor | no |
+| `/settings/senders` | error page — the route is wrong | no |
 
-- the catalog is a usable map of Brevo's *read* surface and little else;
-- no entry has ever been stamped `verified`, because nothing has been executed;
-- the 20 ids in `data/eval-tasks.json` remain predictions. `pnpm eval` reports
-  them as unscoreable rather than scoring them as misses, which is why the
-  headline is "0 of 20 scoreable" and not a quality score.
+Two of six. Each wizard is hours of selector work that breaks on Brevo's next
+release, and a person performs the same flow in about thirty seconds.
+
+**So the remaining coverage comes from `pnpm import:har`.** Perform the actions
+in your own browser with DevTools recording, export the HAR, and the same
+sanitize → extract → normalize path ingests it. No login timeout, no selectors,
+no locale. `parseHar` had been tested since the first week and had no caller;
+it is now the stage that matters most.
+
+Until that session happens:
+
+- the catalog maps Brevo's read surface well and its write surface barely;
+- no entry is `verified`, because verification needs a recipe per action and
+  only `create_contact` has the captured evidence to build one from.
 
 ## The public API barely overlaps the product
 
@@ -79,13 +92,14 @@ than `free` with suspicion.
 
 ## Structural limitations
 
-- **Reproducibility is partial by design, and currently thinner than intended.**
-  Stage 0 runs offline for anyone. Stages 4–8 are *built* to run offline from
-  committed clean captures, but none are committed yet — the crawl has not run —
-  so right now only stage 0 does anything for a third party. The crawl stages
-  need a Brevo account of your own and are documented rather than runnable,
-  which the brief explicitly permits ("if something needs a key to run, describe
-  it instead").
+- **Reproducibility is partial by design, and better than first written.**
+  Stage 0 runs offline for anyone, and stages 4–8 now genuinely do too: the 61
+  sanitized capture files under `captures/clean/` are committed, so a third
+  party can re-run extraction, normalisation, validation, indexing and the eval
+  against real Brevo traffic with no Brevo account at all. Only an LLM provider
+  is needed. The browser stages still require an account of your own and are
+  documented rather than runnable, which the brief explicitly permits ("if
+  something needs a key to run, describe it instead").
 - **`inferred` is unreachable today.** The extraction pipeline drafts only from
   captured traffic, so every drafted entry is `observed`. The status exists for
   UI-only actions discovered without a capture, and nothing produces those yet.
@@ -106,14 +120,17 @@ than `free` with suspicion.
 
 ## What more time would buy, in order
 
-1. **Run the six write passes.** This is not a refinement, it is the difference
-   between a read-only map and a catalog of business actions. Everything below
-   matters less than this one step.
-2. **More write passes** — automation workflows, forms, meetings, ecommerce.
-   These are also the surfaces with no public API coverage at all, so they are
-   where a catalog is worth the most and where this one is weakest.
+1. **One recorded HAR session.** Perform the twenty flows the eval names, once,
+   by hand, and ingest the log. This is not a refinement: it is the difference
+   between a read-only map and a catalog of business actions, and it reaches the
+   wizards no selector pass can. Everything below matters less than this step.
+2. **More write passes for the flat forms only** — attributes, senders, folders.
+   Worth automating where a dialog with a name field exists; not worth it for
+   anything shaped like a wizard, which is what measurement showed most of them
+   are.
 3. **Verification recipes** for whichever write actions step 1 surfaces, chosen
    by what an agent is most likely to call and what would hurt most if wrong.
+   `create_contact` is the only one with captured evidence to build from today.
 4. **Close the eval loop** — re-run, fix the descriptions it defeats, re-run, and
    report both numbers. The before/after pair says the pipeline has a working
    feedback loop, which is a stronger claim than any single score.

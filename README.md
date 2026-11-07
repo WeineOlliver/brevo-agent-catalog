@@ -4,15 +4,22 @@ A catalog of Brevo's **business actions** — everything a user can do by clicki
 around the product — in a form an AI agent can act on without a human checking
 its work first.
 
-> **Status: the pipeline has run; the catalog is read-only so far.**
-> 38 routes crawled, 1176 requests captured, **118 actions catalogued** — but 108
-> of those 118 are `get`/`list` and exactly one is a write, so the selection eval
-> scores **0 of 20** on the tasks a user would actually ask for. A crawl that
-> clicks nothing sees only reads. The six write passes that fix this are built
-> and tested but need an interactive login that has not happened yet. Nothing
-> here is `verified`. See [docs/gaps.md](docs/gaps.md) and
-> [docs/eval.md](docs/eval.md) — every number in this repository is measured, and
-> the uncomfortable ones are stated first.
+> **Status: writes are proven; coverage of them is not.**
+> 38 routes crawled, 3097 requests captured, **136 actions catalogued**, of which
+> **4 are writes** — `contacts.create_contact` among them, carrying its real
+> request body and a `200` that returned a `contact_id`. The selection eval
+> scores **2 of 3 scoreable tasks**; the other 17 of its 20 tasks name actions
+> this catalog does not hold yet, and almost all of those are writes. Nothing is
+> `verified`.
+>
+> Reconnaissance measured why the automated ceiling is low: of the six routes the
+> write passes target, two are flat forms and four are multi-step wizards or dead
+> URLs. Driving a wizard by selector costs hours per flow; a person does it in
+> thirty seconds. So the remaining coverage comes through
+> `pnpm import:har` — perform the flow once in your own browser, export the
+> network log, and the same extraction pipeline ingests it. See
+> [docs/gaps.md](docs/gaps.md) and [docs/eval.md](docs/eval.md) — every number in
+> this repository is measured, and the uncomfortable ones are stated first.
 
 ## Why this exists
 

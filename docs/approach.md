@@ -97,11 +97,14 @@ coverage count would have reported 118 actions and read as success.
 
 ## Current state
 
-The pipeline is complete and tested — 308 tests, strict TypeScript, clean
+The pipeline is complete and tested — 421 tests, strict TypeScript, clean
 typecheck, leak gate clean across every tracked file. It has run end to end
-against a live account: 38 routes crawled, 1176 requests captured and sanitized,
-118 actions catalogued, validated and indexed.
+against a live account: 38 routes crawled, 3097 requests captured and sanitized,
+136 actions catalogued, validated and indexed, and a selection eval scored at
+2 of 3 scoreable tasks.
 
-What is missing is the write coverage described above. No document here reports a
+Four writes are on the wire, `contacts.create_contact` among them with a real
+request body and a `200` returning a `contact_id`. What is missing is the rest
+of the write coverage described above. No document here reports a
 number it has not measured; the ones that look bad are in
 [gaps.md](gaps.md) and [eval.md](eval.md) rather than omitted.

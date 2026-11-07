@@ -75,20 +75,59 @@ are precisely the business actions the catalog is about."* It was recorded as a
 known risk, the mitigation was designed in, and the eval then proved the risk was
 real rather than theoretical.
 
-## Results — run 2, after the write passes
+## Results — runs 2 to 5
 
-> **Not yet run.** The write passes need an interactive login that only the
-> account holder can perform, and that has not happened yet. Nothing is reported
-> here because nothing has been measured. See [gaps.md](gaps.md).
+The interesting claim was never the absolute score, which 17 missing actions cap
+at 3. It is whether the loop closes: does a miss name a real defect, does fixing
+that defect move the number, and does the eval resist being gamed into passing.
 
-The comparison to fill in, which is the interesting claim — not the absolute
-score but whether the feedback loop works:
+| | Crawl only | + write passes | + id reconciliation | + description fixes |
+|---|---|---|---|---|
+| Correct action selected | — | 1 / 1 | 2 / 3 | 2 / 3 |
+| Correct inputs | — | 1 / 1 | 1 / 1 | 1 / 1 |
+| Scoreable of 20 tasks | 0 | 1 | 3 | 3 |
 
-| | Crawl only | After write passes | After description fixes |
-|---|---|---|---|
-| Correct action selected | 0 / 20 | — | — |
-| Correct inputs | — | — | — |
-| Unscoreable | 20 / 20 | — | — |
+Four things it caught, in order:
+
+1. **The scorer had never scored anything.** Run 2 existed only to find that
+   out, with one scoreable task, before the catalog was large enough for a bad
+   scorer to be discovered late. It worked: `contacts.create_contact` was
+   selected from the prompt *"add john@example.com to my newsletter list"*,
+   which shares no wording with the entry, and its inputs matched.
+
+2. **Two of the 20 expected ids were predictions, not gaps.** `lists.list_lists`
+   is `lists.get_lists`; `contacts.list_contacts` is `segments.query_contacts`,
+   which Brevo serves with an empty `fe_query` — the captured request proves it
+   returns the whole base. Both were reconciled in `data/eval-tasks.json`. Two
+   others that looked reconcilable were **not**, and stayed gaps:
+   `lists.add_contacts_to_list` (the catalog's neighbour acts on one contact, not
+   list-to-list) and `campaigns.get_campaign_report` (the neighbour aggregates
+   over a date range rather than reporting one campaign).
+
+3. **A description that denied what the action does.** Before the fix,
+   `segments.query_contacts` described itself as returning "contacts that belong
+   to a specific segment", so no agent would pick it for *"show me everyone
+   currently in Brevo"*. Corrected against the captured evidence, it scores.
+
+4. **A confusable pair that is still a miss, on purpose.** For *"what audience
+   groups do we have"* the model chose `contacts.get_lists_and_segments` over the
+   expected `lists.get_lists`. Both descriptions were rewritten to say what the
+   other returns and when to prefer it — and the model's choice did not change,
+   which is evidence the defect is not wording: "audience groups" covers lists
+   and segments both, and the entry returning both is a defensible answer. The
+   honest reading is that the **task** is ambiguous.
+
+   It stays a recorded miss. Sharpening the prompt after seeing which way the
+   model went would make the number go up and the eval worth less.
+
+### A failure that is not a failure
+
+Run 4 reported 1 of 3 with two misses whose token counts were zero: a usage limit
+hit mid-run. The harness was right not to throw, but counting that as a miss
+presents infrastructure noise as a quality regression. Provider failures are now
+recorded, excluded from the denominator, and always printed —
+`src/eval/selection.ts` separates "the model answered badly", which is scored,
+from "the provider never answered", which is not.
 
 ## What the failures will mean
 
