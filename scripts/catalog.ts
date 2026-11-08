@@ -11,7 +11,7 @@
  *
  *   pnpm catalog                      the nine areas
  *   pnpm catalog area contacts        what is in one area, names only
- *   pnpm catalog show <id>            one entry in full
+ *   pnpm catalog show <id>            what you need to call it (--full for the record)
  *   pnpm catalog search "<task>"      ranked guesses across every area
  *   pnpm catalog flows                the multi-step recipes
  *   pnpm catalog flow <id>            one recipe, in order
@@ -21,17 +21,26 @@ import { readFileSync, existsSync } from 'node:fs';
 import { join } from 'node:path';
 import { AREAS } from '../src/catalog/areas.js';
 import {
+  briefOf,
   findFlow,
   flowsContaining,
   listArea,
+  renderBrief,
   search,
   summariseAreas,
   type CatalogIndexFile,
   type FlowFile,
+  type StoredAction,
 } from '../src/cli/query.js';
 
 const args = process.argv.slice(2);
 const json = args.includes('--json');
+/**
+ * `--full` prints the stored entry verbatim. Without it, `show` answers the
+ * question an agent asked — what to call, what to send, what it costs if wrong
+ * — and leaves out the provenance it cannot act on.
+ */
+const full = args.includes('--full');
 const positional = args.filter((arg) => !arg.startsWith('--'));
 const [command = 'areas', ...rest] = positional;
 
@@ -120,14 +129,26 @@ switch (command) {
     const action = JSON.parse(readFileSync(path, 'utf8')) as Record<string, unknown>;
     const inFlows = flowsContaining(flows, actionId);
 
-    if (json) {
-      emit({ ...action, flows: inFlows });
+    if (full) {
+      if (json) {
+        emit({ ...action, flows: inFlows });
+        break;
+      }
+      console.log(JSON.stringify(action, null, 2));
+      if (inFlows.length > 0) {
+        console.log(`\nPart of flow(s): ${inFlows.join(', ')} — pnpm catalog flow <id>`);
+      }
       break;
     }
-    console.log(JSON.stringify(action, null, 2));
-    if (inFlows.length > 0) {
-      console.log(`\nPart of flow(s): ${inFlows.join(', ')} — pnpm catalog flow <id>`);
+
+    const brief = briefOf(action as unknown as StoredAction, flows);
+    if (json) {
+      emit(brief);
+      break;
     }
+    for (const line of renderBrief(brief)) console.log(line);
+    console.log('');
+    console.log('(the stored entry, with evidence and UI path: add --full)');
     break;
   }
 

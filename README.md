@@ -8,7 +8,7 @@
 ![coverage](https://img.shields.io/badge/write%20endpoints-38%2F38-16a34a)
 ![eval](https://img.shields.io/badge/selection%20eval-15%2F19-ca8a04)
 ![verified](https://img.shields.io/badge/verified-3%2F197-ca8a04)
-![tests](https://img.shields.io/badge/tests-517-2563eb)
+![tests](https://img.shields.io/badge/tests-526-2563eb)
 
 </div>
 
@@ -33,7 +33,7 @@ calls, and turns that into a catalog an AI agent can use.
 | Can a model pick the right action? | **15 of 19** tasks (best run 17; see below) |
 | Actually executed and proven | **3** (194 are captured but unproven) |
 | Public API overlap | **0 of 197** ([three values, one record](docs/gaps.md#the-public-api-overlap-0-then-2-then-0-again)) |
-| Tests | **517** |
+| Tests | **526** |
 
 ## How it works
 
@@ -95,7 +95,8 @@ takes `--json`.
 ```bash
 pnpm catalog                                  # the 9 areas          ~100 tokens
 pnpm catalog area contacts                    # 64 names, no prose   ~790 tokens
-pnpm catalog show contacts.delete_contact     # one entry in full    ~400 tokens
+pnpm catalog show contacts.delete_contact     # what you need to call it
+pnpm catalog show contacts.delete_contact --full   # the stored record, with evidence
 pnpm catalog flow erase_contact               # the recipe, in order
 pnpm catalog search "someone asked to be deleted"
 ```
@@ -189,7 +190,7 @@ judgment. Both behind one interface, so the Groq key is optional.
 Node 20+ and pnpm. `pnpm install`, then:
 
 ```bash
-pnpm test          # 517 tests
+pnpm test          # 526 tests
 pnpm validate      # schema + no broken references + flows match their captures
 pnpm build:flows   # re-derive flows/index.json from the captures
 pnpm eval          # can a model pick the right action? (costs provider quota)

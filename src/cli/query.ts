@@ -228,3 +228,141 @@ export function flowsContaining(flows: FlowFile, actionId: string): string[] {
     .filter((flow) => flow.steps.some((step) => step.action_id === actionId))
     .map((flow) => flow.id);
 }
+
+/**
+ * What an agent needs in order to act, and nothing else.
+ *
+ * `show` used to print the whole stored entry: 2 606 characters for
+ * `contacts.delete_contact`, of which the agent can act on about a quarter. The
+ * rest is provenance — `ui_path`, `public_api`, `plan_tier: unknown`, the
+ * evidence list, a local Playwright trace path, a timestamp. All of it earns
+ * its place in the file, because the file is the record. None of it belongs in
+ * the answer to "what do I call and what do I send".
+ *
+ * Trimming this is not cosmetic. An agent reads the reply it is given, and
+ * padding a reply with fields that cannot be acted on is how the operative
+ * parts — the risk flag, the preconditions — get skimmed past.
+ *
+ * `--full` still prints the stored entry verbatim, because the provenance is
+ * the point of the catalogue and has to stay one keystroke away.
+ */
+export type StoredAction = {
+  id: string;
+  name: string;
+  description: string;
+  preconditions?: string[];
+  inputs?: { properties?: Record<string, { type?: string; description?: string }>; required?: string[] };
+  outputs?: { properties?: Record<string, unknown> };
+  side_effects?: string[];
+  destructive?: boolean;
+  idempotent?: boolean;
+  internal_endpoint?: { method?: string; path?: string; body_example?: string | null };
+  verification?: { status?: string };
+};
+
+const TRUST: Record<string, string> = {
+  verified: 'executed against a real account; the request matched this entry',
+  observed: 'seen in real traffic, never executed — treat inputs as a hypothesis',
+  inferred: 'no traffic behind it; guessed from the UI',
+};
+
+export type ActionBrief = {
+  id: string;
+  name: string;
+  description: string;
+  call: { method: string; path: string; body_example?: string | null };
+  inputs: { name: string; type: string; required: boolean; description: string }[];
+  returns: string[];
+  destructive: boolean;
+  idempotent: boolean;
+  trust: { status: string; means: string };
+  before: string[];
+  after: string[];
+  flows: { id: string; step: number; of: number }[];
+};
+
+export function briefOf(action: StoredAction, flows: FlowFile): ActionBrief {
+  const props = action.inputs?.properties ?? {};
+  const required = new Set(action.inputs?.required ?? []);
+  const status = action.verification?.status ?? 'observed';
+
+  return {
+    id: action.id,
+    name: action.name,
+    description: action.description,
+    call: {
+      method: action.internal_endpoint?.method ?? '?',
+      path: action.internal_endpoint?.path ?? '?',
+      ...(action.internal_endpoint?.body_example
+        ? { body_example: action.internal_endpoint.body_example }
+        : {}),
+    },
+    inputs: Object.entries(props).map(([name, spec]) => ({
+      name,
+      type: spec?.type ?? 'unknown',
+      required: required.has(name),
+      description: spec?.description ?? '',
+    })),
+    returns: Object.keys(action.outputs?.properties ?? {}),
+    destructive: action.destructive === true,
+    idempotent: action.idempotent === true,
+    trust: { status, means: TRUST[status] ?? 'unknown' },
+    before: action.preconditions ?? [],
+    after: action.side_effects ?? [],
+    flows: flows.flows
+      .map((flow) => {
+        const step = flow.steps.findIndex((s) => s.action_id === action.id);
+        return step === -1 ? null : { id: flow.id, step: step + 1, of: flow.steps.length };
+      })
+      .filter((x): x is { id: string; step: number; of: number } => x !== null),
+  };
+}
+
+/** The brief as lines of text, for a person reading over the agent's shoulder. */
+export function renderBrief(brief: ActionBrief): string[] {
+  const lines: string[] = [];
+  const flags = [
+    brief.destructive ? 'DESTRUCTIVE' : null,
+    brief.idempotent ? 'idempotent' : 'not idempotent',
+  ]
+    .filter(Boolean)
+    .join(', ');
+
+  lines.push(`${brief.id}  —  ${brief.name}   [${flags}]`);
+  lines.push(`trust: ${brief.trust.status} — ${brief.trust.means}`);
+  lines.push('');
+  lines.push(`${brief.call.method} ${brief.call.path}`);
+  if (brief.call.body_example) lines.push(`body example: ${brief.call.body_example}`);
+  lines.push('');
+  lines.push(brief.description);
+
+  if (brief.inputs.length > 0) {
+    lines.push('');
+    lines.push('inputs:');
+    for (const input of brief.inputs) {
+      lines.push(
+        `  ${input.name}${input.required ? '*' : ''}  ${input.type}` +
+          (input.description ? `  — ${input.description}` : ''),
+      );
+    }
+  }
+  if (brief.returns.length > 0) {
+    lines.push('');
+    lines.push(`returns: ${brief.returns.join(', ')}`);
+  }
+  if (brief.before.length > 0) {
+    lines.push('');
+    lines.push('before:');
+    for (const item of brief.before) lines.push(`  - ${item}`);
+  }
+  if (brief.after.length > 0) {
+    lines.push('');
+    lines.push('after:');
+    for (const item of brief.after) lines.push(`  - ${item}`);
+  }
+  for (const flow of brief.flows) {
+    lines.push('');
+    lines.push(`flow ${flow.id}: step ${flow.step} of ${flow.of} — pnpm catalog flow ${flow.id}`);
+  }
+  return lines;
+}
