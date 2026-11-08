@@ -126,6 +126,21 @@ function hasWord(text: string, word: string): boolean {
   return terms(text).some((candidate) => sameWord(candidate, word));
 }
 
+/**
+ * The area that holds what the app calls to draw itself.
+ *
+ * Named here because it has to be excluded from the default answer. The
+ * question this catalogue exists to answer is what a *user* can do, and
+ * fetching a font list or an English locale file is not something a user does.
+ * Listing those 27 entries beside contacts and campaigns presents them as
+ * equivalent, which is a wrong answer rather than a long one.
+ *
+ * They stay reachable — `pnpm catalog --all`, or `area platform` — because they
+ * are real traffic and the catalogue's job is to be faithful about what the app
+ * calls. They are just not an answer to "what can I do".
+ */
+export const NOT_A_USER_CAPABILITY = 'platform';
+
 export function summariseAreas(
   index: CatalogIndexFile,
   areas: { id: string; name: string; does: string }[],
@@ -177,13 +192,20 @@ export function listArea(index: CatalogIndexFile, areaId: string): AreaListing |
  * cannot. An id or name hit outranks a description hit, because a description
  * mentioning "list" is weaker evidence than a name containing it.
  */
-export function search(index: CatalogIndexFile, query: string, limit = 10): SearchHit[] {
+export function search(
+  index: CatalogIndexFile,
+  query: string,
+  limit = 10,
+  includePlumbing = false,
+): SearchHit[] {
   const wanted = terms(query);
   if (wanted.length === 0) return [];
 
   const hits: SearchHit[] = [];
 
   for (const entry of index.actions) {
+    // A font list is never the answer to what a user wants to do.
+    if (!includePlumbing && entry.area === NOT_A_USER_CAPABILITY) continue;
     let score = 0;
     let covered = 0;
 
@@ -318,27 +340,53 @@ export function briefOf(action: StoredAction, flows: FlowFile): ActionBrief {
   };
 }
 
-/** The brief as lines of text, for a person reading over the agent's shoulder. */
+/**
+ * The brief as lines of text, answering what the user can do.
+ *
+ * The order is the whole point and it was wrong once. This used to open with
+ * `DELETE /contact/backend/contacts/:id`, which is the least useful line on the
+ * screen for the question actually being asked: an agent consulting this
+ * catalogue wants to know whether the user *can* do something and what it
+ * costs, not what to POST. Nothing here performs an action.
+ *
+ * So: what it is, then whether it can be undone, then what it does, then what
+ * has to be true first, then what changes afterwards. The endpoint stays, at
+ * the bottom, labelled as evidence — it is what makes the entry checkable, and
+ * it is not the answer.
+ */
 export function renderBrief(brief: ActionBrief): string[] {
   const lines: string[] = [];
-  const flags = [
-    brief.destructive ? 'DESTRUCTIVE' : null,
-    brief.idempotent ? 'idempotent' : 'not idempotent',
-  ]
-    .filter(Boolean)
-    .join(', ');
 
-  lines.push(`${brief.id}  —  ${brief.name}   [${flags}]`);
-  lines.push(`trust: ${brief.trust.status} — ${brief.trust.means}`);
-  lines.push('');
-  lines.push(`${brief.call.method} ${brief.call.path}`);
-  if (brief.call.body_example) lines.push(`body example: ${brief.call.body_example}`);
-  lines.push('');
-  lines.push(brief.description);
+  lines.push(`${brief.name}  (${brief.id})`);
 
+  // Reversibility first, in words rather than as a flag name. "destructive:
+  // true" is a field; "cannot be undone" is a consequence.
+  lines.push(
+    brief.destructive
+      ? '  CANNOT BE UNDONE — irreversible, or visible outside the account.'
+      : '  Reversible.',
+  );
+  if (!brief.idempotent) {
+    lines.push('  Doing it twice is not the same as doing it once.');
+  }
+
+  lines.push('');
+  lines.push('What it does');
+  lines.push(`  ${brief.description}`);
+
+  if (brief.before.length > 0) {
+    lines.push('');
+    lines.push('What has to be true first');
+    for (const item of brief.before) lines.push(`  - ${item}`);
+  }
+  if (brief.after.length > 0) {
+    lines.push('');
+    lines.push('What changes afterwards');
+    for (const item of brief.after) lines.push(`  - ${item}`);
+  }
   if (brief.inputs.length > 0) {
     lines.push('');
-    lines.push('inputs:');
+    lines.push('What it needs to know (* required)');
     for (const input of brief.inputs) {
       lines.push(
         `  ${input.name}${input.required ? '*' : ''}  ${input.type}` +
@@ -346,23 +394,23 @@ export function renderBrief(brief: ActionBrief): string[] {
       );
     }
   }
-  if (brief.returns.length > 0) {
-    lines.push('');
-    lines.push(`returns: ${brief.returns.join(', ')}`);
-  }
-  if (brief.before.length > 0) {
-    lines.push('');
-    lines.push('before:');
-    for (const item of brief.before) lines.push(`  - ${item}`);
-  }
-  if (brief.after.length > 0) {
-    lines.push('');
-    lines.push('after:');
-    for (const item of brief.after) lines.push(`  - ${item}`);
-  }
+
+  lines.push('');
+  lines.push('How sure we are');
+  lines.push(`  ${brief.trust.status} — ${brief.trust.means}`);
+
   for (const flow of brief.flows) {
     lines.push('');
-    lines.push(`flow ${flow.id}: step ${flow.step} of ${flow.of} — pnpm catalog flow ${flow.id}`);
+    lines.push(
+      `Part of: ${flow.id}, step ${flow.step} of ${flow.of}` +
+        ` — pnpm catalog flow ${flow.id}`,
+    );
   }
+
+  lines.push('');
+  lines.push(
+    `Evidence: the app calls ${brief.call.method} ${brief.call.path}` +
+      (brief.returns.length > 0 ? ` and gets back ${brief.returns.join(', ')}` : ''),
+  );
   return lines;
 }

@@ -14,6 +14,17 @@ machine can filter on?"**
 
 That is why `verification.status` is an enforced field and not a footnote.
 
+**And acting on a catalog starts with answering from it.** The agent this is
+built for is telling a person what they can do in Brevo, what it will cost, and
+what has to be true first — not issuing the request itself. Nothing here
+performs an action, by decision rather than by omission. That is why
+`pnpm catalog` leads with the capability and the consequence and puts the
+endpoint last, why the `platform` area is excluded from the default answer, and
+why the host each service is served on is recorded as a known gap rather than
+built: 51 hosts sit in the captures and none of them is needed to answer the
+question being asked. [gaps.md](gaps.md) keeps the measurement in case the
+question changes.
+
 ## What reconnaissance settled before any code
 
 Brevo publishes 292 API operations. Of those:

@@ -80,9 +80,27 @@ describe('briefOf', () => {
 });
 
 describe('renderBrief', () => {
-  it('leads with the risk flag, before anything else can be skimmed', () => {
+  it('says it cannot be undone in the first two lines, in words', () => {
+    // "destructive: true" is a field name; "CANNOT BE UNDONE" is the
+    // consequence. An agent telling a person what will happen needs the
+    // second, and it has to arrive before anything can be skimmed past.
     const lines = renderBrief(briefOf(action, flows));
-    expect(lines[0]).toContain('DESTRUCTIVE');
+    expect(lines.slice(0, 2).join(' ')).toContain('CANNOT BE UNDONE');
+  });
+
+  it('leads with the capability and leaves the endpoint last', () => {
+    // This opened with "DELETE /contact/backend/contacts/:id" once. For the
+    // question this catalogue answers — what can the user do — that is the
+    // least useful line on the screen.
+    const lines = renderBrief(briefOf(action, flows));
+    expect(lines[0]).toContain('Delete contact');
+    expect(lines.join(' | ')).toContain('What it does');
+    expect(lines[lines.length - 1]).toContain('Evidence: the app calls DELETE');
+  });
+
+  it('marks a reversible action as reversible rather than staying silent', () => {
+    const lines = renderBrief(briefOf({ ...action, destructive: false }, flows));
+    expect(lines.slice(0, 2).join(' ')).toContain('Reversible');
   });
 
   it('marks required inputs', () => {

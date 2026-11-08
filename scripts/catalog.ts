@@ -1,10 +1,17 @@
 /**
- * `pnpm catalog` — the catalog as a command, for an agent with a shell.
+ * `pnpm catalog` — what can a user do in this app?
+ *
+ * That is the question, and it is worth stating because it decides the shape of
+ * every answer here. An agent consulting this catalogue is not about to call
+ * Brevo; it wants to tell someone whether a thing is possible, what it costs,
+ * and what has to be true first. So replies lead with the capability and the
+ * consequence, and the endpoint appears at the bottom as the evidence that the
+ * capability is real.
  *
  * Decision #4 demoted an MCP server, and this is the cheaper half of what one
  * would have provided: an agent already has a shell, so a server adds a
- * protocol and a lifecycle to a problem that needed neither. What it does not
- * replace is execution — this reads the catalog, it never calls Brevo.
+ * protocol and a lifecycle to a problem that needed neither. Nothing here
+ * performs an action — it reads the catalogue, it never calls Brevo.
  *
  * Every subcommand takes --json, because the text output is for a person
  * reading over the agent's shoulder and the JSON is for the agent.
@@ -21,6 +28,7 @@ import { readFileSync, existsSync } from 'node:fs';
 import { join } from 'node:path';
 import { AREAS } from '../src/catalog/areas.js';
 import {
+  NOT_A_USER_CAPABILITY,
   briefOf,
   findFlow,
   flowsContaining,
@@ -41,6 +49,11 @@ const json = args.includes('--json');
  * — and leaves out the provenance it cannot act on.
  */
 const full = args.includes('--full');
+/**
+ * `--all` includes the `platform` area: what the web app calls to render
+ * itself. Excluded by default because it is not something a user does.
+ */
+const all = args.includes('--all');
 const positional = args.filter((arg) => !arg.startsWith('--'));
 const [command = 'areas', ...rest] = positional;
 
@@ -67,17 +80,32 @@ function risk(destructive: boolean): string {
 
 switch (command) {
   case 'areas': {
-    const summaries = summariseAreas(index, AREAS, flows);
+    const everything = summariseAreas(index, AREAS, flows);
+    const summaries = all
+      ? everything
+      : everything.filter((area) => area.id !== NOT_A_USER_CAPABILITY);
+    const hidden = everything
+      .filter((area) => area.id === NOT_A_USER_CAPABILITY)
+      .reduce((n, area) => n + area.count, 0);
+    const shown = summaries.reduce((n, area) => n + area.count, 0);
+
     if (json) {
-      emit({ count: index.count, areas: summaries });
+      emit({ count: shown, areas: summaries, ...(all ? {} : { excluded_plumbing: hidden }) });
       break;
     }
-    console.log(`${index.count} actions in ${summaries.length} areas\n`);
+    console.log(`${shown} things a user can do, in ${summaries.length} areas\n`);
     for (const area of summaries) {
       const flagged = area.destructive > 0 ? `, ${area.destructive} destructive` : '';
       console.log(`${area.id.padEnd(14)} ${String(area.count).padStart(3)}${flagged}`);
       console.log(`               ${area.does}`);
       if (area.flows.length > 0) console.log(`               flows: ${area.flows.join(', ')}`);
+      console.log('');
+    }
+    if (!all && hidden > 0) {
+      console.log(
+        `(${hidden} further entries are what the app calls to draw itself — fonts,`,
+      );
+      console.log("locales, feature flags. Not user capabilities: 'pnpm catalog --all'.)");
       console.log('');
     }
     console.log('Next: pnpm catalog area <id>   |   pnpm catalog search "<task>"');
@@ -158,7 +186,7 @@ switch (command) {
       console.error('Usage: pnpm catalog search "<what you are trying to do>"');
       process.exit(1);
     }
-    const hits = search(index, query);
+    const hits = search(index, query, 10, all);
     if (json) {
       emit({ query, hits });
       break;

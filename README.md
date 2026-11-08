@@ -2,13 +2,13 @@
 
 # brevo-agent-catalog
 
-**What can this app do? Ask the app, not its docs.**
+**What can a user do in this app? Ask the app, not its docs.**
 
 ![actions](https://img.shields.io/badge/actions-197-2563eb)
 ![coverage](https://img.shields.io/badge/write%20endpoints-38%2F38-16a34a)
 ![eval](https://img.shields.io/badge/selection%20eval-15%2F19-ca8a04)
 ![verified](https://img.shields.io/badge/verified-3%2F197-ca8a04)
-![tests](https://img.shields.io/badge/tests-526-2563eb)
+![tests](https://img.shields.io/badge/tests-528-2563eb)
 
 </div>
 
@@ -33,7 +33,7 @@ calls, and turns that into a catalog an AI agent can use.
 | Can a model pick the right action? | **15 of 19** tasks (best run 17; see below) |
 | Actually executed and proven | **3** (194 are captured but unproven) |
 | Public API overlap | **0 of 197** ([three values, one record](docs/gaps.md#the-public-api-overlap-0-then-2-then-0-again)) |
-| Tests | **526** |
+| Tests | **528** |
 
 ## How it works
 
@@ -86,20 +86,40 @@ The assignment is a table in [`src/catalog/areas.ts`](src/catalog/areas.ts), not
 a model call, and **a module with no area fails the build** rather than
 defaulting into the catch-all. Why, in full: [decision 14](docs/decisions.md#14-two-groupings-modules-for-reading-the-capture-areas-for-finding-a-feature).
 
-## Reading it as an agent would: `pnpm catalog`
+## The question it answers: `pnpm catalog`
+
+**What can a user do here, what does it cost, and what has to be true first.**
+Not "what do I POST" — nothing in this repository performs an action, and an
+agent consulting it is answering a person, not calling an API. So every reply
+leads with the capability and the consequence, and the endpoint appears last, as
+the evidence that the capability is real.
 
 An agent already has a shell, so this is the cheaper half of what an MCP server
-would provide. It reads the catalog; it never calls Brevo. Every subcommand
-takes `--json`.
+would provide. Every subcommand takes `--json`.
 
 ```bash
-pnpm catalog                                  # the 9 areas          ~100 tokens
-pnpm catalog area contacts                    # 64 names, no prose   ~790 tokens
-pnpm catalog show contacts.delete_contact     # what you need to call it
+pnpm catalog                                  # 170 things a user can do, in 8 areas
+pnpm catalog area contacts                    # 64 names, no prose
+pnpm catalog show contacts.delete_contact     # can they? what does it cost?
 pnpm catalog show contacts.delete_contact --full   # the stored record, with evidence
-pnpm catalog flow erase_contact               # the recipe, in order
+pnpm catalog flow erase_contact               # the order, when it takes more than one step
 pnpm catalog search "someone asked to be deleted"
 ```
+
+A reply opens with the two lines that matter:
+
+```
+Delete contact  (contacts.delete_contact)
+  CANNOT BE UNDONE — irreversible, or visible outside the account.
+```
+
+`destructive: true` is a field name. *Cannot be undone* is the consequence, and
+it is what an agent has to be able to tell a person before they ask for it.
+
+**The 27 plumbing entries are not in that answer.** Fetching a font list is not
+something a user does, and listing it beside contacts and campaigns presents it
+as equivalent — a wrong answer rather than a long one. They stay one flag away
+(`--all`), because the catalog's job is to be faithful about what the app calls.
 
 **The search is the weak part, and it is measured rather than claimed.**
 `pnpm bench:search` runs the eval's 19 tasks through it with no model: the right
@@ -190,7 +210,7 @@ judgment. Both behind one interface, so the Groq key is optional.
 Node 20+ and pnpm. `pnpm install`, then:
 
 ```bash
-pnpm test          # 526 tests
+pnpm test          # 528 tests
 pnpm validate      # schema + no broken references + flows match their captures
 pnpm build:flows   # re-derive flows/index.json from the captures
 pnpm eval          # can a model pick the right action? (costs provider quota)

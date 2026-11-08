@@ -284,9 +284,16 @@ Sources: [Claude tool search](https://platform.claude.com/docs/en/agents-and-too
   rather than crash, but a renamed button silently reduces coverage. The printed
   write count is how that becomes visible.
 
-## The entries do not say which server to call
+## The entries do not say which server to call — and that is now a known gap, not a defect
 
-**Found on 2026-11-08, and it is the most serious defect in the catalogue.**
+**Found on 2026-11-08, and reclassified the same evening.** It was written up as
+the most serious defect here, on the assumption that an agent would call these
+endpoints. It will not: this catalogue answers what a user can do, and nothing
+in it performs an action. A missing host blocks a question nobody is asking, so
+the measurement stays and the two-hour fix does not.
+
+It becomes a defect again the day `execute_action` exists, which is why the
+numbers below were kept rather than deleted.
 `internal_endpoint` carries a method, a path and a body example, and no host.
 The captures contain **51 distinct hosts**, and of the 153 actions whose request
 could be located in the capture, **152 are served by something other than
