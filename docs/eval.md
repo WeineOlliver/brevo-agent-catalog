@@ -177,6 +177,28 @@ recorded here unfinished rather than guessed at, because both answers are
 plausible and publishing either as a cause is how the `(nothing parseable)`
 mistake happened in the first place.
 
+## The eval cannot run on Groq at all
+
+Decision #3 splits the providers by job — Groq for volume, headless Claude Code
+for judgement — and the eval's own header claimed `--provider groq` stayed
+available for when the Claude quota ran out. **That was false, and nobody had
+tried it.**
+
+One selection call ships the whole rendered catalog. Groq's counter puts it at
+**14 846 tokens against an 8 000 tokens-per-minute ceiling** on this account's
+tier, so it returns HTTP 413 before the model reads a word. Pacing cannot help:
+a per-minute ceiling below the size of a single request is a size problem
+wearing a rate problem's error code. A 2 000-character probe on the same key and
+model succeeded in the same minute, which is what rules out an outage or a
+drained day.
+
+So the eval has exactly one provider, and the honest consequence is that **every
+number in this document depends on one vendor's availability.** The paired
+experiment below is blocked on it, not on anything about the catalog.
+
+The split still holds for extraction, where a call carries one capture instead
+of 197 entries. It was the fallback claim that was never true.
+
 ## The two misses that remain
 
 **One is a limit of the eval, not the catalog.** For *"how did the spring sale

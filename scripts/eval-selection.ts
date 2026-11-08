@@ -15,7 +15,16 @@
  * and a rate-limited provider contributes failures that say nothing about any
  * description. Those are now excluded from the denominator rather than counted
  * as misses, but the cleanest version of the number comes from a provider that
- * answers every time. `--provider groq` stays available for when quota is out.
+ * answers every time.
+ *
+ * `--provider groq` does NOT work here, and the comment that said it stayed
+ * available as a fallback was wrong. One selection call ships the whole
+ * rendered catalog: 74 767 characters, measured at 14 846 tokens by Groq's own
+ * counter, against an 8 000 tokens-per-minute ceiling on this account's tier.
+ * It returns HTTP 413 before the model sees anything, and pacing cannot help —
+ * a per-minute ceiling below the size of one request is not a rate problem, it
+ * is a size problem. Groq remains the right provider for extraction, where each
+ * call carries one capture rather than 197 entries.
  */
 
 import { existsSync, readFileSync, writeFileSync } from 'node:fs';
@@ -35,6 +44,29 @@ function argValue(name: string, fallback: string): string {
 
 const config = loadConfig();
 const providerName = argValue('provider', 'claude');
+
+/**
+ * Restrict the run to named expected action ids.
+ *
+ * Every call ships the whole rendered catalog, about 18 500 tokens, so 19 tasks
+ * is roughly 352 000 tokens of input for one run. That is more than some
+ * providers allow in a day, and a run that exhausts an allowance half way
+ * through reports provider failures for the rest and measures nothing - which
+ * has already happened twice here.
+ *
+ * So a question that concerns a few tasks is asked of those tasks. The
+ * destructive-marker experiment needs the 4 tasks whose answer is destructive,
+ * once with the marker and once without: 8 calls instead of 38, and it fits.
+ *
+ * A subset is never a published figure, and it cannot overwrite one - see the
+ * report path below.
+ */
+const only = new Set(
+  (argValue('only', '') || '')
+    .split(',')
+    .map((id) => id.trim())
+    .filter((id) => id.length > 0),
+);
 
 /**
  * Diagnostic only. Renders the catalog without the `[destructive]` marker to
@@ -92,7 +124,25 @@ if (!riskLabels) {
   );
 }
 
-const report = await scoreSelection(scoreable, index, provider, { riskLabels });
+const selected =
+  only.size === 0 ? scoreable : scoreable.filter((task) => only.has(task.expectedActionId));
+
+if (only.size > 0) {
+  const missing = [...only].filter(
+    (id) => !scoreable.some((task) => task.expectedActionId === id),
+  );
+  console.log(
+    `--only: ${selected.length} of ${scoreable.length} task(s) selected` +
+      (missing.length > 0 ? `; no scoreable task expects ${missing.join(', ')}` : '') +
+      '\nThis is a subset, so this score is not comparable to a full run.\n',
+  );
+  if (selected.length === 0) {
+    console.error('Nothing selected. Check the ids against data/eval-tasks.json.');
+    process.exit(1);
+  }
+}
+
+const report = await scoreSelection(selected, index, provider, { riskLabels });
 
 for (const result of report.cases) {
   if (result.correct && result.inputsCorrect !== false) {
@@ -135,8 +185,15 @@ for (const result of report.cases) {
 
 const withInputs = report.cases.filter((c) => c.inputsCorrect !== null).length;
 
+// A subset or an unmarked-catalog run is a diagnostic, and the committed report
+// is a published figure. They do not share a file.
+const isDiagnostic = only.size > 0 || !riskLabels;
+
 writeFileSync(
-  join(config.paths.data, 'eval-report.json'),
+  join(
+    config.paths.data,
+    isDiagnostic ? 'eval-report-diagnostic.json' : 'eval-report.json',
+  ),
   `${JSON.stringify({ generated_at: new Date().toISOString(), provider: provider.name, unscoreable, ...report }, null, 2)}\n`,
   'utf8',
 );

@@ -5,3 +5,7 @@ node_modules
 *.log
 test-results/
 .superpowers/
+
+# Diagnostic eval runs (subset, or catalog rendered without risk labels).
+# Not a published figure: the committed report is data/eval-report.json.
+data/eval-report-diagnostic.json
