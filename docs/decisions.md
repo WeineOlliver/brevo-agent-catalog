@@ -1,8 +1,27 @@
 # Decisions
 
 Every architectural decision, the alternatives rejected, and **the cost
-accepted**. That last column is the point: a decision record without costs is a
+accepted**. That last part is the point: a decision record without costs is a
 list of claims.
+
+| # | Decision | Jump |
+|:--|:--|:--|
+| 1 | Crawl the app; do not generate from the public API | [read](#1-discover-by-crawling-the-app-not-by-reading-the-public-api) |
+| 2 | Verify by driving the real UI, not by replaying endpoints | [read](#2-verify-by-driving-the-real-ui-not-by-replaying-captured-endpoints) |
+| 3 | Two model providers, split by job | [read](#3-two-model-providers-split-by-job) |
+| 4 | No MCP server | [read](#4-no-mcp-server) |
+| 5 | ~~Risk flags derived from the HTTP method~~ **superseded by #12** | [read](#5-fail-safe-risk-flags-enforced-in-code) |
+| 6 | Commit the sanitized captures; gate them independently | [read](#6-commit-the-sanitized-captures-gate-them-independently) |
+| 7 | A second capture source, so the crawler is not a single point of failure | [read](#7-a-capture-source-abstraction-so-the-crawler-is-not-a-single-point-of-failure) |
+| 8 | Zod as the source of truth; JSON Schema generated | [read](#8-zod-as-the-source-of-truth-json-schema-generated) |
+| 9 | Core actions chosen after the crawl, not before | [read](#9-core-actions-chosen-after-the-crawl-not-before) |
+| 10 | Crawl in the signed-in context, not from a saved session | [read](#10-crawl-in-the-signed-in-browser-context-not-from-a-saved-session) |
+| 11 | Interaction is the coverage mechanism; crawling is reconnaissance | [read](#11-interaction-is-the-coverage-mechanism-crawling-is-reconnaissance) |
+| 12 | Risk is a fact about the product, not about the HTTP method | [read](#12-risk-is-a-fact-about-the-product-not-a-property-of-the-http-method) |
+| 13 | Eval expectations are reconciled against the capture, never the model | [read](#13-the-evals-expected-ids-are-reconciled-against-the-catalog-never-against-the-models-answer) |
+
+Each section carries what it cost. If you read one, read #12 — it is the only
+one that reversed an earlier decision after measurement.
 
 ---
 
@@ -107,6 +126,11 @@ session.
 ---
 
 ## 5. Fail-safe risk flags, enforced in code
+
+> **Superseded by [#12](#12-risk-is-a-fact-about-the-product-not-a-property-of-the-http-method).**
+> The principle held — risk is clamped in code, never taken from the model — but
+> deriving it from the HTTP method was wrong, because Brevo reads using POST.
+> Kept here because the replacement only makes sense against what it replaced.
 
 **Decided:** Any action whose method is not GET/HEAD/OPTIONS is
 `destructive: true, idempotent: false` until execution proves otherwise. Applied
@@ -267,7 +291,7 @@ produced `segments.get_count`, `segments.paginated_count`,
 destructive — an agent obeying the flag refuses four harmless reads, and an
 agent that learns to ignore it on reads will ignore it on `delete`. The method
 rule also fails in the opposite direction: `create_contact` mutates and is safe
-(reversible, our own data), while `send_campaign` creates nothing and is the
+(reversible, our own data), while `campaigns.send_now` creates nothing and is the
 most dangerous action in the product, because it mails real people and has no
 undo. "Not a read" and "destructive" are not the same question.
 

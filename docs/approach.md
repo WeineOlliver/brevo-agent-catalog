@@ -1,126 +1,111 @@
 # Approach
 
-How the problem was framed and what was prioritized. The decisions themselves,
-with their rejected alternatives and costs, are in
-[decisions.md](decisions.md) — this document does not repeat them.
+How the problem was framed. The decisions themselves, with what was rejected and
+what it cost, are in [decisions.md](decisions.md).
 
-## Framing
+## The framing that drove everything
 
-The brief asks for a catalog of business actions that an AI agent could pick up
-and act on. The interesting word is *act*. A catalog an agent can read is easy;
-a catalog an agent can act on without a human double-checking is the whole
-difficulty, and it is what the Reliability axis is asking about.
+The brief asks for a catalog an AI agent can **act** on. A catalog an agent can
+read is easy. One it can act on without a human double-checking is the hard part.
 
-That reframing drove everything. The question stopped being "how many actions can
-I list?" and became **"for each action, what do I actually know, and how do I say
-so in a way a machine can filter on?"** Hence `verification.status` as a
-first-class, enforced field rather than a footnote, and hence the decision that
-spec-derived entries do not get promoted above `inferred`.
+So the question stopped being *"how many actions can I list?"* and became
+**"for each action, what do I actually know, and how do I say so in a way a
+machine can filter on?"**
 
-The second framing came from reconnaissance rather than from the brief. Before
-writing any code I checked what Brevo publishes, and the numbers settled the
-architecture: 292 public operations, of which 79 are partner/reseller surface a
-user never sees, and no public coverage at all for automation, landing pages,
-forms, meetings or push. The public API and the product overlap; neither
-contains the other. That is the brief's premise made concrete, and it is why the
-pipeline starts in a browser.
+That is why `verification.status` is an enforced field and not a footnote.
 
-## What was prioritized, and why
+## What reconnaissance settled before any code
 
-**First: the honesty mechanism.** The schema, the three confidence levels with
-written rules, and the fail-safe risk flags were built before anything that
-produces volume. A catalog that over-claims is worse than a smaller one that
-does not, because an agent acting on a fabricated precondition or a wrong
-`destructive` flag fails in a way no amount of coverage compensates for. Getting
-this wrong is unrecoverable; getting coverage wrong is just a smaller number.
+Brevo publishes 292 API operations. Of those:
 
-**Second: determinism wherever it was available.** Every field that can be
-derived from evidence is derived in code — `internal_endpoint` from the capture,
-`public_api` from the spec match, `verification` from what was executed. The
-model is spent only on what genuinely cannot be derived: the agent-facing
-description, preconditions, side effects, and the risk judgments. Asking a model
-for facts you already hold is the main source of fabricated documentation, and
-it is free to avoid.
+- **79** are partner and reseller surface no ordinary user ever sees.
+- **0** cover automation, landing pages, forms, meetings or push — all of which
+  exist in the product.
 
-**Third: the thing that would sink the weekend.** The crawl depends on a live
-session that Brevo can refuse at any moment. A capture-source abstraction was
-built in from the start so a hand-exported HAR feeds the identical pipeline.
-Cheap on Friday, impossible to retrofit on Sunday.
+The public API and the product overlap. Neither contains the other. That is why
+the pipeline starts in a browser instead of in a specification.
 
-**Fourth: measurement over assertion.** The selection eval exists because
-"designed for agents" is a claim, and a score against tasks phrased the way a
-user would phrase them is a measurement. Its failures are not curiosities — each
-one is a description an agent could not resolve, which is a Reliability bug found
-before shipping rather than after.
+## What was built first, and why
 
-## What was deliberately not done
+| Order | What | Why first |
+|:--|:--|:--|
+| 1 | The honesty mechanism: schema, three confidence levels, fail-safe risk flags | A catalog that over-claims is worse than a smaller honest one. Getting this wrong is unrecoverable; getting coverage wrong is just a smaller number |
+| 2 | Determinism everywhere available | Endpoints, spec matches and proof are derived in code. The model is spent only on what cannot be derived |
+| 3 | A second capture source (HAR import) | The crawl depends on a session Brevo can refuse at any moment. Cheap to build early, impossible to retrofit late |
+| 4 | The eval | "Designed for agents" is a claim. A score against tasks phrased the way a user would phrase them is a measurement |
 
-An MCP server was planned and then dropped (decisions #4). Execution is out of
-scope: the catalog describes actions, and nothing here performs them against
-Brevo at runtime. Automated deletion of test fixtures was skipped even though the
-mutation bounds permit it, because a mis-aimed selector on a delete control is
-the one mistake in this project that cannot be undone.
+Deliberately **not** done: an MCP server (decision #4), and execution at runtime.
+The catalog describes actions; it does not perform them.
 
-## Sequencing
+## What running it taught
 
-Deliberately waterfall, because the deadline rewards it. A design document was
-written and reviewed before any code; a fresh engineer then read that document
-cold and reported what they would have had to guess at, which surfaced five real
-gaps — most importantly that the three confidence levels were undefined beyond
-`verified`, and that the crawl as specified would see almost no write traffic.
-Both were fixed in the design rather than discovered in the implementation. The
-implementation plan that followed was executed task by task under TDD, with every
-deviation from the plan recorded as a ruling at the time it was made.
+Two things only showed up once it ran against a real account.
 
-## What running it actually taught
+**The public API and the product are different systems.** 0 of 197 catalogued
+endpoints appear in Brevo's published spec. An earlier, smaller catalog managed
+2 of 126 — tripling the capture and adding every write flow did not add one
+match. The app runs on about 20 internal microservices the public `/v3` surface
+does not wrap.
 
-Two findings changed how I'd describe this problem, and both only appeared once
-the pipeline ran against a real account.
+**A crawl that clicks nothing produces a read-only catalog.** The first run
+produced 118 actions, 108 of them `get` or `list`, and exactly one write. The
+eval scored **0 of 20**. This was predicted in review before any code was
+written and mitigated by designing the interaction stage in — then it happened
+anyway, because the mitigation had not been run yet.
 
-**The public API and the product are different APIs.** Not overlapping subsets —
-different. **0 of 197** catalogued endpoints map onto an operation in Brevo's
-published spec. The earlier, smaller catalog managed 2 of 126; tripling the
-capture and adding every write flow did not add one. The overlap is not small
-because coverage was thin. The app runs on ~20 internal microservices the public `/v3` surface does
-not wrap. The brief's premise is not a hypothetical about legacy systems; it is
-true of a modern SaaS product with a well-documented API.
+**And the fix was not more engineering.** Four hand-driven DevTools recordings,
+about fifteen minutes each, took the capture from 3 097 requests to 38 132 and
+the write endpoints from 4 to 38. The selector automation built for that job
+reached two of six target routes. `parseHar` had been written and tested in the
+first week with no caller, and became the stage that mattered most.
 
-**A crawl that clicks nothing produces a read-only catalog.** 118 actions
-captured, 108 of them `get` or `list`, exactly one write. The selection eval
-scored 0 of 20 against the tasks a user would ask for. This was predicted as a
-risk in review before any code was written, mitigated by designing the
-interaction stage in — and then it happened anyway at full strength, because the
-mitigation had not been run yet. The lesson I would carry forward is that for
-this class of problem, interaction is the coverage mechanism and crawling is
-only reconnaissance.
-
-The second finding is also the clearest argument for having built the eval. A
-coverage count would have reported 118 actions and read as success.
-
-**And the mechanism that fixed it was not more engineering.** Four hand-driven
-DevTools recordings, about fifteen minutes each, imported through the same
-pipeline, took the capture from 3 097 requests to 38 132 and the write endpoints
-from 4 to 38. `parseHar` had been written and tested in the first week and had no
-caller; it became the stage that mattered most. The selector work that was meant
-to do this job reached two of six target routes. Knowing which of your own
-components is load-bearing is apparently not something design tells you — the
-measurement did.
+The lesson: for this class of problem, interaction is the coverage mechanism and
+crawling is only reconnaissance.
 
 ## Current state
 
-The pipeline is complete and tested — 461 tests, strict TypeScript, clean
-typecheck, leak gate clean across every tracked file. It has run end to end
-against a live account: 38 routes crawled plus four hand-driven HAR sessions,
-38 132 requests observed and 2 147 committed after sanitizing, 197 actions
-catalogued, validated and
-indexed, and a selection eval scored at **17 of 19 scoreable tasks**.
+470 tests, strict TypeScript, leak gate clean. Run end to end against a live
+account: 38 routes crawled plus four HAR sessions, 38 132 requests observed and
+2 147 committed, 197 actions validated and indexed, eval at **17 of 19**.
 
-Every one of the 38 distinct write endpoints in the capture has a catalog entry,
-including the irreversible `POST /marketing-campaign/api/campaign/2/send-now`
-that returned 204, and the 5-call campaign machine and 3-call CSV import wizard
-behind it. 3 entries are now `verified` by execution rather than by reading
-traffic, including the destructive `delete_contact`. The other 194 are
-`observed`, and sender creation is still missing entirely.
-No document here reports a
-number it has not measured; the ones that look bad are in
-[gaps.md](gaps.md) and [eval.md](eval.md) rather than omitted.
+All 38 write endpoints in the capture have an entry — including the irreversible
+`POST /marketing-campaign/api/campaign/2/send-now` that returned 204, the 5-call
+campaign machine and the 3-call CSV import wizard. 3 entries are `verified` by
+execution, including the destructive `delete_contact`. The other 194 are
+`observed`. Sender creation is missing entirely.
+
+The numbers that look bad are in [gaps.md](gaps.md) and [eval.md](eval.md)
+rather than omitted.
+
+## Every command
+
+Node 20+ and pnpm. `pnpm install` first.
+
+| Command | What it does | Needs |
+|:--|:--|:--|
+| `pnpm build:schema` | Regenerate `schema/action.schema.json` from `src/types.ts` | nothing |
+| `pnpm fetch:openapi` | Download and index Brevo's public spec | nothing |
+| `pnpm brevo:login` | Save an authenticated session to `.auth/` | **a manual login** |
+| `pnpm crawl` | Walk the app, recording XHR | a saved session |
+| `pnpm explore` | Check what a create control actually opens | a saved session |
+| `pnpm interact` | Write passes with throwaway fixtures | a saved session |
+| `pnpm import:har` | Ingest a DevTools HAR export | a `.har` file |
+| `pnpm sanitize` | `captures/raw` to `captures/clean`, redacted | captures |
+| `pnpm extract` | Draft catalog entries | clean captures + a provider |
+| `pnpm normalize` | Merge duplicates, enforce the risk rule | drafted actions |
+| `pnpm validate` | Schema gate and cross-reference gate | drafted actions |
+| `pnpm build:index` | Write `actions/index.json` | valid actions |
+| `pnpm verify` | Execute chosen actions, stamp `verified` | a saved session |
+| `pnpm eval` | Score whether a model picks the right action | a catalog index |
+| `pnpm fix:crossrefs` | Rewrite prose citing ids that do not exist | a catalog + a provider |
+| `pnpm build:docs` | Regenerate [modules.md](modules.md) | a catalog index |
+| `pnpm scan` | **Leak gate.** Run before any push | nothing |
+| `pnpm test` / `pnpm typecheck` | 470 tests, strict TypeScript | nothing |
+
+`captures/clean/` is committed, so everything from `extract` onward runs offline.
+The capture stages need a Brevo account of your own.
+
+**Credentials.** None are committed. `pnpm extract --provider groq` wants
+`GROQ_API_KEY` in `.env`; `--provider claude` shells out to an authenticated
+`claude` CLI and needs no key. There is no Brevo API key anywhere — verification
+drives the real UI instead.
