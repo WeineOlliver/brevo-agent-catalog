@@ -211,7 +211,7 @@ checked against the git history before the first push.
 |:--|:--|
 | [decisions.md](docs/decisions.md) | 16 decisions, what we rejected, what it cost |
 | [gaps.md](docs/gaps.md) | What is broken and what more time buys |
-| [eval.md](docs/eval.md) | Every eval run, including the failures |
+| [eval.md](docs/eval.md) | Every eval run, what it caught, and what quota stopped it measuring |
 | [ai-usage.md](docs/ai-usage.md) | How the models were used and what they got wrong |
 | [modules.md](docs/modules.md) | Generated inventory of everything |
 | [approach.md](docs/approach.md) | How the problem was framed, and the full command list |

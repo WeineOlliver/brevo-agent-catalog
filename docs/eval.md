@@ -199,6 +199,78 @@ experiment below is blocked on it, not on anything about the catalog.
 The split still holds for extraction, where a call carries one capture instead
 of 197 entries. It was the fallback claim that was never true.
 
+## What the eval has already paid for
+
+Listed because an eval is easy to mistake for a scoreboard. Almost none of its
+value here was the score. Every item below is a defect this project would have
+shipped, each one found by running the eval rather than by reading the output:
+
+| What it caught | What it would have cost |
+|:--|:--|
+| **Run 1: 0 of 20.** The crawl-only catalog held 118 actions, 108 of them reads, one write | A coverage count would have reported "118 actions" and read as success. The eval is what turned that into zero and made the write passes the coverage mechanism instead of a supporting stage |
+| **The scorer had never scored anything**, found on run 2 with one scoreable task | A broken scorer discovered after the catalog was big enough to trust it |
+| **Two expected ids were predictions, not gaps** — `lists.list_lists` is `lists.get_lists` | Two phantom coverage holes in `gaps.md`, and a lower score for a catalog that was complete |
+| **A description that denied what the action does.** `segments.query_contacts` claimed it returned contacts in a specific segment | An agent asked for "everyone in Brevo" would never have picked the action that answers it |
+| **41 invented action ids** cited 42 times — found by a checker the eval's own misses motivated | An agent following a description to a neighbouring action, and finding nothing there |
+| **`destructive` flags concentrated the failures.** The 4 tasks whose answer is destructive score 1; the other 15 score 13 | Shipping a safety mechanism that quietly costs the catalog its risky actions, which is the opposite of what it is for |
+| **`(nothing parseable)` was the model declining**, not the harness failing | A coverage finding — the model judging the catalog incapable — printing for seven runs as a parser error |
+| **17 of 19 did not reproduce.** Four runs the next day gave 15, 14, 15 | A headline number on the README that a reviewer could disprove in one command |
+| **Groq cannot run it at all**, at 14 846 tokens against an 8 000 TPM ceiling | A documented fallback provider that had never been tried and did not work |
+
+The pattern is worth naming: the eval's **misses** were more useful than its
+hits, and its **infrastructure failures** were more useful than either. Three of
+the nine rows above are defects in the measuring instrument, found because
+something looked wrong in a run that should have been boring.
+
+## What was not measured, and why
+
+The limits below are quota and provider limits rather than design choices, and
+they bound what any number in this document can be read to mean.
+
+- **The eval has exactly one provider.** Headless `claude -p`. Groq is
+  structurally ruled out — one call is 14 846 tokens against an 8 000 TPM
+  ceiling — so there is no second opinion available, and a run that drains the
+  Claude quota mid-way reports provider failures for the rest and measures
+  nothing. That happened twice in one day.
+- **The destructive-marker experiment is unrun.** The single most important open
+  question here, one run away from an answer, blocked on the provider the
+  baseline came from. `pnpm eval --only <ids>` was built to make it 8 calls
+  instead of 38, and it still has not been possible to run cleanly.
+- **Nineteen scoreable tasks is too few for a confidence interval.** A one-task
+  swing moves the headline by five points, and the observed spread on an
+  unchanged catalog was 14 to 17. The variance is real and has never been
+  quantified, because quantifying it means many more runs.
+- **One model, one shot, one attempt per task.** A two-step task cannot be
+  scored fairly this way: the campaign-stats and send-now misses are both the
+  model correctly reaching for step one.
+- **The tasks and their expected answers were written by the same person who
+  wrote the catalog.** Mitigated by never reusing the catalog's wording and by
+  recording every reconciliation, but not eliminated.
+
+## Where this goes next
+
+**Connect a better model, through the API rather than a CLI.** The limiting
+factor on every number above is not the catalog and not the harness — it is a
+single interactive quota and a vendor ceiling. The honest upgrades, in order:
+
+1. **A stronger model behind a proper API key**, so a run is a cost rather than
+   a gamble on whether the quota survives. Half the eval's recorded history is
+   about provider failures, and none of that work taught anything about Brevo.
+2. **Two or three models, with the spread reported.** A score that holds for one
+   model is a property of that model. Published as a single figure it reads as a
+   property of the catalog, which it is not.
+3. **Repeat runs, so variance is stated rather than discovered.** 17 became 15
+   with nothing changed; a reader deserves that as an interval, not as a
+   footnote.
+4. **Score sequences, not single picks**, now that `flows/index.json` exists.
+   The two-step tasks stop being unfair and start measuring the thing flows were
+   built for.
+5. **More tasks, written by someone else**, which is the only real fix for the
+   last limit in the previous section.
+
+Until then, the number to quote is 15 of 19, the spread is 14 to 17, and both
+come from one model on one day.
+
 ## The two misses that remain
 
 **One is a limit of the eval, not the catalog.** For *"how did the spring sale
