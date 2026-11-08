@@ -231,11 +231,17 @@ and `pnpm build:index` rather than defaulting into the catch-all.
    `src/catalog/areas.ts`, stamped onto every index entry, gated. The 62
    modules stay, because they are the right axis for reading the capture; they
    were only ever the wrong axis for finding a feature.
-6. **A query command** over the index and the flows — `search` and `show`, so an
-   agent asks for three entries instead of reading 197. This is the cheaper
-   half of what an MCP server would provide, runs anywhere a shell does, and
-   tests an assumption the eval currently hides: today the eval hands the model
-   all 197 entries at once, which is not how an agent with a search tool works.
+6. ~~**A query command**~~ Done: `pnpm catalog` (areas, area, show, search,
+   flows, flow), all with `--json`. It also settled the assumption it was meant
+   to test, in the uncomfortable direction. `pnpm bench:search` runs the eval's
+   19 tasks through the lexical search with no model: the answer ranks first
+   twice and reaches the top three five times, against 15 of 19 for a model
+   reading all 197 entries. **Narrowing the context is not free**, because the
+   catalog's wording and a person's wording do not overlap — which is the eval's
+   first design rule, now biting the retrieval path instead of the model. The
+   usable shape is browse-then-read, not search-then-trust, and improving this
+   means better retrieval (embeddings, or a model doing the narrowing), not more
+   words in the descriptions.
 7. **An MCP server** over the existing index — about a hundred lines, and then
    there is a live demo. Decision #4 explains why it was demoted, not why it is
    worthless.

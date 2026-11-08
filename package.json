@@ -27,7 +27,9 @@
     "explore": "tsx scripts/explore.ts",
     "import:har": "tsx scripts/import-har.ts",
     "fix:crossrefs": "tsx scripts/fix-crossrefs.ts",
-    "build:flows": "tsx scripts/build-flows.ts"
+    "build:flows": "tsx scripts/build-flows.ts",
+    "catalog": "tsx scripts/catalog.ts",
+    "bench:search": "tsx scripts/bench-search.ts"
   },
   "dependencies": {
     "ajv": "^8.17.1",

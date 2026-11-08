@@ -8,7 +8,7 @@
 ![coverage](https://img.shields.io/badge/write%20endpoints-38%2F38-16a34a)
 ![eval](https://img.shields.io/badge/selection%20eval-15%2F19-ca8a04)
 ![verified](https://img.shields.io/badge/verified-3%2F197-ca8a04)
-![tests](https://img.shields.io/badge/tests-503-2563eb)
+![tests](https://img.shields.io/badge/tests-517-2563eb)
 
 </div>
 
@@ -33,7 +33,7 @@ calls, and turns that into a catalog an AI agent can use.
 | Can a model pick the right action? | **15 of 19** tasks (best run 17; see below) |
 | Actually executed and proven | **3** (194 are captured but unproven) |
 | Public API overlap | **2 of 197** |
-| Tests | **503** |
+| Tests | **517** |
 
 ## How it works
 
@@ -98,6 +98,47 @@ The assignment is a table in [`src/catalog/areas.ts`](src/catalog/areas.ts), not
 a model call: it is a naming decision, and those belong where they can be argued
 with. **A module with no area fails the build.** It does not default into
 `platform`, because a catch-all that fills itself stops describing anything.
+
+## Reading it as an agent would: `pnpm catalog`
+
+Decision #4 demoted an MCP server. This is the cheaper half of what one would
+have provided — an agent already has a shell, so a server adds a protocol and a
+lifecycle to a problem that needed neither. It reads the catalog; it never calls
+Brevo.
+
+```bash
+pnpm catalog                                  # the 9 areas          ~100 tokens
+pnpm catalog area contacts                    # 64 names, no prose   ~790 tokens
+pnpm catalog show contacts.delete_contact     # one entry in full    ~400 tokens
+pnpm catalog search "someone asked to be deleted"
+pnpm catalog flow erase_contact               # the recipe, in order
+```
+
+Every subcommand takes `--json`. Group listings are names only on purpose:
+`contacts` holds 64 entries whose descriptions are 5 773 tokens and whose names
+are 787, and the descriptions are paid for on the one entry that gets chosen.
+Browsing all three hops costs roughly a twentieth of the 18 519 tokens the whole
+index takes.
+
+**The search is the weak part, and it is measured rather than claimed.**
+`pnpm bench:search` runs the eval's own 19 tasks through it with no model
+anywhere:
+
+| | |
+|:--|:--|
+| Right answer ranked first | **2 of 19** |
+| Right answer in the top 3 | **5 of 19** |
+| Right answer anywhere in 10 | **8 of 19** |
+| A model reading all 197 entries | **15 of 19** |
+
+That gap is the eval's first rule biting back: a task never reuses the catalog's
+wording, so *"I need a new audience group"* has to reach `lists.create_list`
+without sharing a word with it. A model bridges that. Prefix matching cannot.
+
+So the honest shape of this tool is **browse, not search**: areas, then an area
+listing, then the model picks from names it can see. Trusting the top three
+search hits would make an agent worse than handing it everything, and the
+command says so in its own output.
 
 ## 197 actions do not say what order to call them in
 
@@ -172,10 +213,11 @@ judgment. Both behind one interface, so the Groq key is optional.
 Node 20+ and pnpm. `pnpm install`, then:
 
 ```bash
-pnpm test          # 503 tests
+pnpm test          # 517 tests
 pnpm validate      # schema + no broken references + flows match their captures
 pnpm build:flows   # re-derive flows/index.json from the captures
-pnpm eval          # can a model pick the right action?
+pnpm eval          # can a model pick the right action? (costs provider quota)
+pnpm bench:search  # can the CLI search find it with no model at all? (free)
 pnpm scan          # leak gate, run before any push
 ```
 

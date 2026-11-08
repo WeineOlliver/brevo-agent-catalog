@@ -1,0 +1,230 @@
+/**
+ * Reading the catalog the way an agent actually reads it.
+ *
+ * The selection eval hands a model all 197 entries with their full descriptions
+ * — about 18 500 tokens — and then measures whether it picks the right one.
+ * That is not how an agent with a search tool works, and the gap matters:
+ * working with everything in context says nothing about working with three
+ * results. This module is the narrow path, and it is deliberately three steps:
+ *
+ *   areas            9 lines, ~100 tokens       which part of the app
+ *   area <id>        names only, ~790 worst     what is in that part
+ *   show <id>        one full entry, ~400       inputs, risk, proof
+ *
+ * Measured against the whole index, that is roughly twenty times less text for
+ * the same decision — and the descriptions, which are the expensive part, are
+ * only paid for on the one entry that gets chosen.
+ *
+ * Group listings are names only, on purpose. `contacts` holds 64 entries and
+ * 5 773 tokens of description; the names are 787. An agent that needs more
+ * than a name to tell two entries apart has found a description defect worth
+ * fixing rather than a listing worth enlarging.
+ */
+
+export type IndexEntry = {
+  id: string;
+  module: string;
+  area: string;
+  name: string;
+  description: string;
+  status: string;
+  destructive: boolean;
+};
+
+export type CatalogIndexFile = {
+  count: number;
+  by_status: Record<string, number>;
+  by_area: Record<string, number>;
+  actions: IndexEntry[];
+};
+
+export type FlowStep = { action_id: string; why: string; optional: boolean };
+
+export type FlowFile = {
+  count: number;
+  flows: {
+    id: string;
+    name: string;
+    goal: string;
+    when_to_use: string;
+    evidence: { capture: string; from: string; to: string };
+    steps: FlowStep[];
+    notes: string[];
+  }[];
+};
+
+export type AreaSummary = {
+  id: string;
+  name: string;
+  does: string;
+  count: number;
+  destructive: number;
+  /** Flows whose steps land mostly in this area, so the next hop is visible. */
+  flows: string[];
+};
+
+export type AreaListing = {
+  area: string;
+  count: number;
+  entries: { id: string; name: string; destructive: boolean; status: string }[];
+};
+
+export type SearchHit = {
+  id: string;
+  name: string;
+  area: string;
+  destructive: boolean;
+  score: number;
+};
+
+/**
+ * Words that carry no signal in a task phrased by a person.
+ *
+ * Without this, "someone asked to be deleted" scores every entry whose
+ * description happens to say "the" or "for", and the ranking is noise with a
+ * number on it.
+ */
+const STOPWORDS = new Set([
+  'the', 'and', 'for', 'from', 'with', 'that', 'this', 'into', 'out', 'all',
+  'any', 'our', 'their', 'you', 'your', 'can', 'want', 'wants', 'need', 'needs',
+  'asked', 'asks', 'ask', 'someone', 'somebody', 'please', 'how', 'did', 'does',
+  'was', 'were', 'has', 'have', 'had', 'but', 'not', 'now', 'get', 'got',
+  'everything', 'everyone', 'entirely', 'sort', 'thing', 'things', 'who',
+  'what', 'when', 'where', 'why', 'right', 'ready', 'instead', 'about', 'his',
+  'her', 'him', 'them', 'they', 'she', 'its', 'are', 'off', 'put', 'keep',
+  'let', 'see', 'start', 'new', 'already',
+]);
+
+/** Words worth matching on: three letters or more, lowercased, not stopwords. */
+function terms(text: string): string[] {
+  return text
+    .toLowerCase()
+    .split(/[^a-z0-9]+/)
+    .filter((word) => word.length >= 3 && !STOPWORDS.has(word));
+}
+
+/**
+ * Whether two words are the same word for ranking purposes.
+ *
+ * Substring matching fails on inflection, and it fails in the direction that
+ * matters: "deleted" does not contain "delete_contact" and
+ * "delete_contact" does not contain "deleted", so the one entry a deletion
+ * request needs scored zero while an unrelated entry won on a stopword. Prefix
+ * agreement in either direction catches delete/deleted, send/sending,
+ * campaign/campaigns without a stemmer, and four characters is enough to stop
+ * "con" matching "contact", "config", "consent" and "conversion" at once.
+ */
+function sameWord(a: string, b: string): boolean {
+  if (a === b) return true;
+  const shorter = a.length <= b.length ? a : b;
+  const longer = a.length <= b.length ? b : a;
+  return shorter.length >= 4 && longer.startsWith(shorter);
+}
+
+/** Does any word in `text` agree with `word`? */
+function hasWord(text: string, word: string): boolean {
+  return terms(text).some((candidate) => sameWord(candidate, word));
+}
+
+export function summariseAreas(
+  index: CatalogIndexFile,
+  areas: { id: string; name: string; does: string }[],
+  flows: FlowFile,
+): AreaSummary[] {
+  return areas.map((area) => {
+    const entries = index.actions.filter((entry) => entry.area === area.id);
+    const related = flows.flows
+      .filter((flow) =>
+        flow.steps.some((step) => {
+          const entry = index.actions.find((candidate) => candidate.id === step.action_id);
+          return entry?.area === area.id;
+        }),
+      )
+      .map((flow) => flow.id);
+
+    return {
+      id: area.id,
+      name: area.name,
+      does: area.does,
+      count: entries.length,
+      destructive: entries.filter((entry) => entry.destructive).length,
+      flows: related,
+    };
+  });
+}
+
+export function listArea(index: CatalogIndexFile, areaId: string): AreaListing | null {
+  const known = new Set(index.actions.map((entry) => entry.area));
+  if (!known.has(areaId)) return null;
+
+  const entries = index.actions
+    .filter((entry) => entry.area === areaId)
+    .map((entry) => ({
+      id: entry.id,
+      name: entry.name,
+      destructive: entry.destructive,
+      status: entry.status,
+    }));
+
+  return { area: areaId, count: entries.length, entries };
+}
+
+/**
+ * Ranked substring search over id, name and description.
+ *
+ * Deliberately not an embedding: this has to run offline with no provider, and
+ * a lexical ranking that an agent can reason about beats a similarity score it
+ * cannot. An id or name hit outranks a description hit, because a description
+ * mentioning "list" is weaker evidence than a name containing it.
+ */
+export function search(index: CatalogIndexFile, query: string, limit = 10): SearchHit[] {
+  const wanted = terms(query);
+  if (wanted.length === 0) return [];
+
+  const hits: SearchHit[] = [];
+
+  for (const entry of index.actions) {
+    let score = 0;
+    let covered = 0;
+
+    for (const word of wanted) {
+      const inId = hasWord(entry.id, word);
+      const inName = hasWord(entry.name, word);
+      const inDescription = hasWord(entry.description, word);
+
+      if (inId) score += 6;
+      if (inName) score += 4;
+      if (inDescription) score += 1;
+      if (inId || inName || inDescription) covered += 1;
+    }
+
+    // Every word of the task landing somewhere beats one word landing twice:
+    // "delete contact" should outrank an entry that only says "contact" often.
+    if (covered === wanted.length && wanted.length > 1) score += 3;
+
+    if (score > 0) {
+      hits.push({
+        id: entry.id,
+        name: entry.name,
+        area: entry.area,
+        destructive: entry.destructive,
+        score,
+      });
+    }
+  }
+
+  return hits
+    .sort((a, b) => (b.score !== a.score ? b.score - a.score : a.id.localeCompare(b.id)))
+    .slice(0, limit);
+}
+
+export function findFlow(flows: FlowFile, flowId: string): FlowFile['flows'][number] | null {
+  return flows.flows.find((flow) => flow.id === flowId) ?? null;
+}
+
+/** Flows that contain a given action, so `show` can point at the next step. */
+export function flowsContaining(flows: FlowFile, actionId: string): string[] {
+  return flows.flows
+    .filter((flow) => flow.steps.some((step) => step.action_id === actionId))
+    .map((flow) => flow.id);
+}
