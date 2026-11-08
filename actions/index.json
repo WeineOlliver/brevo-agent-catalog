@@ -1,9 +1,9 @@
 {
-  "generated_at": "2026-11-07T11:16:14.877Z",
+  "generated_at": "2026-11-08T01:35:59.555Z",
   "count": 197,
   "by_status": {
-    "verified": 0,
-    "observed": 197,
+    "verified": 3,
+    "observed": 194,
     "inferred": 0
   },
   "actions": [
@@ -452,7 +452,7 @@
       "module": "contacts",
       "name": "Create contact",
       "description": "Call this when you need to add a single new contact to the account from an email address, optionally placing it on lists and setting attribute values at the same time. The response returns the new contact's internal numeric id, so call this when a later step needs that id. Check first with contacts.check_duplicate_contact if you are unsure whether the email already exists, since this endpoint's behaviour for an existing email is not established by the evidence. For adding many contacts at once prefer the account's import flow rather than looping this action, and to put an already-existing contact onto a list use the list-membership action instead of re-creating it.",
-      "status": "observed",
+      "status": "verified",
       "destructive": false
     },
     {
@@ -460,7 +460,7 @@
       "module": "contacts",
       "name": "Delete contact",
       "description": "Call this when the user wants a contact permanently removed from the whole Brevo account, not just taken off one mailing list. If the goal is only to stop sending to a contact while keeping their record and history, use contacts.update_contact to set them to blocklisted instead, and if the goal is to take them off a specific list or add them to another, use contacts.bulk_modify_list. Resolve the numeric contact id first (for example via the contact index or contacts.get_preview) because this action identifies the contact by internal id, not by email.",
-      "status": "observed",
+      "status": "verified",
       "destructive": true
     },
     {
@@ -1068,7 +1068,7 @@
       "module": "lists",
       "name": "Create list",
       "description": "Call this when you need to create a new contact list in Brevo. If you only need to create a folder (is_folder true), use the dedicated create_folder action instead.",
-      "status": "observed",
+      "status": "verified",
       "destructive": false
     },
     {

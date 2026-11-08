@@ -68,10 +68,12 @@
   },
   "plan_tier": "unknown",
   "verification": {
-    "status": "observed",
+    "status": "verified",
     "evidence": [
-      "captures/clean/interact/contacts.json"
+      "executed POST /contact/backend/contacts/add-contact -> 200",
+      "response: {\"contact_id\":8}",
+      "playwright trace: test-results\\contacts.create_contact.trace.zip"
     ],
-    "verified_at": null
+    "verified_at": "2026-11-08T01:19:29.785Z"
   }
 }

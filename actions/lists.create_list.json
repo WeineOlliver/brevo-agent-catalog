@@ -67,10 +67,12 @@
   },
   "plan_tier": "unknown",
   "verification": {
-    "status": "observed",
+    "status": "verified",
     "evidence": [
-      "captures/clean/har/block-a-contacts.json"
+      "executed POST /lists/create -> 201",
+      "response: {\"id\":11}\n",
+      "playwright trace: test-results\\lists.create_list.trace.zip"
     ],
-    "verified_at": null
+    "verified_at": "2026-11-08T01:31:32.878Z"
   }
 }

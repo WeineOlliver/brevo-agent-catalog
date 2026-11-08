@@ -56,10 +56,12 @@
   },
   "plan_tier": "unknown",
   "verification": {
-    "status": "observed",
+    "status": "verified",
     "evidence": [
-      "captures/clean/har/block-a-contacts.json"
+      "executed DELETE /contact/backend/contacts/8 -> 200",
+      "response: {\"message\":\"Contact has been successfully deleted\"}",
+      "playwright trace: test-results\\contacts.delete_contact.trace.zip"
     ],
-    "verified_at": null
+    "verified_at": "2026-11-08T01:35:30.748Z"
   }
 }

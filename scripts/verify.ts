@@ -17,13 +17,14 @@ import { attachRecorder } from '../src/crawl/recorder.js';
 import { createFixtureBag } from '../src/interact/types.js';
 import { applyOutcome, assessOutcome, type VerifyRecipe } from '../src/verify/harness.js';
 import { contactsRecipes } from '../src/verify/recipes/contacts.js';
+import { listsRecipes } from '../src/verify/recipes/lists.js';
 import {
   HEADED_VIEWPORT,
   describePlacement,
 } from '../src/browser/window.js';
 import { appContextOptions, appLaunchArgs } from '../src/browser/context.js';
 
-const RECIPES: VerifyRecipe[] = [...contactsRecipes];
+const RECIPES: VerifyRecipe[] = [...contactsRecipes, ...listsRecipes];
 
 function argValue(name: string, fallback: string): string {
   const index = process.argv.indexOf(`--${name}`);
