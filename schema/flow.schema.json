@@ -1,0 +1,111 @@
+{
+  "type": "object",
+  "properties": {
+    "generated_at": {
+      "type": "string",
+      "minLength": 1
+    },
+    "count": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "flows": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z0-9_]+$"
+          },
+          "name": {
+            "type": "string",
+            "minLength": 3
+          },
+          "goal": {
+            "type": "string",
+            "minLength": 10
+          },
+          "when_to_use": {
+            "type": "string",
+            "minLength": 10
+          },
+          "evidence": {
+            "type": "object",
+            "properties": {
+              "capture": {
+                "type": "string",
+                "minLength": 1
+              },
+              "from": {
+                "type": "string",
+                "pattern": "^\\d{2}:\\d{2}:\\d{2}$"
+              },
+              "to": {
+                "type": "string",
+                "pattern": "^\\d{2}:\\d{2}:\\d{2}$"
+              }
+            },
+            "required": [
+              "capture",
+              "from",
+              "to"
+            ],
+            "additionalProperties": false
+          },
+          "steps": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "action_id": {
+                  "type": "string",
+                  "pattern": "^[a-z0-9_]+\\.[a-z0-9_]+$"
+                },
+                "why": {
+                  "type": "string",
+                  "minLength": 10
+                },
+                "optional": {
+                  "type": "boolean",
+                  "default": false
+                }
+              },
+              "required": [
+                "action_id",
+                "why"
+              ],
+              "additionalProperties": false
+            },
+            "minItems": 2
+          },
+          "notes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "default": []
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "goal",
+          "when_to_use",
+          "evidence",
+          "steps"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": [
+    "generated_at",
+    "count",
+    "flows"
+  ],
+  "additionalProperties": false,
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/brevo-agent-catalog/schema/flow.schema.json",
+  "title": "Brevo business flows"
+}

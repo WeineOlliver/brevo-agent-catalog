@@ -8,7 +8,7 @@
 ![coverage](https://img.shields.io/badge/write%20endpoints-38%2F38-16a34a)
 ![eval](https://img.shields.io/badge/selection%20eval-15%2F19-ca8a04)
 ![verified](https://img.shields.io/badge/verified-3%2F197-ca8a04)
-![tests](https://img.shields.io/badge/tests-470-2563eb)
+![tests](https://img.shields.io/badge/tests-495-2563eb)
 
 </div>
 
@@ -28,11 +28,12 @@ calls, and turns that into a catalog an AI agent can use.
 |:--|:--|
 | Actions catalogued | **197** in 62 modules |
 | Of those, product actions / app plumbing | **174 / 23** |
+| Multi-step flows, derived from the capture | **3** (16 steps) |
 | Write endpoints found / covered | **38 / 38** |
 | Can a model pick the right action? | **15 of 19** tasks (best run 17; see below) |
 | Actually executed and proven | **3** (194 are captured but unproven) |
 | Public API overlap | **2 of 197** |
-| Tests | **470** |
+| Tests | **495** |
 
 ## How it works
 
@@ -55,11 +56,37 @@ Asking a model for facts you already have is how documentation gets invented.
 | Path | What |
 |:--|:--|
 | [`actions/index.json`](actions/index.json) | **Start here.** All 197 actions, one small file |
+| [`flows/index.json`](flows/index.json) | The multi-step ones, in order: send a campaign, add a contact, erase a contact |
 | `actions/<id>.json` | One action in full: inputs, outputs, risks, proof |
 | [`schema/action.schema.json`](schema/action.schema.json) | The contract. A test fails if the code drifts from it |
 | `captures/clean/` | The traffic every entry came from |
 
 Ids look like `contacts.create_contact` and `campaigns.send_now`.
+
+## 197 actions do not say what order to call them in
+
+A flat catalog answers *what can this app do* and is silent on *and then what*.
+That silence is measurable: the eval's remaining misses are tasks that take more
+than one call, and on both the model picked the listing action that would have
+been step one.
+
+So three flows are derived — not written — from the capture:
+
+```
+send_email_campaign   8 steps   create > count > recipients > subject > design > preview > test > send
+onboard_contact       6 steps   list > company > contact > link > membership > attributes
+erase_contact         2 steps   unsubscribe > delete
+```
+
+Each flow names a capture file and a time window, and its steps are the write
+calls Brevo's own UI made in that window, in that order. `pnpm validate`
+re-derives them and fails on any difference, so a flow is a claim about evidence
+rather than a claim about memory. Editing `flows/index.json` by hand breaks the
+build and prints both sequences.
+
+`erase_contact` is the pair worth reading: step one is reversible and answers
+*"stop emailing me"*, step two is irreversible and answers *"delete me"*.
+Confusing them is the most expensive mistake an agent can make here.
 
 ## How much to trust it
 
@@ -109,8 +136,9 @@ judgment. Both behind one interface, so the Groq key is optional.
 Node 20+ and pnpm. `pnpm install`, then:
 
 ```bash
-pnpm test          # 470 tests
-pnpm validate      # schema + no broken references
+pnpm test          # 495 tests
+pnpm validate      # schema + no broken references + flows match their captures
+pnpm build:flows   # re-derive flows/index.json from the captures
 pnpm eval          # can a model pick the right action?
 pnpm scan          # leak gate, run before any push
 ```

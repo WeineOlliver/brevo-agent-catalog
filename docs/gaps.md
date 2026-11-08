@@ -208,12 +208,23 @@ field is how it would stop drifting.
    task.
 3. **Resolve the three overlapping list reads.** A taxonomy call, not a wording
    tweak.
-4. **Normalise the module taxonomy.** 62 modules for 197 actions, many with a
+4. **More flows.** Three exist (`flows/index.json`), covering 16 steps. The
+   capture holds more — segment creation, the import mapping, company setup —
+   and each is a window and six lines of prose, since the steps derive
+   themselves. Flows are also the better answer to the taxonomy problem below:
+   sending one campaign crosses three modules, so intent and URL prefix are
+   different axes and only one of them is what an agent asks for.
+5. **Normalise the module taxonomy.** 62 modules for 197 actions, many with a
    single entry (`ui`, `widgets`, `locales`, `countries`).
-5. **An MCP server** over the existing index — about a hundred lines, and then
+6. **A query command** over the index and the flows — `search` and `show`, so an
+   agent asks for three entries instead of reading 197. This is the cheaper
+   half of what an MCP server would provide, runs anywhere a shell does, and
+   tests an assumption the eval currently hides: today the eval hands the model
+   all 197 entries at once, which is not how an agent with a search tool works.
+7. **An MCP server** over the existing index — about a hundred lines, and then
    there is a live demo. Decision #4 explains why it was demoted, not why it is
    worthless.
-6. **`execute_action`.** Turns the catalog from a description into a capability.
+8. **`execute_action`.** Turns the catalog from a description into a capability.
    Where this goes next in production, and deliberately not a weekend task.
 
 Done since the first draft of this document: the HAR sessions (four of them,

@@ -1,5 +1,6 @@
 /**
- * Stage 5 — validate every catalog entry against the committed schema.
+ * Stage 5 — validate every catalog entry against the committed schema, and
+ * every flow against the capture it claims to come from.
  *
  * Exits non-zero on any failure, and names every one. Nothing is silently
  * dropped: an entry that cannot validate is a bug in the extraction prompt,
@@ -12,6 +13,7 @@ import 'dotenv/config';
 import { loadConfig } from '../src/config.js';
 import { validateAction } from '../src/catalog/validate.js';
 import { findDanglingRefs, textOf } from '../src/catalog/crossrefs.js';
+import { validateFlowIndex } from '../src/flows/validate.js';
 
 /**
  * Dangling cross-references the catalog is allowed to carry: none.
@@ -120,4 +122,43 @@ if (citations < KNOWN_DANGLING_CITATIONS) {
     `ratchet: citations are down to ${citations} from ${KNOWN_DANGLING_CITATIONS} —` +
       ' lower KNOWN_DANGLING_CITATIONS in scripts/validate.ts to hold the gain.',
   );
+}
+
+// --- flows -------------------------------------------------------------------
+//
+// A flow's steps are derived from a capture window, so validation re-derives
+// them and compares. This is what stops a flow becoming a story about the
+// product that nobody can check: if Brevo's ordering changes, or someone edits
+// flows/index.json by hand, the build fails and names the difference.
+
+const flowIndexPath = join('flows', 'index.json');
+
+if (!existsSync(flowIndexPath)) {
+  console.log('no flows/index.json — skipping flow validation (run "pnpm build:flows")');
+} else {
+  const flowProblems = validateFlowIndex({
+    raw: JSON.parse(readFileSync(flowIndexPath, 'utf8')) as unknown,
+    actionIds: new Set(files.map((file) => file.replace(/\.json$/, ''))),
+    endpoints: files.map((file) => {
+      const action = JSON.parse(readFileSync(join(dir, file), 'utf8')) as {
+        id: string;
+        internal_endpoint: { method: string; path: string };
+      };
+      return {
+        id: action.id,
+        method: action.internal_endpoint.method,
+        path: action.internal_endpoint.path,
+      };
+    }),
+    loadCapture: (path) => JSON.parse(readFileSync(path, 'utf8')) as unknown[],
+    captureExists: (path) => existsSync(path),
+  });
+
+  if (flowProblems.length > 0) {
+    console.error(`${flowProblems.length} flow problem(s):`);
+    for (const problem of flowProblems) console.error(`  ${problem}`);
+    process.exit(1);
+  }
+
+  console.log('flows match the capture windows they are derived from');
 }

@@ -1,0 +1,138 @@
+{
+  "generated_at": "2026-11-08T17:03:00.200Z",
+  "count": 3,
+  "flows": [
+    {
+      "id": "send_email_campaign",
+      "name": "Create and send an email campaign",
+      "goal": "Send a marketing email to a list of contacts, from nothing to delivered.",
+      "when_to_use": "The user wants an email to go out. Not for reading how a sent campaign performed, and not for scheduling: the last step has a scheduling counterpart that replaces it.",
+      "evidence": {
+        "capture": "captures/clean/har/block-c-email.json",
+        "from": "07:17:45",
+        "to": "07:20:57"
+      },
+      "steps": [
+        {
+          "action_id": "email_campaigns.create_regular",
+          "why": "Creates the draft and returns the campaign id every later step needs. Nothing else in this flow can run before it.",
+          "optional": false
+        },
+        {
+          "action_id": "email_campaigns.count_recipients",
+          "why": "Reports how many contacts the chosen audience resolves to, so a send can be sanity-checked before it is irreversible.",
+          "optional": true
+        },
+        {
+          "action_id": "email_campaigns.save_campaign_recipients",
+          "why": "Attaches the audience. A campaign with no recipients cannot be sent.",
+          "optional": false
+        },
+        {
+          "action_id": "email_campaigns.save_subject",
+          "why": "Sets the subject line, which Brevo stores separately from the design.",
+          "optional": false
+        },
+        {
+          "action_id": "email_campaigns.save_newsletter_design",
+          "why": "Stores the email body. The design lives in the editor service, not with the campaign, which is why this step changes host.",
+          "optional": false
+        },
+        {
+          "action_id": "newsletters.preview",
+          "why": "Renders the email as the recipient will see it, without sending anything.",
+          "optional": true
+        },
+        {
+          "action_id": "email_campaigns.send_test_email",
+          "why": "Sends one copy to the operator. Marked destructive because mail leaves the account, but the blast radius is your own inbox.",
+          "optional": true
+        },
+        {
+          "action_id": "campaigns.send_now",
+          "why": "Delivers to every recipient. Irreversible, and the only step here that reaches real people.",
+          "optional": false
+        }
+      ],
+      "notes": [
+        "The capture shows all eight calls against one campaign id, so the ordering is observed and not inferred.",
+        "To schedule instead of sending, replace the final step with the schedule action. Do not call both.",
+        "The selection eval misses \"push it out to everyone right now\" by choosing the campaign listing action, which is a reasonable first move when the task names a campaign rather than an id. This flow is the answer that miss was asking for."
+      ]
+    },
+    {
+      "id": "onboard_contact",
+      "name": "Add a contact, with its company and list membership",
+      "goal": "Get a new person into Brevo, attached to the right company and the right audience.",
+      "when_to_use": "The user wants someone added. Skip the steps that do not apply: a contact needs neither a company nor a list to exist.",
+      "evidence": {
+        "capture": "captures/clean/har/block-a-contacts.json",
+        "from": "06:20:47",
+        "to": "06:23:34"
+      },
+      "steps": [
+        {
+          "action_id": "lists.create_list",
+          "why": "Creates the audience first, because adding a contact to a list needs that list to exist. Skip it when adding to a list that is already there.",
+          "optional": true
+        },
+        {
+          "action_id": "companies.create_company",
+          "why": "Creates the company record the contact will be linked to. Skip it for a contact with no company.",
+          "optional": true
+        },
+        {
+          "action_id": "contacts.create_contact",
+          "why": "Creates the contact and returns the contact id. This is the step that makes the person exist.",
+          "optional": false
+        },
+        {
+          "action_id": "contacts.link_unlink_company",
+          "why": "Associates the contact with the company. Separate from contact creation, so a contact created without one is linked afterwards rather than re-created.",
+          "optional": true
+        },
+        {
+          "action_id": "contacts.add_contact_to_lists",
+          "why": "Puts the contact into one or more lists, which is what makes them reachable by a campaign.",
+          "optional": false
+        },
+        {
+          "action_id": "contacts.update_contact",
+          "why": "Fills in attributes after creation. The capture shows the operator editing fields in the contact form rather than passing everything to the create call.",
+          "optional": true
+        }
+      ],
+      "notes": [
+        "Creating a contact is not destructive and is reversible, unlike deleting one.",
+        "A contact that exists but is in no list receives no campaigns. The membership step is what people forget."
+      ]
+    },
+    {
+      "id": "erase_contact",
+      "name": "Honour a deletion request",
+      "goal": "Remove a person from Brevo entirely, as a right-to-erasure request requires.",
+      "when_to_use": "Only when the user wants the person GONE. Someone who asked to stop receiving email wants the unsubscribe step and nothing after it — stopping at the first step is a different, reversible outcome.",
+      "evidence": {
+        "capture": "captures/clean/har/block-a-contacts.json",
+        "from": "06:29:23",
+        "to": "06:29:49"
+      },
+      "steps": [
+        {
+          "action_id": "contacts.update_contact",
+          "why": "Marks the contact unsubscribed. Reversible, and for a \"stop emailing me\" request this is the whole job.",
+          "optional": false
+        },
+        {
+          "action_id": "contacts.delete_contact",
+          "why": "Destroys the contact record. Irreversible, and it is this step alone that satisfies an erasure request.",
+          "optional": false
+        }
+      ],
+      "notes": [
+        "These two steps are the confusable pair the selection eval exists to separate: unsubscribing someone who asked to be deleted leaves their data behind, and deleting someone who asked to be unsubscribed destroys it.",
+        "The delete was executed against a real account and is one of the three verified entries in the catalog, so this flow ends in a proven call rather than an assumed one."
+      ]
+    }
+  ]
+}

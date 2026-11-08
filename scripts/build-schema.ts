@@ -1,17 +1,24 @@
 /**
- * Regenerates schema/action.schema.json from the Zod contract in src/types.ts.
+ * Regenerates the published JSON Schema documents from the Zod contracts.
  *
- * Run after any change to ActionSchema; tests/schema-sync.test.ts fails if the
- * committed file and the Zod source have drifted.
+ * schema/action.schema.json comes from ActionSchema in src/types.ts, and
+ * schema/flow.schema.json from FlowIndexSchema in src/flows/schema.ts. Run
+ * after changing either; tests/schema-sync.test.ts fails if a committed file
+ * and its Zod source have drifted.
  */
 
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { dirname } from 'node:path';
 import { generateJsonSchema } from '../src/types.js';
+import { generateFlowJsonSchema } from '../src/flows/schema.js';
 
-const OUT = 'schema/action.schema.json';
+const OUTPUTS: [string, Record<string, unknown>][] = [
+  ['schema/action.schema.json', generateJsonSchema()],
+  ['schema/flow.schema.json', generateFlowJsonSchema()],
+];
 
-mkdirSync(dirname(OUT), { recursive: true });
-writeFileSync(OUT, `${JSON.stringify(generateJsonSchema(), null, 2)}\n`, 'utf8');
-
-console.log(`wrote ${OUT}`);
+for (const [path, document] of OUTPUTS) {
+  mkdirSync(dirname(path), { recursive: true });
+  writeFileSync(path, `${JSON.stringify(document, null, 2)}\n`, 'utf8');
+  console.log(`wrote ${path}`);
+}
