@@ -60,7 +60,7 @@
     "evidence": [
       "executed DELETE /contact/backend/contacts/8 -> 200",
       "response: {\"message\":\"Contact has been successfully deleted\"}",
-      "playwright trace: test-results\\contacts.delete_contact.trace.zip"
+      "playwright trace (local, not committed; reproduce with \"pnpm verify\"): test-results\\contacts.delete_contact.trace.zip"
     ],
     "verified_at": "2026-11-08T01:35:30.748Z"
   }

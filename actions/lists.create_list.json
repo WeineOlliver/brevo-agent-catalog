@@ -71,7 +71,7 @@
     "evidence": [
       "executed POST /lists/create -> 201",
       "response: {\"id\":11}\n",
-      "playwright trace: test-results\\lists.create_list.trace.zip"
+      "playwright trace (local, not committed; reproduce with \"pnpm verify\"): test-results\\lists.create_list.trace.zip"
     ],
     "verified_at": "2026-11-08T01:31:32.878Z"
   }

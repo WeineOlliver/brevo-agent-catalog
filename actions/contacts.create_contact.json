@@ -72,7 +72,7 @@
     "evidence": [
       "executed POST /contact/backend/contacts/add-contact -> 200",
       "response: {\"contact_id\":8}",
-      "playwright trace: test-results\\contacts.create_contact.trace.zip"
+      "playwright trace (local, not committed; reproduce with \"pnpm verify\"): test-results\\contacts.create_contact.trace.zip"
     ],
     "verified_at": "2026-11-08T01:19:29.785Z"
   }

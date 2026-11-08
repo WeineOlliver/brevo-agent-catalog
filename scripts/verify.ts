@@ -94,7 +94,16 @@ for (const recipe of selected) {
   // Evidence is written into a committed artifact, so it is redacted here —
   // the sanitizer only ever touches captures/.
   const outcome = assessOutcome(loaded.action, observed, config.redact);
-  if (outcome.status === 'verified') outcome.evidence.push(`playwright trace: ${tracePath}`);
+  if (outcome.status === 'verified') {
+    // Named as local on purpose. `test-results/` is gitignored -- a Playwright
+    // trace holds screenshots of a signed-in account -- so a reader who clones
+    // this repository cannot open the file. An evidence line that points at
+    // something the reader has no way to reach is the same defect as a
+    // description citing an action id that does not exist.
+    outcome.evidence.push(
+      `playwright trace (local, not committed; reproduce with "pnpm verify"): ${tracePath}`,
+    );
+  }
   const updated = applyOutcome(loaded.action, outcome);
 
   const revalidated = validateAction(updated);
