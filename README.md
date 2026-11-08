@@ -12,6 +12,10 @@
 
 </div>
 
+> **If you are an agent:** read [AGENTS.md](AGENTS.md), or run
+> `pnpm catalog help`. Answer product questions with `pnpm catalog`, not by
+> reading `actions/*.json`. Nothing here performs an action.
+
 ## What this is
 
 Brevo is an email marketing app. It publishes an API with 292 operations.

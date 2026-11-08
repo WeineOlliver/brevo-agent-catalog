@@ -79,7 +79,62 @@ function risk(destructive: boolean): string {
   return destructive ? '  [destructive]' : '';
 }
 
+/**
+ * The tool has to explain itself.
+ *
+ * An agent arrives having cloned a repository and been asked what a user can
+ * do. It has no instruction layer beyond what it finds here, and in an
+ * evaluation it will not be given one. AGENTS.md is the first half of the
+ * answer, because agent tooling reads it on sight; this is the second, because
+ * a tool that only makes sense alongside a document is a tool that will be used
+ * wrongly the first time the document is skipped.
+ *
+ * So every reply ends with the next command, and `help` states the rules that
+ * cannot be inferred from a reply: say when something is absent, pass on
+ * irreversibility, ask when a request has two readings.
+ */
+const HELP = [
+  'pnpm catalog — what can a user do in Brevo?',
+  '',
+  'This is a catalogue of 170 things a user can do in Brevo, derived from',
+  'watching the real app. Nothing here performs an action.',
+  '',
+  'Commands (each takes --json):',
+  '  pnpm catalog                  the areas, and how many capabilities each holds',
+  '  pnpm catalog area <id>        the capabilities in one area, by name',
+  '  pnpm catalog show <id>        one capability: what it does, what it costs',
+  '  pnpm catalog show <id> --full the stored record, with evidence',
+  '  pnpm catalog flow <id>        the order, when something takes several steps',
+  '  pnpm catalog flows            the multi-step ones',
+  '  pnpm catalog search "<task>"  a weak keyword guess; prefer browsing',
+  '  pnpm catalog --all            include what the app calls to draw itself',
+  '',
+  'Answering from it:',
+  '  - Say when something is not here. An area reported as read-only cannot be',
+  '    made to write by combining entries that look close.',
+  '  - Pass on "CANNOT BE UNDONE" before the person asks, not after.',
+  '  - 31 of the 170 change something; 139 only look. Do not promise the first',
+  '    when the catalogue only holds the second.',
+  '  - When a request has two readings — unsubscribe or delete — ask.',
+  '  - Each capability states how sure the catalogue is. 194 of 197 entries were',
+  '    seen in real traffic but never executed, so their inputs are a hypothesis.',
+  '',
+  'Reading actions/*.json directly works and costs twenty times more for the',
+  'same answer. The three commands above are the cheap path.',
+];
+
 switch (command) {
+  case 'help':
+  case '--help':
+  case '-h': {
+    if (json) {
+      emit({ help: HELP });
+      break;
+    }
+    for (const line of HELP) console.log(line);
+    break;
+  }
+
   case 'areas': {
     const everything = summariseAreas(index, AREAS, flows);
     const summaries = all
@@ -103,7 +158,7 @@ switch (command) {
       console.log("locales, feature flags. Not user capabilities: 'pnpm catalog --all'.)");
       console.log('');
     }
-    console.log('Next: pnpm catalog area <id>   |   pnpm catalog search "<task>"');
+    console.log('Next: pnpm catalog area <id>   |   pnpm catalog flows   |   pnpm catalog help');
     break;
   }
 
@@ -264,7 +319,7 @@ switch (command) {
 
   default:
     console.error(
-      `Unknown command "${command}". Try: areas, area <id>, show <id>, search "<task>", flows, flow <id>.`,
+      `Unknown command "${command}". Run "pnpm catalog help" for what this tool does.`,
     );
     process.exit(1);
 }
