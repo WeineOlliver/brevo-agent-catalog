@@ -63,6 +63,6 @@ console.log(
 if (index.operations.length !== 292 || pathCount !== 208) {
   console.warn(
     `\nNOTE: the design recorded 292 operations across 208 paths. Brevo has changed its ` +
-      `specification since — record the new figures in docs/gaps.md rather than quietly accepting them.`,
+      `specification since — record the new figures in docs/NOTES.md rather than quietly accepting them.`,
   );
 }

@@ -158,7 +158,7 @@ while (queue.length > 0 && visited.size < maxRoutes) {
 
 await browser.close();
 
-// The route inventory feeds docs/modules.md, where routes that produced no
+// The route inventory records which routes produced no
 // action are listed explicitly as the honest coverage boundary.
 mkdirSync(config.paths.data, { recursive: true });
 writeFileSync(

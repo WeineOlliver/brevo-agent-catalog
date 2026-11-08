@@ -63,18 +63,15 @@ performed, your answer is how it is done in the product, not a request you send.
 
 Entries record the internal endpoint the app calls, as the evidence that the
 capability is real. They deliberately do **not** record which host serves it, so
-they are not callable, and that is a known gap rather than an oversight — see
-[docs/gaps.md](docs/gaps.md).
+they are not callable, and that is a known gap rather than an oversight.
 
 ## If you are working on the repository rather than answering from it
 
-Read [README.md](README.md) first, then
-[docs/decisions.md](docs/decisions.md) — 16 decisions with what was rejected and
-what it cost. Before changing anything, know that:
+Read [README.md](README.md), then [docs/NOTES.md](docs/NOTES.md). Before
+changing anything, know that:
 
-- `actions/index.json`, `flows/index.json` and `docs/modules.md` are generated.
-  Edit the pipeline, never the output: `pnpm build:index`, `pnpm build:flows`,
-  `pnpm build:docs`.
+- `actions/index.json` and `flows/index.json` are generated. Edit the pipeline,
+  never the output: `pnpm build:index`, `pnpm build:flows`.
 - `pnpm validate` is the gate — schema, cross-references at zero, flows
   re-derived from their captures, every action in exactly one area.
 - `pnpm scan` is the leak gate and runs before any push.

@@ -21,7 +21,6 @@
     "build:index": "tsx scripts/build-index.ts",
     "verify": "tsx scripts/verify.ts",
     "eval": "tsx scripts/eval-selection.ts",
-    "build:docs": "tsx scripts/build-modules-doc.ts",
     "scan": "tsx scripts/scan-secrets.ts",
     "normalize": "tsx scripts/normalize-catalog.ts",
     "explore": "tsx scripts/explore.ts",

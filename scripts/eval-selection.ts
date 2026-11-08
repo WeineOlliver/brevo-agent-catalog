@@ -2,7 +2,7 @@
  * Stage 7 — can a model actually find the right action?
  *
  * Reports a score and every failure. Each failure is a description that needs
- * fixing; re-run after fixing and record both numbers in docs/eval.md. The
+ * fixing; re-run after fixing and record both numbers in docs/NOTES.md. The
  * before/after pair is the most informative line in the whole write-up.
  *
  * Defaults to Claude, unlike extraction, which defaults to Groq. Decision #3
@@ -105,7 +105,7 @@ if (unscoreable.length > 0) {
   console.log(
     `${unscoreable.length} task(s) expect an action id that is not in the catalog — not scored:\n` +
       unscoreable.map((t) => `  ${t.expectedActionId}  ("${t.prompt}")`).join('\n') +
-      '\nEither the catalog is missing that action (a coverage gap worth recording in docs/gaps.md),\n' +
+      '\nEither the catalog is missing that action (a coverage gap worth recording in docs/NOTES.md),\n' +
       'or the expected id in data/eval-tasks.json needs correcting to match the real catalog.\n',
   );
 }
