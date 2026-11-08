@@ -78,8 +78,10 @@ Two findings changed how I'd describe this problem, and both only appeared once
 the pipeline ran against a real account.
 
 **The public API and the product are different APIs.** Not overlapping subsets —
-different. 2 of 126 captured endpoints map onto an operation in Brevo's published
-spec. The app runs on ~20 internal microservices the public `/v3` surface does
+different. **0 of 197** catalogued endpoints map onto an operation in Brevo's
+published spec. The earlier, smaller catalog managed 2 of 126; tripling the
+capture and adding every write flow did not add one. The overlap is not small
+because coverage was thin. The app runs on ~20 internal microservices the public `/v3` surface does
 not wrap. The brief's premise is not a hypothetical about legacy systems; it is
 true of a modern SaaS product with a well-documented API.
 
@@ -95,16 +97,27 @@ only reconnaissance.
 The second finding is also the clearest argument for having built the eval. A
 coverage count would have reported 118 actions and read as success.
 
+**And the mechanism that fixed it was not more engineering.** Four hand-driven
+DevTools recordings, about fifteen minutes each, imported through the same
+pipeline, took the capture from 3 097 requests to 38 132 and the write endpoints
+from 4 to 38. `parseHar` had been written and tested in the first week and had no
+caller; it became the stage that mattered most. The selector work that was meant
+to do this job reached two of six target routes. Knowing which of your own
+components is load-bearing is apparently not something design tells you — the
+measurement did.
+
 ## Current state
 
-The pipeline is complete and tested — 421 tests, strict TypeScript, clean
+The pipeline is complete and tested — 461 tests, strict TypeScript, clean
 typecheck, leak gate clean across every tracked file. It has run end to end
-against a live account: 38 routes crawled, 3097 requests captured and sanitized,
-136 actions catalogued, validated and indexed, and a selection eval scored at
-2 of 3 scoreable tasks.
+against a live account: 38 routes crawled plus four hand-driven HAR sessions,
+38 132 requests captured and sanitized, 197 actions catalogued, validated and
+indexed, and a selection eval scored at **17 of 19 scoreable tasks**.
 
-Four writes are on the wire, `contacts.create_contact` among them with a real
-request body and a `200` returning a `contact_id`. What is missing is the rest
-of the write coverage described above. No document here reports a
+Every one of the 38 distinct write endpoints in the capture has a catalog entry,
+including the irreversible `POST /marketing-campaign/api/campaign/2/send-now`
+that returned 204, and the 5-call campaign machine and 3-call CSV import wizard
+behind it. What is missing is `verified`, which is still 0, and sender creation.
+No document here reports a
 number it has not measured; the ones that look bad are in
 [gaps.md](gaps.md) and [eval.md](eval.md) rather than omitted.

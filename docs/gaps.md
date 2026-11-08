@@ -2,48 +2,86 @@
 
 What this does not do, stated plainly, and what more time would buy.
 
-## The catalog is still mostly read actions
+## The write surface is covered; the read surface is still the bulk of it
 
-This is the largest gap by far, and it is measured rather than suspected.
+This was the largest gap and is now the smallest. It is worth keeping the before
+and after side by side, because the fix was not more engineering.
 
-136 catalogued actions from 3097 captured requests, of which **4 are writes**:
-`contacts.create_contact`, `contacts.add_contact_to_lists`,
-`account.enable_sms_campaigns_app` and `lists.sync_list_counts`. The rest are 85
-`get` and 36 `list`. Of the eval's 20 tasks, 17 name an action that does not
-exist here, and nearly all of those are writes.
-
-The cause is no longer a missing login — that happened, and the write passes have
-run three times. The cause is that **driving writes by selector only works on
-flat forms.** Reconnaissance over the six targeted routes measured it:
-
-| Route | What a create control opens | Usable by a pass? |
+| | Before the HAR sessions | Now |
 |---|---|---|
-| `/contact/list` | dialog, `email` field, submit `Create` | yes |
-| `/contact/list-listing` | dialog, `create-listName` field | yes |
-| `/contact/segment` | navigates to a multi-step builder | no |
-| `/campaigns/listing` | channel split-button, no create control matched | no |
-| `/templates/listing` | opens the drag-and-drop editor | no |
-| `/settings/senders` | error page — the route is wrong | no |
+| Captured records | 3 097 | 38 132 across 65 files |
+| Catalogued actions | 136 | 197 across 62 modules |
+| Distinct write endpoints in the capture | 4 | 38 |
+| Write endpoints with a catalog entry | 4 | 38 |
+| Eval tasks naming an action that exists | 3 of 20 | 19 of 20 |
 
-Two of six. Each wizard is hours of selector work that breaks on Brevo's next
+**Driving writes by selector only worked on flat forms.** Reconnaissance over six
+targeted routes measured two of six usable: a segment builder, a campaign
+split-button, the drag-and-drop template editor and a wrong senders route all
+defeated it. Each wizard is hours of selector work that breaks on Brevo's next
 release, and a person performs the same flow in about thirty seconds.
 
-**So the remaining coverage comes from `pnpm import:har`.** Perform the actions
-in your own browser with DevTools recording, export the HAR, and the same
-sanitize → extract → normalize path ingests it. No login timeout, no selectors,
-no locale. `parseHar` had been tested since the first week and had no caller;
-it is now the stage that matters most.
+So the coverage came from `pnpm import:har`: four hand-driven DevTools recordings
+of about fifteen minutes each, exported and fed through the same sanitize →
+extract → normalize path. No login timeout, no selectors, no locale. `parseHar`
+had been tested since the first week and had no caller; it became the stage that
+mattered most.
 
-Until that session happens:
+What is left is a real but narrower shape problem. Of 197 entries, 104 are `get`
+and 43 are `list`; 30 carry a mutating or flow verb, and **7 are destructive.**
+That ratio is honest about Brevo rather than about the method: a marketing app
+reads far more than it writes, and a fifteen-minute session touching four
+screens loads dozens of panels per form submitted.
 
-- the catalog maps Brevo's read surface well and its write surface barely;
-- no entry is `verified`, because verification needs a recipe per action and
-  only `create_contact` has the captured evidence to build one from.
+Two things the sessions did not get:
+
+- **Sender creation.** The only eval task with no answer in the catalog. The
+  flow was deferred and never demonstrated, so there is no entry, and the eval
+  reports it as a coverage gap every run rather than being quietly satisfied by
+  a near miss.
+- **`verified` is still 0.** Every entry is `observed`. Verification needs a
+  replay recipe per action, and asserting a catalog is correct because a model
+  drafted it from traffic it saw is exactly the claim this project exists to
+  distrust.
+
+## Descriptions cite action ids that do not exist
+
+Measured, and the cause is in our own prompt rather than in the model.
+
+**41 invented action ids, cited 42 times.** The extraction prompt asked each
+description to "name the neighbouring action to use instead", while drafting
+every candidate in isolation with no list of which ids exist. So the model
+guessed plausible ones. An agent that reads "Use `contacts.import_contacts`
+instead" and looks it up finds nothing.
+
+The schema cannot catch this: an invented id is a well-formed string in a field
+allowed to hold any text. So two changes, neither of which is a hand-edit of 42
+descriptions:
+
+- the prompt now asks for the neighbour **by what it does**, in words, because
+  an id the drafter cannot verify is worth less than a phrase an agent can
+  search the index for;
+- `pnpm validate` counts them every run and fails if the count goes **up**. It
+  is a ratchet, not an allowance — a measured defect that cannot grow back while
+  nobody is looking.
+
+Clearing the existing 42 needs a re-draft of the affected entries, which costs
+provider quota and has not been spent. The count is the honest status.
+
+A first naive scan of this reported 47 ids and 52 citations. The real figures are
+41 and 42; the difference is a rule that only counts a citation whose module
+prefix is a module the catalog actually has, without which prose like
+"appended to `document.head`" scores as a missing action. The gap between the
+two numbers is the point: a checker is only as good as its false-positive rate,
+and the first number quoted was its own kind of wrong.
 
 ## The public API barely overlaps the product
 
-Also measured, and the single most interesting finding here: **2 of 126**
-captured endpoints map onto an operation in Brevo's published OpenAPI spec.
+Also measured, and the single most interesting finding here: **0 of 197**
+catalogued endpoints map onto an operation in Brevo's published OpenAPI spec.
+The earlier, smaller catalog managed 2 of 126; tripling the capture and adding
+every write flow did not add one more. The overlap is not small because coverage
+was thin. It is small because these are different APIs.
 
 Brevo's web app talks to roughly twenty internal microservices —
 `contacts-api`, `crm-backend-api`, `segments-api`, `workflow-apis`,
@@ -120,22 +158,27 @@ than `free` with suspicion.
 
 ## What more time would buy, in order
 
-1. **One recorded HAR session.** Perform the twenty flows the eval names, once,
-   by hand, and ingest the log. This is not a refinement: it is the difference
-   between a read-only map and a catalog of business actions, and it reaches the
-   wizards no selector pass can. Everything below matters less than this step.
-2. **More write passes for the flat forms only** — attributes, senders, folders.
-   Worth automating where a dialog with a name field exists; not worth it for
-   anything shaped like a wizard, which is what measurement showed most of them
-   are.
-3. **Verification recipes** for whichever write actions step 1 surfaces, chosen
-   by what an agent is most likely to call and what would hurt most if wrong.
-   `create_contact` is the only one with captured evidence to build from today.
-4. **Close the eval loop** — re-run, fix the descriptions it defeats, re-run, and
-   report both numbers. The before/after pair says the pipeline has a working
-   feedback loop, which is a stronger claim than any single score.
-5. **Normalise the module taxonomy further.** 118 actions currently spread across
-   51 modules, many with a single entry (`ui`, `widgets`, `locales`, `countries`).
+~~1. One recorded HAR session.~~ **Done** — four of them, and it was the
+   difference between a read-only map and a catalog of business actions, exactly
+   as predicted. Everything that follows was reordered by what those sessions
+   then showed.
+
+1. **Verification recipes.** The one remaining structural claim this project
+   cannot yet make: `verified` is 0 of 197. Pick by what an agent is most likely
+   to call and what would hurt most if wrong, which after the sessions means
+   `campaigns.send_now` and `contacts.delete_contact` before anything else.
+2. **Re-draft the 42 dangling cross-references** with the corrected prompt, then
+   lower the ratchet in `scripts/validate.ts` to the new count. Mechanical, and
+   it costs provider quota rather than judgement.
+3. **The sender-creation flow**, the eval's one unanswered task. One more
+   fifteen-minute recording closes it.
+4. **Resolve the near-duplicate reads the eval exposed.** It missed "what
+   audience groups do we have" by choosing `contacts.get_lists_and_segments`
+   over `lists.get_lists`, and the catalog holds a third overlapping entry in
+   `segments.get_lists`. Three entries answering one question is a description
+   problem, and the eval found it rather than a reviewer.
+5. **Normalise the module taxonomy further.** 197 actions across 62 modules,
+   many with a single entry (`ui`, `widgets`, `locales`, `countries`).
    Singular/plural pairs are merged automatically; the rest needs a judgement
    call about what counts as a product area.
 6. **An MCP server** over the existing index (decisions #4 explains why it was

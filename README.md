@@ -4,20 +4,21 @@ A catalog of Brevo's **business actions** — everything a user can do by clicki
 around the product — in a form an AI agent can act on without a human checking
 its work first.
 
-> **Status: writes are proven; coverage of them is not.**
-> 38 routes crawled, 3097 requests captured, **136 actions catalogued**, of which
-> **4 are writes** — `contacts.create_contact` among them, carrying its real
-> request body and a `200` that returned a `contact_id`. The selection eval
-> scores **2 of 3 scoreable tasks**; the other 17 of its 20 tasks name actions
-> this catalog does not hold yet, and almost all of those are writes. Nothing is
-> `verified`.
+> **Status: the write surface is catalogued and the eval scores it.**
+> 38 132 requests captured across four hand-driven sessions plus the crawl,
+> **197 actions catalogued** in 62 modules, and **every one of the 38 distinct
+> write endpoints in the capture has an entry.** The selection eval scores
+> **17 of 19 scoreable tasks**; the 20th names sender creation, which was never
+> demonstrated, and the eval reports that as a coverage gap on every run rather
+> than being satisfied by a near miss. Nothing is `verified`.
 >
-> Reconnaissance measured why the automated ceiling is low: of the six routes the
-> write passes target, two are flat forms and four are multi-step wizards or dead
-> URLs. Driving a wizard by selector costs hours per flow; a person does it in
-> thirty seconds. So the remaining coverage comes through
-> `pnpm import:har` — perform the flow once in your own browser, export the
-> network log, and the same extraction pipeline ingests it. See
+> Reconnaissance measured why the automated ceiling was low: of the six routes
+> the write passes target, two are flat forms and four are multi-step wizards or
+> dead URLs. Driving a wizard by selector costs hours per flow and breaks on the
+> next release; a person does it in thirty seconds. So the coverage came through
+> `pnpm import:har` instead — perform the flow once in your own browser, export
+> the network log, and the same sanitize → extract → normalize pipeline ingests
+> it. That is how the write count went from 4 to 38. See
 > [docs/gaps.md](docs/gaps.md) and [docs/eval.md](docs/eval.md) — every number in
 > this repository is measured, and the uncomfortable ones are stated first.
 

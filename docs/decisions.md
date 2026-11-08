@@ -271,6 +271,30 @@ rule also fails in the opposite direction: `create_contact` mutates and is safe
 most dangerous action in the product, because it mails real people and has no
 undo. "Not a read" and "destructive" are not the same question.
 
+Measured a third time once the hand-driven HAR sessions tripled the write
+set. 163 of 168 ids classified; the five that fell through to the fail-safe
+draft were worth the look, and they split three ways:
+
+- Two were reads shipping as destructive, the original bug in a new costume.
+  `POST /import/suggest-mapping-from-file` returns a proposed CSV column
+  mapping and imports nothing, and `segments.paginated_count` is a count. So
+  `find` and `suggest` joined the read verbs.
+- One was right only by luck. `POST /contact/backend/actions/list` is a
+  dispatcher whose payload names the operation — the entry itself says "e.g.,
+  delete contacts from a list" — and no name can classify that, so `bulk`
+  escalates. The drafted flag had been correct; a different draft would not
+  have been, and luck is not a safety property.
+- One needed the whole-name scan rather than a new rule.
+  `contacts.link_unlink_company` is one endpoint doing both halves, so `link`
+  is reversible and `unlink` is not, and the id escalates on its worse half.
+
+`segments.paginated_count` was fixed by **renaming** it to
+`segments.count_paginated`, not by teaching the rule to find a verb in third
+position. The rule still returns null for a verb that is not first, and the
+test asserting that is still there: an id whose verb is buried is a naming
+defect, and the fix for a naming defect is the name. Parsing English here
+would make every future mis-named action a silent safety guess.
+
 The account under test is disposable, which removes the risk from *our* clicking
 but not from the flag: the catalog is the contract the final product maps, so the
 flag has to be true of Brevo regardless of which account observed it.
@@ -290,3 +314,57 @@ flag has to be true of Brevo regardless of which account observed it.
    having an active workflow, which is not a property of the action; the right
    home for it is `side_effects`, not the flag. This is the clearest known hole
    in the rule.
+
+## 13. The eval's expected ids are reconciled against the catalog, never against the model's answer
+
+**Decision:** When an eval task names an action id the catalog does not have,
+the id is corrected to the entry that the *captured traffic* proves answers the
+prompt. It is never corrected to whatever the selector happened to choose.
+
+**Why this needed stating:** The fixture was written before the catalog existed,
+with ids following the `module.verb_object` convention as a guess. After
+extraction, 12 of 20 named nothing. That is the planned step — the fixture's own
+note said the ids "must be reconciled against the real catalog after
+extraction" — but it is also the single easiest place in this project to cheat,
+and the cheat is invisible in the final number.
+
+So the rule is the source of the correction, not the direction of it. Each of the
+11 reconciled ids is justified by the catalog entry or the request body:
+
+| Guessed | Corrected to | Evidence |
+|---|---|---|
+| `campaigns.send_campaign` | `campaigns.send_now` | `POST /marketing-campaign/api/campaign/:id/send-now`, the irreversible send |
+| `contacts.import_contacts` | `contacts.analyze_import_file` | first call of the 3-step wizard; `save_import_mapping` needs its output |
+| `campaigns.get_campaign_report` | `campaigns.get_campaign_stats` | per-campaign open/click counters; `get_statistics` is a date-range aggregate |
+| `contacts.unsubscribe_contact` | `contacts.update_contact` | the capture sends `emailBlacklisted: true` to `PATCH /contact/backend/contacts/update` |
+| `lists.add_contacts_to_list` | `contacts.bulk_modify_list` | `POST /contact/backend/actions/list` carries `action: ADD_TO_LIST` |
+| 6 others | module renames | normalisation moved the module; same action |
+
+`senders.create_sender` was deliberately **not** reconciled. The flow was never
+demonstrated, so no entry exists, and the eval reports it as a coverage gap on
+every run. Mapping it to a near neighbour would have raised the score by hiding
+the one thing the eval knows that the catalog does not.
+
+**The one widening, and why it is not the cheat it resembles:** `EvalTask` gained
+`acceptableActionIds`, used on exactly one task. Brevo removes a single contact
+from a single list two ways, and the capture holds both on the same contact —
+`PATCH /contact/backend/contacts/update` with `unlinkListIds: [5]` from the
+contact form, and `POST /contact/backend/actions/list` with
+`action: DELETE_FROM_LIST, ids: [3]` from the listing row. The selector chose the
+second; the fixture expected the first. Neither is wrong, so scoring one as a
+miss measures the fixture rather than the catalog.
+
+The guard is that this cannot be done quietly: a pass through an alternative
+prints as `✓ <id> (accepted alternative to <expected>)`, so widening is visible
+in the run output every time it happens.
+
+**Rejected:** Scoring the task as a miss and leaving it. Tempting, because a
+lower number looks more honest. It is not more honest — it is a known-wrong
+measurement kept for appearances, and the next person to read the eval would have
+to rediscover that one of its four misses was never a defect.
+
+**Cost accepted:** `acceptableActionIds` is a mechanism that *could* be used to
+inflate a score, and nothing in the code prevents that. The defences are social
+rather than technical: the bar written into the type's docstring, the printed
+marker, and the fact that the only entry today cites two request bodies.
+

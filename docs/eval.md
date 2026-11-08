@@ -129,6 +129,59 @@ recorded, excluded from the denominator, and always printed —
 `src/eval/selection.ts` separates "the model answered badly", which is scored,
 from "the provider never answered", which is not.
 
+## Results — runs 6 and 7, against the post-HAR catalog
+
+| | Crawl only | + write passes | + id reconciliation | + HAR sessions | + fixture fix |
+|---|---|---|---|---|---|
+| Correct action selected | — | 1 / 1 | 2 / 3 | 15 / 19 | **17 / 19** |
+| Correct inputs | — | 1 / 1 | 1 / 1 | 1 / 1 | 1 / 1 |
+| Scoreable of 20 tasks | 0 | 1 | 3 | 19 | 19 |
+
+The cap moved because the catalog did: 12 of the 20 expected ids had named
+actions that did not exist, and 11 of those capabilities turned out to exist
+under another id. Reconciling them is the step the fixture's own note always
+called for, and the rule governing it — correct against the captured traffic,
+never against what the selector chose — is decision #13.
+
+Three things these two runs caught, and one of them was mine:
+
+1. **A miss that was provider flakiness.** Run 6 scored *"put everyone from the
+   Black Friday list into the VIP list too"* as a miss with `(nothing
+   parseable)`. Run 7 passed it with no change to the catalog or the fixture.
+   Had the output not separated "answered badly" from "never answered", the
+   tempting move would have been to rewrite a description that was never at
+   fault. The fix for a flaky result is a second run, not a patch.
+
+2. **A task with two correct answers, and my expectation was one of them.** For
+   *"take maria off the Black Friday list but keep her in Brevo"* the fixture
+   expected `contacts.update_contact` and the model chose
+   `contacts.bulk_modify_list`. The capture holds **both**, on the same single
+   contact: `PATCH /contact/backend/contacts/update` with `unlinkListIds: [5]`
+   from the contact form, and `POST /contact/backend/actions/list` with
+   `action: DELETE_FROM_LIST, ids: [3]` from the listing row. Scoring either as
+   wrong measures the fixture. `acceptableActionIds` exists for this, it is used
+   on this one task, and every pass through it prints as
+   `✓ <id> (accepted alternative to <expected>)` so the widening is never quiet.
+
+3. **A miss that is a limit of the eval, not of the catalog.** For *"how did the
+   spring sale email do — opens, clicks, that sort of thing"* the model chose
+   `campaigns.list_campaigns` over `campaigns.get_campaign_stats`. The stats
+   entry's own description ends *"use the campaign listing action first if you
+   still need to discover campaign IDs"* — and the prompt names the campaign by
+   name, not id. So the model followed the catalog's guidance correctly, and its
+   answer is the right **first** action for a two-step task.
+
+   It stays a miss. The bar for an accepted alternative is that it performs the
+   same user action, and `list_campaigns` returns no open or click counters: it
+   is a prerequisite, not an equivalent. The honest reading is that a one-shot
+   selection eval cannot score a two-step task fairly, which is a property of
+   this harness worth knowing before anyone reads 17/19 as a ceiling.
+
+What neither run caught, and measurement did: 41 invented action ids cited 42
+times across the descriptions. The eval cannot see those, because it scores the
+action a model picks rather than the guidance it reads on the way. That gap is
+why `pnpm validate` now counts them. See [gaps.md](gaps.md).
+
 ## What the failures will mean
 
 Three distinct causes, worth separating when reading the output:
