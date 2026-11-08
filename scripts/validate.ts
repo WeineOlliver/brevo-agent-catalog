@@ -11,6 +11,22 @@ import { join } from 'node:path';
 import 'dotenv/config';
 import { loadConfig } from '../src/config.js';
 import { validateAction } from '../src/catalog/validate.js';
+import { findDanglingRefs, textOf } from '../src/catalog/crossrefs.js';
+
+/**
+ * Dangling cross-references the catalog is known to carry.
+ *
+ * This number may only ever go DOWN. It is not a target and not an allowance:
+ * it is a ratchet, so a defect that is already measured cannot grow back while
+ * nobody is looking. The schema cannot catch these, because an invented id is
+ * a well-formed string in a field allowed to hold any text.
+ *
+ * The cause was the extraction prompt asking each description to name the
+ * neighbouring action by id while drafting that entry in isolation, with no way
+ * to know which ids exist. The prompt now asks for the neighbour by what it
+ * does, so re-drafting is what actually clears this.
+ */
+const KNOWN_DANGLING_CITATIONS = 42;
 
 const config = loadConfig();
 const dir = config.paths.actions;
@@ -61,3 +77,45 @@ if (failed > 0) {
 }
 
 console.log(`${files.length} action file(s) valid against ${'schema/action.schema.json'}`);
+
+// Cross-references, which the schema cannot see. Reported every run, because a
+// description that sends an agent to an id with nothing behind it is a
+// Reliability defect whether or not it trips the ratchet.
+const texts = files.map((file) => {
+  const action = JSON.parse(readFileSync(join(dir, file), 'utf8')) as Record<string, unknown>;
+  return { id: String(action.id), module: String(action.module), text: textOf(action) };
+});
+
+const dangling = findDanglingRefs(texts);
+const citations = [...dangling.values()].reduce((n, from) => n + from.length, 0);
+
+if (dangling.size === 0) {
+  console.log('no dangling action cross-references');
+} else {
+  console.log('');
+  console.log(
+    `${dangling.size} invented action id(s) cited ${citations} time(s) in descriptions` +
+      ' — an agent that follows one finds nothing:',
+  );
+  const worst = [...dangling].sort((a, b) => b[1].length - a[1].length).slice(0, 10);
+  for (const [citation, from] of worst) {
+    console.log(`  ${citation}  cited by ${from.length}: ${from.slice(0, 3).join(', ')}`);
+  }
+  if (dangling.size > 10) console.log(`  … and ${dangling.size - 10} more`);
+}
+
+if (citations > KNOWN_DANGLING_CITATIONS) {
+  console.error('');
+  console.error(
+    `FAIL: dangling citations went up, ${KNOWN_DANGLING_CITATIONS} -> ${citations}.` +
+      ' Refer to a neighbouring action by what it does, not by an id.',
+  );
+  process.exit(1);
+}
+
+if (citations < KNOWN_DANGLING_CITATIONS) {
+  console.log(
+    `ratchet: citations are down to ${citations} from ${KNOWN_DANGLING_CITATIONS} —` +
+      ' lower KNOWN_DANGLING_CITATIONS in scripts/validate.ts to hold the gain.',
+  );
+}

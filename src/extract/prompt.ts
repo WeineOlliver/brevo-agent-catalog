@@ -26,9 +26,17 @@ Fields, all required:
 - id: snake_case "module.verb_object", e.g. "contacts.create_contact".
 - module: the product area, lower case, e.g. "contacts", "campaigns", "lists".
 - name: a short human label, e.g. "Create contact".
-- description: WRITTEN FOR AN AGENT. State when to call this action, and name the
-  neighbouring action to use instead when it would be the better fit. Begin with
-  "Call this when...". Never restate what the HTTP request does.
+- description: WRITTEN FOR AN AGENT. State when to call this action, and point
+  at the neighbouring capability to use instead when it would be the better
+  fit. Begin with "Call this when...". Never restate what the HTTP request
+  does.
+
+  Refer to that neighbour by what it DOES, in words — "the action that creates
+  a contact" — never by an id like "contacts.create_contact". You are drafting
+  this entry alone and cannot see which ids exist, so an id here is a guess.
+  The first run guessed 41 distinct ids that were not in the catalog, cited 42
+  times, each one a dead end for an agent that followed it. A phrase an agent
+  can search the index for is worth more than an id it cannot resolve.
 - preconditions: array of strings. What must already be true for the call to
   succeed, e.g. "The list must already exist." Say nothing you cannot support
   from the evidence. An empty array is better than an invented precondition.
