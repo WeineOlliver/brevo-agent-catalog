@@ -34,8 +34,12 @@ the pipeline starts in a browser instead of in a specification.
 | 3 | A second capture source (HAR import) | The crawl depends on a session Brevo can refuse at any moment. Cheap to build early, impossible to retrofit late |
 | 4 | The eval | "Designed for agents" is a claim. A score against tasks phrased the way a user would phrase them is a measurement |
 
-Deliberately **not** done: an MCP server (decision #4), and execution at runtime.
-The catalog describes actions; it does not perform them.
+| 5 | The groupings, after the catalog existed | 62 URL-derived modules are the wrong boxes for a person, and nine areas are only arguable once you can see what is in them (#14) |
+| 6 | Flows, derived from the capture rather than written | The order is already recorded in the traffic; authoring it would have been the one part of this repository with no evidence behind it (#15) |
+
+Deliberately **not** done: an MCP server (decision #4), a retrieval layer
+(#16), and execution at runtime. The catalog describes actions; it does not
+perform them.
 
 ## What running it taught
 
@@ -100,9 +104,12 @@ Node 20+ and pnpm. `pnpm install` first.
 | `pnpm verify` | Execute chosen actions, stamp `verified` | a saved session |
 | `pnpm eval` | Score whether a model picks the right action | a catalog index |
 | `pnpm fix:crossrefs` | Rewrite prose citing ids that do not exist | a catalog + a provider |
+| `pnpm build:flows` | Re-derive `flows/index.json` from the captures | clean captures + a catalog |
+| `pnpm catalog` | Read the catalog as an agent would: areas, area, show, search, flow | a catalog index |
+| `pnpm bench:search` | Score the CLI search against the eval's tasks, with no model | a catalog index |
 | `pnpm build:docs` | Regenerate [modules.md](modules.md) | a catalog index |
 | `pnpm scan` | **Leak gate.** Run before any push | nothing |
-| `pnpm test` / `pnpm typecheck` | 470 tests, strict TypeScript | nothing |
+| `pnpm test` / `pnpm typecheck` | 517 tests, strict TypeScript | nothing |
 
 `captures/clean/` is committed, so everything from `extract` onward runs offline.
 The capture stages need a Brevo account of your own.

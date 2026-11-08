@@ -239,7 +239,7 @@ checked against the git history before the first push.
 
 | Doc | For |
 |:--|:--|
-| [decisions.md](docs/decisions.md) | 13 decisions, what we rejected, what it cost |
+| [decisions.md](docs/decisions.md) | 16 decisions, what we rejected, what it cost |
 | [gaps.md](docs/gaps.md) | What is broken and what more time buys |
 | [eval.md](docs/eval.md) | Every eval run, including the failures |
 | [ai-usage.md](docs/ai-usage.md) | How the models were used and what they got wrong |

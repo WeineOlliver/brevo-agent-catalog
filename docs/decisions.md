@@ -19,6 +19,9 @@ list of claims.
 | 11 | Interaction is the coverage mechanism; crawling is reconnaissance | [read](#11-interaction-is-the-coverage-mechanism-crawling-is-reconnaissance) |
 | 12 | Risk is a fact about the product, not about the HTTP method | [read](#12-risk-is-a-fact-about-the-product-not-a-property-of-the-http-method) |
 | 13 | Eval expectations are reconciled against the capture, never the model | [read](#13-the-evals-expected-ids-are-reconciled-against-the-catalog-never-against-the-models-answer) |
+| 14 | Two groupings: modules for the capture, areas for people | [read](#14-two-groupings-modules-for-reading-the-capture-areas-for-finding-a-feature) |
+| 15 | Flows are derived from the capture, never authored | [read](#15-flows-are-derived-from-the-capture-never-authored) |
+| 16 | No retrieval layer, because the index fits in a prompt | [read](#16-no-retrieval-layer-because-the-whole-index-fits-in-a-prompt) |
 
 Each section carries what it cost. If you read one, read #12 — it is the only
 one that reversed an earlier decision after measurement.
@@ -392,3 +395,109 @@ inflate a score, and nothing in the code prevents that. The defences are social
 rather than technical: the bar written into the type's docstring, the printed
 marker, and the fact that the only entry today cites two request bodies.
 
+
+---
+
+## 14. Two groupings: modules for reading the capture, areas for finding a feature
+
+**Decision:** Keep `module`, and add `area`. Every action carries both. Modules
+stay as they are — derived from the first segment of the internal URL — and nine
+areas named after what a person does in the app are stamped onto every index
+entry from a table in `src/catalog/areas.ts`.
+
+**Why this needed stating:** The module grouping looked like a taxonomy and was
+not one. 62 modules hold 197 actions, **34 of them hold exactly one**, and the
+single act of sending a campaign crosses `email_campaigns`, `editor` and
+`marketing_campaign`. Nobody asks for a feature by hostname. But modules are not
+wrong either — they are exactly right for reading a capture, where the question
+is which service answered. Two questions, two axes.
+
+**Rejected: replacing modules with areas.** It would have destroyed the only
+grouping that matches the evidence, and every `module` in every entry, doc and
+generated listing traces back to a URL that really was called.
+
+**Rejected: asking a model to assign the areas.** Naming is a judgement, and a
+judgement belongs somewhere it can be argued with and diffed. The table is 60
+lines and reads as an opinion, which is what it is.
+
+**The rule that makes it a grouping rather than a label:** a module with no area
+is fatal in `buildIndex` and fails `pnpm validate`. It does not fall into the
+catch-all. A catch-all that fills itself becomes the largest box in the taxonomy
+without anyone choosing that, and the first new module would have started it.
+
+**Cost accepted:** Two groupings is two things to keep straight, and the
+`platform` area is a judgement call about 27 entries that someone could
+reasonably draw differently — `settings.list_timezones` is a static reference
+list that a form genuinely needs. The 23-versus-27 correction in
+[gaps.md](gaps.md) is what that costs when it is done by hand instead.
+
+---
+
+## 15. Flows are derived from the capture, never authored
+
+**Decision:** A flow names a capture file and a time window, and its steps are
+the write calls Brevo's UI made inside that window, in that order. `pnpm
+validate` re-derives every flow and fails on any difference. The prose — what
+the flow is for, why each step exists — is written by hand.
+
+**Why this needed stating:** The catalog's remaining selection misses are both
+tasks that take more than one call, and on both the model reached for the
+listing action that would have been step one. It was not choosing badly; the
+catalog had no way to say *this is step 8 of 8*. The fix is ordering, and
+ordering is the easiest thing in this repository to invent convincingly.
+
+**Rejected: writing the step lists by hand.** It would have been faster and it
+would have produced the only artefact here with no evidence behind it. A flow
+that is a story someone remembers about the product is worse than no flow,
+because it reads exactly like one that was observed.
+
+**Rejected: a schema field for "step N of M" on each action.** An action belongs
+to more than one flow, and a number on an entry cannot say which.
+
+**Two judgements inside the derivation, named in the code rather than hidden:**
+the contacts grid reloads itself after every mutation through `/segment/count`,
+`/segment/query` and `/segment/paginated_count` — writes only because Brevo
+reads over POST — and three consecutive `PATCH /contacts/update` are one person
+filling three fields. Both are filtered, and both are arguable.
+
+**Cost accepted:** Three flows cover 16 steps. The capture holds more, and each
+one still needs a human to pick the window and write the reasons, so the set
+grows by hand even though the steps do not. A flow also breaks if Brevo reorders
+its own wizard — which is the gate working, not the gate failing.
+
+---
+
+## 16. No retrieval layer, because the whole index fits in a prompt
+
+**Decision:** `pnpm catalog` narrows by browsing — areas, then an area listing,
+then one entry — and the recommended path hands the model names it can see. The
+lexical `search` subcommand exists, is weak, and says so in its own output. No
+embeddings, no BM25 index, no reranker.
+
+**Why this needed stating:** Building retrieval is the obvious instinct, and
+here it is measurably the wrong one. The whole index is **18 519 tokens**,
+against published guidance putting the line for skipping retrieval at roughly
+200 000. And the measurement agrees with the guidance rather than contradicting
+it: a model reading all 197 entries finds the answer **15 of 19** times, while
+the lexical search puts it in the top three **5 of 19** times
+(`pnpm bench:search`, which costs nothing to run because no model is involved).
+
+The reason a lexical layer cannot close that gap is the eval's own first rule: a
+task never reuses the catalog's wording, so *"I need a new audience group"* has
+to reach `lists.create_list` without sharing a word with it. Bridging vocabulary
+is what the model is for.
+
+**Rejected: embeddings now.** It would add a dependency and an index-build step
+to beat a baseline that is already winning, and the repository's constraint is
+that everything after capture runs offline.
+
+**Rejected: deleting the search subcommand.** A weak tool that reports its own
+weakness is more useful than no tool, and the benchmark only exists because the
+search does.
+
+**Cost accepted:** Reading everything is ~18 500 input tokens per decision, and
+that scales with how often an agent decides, where retrieval would be flat.
+Prompt caching defers the problem rather than solving it. [gaps.md](gaps.md) has
+the upgrade shape — hybrid BM25 plus dense, fused by Reciprocal Rank Fusion at
+k=60, reranked to 3–5, exposed as a search meta-tool — with sources, so the
+answer to *"what if it scales?"* is written down rather than improvised.
