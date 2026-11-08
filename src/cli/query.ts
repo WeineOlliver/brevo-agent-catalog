@@ -21,6 +21,8 @@
  * fixing rather than a listing worth enlarging.
  */
 
+import { isRead } from '../catalog/risk.js';
+
 export type IndexEntry = {
   id: string;
   module: string;
@@ -61,6 +63,31 @@ export type AreaSummary = {
   destructive: number;
   /** Flows whose steps land mostly in this area, so the next hop is visible. */
   flows: string[];
+  /**
+   * A few capability names, so the reader can tell whether what they want is
+   * in here without opening it.
+   *
+   * A count and a sentence are not enough to route on: "38 things, compose and
+   * send marketing messages" does not answer "can I schedule one for Friday".
+   * Three names do.
+   *
+   * Chosen deterministically rather than alphabetically, because the first
+   * three ids in a module are an accident of naming. Flow steps come first —
+   * they are the canonical journeys through the area — then anything
+   * irreversible, which is what a reader most needs to know exists, then the
+   * rest in id order to fill the gap.
+   */
+  examples: string[];
+  /**
+   * How many of them change something, and how many only look.
+   *
+   * The decisive fact for the question this catalogue answers, and it was
+   * missing. `automation` holds 6 entries and every one of them is a read:
+   * an agent can tell someone what their automations are doing and cannot help
+   * them build one. "6 things" hides that; "6, all read-only" is the answer.
+   */
+  canChange: number;
+  canSee: number;
 };
 
 export type AreaListing = {
@@ -157,6 +184,15 @@ export function summariseAreas(
       )
       .map((flow) => flow.id);
 
+    const inFlows = new Set(
+      flows.flows.flatMap((flow) => flow.steps.map((step) => step.action_id)),
+    );
+    const ranked = [
+      ...entries.filter((entry) => inFlows.has(entry.id)),
+      ...entries.filter((entry) => !inFlows.has(entry.id) && entry.destructive),
+      ...entries.filter((entry) => !inFlows.has(entry.id) && !entry.destructive),
+    ];
+
     return {
       id: area.id,
       name: area.name,
@@ -164,8 +200,54 @@ export function summariseAreas(
       count: entries.length,
       destructive: entries.filter((entry) => entry.destructive).length,
       flows: related,
+      examples: ranked.slice(0, 3).map((entry) => entry.name),
+      canChange: entries.filter((entry) => !isRead(entry.id)).length,
+      canSee: entries.filter((entry) => isRead(entry.id)).length,
     };
   });
+}
+
+/**
+ * The opening answer: how many things a user can do, and where they live.
+ *
+ * This is the first thing an agent reads, and its only job is to route the
+ * next question. So each area carries the human name, the count, how many of
+ * them cannot be undone, a sentence on what the area is for, three real
+ * capability names as anchors, and the command for going in.
+ */
+export function renderAreas(summaries: AreaSummary[], total: number): string[] {
+  const lines: string[] = [];
+  const change = summaries.reduce((n, area) => n + area.canChange, 0);
+  const look = summaries.reduce((n, area) => n + area.canSee, 0);
+
+  // The split belongs in the first sentence. "170 things" reads as 170
+  // capabilities; most of them are ways to look at the account, and an agent
+  // that knows the ratio asks a better second question.
+  lines.push(
+    `A user can do ${total} things in this app, across ${summaries.length} areas.`,
+  );
+  lines.push(`${change} of them change something; the other ${look} only look.`);
+
+  for (const area of summaries) {
+    lines.push('');
+    const caution =
+      area.destructive > 0 ? `, ${area.destructive} of them cannot be undone` : '';
+    const split =
+      area.canChange === 0
+        ? `${area.count}, all read-only — nothing here changes anything`
+        : `${area.canChange} to change, ${area.canSee} to look at${caution}`;
+    lines.push(`${area.name}  —  ${split}`);
+    lines.push(`  ${area.does}`);
+    if (area.examples.length > 0) {
+      lines.push(`  for example: ${area.examples.join(' · ')}`);
+    }
+    if (area.flows.length > 0) {
+      lines.push(`  takes more than one step: ${area.flows.join(', ')}`);
+    }
+    lines.push(`  -> pnpm catalog area ${area.id}`);
+  }
+
+  return lines;
 }
 
 export function listArea(index: CatalogIndexFile, areaId: string): AreaListing | null {

@@ -175,6 +175,19 @@ export type RiskVerdict = Risk & {
  * Returns null for an id that does not have one, which is a normalisation
  * problem rather than a risk problem and is left to the caller.
  */
+/**
+ * Does this id's verb only look at something?
+ *
+ * Exported so that "what can a user do here" can separate the things they can
+ * change from the things they can only look at. READ_VERBS stays private and
+ * stays the single source of truth: a second list somewhere else would drift,
+ * and this one is already the thing the risk rule is built on.
+ */
+export function isRead(id: string): boolean {
+  const verb = verbOf(id);
+  return verb !== null && READ_VERBS.has(verb);
+}
+
 export function verbOf(id: string): string | null {
   const local = id.split(".")[1];
   if (local === undefined || local.length === 0) return null;

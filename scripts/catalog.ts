@@ -33,6 +33,7 @@ import {
   findFlow,
   flowsContaining,
   listArea,
+  renderAreas,
   renderBrief,
   search,
   summariseAreas,
@@ -93,14 +94,8 @@ switch (command) {
       emit({ count: shown, areas: summaries, ...(all ? {} : { excluded_plumbing: hidden }) });
       break;
     }
-    console.log(`${shown} things a user can do, in ${summaries.length} areas\n`);
-    for (const area of summaries) {
-      const flagged = area.destructive > 0 ? `, ${area.destructive} destructive` : '';
-      console.log(`${area.id.padEnd(14)} ${String(area.count).padStart(3)}${flagged}`);
-      console.log(`               ${area.does}`);
-      if (area.flows.length > 0) console.log(`               flows: ${area.flows.join(', ')}`);
-      console.log('');
-    }
+    for (const line of renderAreas(summaries, shown)) console.log(line);
+    console.log('');
     if (!all && hidden > 0) {
       console.log(
         `(${hidden} further entries are what the app calls to draw itself — fonts,`,

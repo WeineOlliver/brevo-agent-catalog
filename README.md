@@ -8,7 +8,7 @@
 ![coverage](https://img.shields.io/badge/write%20endpoints-38%2F38-16a34a)
 ![eval](https://img.shields.io/badge/selection%20eval-15%2F19-ca8a04)
 ![verified](https://img.shields.io/badge/verified-3%2F197-ca8a04)
-![tests](https://img.shields.io/badge/tests-528-2563eb)
+![tests](https://img.shields.io/badge/tests-536-2563eb)
 
 </div>
 
@@ -33,7 +33,7 @@ calls, and turns that into a catalog an AI agent can use.
 | Can a model pick the right action? | **15 of 19** tasks (best run 17; see below) |
 | Actually executed and proven | **3** (194 are captured but unproven) |
 | Public API overlap | **0 of 197** ([three values, one record](docs/gaps.md#the-public-api-overlap-0-then-2-then-0-again)) |
-| Tests | **528** |
+| Tests | **536** |
 
 ## How it works
 
@@ -98,7 +98,7 @@ An agent already has a shell, so this is the cheaper half of what an MCP server
 would provide. Every subcommand takes `--json`.
 
 ```bash
-pnpm catalog                                  # 170 things a user can do, in 8 areas
+pnpm catalog                                  # the opening answer, below
 pnpm catalog area contacts                    # 64 names, no prose
 pnpm catalog show contacts.delete_contact     # can they? what does it cost?
 pnpm catalog show contacts.delete_contact --full   # the stored record, with evidence
@@ -106,7 +106,31 @@ pnpm catalog flow erase_contact               # the order, when it takes more th
 pnpm catalog search "someone asked to be deleted"
 ```
 
-A reply opens with the two lines that matter:
+The opening answer routes the next question:
+
+```
+A user can do 170 things in this app, across 8 areas.
+31 of them change something; the other 139 only look.
+
+Contacts and audiences  —  12 to change, 52 to look at, 3 of them cannot be undone
+  Hold the people you market to, and cut them into lists and segments.
+  for example: Add contact to lists · Create contact · Delete contact
+  takes more than one step: onboard_contact, erase_contact
+  -> pnpm catalog area contacts
+
+Automation  —  6, all read-only — nothing here changes anything
+  Run workflows that act on contacts without anyone pressing send.
+```
+
+Three things in there are the answer rather than decoration. **The
+change-versus-look split**, because "170 things" reads as 170 capabilities and
+most are ways to look at the account. **Three real capability names per area**,
+because a count and a sentence cannot tell you whether scheduling a campaign is
+in `campaigns`. And **"all read-only"**, which is how an agent learns it can
+tell someone what their automations are doing but cannot help them build one —
+a fact that was in the data and invisible in the answer.
+
+And a capability opens with the two lines that matter:
 
 ```
 Delete contact  (contacts.delete_contact)
@@ -210,7 +234,7 @@ judgment. Both behind one interface, so the Groq key is optional.
 Node 20+ and pnpm. `pnpm install`, then:
 
 ```bash
-pnpm test          # 528 tests
+pnpm test          # 536 tests
 pnpm validate      # schema + no broken references + flows match their captures
 pnpm build:flows   # re-derive flows/index.json from the captures
 pnpm eval          # can a model pick the right action? (costs provider quota)
