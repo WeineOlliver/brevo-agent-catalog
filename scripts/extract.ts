@@ -28,27 +28,51 @@ function argValue(name: string, fallback: string): string {
 }
 
 /**
- * Three bounds, because one is never enough for a loop over a rate-limited
+ * Four bounds, because one is never enough for a loop over a rate-limited
  * provider. The adapter already caps a single HTTP attempt; these cap the rest:
  *
- * - `CANDIDATE_BUDGET_MS` caps one candidate. Five retries honouring a
- *   `Retry-After` of a minute is five minutes on one entry, with nothing
- *   technically hung.
- * - `--budget` caps the whole stage. A free-tier run that would take hours
- *   stops and says what is left, instead of being discovered hours later.
- * - `--break-after` stops a run whose provider has stopped answering at all.
- *   Grinding through 130 more candidates to relearn that is pure waste.
+ * - `--candidate-budget` caps one candidate, in seconds. Five retries
+ *   honouring a `Retry-After` of a minute is five minutes on one entry, with
+ *   nothing technically hung.
+ * - `--interval` sets the gap between candidates, in seconds.
+ * - `--budget` caps the whole stage, in minutes. A free-tier run that would
+ *   take hours stops and says what is left, instead of being discovered hours
+ *   later.
+ * - `--break-after` stops a run whose provider has stopped answering at
+ *   all. Grinding through 130 more candidates to relearn that is pure waste.
  *
  * Defaults are generous: they exist to make the worst case finite, not to cut
  * a working run short. Nothing here changes what gets drafted.
  */
-const CANDIDATE_BUDGET_MS = 150_000;
 
 const config = loadConfig();
 const providerName = argValue('provider', 'groq');
 const stageBudgetMs = Math.max(1, Number(argValue('budget', '25'))) * 60_000;
 const breakAfter = Math.max(1, Math.trunc(Number(argValue('break-after', '6'))));
 const limit = Number(argValue('limit', '0'));
+
+/**
+ * How long one candidate may take, and how fast candidates are started.
+ *
+ * Both were constants tuned before the real failure mode was known, and the
+ * first guess at that mode was wrong in a way worth recording: the limit that
+ * stops this stage is tokens per DAY, not per minute. Groq's free tier allows
+ * 200k TPD on this model, and the error body says so plainly once it is not
+ * discarded — "on tokens per day (TPD): Limit 200000, Used 199305".
+ *
+ * That distinction decides the remedy. A per-minute limit is paced around; a
+ * daily one is not. The run that proved it spent 3h04m at --interval 15
+ * --candidate-budget 420 to draft 17 candidates and collect 27 identical 429s:
+ * slowing down bought nothing, because every retry drew on a budget that only
+ * refills tomorrow. The "try again in 7m35s" in those messages is the minute
+ * window talking, and following it is how a run burns three hours.
+ *
+ * So these stay flags, for the case where the daily budget is intact and the
+ * minute window is the only thing in the way. Once a run reports TPD, the
+ * answer is --provider claude for the leftovers, or waiting for the reset.
+ */
+const candidateBudgetMs = Math.max(1, Number(argValue('candidate-budget', '150'))) * 1_000;
+const intervalOverrideMs = Number(argValue('interval', '0')) * 1_000;
 const force = process.argv.includes('--force');
 
 function selectProvider(): { provider: LlmProvider; intervalMs: number } {
@@ -74,7 +98,7 @@ function selectProvider(): { provider: LlmProvider; intervalMs: number } {
       apiKey: config.groqApiKey,
       model: config.groqModel,
     }),
-    intervalMs: 2100,
+    intervalMs: intervalOverrideMs > 0 ? intervalOverrideMs : 2100,
   };
 }
 
@@ -189,17 +213,26 @@ for (const candidate of candidates) {
 
   // `withDeadline` does not cancel the work it gives up on — the adapter's own
   // per-attempt signal ends the request. This bounds the wait, not the socket.
+  // Whatever the adapter raised is kept, because "the provider failed" is not a
+  // diagnosis: a 429 is waited out, a 401 ends the run, a bad model is a typo.
+  let providerError: string | null = null;
   const result = await withDeadline(
     limiter(() => draftAction(candidate, operation, provider)),
-    CANDIDATE_BUDGET_MS,
+    candidateBudgetMs,
     null,
-    () => note(`  ! ${candidate.key} — gave up after ${CANDIDATE_BUDGET_MS / 1000}s`),
+    () => note(`  ! ${candidate.key} — gave up after ${candidateBudgetMs / 1000}s`),
+    (error) => {
+      providerError = String(error).split('\n')[0] ?? 'unknown error';
+      note(`  ! ${candidate.key} — ${providerError}`);
+    },
   );
 
   if (result === null) {
     failures.push({
       key: candidate.key,
-      errors: [`no draft within ${CANDIDATE_BUDGET_MS / 1000}s, or the provider failed`],
+      errors: [
+        providerError ?? `no draft within ${candidateBudgetMs / 1000}s — the provider did not answer in time`,
+      ],
       raw: '',
     });
     if (breaker.fail()) {

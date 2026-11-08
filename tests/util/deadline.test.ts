@@ -29,6 +29,28 @@ describe('withDeadline', () => {
     expect(onTimeout).not.toHaveBeenCalled();
   });
 
+  it('hands the caller the error it swallowed', async () => {
+    // Two extraction runs reported "the provider failed" when the adapter had
+    // said "HTTP 429, retry after 60s". The fallback behaviour is deliberate;
+    // losing the reason was not.
+    const onError = vi.fn();
+    const failing = Promise.reject(new Error('Groq request failed with HTTP 429'));
+    expect(await withDeadline(failing, 50, 'fallback', undefined, onError)).toBe('fallback');
+    expect(onError).toHaveBeenCalledTimes(1);
+    expect(String(onError.mock.calls[0]?.[0])).toContain('HTTP 429');
+  });
+
+  it('does not report an error when the work merely timed out', async () => {
+    // The two outcomes have different remedies, so a caller must be able to
+    // tell them apart: a timeout is waited out, a 401 ends the run.
+    const onError = vi.fn();
+    const onTimeout = vi.fn();
+    const never = new Promise<string>(() => {});
+    expect(await withDeadline(never, 10, 'fallback', onTimeout, onError)).toBe('fallback');
+    expect(onTimeout).toHaveBeenCalledTimes(1);
+    expect(onError).not.toHaveBeenCalled();
+  });
+
   it('clears its timer so a finished call cannot hold the process open', async () => {
     const pending = vi.spyOn(global, 'clearTimeout');
     await withDeadline(Promise.resolve('ok'), 50, 'fallback');
