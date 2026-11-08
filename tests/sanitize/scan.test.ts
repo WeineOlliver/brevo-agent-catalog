@@ -75,6 +75,17 @@ describe('scanForLeaks', () => {
   });
 
   it('finds other vendors’ key shapes, which a pasted example would carry', () => {
+    // These are fixtures, not credentials: every body is literally
+    // "abcdefghijklmnopqrstuvwx". They are here because a capture can carry a
+    // pasted example from somebody else's documentation, and the gate should
+    // stop it.
+    //
+    // They also tripped GitHub's own push protection, which blocked the first
+    // push of this repository on a "Stripe API Key" and a "Slack API Token" at
+    // these lines. That is the inherent shape of the problem rather than a
+    // mistake on either side: the test suite of a secret detector is, by
+    // construction, a file full of secret-shaped strings, so it sets off every
+    // other detector that reads it. Resolved as the false positive it is.
     for (const secret of [
       'AKIAIOSFODNN7EXAMPLE',
       'ghp_abcdefghijklmnopqrstuvwxyz0123456789',
