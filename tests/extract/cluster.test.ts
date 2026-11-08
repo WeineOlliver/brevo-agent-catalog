@@ -84,6 +84,26 @@ describe('clusterCaptures', () => {
     ).toHaveLength(2);
   });
 
+  it('drops the flow markers an operator fetches during a HAR session', () => {
+    // These are app-origin GETs with a body and a path that reads like a
+    // feature, so every other rule here lets them through. Six of them became
+    // catalogued actions with invented endpoints and invented outputs before
+    // this rule existed.
+    const markers = [
+      capture({ method: 'GET', url: 'https://app.brevo.com/__mark_01_create_contact__' }),
+      capture({ method: 'GET', url: 'https://app.brevo.com/mark_03_create_list' }),
+      capture({ method: 'GET', url: 'https://app.brevo.com/mark_07' }),
+    ];
+    expect(clusterCaptures(markers)).toEqual([]);
+  });
+
+  it('keeps a real path that merely begins with the same letters', () => {
+    // /marketing/* is most of this app. A marker rule that swallowed it would
+    // delete the catalog.
+    const real = capture({ method: 'GET', url: 'https://app.brevo.com/marketing/notification-list' });
+    expect(clusterCaptures([real])).toHaveLength(1);
+  });
+
   it('drops polling GETs that returned no body', () => {
     expect(
       clusterCaptures([

@@ -37,7 +37,23 @@ function pathOf(url: string): string {
   }
 }
 
+/**
+ * A request the operator made to mark where one flow ended and the next began
+ * during a hand-driven HAR session: fetch('/mark_03_create_list') from the
+ * console, which 404s and leaves a timestamped line in the log.
+ *
+ * It must never reach the extractor. It is app-origin, it is a GET, it returns
+ * a body, and it carries a path that reads exactly like a feature — so a model
+ * asked to draft an action for it writes a confident, entirely fabricated
+ * entry. That happened: six of them, with invented outputs, from one session.
+ * An endpoint the operator invented is the one kind of traffic in this store
+ * that is guaranteed not to be part of the product.
+ */
+const OPERATOR_MARKER = /^\/_*mark_\d+(?:_|$)/i;
+
 function isNoise(record: CaptureRecord): boolean {
+  if (OPERATOR_MARKER.test(pathOf(record.url))) return true;
+
   // Brevo's own product surface only: beacons, chrome hosts and assets are
   // not business actions. Shared with the interactive runs so the write count
   // they print is the write count this extractor will act on.

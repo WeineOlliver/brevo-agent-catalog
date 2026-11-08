@@ -19,7 +19,8 @@
  *
  * How to produce the input:
  *
- *   1. In Chrome, open DevTools -> Network, tick **Preserve log**.
+ *   1. In Chrome, open DevTools -> Network, tick **Preserve log**, and leave
+ *      the filter box empty.
  *   2. Perform the actions you want catalogued, one after another.
  *   3. Right-click the request list -> **Save all as HAR with content**.
  *   4. `pnpm import:har <file.har>`
@@ -62,8 +63,12 @@ if (!existsSync(harPath)) {
 
 const config = loadConfig();
 
-// A route label is optional: `parseHar` reads each entry's own page when the
-// HAR records one, which a DevTools export does.
+// A route label is optional, and without one each record is labelled with its
+// own request path. Chrome's export does not help here: the HAR spec has a
+// log.pages block that would name the UI page each request came from, and a
+// 15-minute, 8797-entry DevTools export of this app carries pages: 0. So the
+// UI route a request belongs to is not recoverable from the file, and --route
+// labels the whole import when every flow in it shares one screen.
 const route = argValue('route') ?? undefined;
 
 let records;

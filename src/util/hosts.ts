@@ -29,7 +29,7 @@ const VENDOR_HOSTS =
  * were a large share of all candidates and not one of them is a business action.
  */
 const CHROME_HOSTS =
-  /^(?:sidebar-backend|notifications?-banner-api|marketing-notification|dt|metrics|get|fsrelay|rum|ph)\./i;
+  /^(?:sidebar-backend|notifications?-banner-api|marketing-notification|in-automate|custom-ua-logger|dt|metrics|get|fsrelay|rum|ph)\./i;
 
 /**
  * Beacon paths that appear on product hosts too.
@@ -83,12 +83,35 @@ export function isAppTraffic(url: string): boolean {
 const READ_METHODS = new Set(['GET', 'HEAD', 'OPTIONS']);
 
 /**
+ * Paths this app reads through POST.
+ *
+ * Every listing screen in Contacts queries through a POST body, because the
+ * filter tree it sends is too large for a query string. Judging those by method
+ * is how a HAR import of two hand-driven sessions reported 51 and 37 writes
+ * when the real mutation counts were 12 and 8 — a four-fold overstatement, and
+ * the number is supposed to be how an operator tells a working pass from a
+ * broken one.
+ */
+const READ_VIA_POST =
+  /^\/(?:segment|contact\/backend\/segment)\/(?:count|query|paginated_count)$|^\/segment\/(?:count|query|paginated_count)$|^\/contact\/backend\/(?:contacts\/lists|segment\/contact\/count)$/i;
+
+/**
  * A request that changed something, as far as the catalog is concerned.
  *
- * The method test alone is not enough: Brevo reads through POST in several
- * places (`segment/count`, `segment/query`, `segment/paginated_count`), and
- * telemetry is almost all POST. This is the predicate the runs report on.
+ * The method test alone is not enough, in both directions: Brevo reads through
+ * POST on every listing screen, and telemetry is almost all POST. This is the
+ * predicate the runs report on, so it has to be the one an operator can trust.
  */
 export function isWriteTraffic(url: string, method: string): boolean {
-  return isAppTraffic(url) && !READ_METHODS.has(method.toUpperCase());
+  if (!isAppTraffic(url)) return false;
+  if (READ_METHODS.has(method.toUpperCase())) return false;
+
+  let path: string;
+  try {
+    path = new URL(url).pathname;
+  } catch {
+    return false;
+  }
+
+  return !READ_VIA_POST.test(path);
 }

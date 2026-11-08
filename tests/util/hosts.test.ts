@@ -67,6 +67,52 @@ describe('isAppTraffic', () => {
 });
 
 describe('isWriteTraffic', () => {
+  it('does not count a listing query that happens to be a POST', () => {
+    // These three are how every Contacts screen reads its rows. Counting them
+    // as writes is what made a HAR import of 12 mutations report 51.
+    expect(isWriteTraffic('https://segments-api.brevo.com/segment/count', 'POST')).toBe(false);
+    expect(isWriteTraffic('https://segments-api.brevo.com/segment/query', 'POST')).toBe(false);
+    expect(
+      isWriteTraffic('https://segments-api.brevo.com/segment/paginated_count', 'POST'),
+    ).toBe(false);
+    expect(
+      isWriteTraffic('https://contacts-api.brevo.com/contact/backend/contacts/lists', 'POST'),
+    ).toBe(false);
+  });
+
+  it('still counts the segment endpoint itself, which creates one', () => {
+    // /segment/count reads; /segment writes. The rule must split them.
+    expect(isWriteTraffic('https://segments-api.brevo.com/segment', 'POST')).toBe(true);
+  });
+
+  it('counts the writes the hand-driven sessions actually made', () => {
+    expect(
+      isWriteTraffic('https://contacts-api-v2.brevo.com/import/save-mapping', 'POST'),
+    ).toBe(true);
+    expect(
+      isWriteTraffic('https://contacts-api.brevo.com/contact/backend/contacts/3', 'DELETE'),
+    ).toBe(true);
+    expect(isWriteTraffic('https://contacts-api-v2.brevo.com/export/preferences', 'PUT')).toBe(
+      true,
+    );
+  });
+
+  it('drops the product-analytics event logger', () => {
+    // POST {"eventName":"preview-modal","payload":{"appName":"Campaigns"}} —
+    // it records that a user opened a modal, which is not a capability.
+    expect(
+      isWriteTraffic(
+        'https://custom-ua-logger.brevo.com/user-event-logs/event/preview-modal',
+        'POST',
+      ),
+    ).toBe(false);
+  });
+
+  it('drops the marketing-automation page tracker', () => {
+    // It posts the signed-in user's address to /p on every navigation.
+    expect(isWriteTraffic('https://in-automate.brevo.com/p', 'POST')).toBe(false);
+  });
+
   it('counts a write to a product backend', () => {
     expect(isWriteTraffic('https://contacts-api.brevo.com/contact/backend/contacts', 'POST')).toBe(
       true,
