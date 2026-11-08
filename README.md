@@ -4,7 +4,7 @@
 
 **What can a user do in this app? Ask the app, not its docs.**
 
-![actions](https://img.shields.io/badge/actions-197-2563eb)
+![capabilities](https://img.shields.io/badge/user%20capabilities-170-2563eb)
 ![coverage](https://img.shields.io/badge/write%20endpoints-38%2F38-16a34a)
 ![eval](https://img.shields.io/badge/selection%20eval-15%2F19-ca8a04)
 ![verified](https://img.shields.io/badge/verified-3%2F197-ca8a04)
@@ -16,101 +16,12 @@
 > `pnpm catalog help`. Answer product questions with `pnpm catalog`, not by
 > reading `actions/*.json`. Nothing here performs an action.
 
-## What this is
-
-Brevo is an email marketing app. It publishes an API with 292 operations.
-
-**None of those 292 appear in the 197 endpoints the app actually calls.** The
-public API and the product are different systems.
-
-So this repo does the obvious thing: it watches the real app, captures what it
-calls, and turns that into a catalog an AI agent can use.
-
-## The numbers
-
-| | |
-|:--|:--|
-| Actions catalogued | **197** in 62 modules |
-| Of those, product features / app plumbing | **170 / 27** |
-| Multi-step flows, derived from the capture | **3** (16 steps) |
-| Write endpoints found / covered | **38 / 38** |
-| Can a model pick the right action? | **15 of 19** tasks (best run 17; see below) |
-| Actually executed and proven | **3** (194 are captured but unproven) |
-| Public API overlap | **0 of 197** ([three values, one record](docs/gaps.md#the-public-api-overlap-0-then-2-then-0-again)) |
-| Tests | **536** |
-
-## How it works
-
-```mermaid
-flowchart LR
-    A[Use the app] --> B[Capture its traffic]
-    B --> C[Strip secrets]
-    C --> D[Model writes each entry]
-    D --> E[Validate and gate]
-    E --> F[Execute some for real]
-    F --> G[Score with an eval]
-```
-
-The model only writes the parts you cannot get from evidence — the description
-and the warnings. Endpoints, methods and proof come from the capture itself.
-Asking a model for facts you already have is how documentation gets invented.
-
-## What is in the box
-
-| Path | What |
-|:--|:--|
-| [`actions/index.json`](actions/index.json) | **Start here.** All 197 actions, one small file |
-| [`flows/index.json`](flows/index.json) | The multi-step ones, in order: send a campaign, add a contact, erase a contact |
-| `actions/<id>.json` | One action in full: inputs, outputs, risks, proof |
-| [`schema/action.schema.json`](schema/action.schema.json) | The contract. A test fails if the code drifts from it |
-| `captures/clean/` | The traffic every entry came from |
-
-Ids look like `contacts.create_contact` and `campaigns.send_now`.
-
-## Nine boxes, because 62 modules were the wrong ones
-
-A `module` is the first segment of an internal URL, so 62 of them hold 197
-actions, **34 hold exactly one**, and sending one campaign crosses three of
-them. Nobody asks for a feature by hostname. So every action also carries an
-`area`:
-
-| | | | |
-|:--|--:|:--|--:|
-| `contacts` | 64 | `transactional` | 10 |
-| `campaigns` | 38 | `ecommerce` | 7 |
-| `platform` — **not a feature** | 27 | `automation` | 6 |
-| `crm` | 21 | `reporting` | 3 |
-| `account` | 21 | | |
-
-Both ship: `module` for reading the capture, `area` for finding a feature.
-`platform` holds the app drawing itself — fonts, locales, feature flags — so the
-other eight stay honest.
-
-The assignment is a table in [`src/catalog/areas.ts`](src/catalog/areas.ts), not
-a model call, and **a module with no area fails the build** rather than
-defaulting into the catch-all. Why, in full: [decision 14](docs/decisions.md#14-two-groupings-modules-for-reading-the-capture-areas-for-finding-a-feature).
-
-## The question it answers: `pnpm catalog`
-
-**What can a user do here, what does it cost, and what has to be true first.**
-Not "what do I POST" — nothing in this repository performs an action, and an
-agent consulting it is answering a person, not calling an API. So every reply
-leads with the capability and the consequence, and the endpoint appears last, as
-the evidence that the capability is real.
-
-An agent already has a shell, so this is the cheaper half of what an MCP server
-would provide. Every subcommand takes `--json`.
+## Ask it
 
 ```bash
-pnpm catalog                                  # the opening answer, below
-pnpm catalog area contacts                    # 64 names, no prose
-pnpm catalog show contacts.delete_contact     # can they? what does it cost?
-pnpm catalog show contacts.delete_contact --full   # the stored record, with evidence
-pnpm catalog flow erase_contact               # the order, when it takes more than one step
-pnpm catalog search "someone asked to be deleted"
+pnpm install
+pnpm catalog
 ```
-
-The opening answer routes the next question:
 
 ```
 A user can do 170 things in this app, across 8 areas.
@@ -126,15 +37,19 @@ Automation  —  6, all read-only — nothing here changes anything
   Run workflows that act on contacts without anyone pressing send.
 ```
 
-Three things in there are the answer rather than decoration. **The
+Then walk in: `area <id>` for the names, `show <id>` for one capability,
+`flow <id>` when it takes several steps. Every command takes `--json`, every
+reply ends with the next one, and the three hops cost about a twentieth of the
+18 519 tokens the whole index does.
+
+Three things in that opening are the answer rather than decoration. **The
 change-versus-look split**, because "170 things" reads as 170 capabilities and
 most are ways to look at the account. **Three real capability names per area**,
 because a count and a sentence cannot tell you whether scheduling a campaign is
 in `campaigns`. And **"all read-only"**, which is how an agent learns it can
-tell someone what their automations are doing but cannot help them build one —
-a fact that was in the data and invisible in the answer.
+tell someone what their automations are doing but cannot help them build one.
 
-And a capability opens with the two lines that matter:
+A capability opens with the two lines that matter:
 
 ```
 Delete contact  (contacts.delete_contact)
@@ -144,43 +59,45 @@ Delete contact  (contacts.delete_contact)
 `destructive: true` is a field name. *Cannot be undone* is the consequence, and
 it is what an agent has to be able to tell a person before they ask for it.
 
-**The 27 plumbing entries are not in that answer.** Fetching a font list is not
-something a user does, and listing it beside contacts and campaigns presents it
-as equivalent — a wrong answer rather than a long one. They stay one flag away
-(`--all`), because the catalog's job is to be faithful about what the app calls.
-
-**The search is the weak part, and it is measured rather than claimed.**
-`pnpm bench:search` runs the eval's 19 tasks through it with no model: the right
-answer ranks first **2 of 19** times and reaches the top three **5 of 19**,
-against **15 of 19** for a model reading all 197 entries. A task never reuses
-the catalog's wording, so *"I need a new audience group"* has to reach
+**`pnpm catalog search` is the weak path, and it is measured rather than
+claimed.** `pnpm bench:search` runs the eval's 19 tasks through it with no model:
+the right answer ranks first **2 of 19** times and reaches the top three **5 of
+19**, against **15 of 19** for a model reading all 197 entries. A task never
+reuses the catalog's wording, so *"I need a new audience group"* has to reach
 `lists.create_list` without sharing a word with it. A model bridges that; prefix
-matching cannot.
+matching cannot. So the shape is browse, not search — and not building real
+retrieval is a decision, not an omission: the index is 18 519 tokens against the
+~200 000 under which published guidance says to skip it
+([decision 16](docs/decisions.md#16-no-retrieval-layer-because-the-whole-index-fits-in-a-prompt)).
 
-So the shape is **browse, not search**, and the command says so in its own
-output. Not building real retrieval is a decision: the whole index is 18 519
-tokens against the ~200 000 under which published guidance says to skip it
-([decision 16](docs/decisions.md#16-no-retrieval-layer-because-the-whole-index-fits-in-a-prompt)
-has the sources and the hybrid-plus-rerank design for when that changes).
+## What this is
 
-## 197 actions do not say what order to call them in
+Brevo is an email marketing app. It publishes an API with 292 operations.
 
-A flat catalog is silent on *and then what*, and that silence is measurable: the
-eval's two-step tasks are missed because the model picks the listing action that
-would have been step one. So three flows are derived — not written — from the
-capture:
+**None of those 292 appear in the 197 endpoints the app actually calls.** The
+public API and the product are different systems, which is why this starts in a
+browser instead of in a specification: it watches the real app, captures what it
+calls, and turns that into a catalogue an agent can answer from.
 
-```
-send_email_campaign   8 steps   create > count > recipients > subject > design > preview > test > send
-onboard_contact       6 steps   list > company > contact > link > membership > attributes
-erase_contact         2 steps   unsubscribe > delete
-```
+Of those 197 entries, **170 are things a user can do**. The other 27 are what the
+web app calls to draw itself — fonts, locales, feature flags — and they are
+boxed under a label that says *not a feature* so the rest stays honest.
 
-Each names a capture file and a time window; the steps are the write calls
-Brevo's UI made in that window, in that order. `pnpm validate` re-derives them
-and fails on any difference, so editing `flows/index.json` by hand breaks the
-build. `erase_contact` is the pair worth reading: step one is reversible and
-answers *"stop emailing me"*, step two is not and answers *"delete me"*.
+Nothing here performs an action. The catalogue describes what a user can do; it
+does not do it ([decision 17](docs/decisions.md#17-the-catalogue-answers-questions-it-does-not-make-requests)).
+
+## The numbers
+
+| | |
+|:--|:--|
+| Things a user can do | **170** in 8 areas |
+| App plumbing, excluded from answers | **27** |
+| Multi-step flows, derived from the capture | **3** (16 steps) |
+| Write endpoints found / covered | **38 / 38** |
+| Can a model pick the right action? | **15 of 19** tasks (best run 17) |
+| Actually executed and proven | **3** (194 are captured but unproven) |
+| Public API overlap | **0 of 197** ([three values, one record](docs/gaps.md#the-public-api-overlap-0-then-2-then-0-again)) |
+| Tests | **536** |
 
 ## How much to trust it
 
@@ -191,32 +108,69 @@ answers *"stop emailing me"*, step two is not and answers *"delete me"*.
 | `inferred` | No traffic. Guessed from the UI | **0** |
 
 The three proven ones are one full lifecycle, not three unrelated wins:
+`create_contact` returned `{"contact_id":8}`, `delete_contact` then deleted
+contact 8, `create_list` returned 201. Same id on both sides of create and
+delete.
 
-```
-contacts.create_contact   POST   /contact/backend/contacts/add-contact  -> 200  {"contact_id":8}
-contacts.delete_contact   DELETE /contact/backend/contacts/8            -> 200
-lists.create_list         POST   /lists/create                          -> 201  {"id":11}
-```
-
-Same contact id on both sides of create and delete.
+**3 of 197 is the weakest number here, and "verify everything" is not the fix.**
+Each proof is a hand-written browser recipe, and the three that exist took four
+runs each. Some entries fire on page load six at a time and cannot be attributed
+to a click; some sit behind five-screen wizards; some are paid-plan features a
+free account cannot reach. The target is representative coverage scaled by
+consequence — every destructive action, one per flow, one per response shape,
+about 20-25 executions — and [gaps.md](docs/gaps.md) carries that plan.
 
 **Read this before trusting a flag.** `destructive` means *irreversible, or
-someone outside your account sees it.* Not "not a read".
-
-- Creating a contact is **not** destructive. You can undo it.
-- Sending a campaign **is** destructive. It mails real people. No undo.
-
-We tried deriving this from the HTTP method. It failed, because **Brevo reads
-using POST.** That shipped `get_count` as destructive — and an agent that learns
-to ignore the flag on reads will ignore it on deletes.
+someone outside your account sees it* — not "not a read". Creating a contact is
+not destructive; sending a campaign is. Deriving it from the HTTP method failed,
+because **Brevo reads using POST**, and that shipped `get_count` as destructive.
 
 **And the flag has a problem nobody has solved.** Of the 19 eval tasks, the 4
 whose answer is destructive score **1**; the other 15 score 13. The model either
 answers that no action fits or picks a safe neighbour. A flag written to stop an
 agent deleting the wrong contact may be stopping it from deleting the right one.
-One run of `pnpm eval --no-risk-labels` settles it and has not happened —
-[eval.md](docs/eval.md) has both candidate causes and why neither is guessed at
-here.
+One run of `pnpm eval --no-risk-labels` settles it and has not been possible —
+[eval.md](docs/eval.md) has both candidate causes and why neither is guessed at.
+
+## How it was built
+
+```mermaid
+flowchart LR
+    A[Use the app] --> B[Capture its traffic]
+    B --> C[Strip secrets]
+    C --> D[Model writes each entry]
+    D --> E[Validate and gate]
+    E --> F[Execute some for real]
+    F --> G[Score with an eval]
+```
+
+The model only writes the parts you cannot get from evidence — the description
+and the warnings. Endpoints, methods, groupings, flow order and proof come from
+the capture or from code. Asking a model for facts you already have is how
+documentation gets invented.
+
+Two groupings ship, because they answer different questions. `module` is the
+first segment of an internal URL, so 62 of them hold 197 entries and 34 hold
+exactly one: right for reading a capture, useless for finding a feature. `area`
+is one of nine boxes named after what a person does, assigned by a table in
+[`src/catalog/areas.ts`](src/catalog/areas.ts) rather than by a model, and **a
+module with no area fails the build**
+([decision 14](docs/decisions.md#14-two-groupings-modules-for-reading-the-capture-areas-for-finding-a-feature)).
+
+Flows are **derived, not written**. Each names a capture file and a time window;
+its steps are the write calls Brevo's own UI made in that window, in that order.
+`pnpm validate` re-derives them and fails on any difference, so editing
+`flows/index.json` by hand breaks the build
+([decision 15](docs/decisions.md#15-flows-are-derived-from-the-capture-never-authored)).
+
+```
+send_email_campaign   8 steps   create > count > recipients > subject > design > preview > test > send
+onboard_contact       6 steps   list > company > contact > link > membership > attributes
+erase_contact         2 steps   unsubscribe > delete
+```
+
+`erase_contact` is the pair worth reading: step one is reversible and answers
+*"stop emailing me"*, step two is not and answers *"delete me"*.
 
 ## Where the model got it wrong
 
@@ -229,20 +183,34 @@ Every one of these was caught by a check, not by reading the output.
 | Flagged safe reads as destructive, and a risky action as safe | Measuring the rule against all 197 |
 | Leaked phone numbers and encoded emails past the gate | Grepping the committed files by hand |
 | Hid a rate-limit error behind "the provider failed" | Printing the error we were throwing away |
+| Answered "no action fits" while printing as a parser error | Reading the stored report instead of the console |
 
 Two models, split by job: **Groq** for volume, **headless Claude Code** for
-judgment. Both behind one interface, so the Groq key is optional.
+judgment. The eval runs on Claude only — one call ships the whole catalogue, and
+Groq rejects it at 14 846 tokens against an 8 000 TPM ceiling.
+
+## What is behind the command
+
+| Path | What |
+|:--|:--|
+| `actions/<id>.json` | One capability in full: inputs, risks, preconditions, proof |
+| [`actions/index.json`](actions/index.json) | All 197, generated. `pnpm catalog` reads this so you do not have to |
+| [`flows/index.json`](flows/index.json) | The multi-step ones, derived from the captures |
+| [`schema/action.schema.json`](schema/action.schema.json) | The contract. A test fails if the code drifts from it |
+| `captures/clean/` | The traffic every entry came from |
+
+Ids look like `contacts.create_contact` and `campaigns.send_now`.
 
 ## Run it
 
 Node 20+ and pnpm. `pnpm install`, then:
 
 ```bash
+pnpm catalog       # what can a user do (start here)
 pnpm test          # 536 tests
-pnpm validate      # schema + no broken references + flows match their captures
-pnpm build:flows   # re-derive flows/index.json from the captures
+pnpm validate      # schema, cross-references, flows re-derived, areas complete
+pnpm bench:search  # can the search find it with no model at all? (free)
 pnpm eval          # can a model pick the right action? (costs provider quota)
-pnpm bench:search  # can the CLI search find it with no model at all? (free)
 pnpm scan          # leak gate, run before any push
 ```
 
@@ -258,9 +226,10 @@ checked against the git history before the first push.
 
 | Doc | For |
 |:--|:--|
-| [decisions.md](docs/decisions.md) | 16 decisions, what we rejected, what it cost |
-| [gaps.md](docs/gaps.md) | What is broken and what more time buys |
+| [AGENTS.md](AGENTS.md) | How an agent should answer from this, and what not to claim |
+| [decisions.md](docs/decisions.md) | 17 decisions, what we rejected, what it cost |
+| [gaps.md](docs/gaps.md) | What is broken, what is missing, and what more time buys |
 | [eval.md](docs/eval.md) | Every eval run, what it caught, and what quota stopped it measuring |
 | [ai-usage.md](docs/ai-usage.md) | How the models were used and what they got wrong |
-| [modules.md](docs/modules.md) | Generated inventory of everything |
 | [approach.md](docs/approach.md) | How the problem was framed, and the full command list |
+| [modules.md](docs/modules.md) | Generated inventory of everything |

@@ -22,6 +22,7 @@ list of claims.
 | 14 | Two groupings: modules for the capture, areas for people | [read](#14-two-groupings-modules-for-reading-the-capture-areas-for-finding-a-feature) |
 | 15 | Flows are derived from the capture, never authored | [read](#15-flows-are-derived-from-the-capture-never-authored) |
 | 16 | No retrieval layer, because the index fits in a prompt | [read](#16-no-retrieval-layer-because-the-whole-index-fits-in-a-prompt) |
+| 17 | The catalogue answers questions; it does not make requests | [read](#17-the-catalogue-answers-questions-it-does-not-make-requests) |
 
 Each section carries what it cost. If you read one, read #12 — it is the only
 one that reversed an earlier decision after measurement.
@@ -501,3 +502,64 @@ Prompt caching defers the problem rather than solving it. [gaps.md](gaps.md) has
 the upgrade shape — hybrid BM25 plus dense, fused by Reciprocal Rank Fusion at
 k=60, reranked to 3–5, exposed as a search meta-tool — with sources, so the
 answer to *"what if it scales?"* is written down rather than improvised.
+
+---
+
+## 17. The catalogue answers questions; it does not make requests
+
+**Decision:** The agent this is built for is telling a person what they can do
+in Brevo, what it will cost, and what has to be true first. It is not going to
+issue the request. So every reply leads with the capability and the consequence,
+the endpoint appears last as the evidence that the capability is real, and the
+entries are deliberately **not** callable.
+
+**Why this needed stating:** it was assumed rather than decided, and the
+assumption pointed the work in the wrong direction for half a day. Measuring the
+captures found 51 distinct hosts and no host field on any entry:
+`account.get_account` says `GET /account` where the real request is
+`GET https://editor-api.brevo.com/editor-api/account`. That was written up here
+as the most serious defect in the repository, a correctness bug that made 152 of
+153 locatable entries impossible to turn into a URL, and the fix was two hours of
+deterministic work with every number already measured.
+
+It was cancelled two hours in, after the question was stated plainly. A missing
+host blocks a request nobody is going to make. The code was deleted rather than
+shipped unused; the measurement stays in [gaps.md](gaps.md), reclassified from
+defect to known gap.
+
+**What the decision changes, concretely:**
+
+- `pnpm catalog show` opened with `DELETE /contact/backend/contacts/:id`. For
+  "can the user do this and what does it cost", that is the least useful line on
+  the screen. It now opens with the name and `CANNOT BE UNDONE`.
+- The risk flag is rendered as a consequence rather than a field name.
+  `destructive: true` is schema; *cannot be undone* is what an agent has to be
+  able to say to someone first.
+- The 27 `platform` entries left the default answer. Under the old framing they
+  were padding in a long list; under this one they are a wrong answer, because
+  fetching a font list is not something a user does and listing it beside
+  contacts presents the two as equivalent.
+- The read-versus-change split became the headline. 31 of 170 change something.
+  An area holding only reads now says so, which is how an agent learns it can
+  describe someone's automations and cannot help them build one.
+
+**Rejected: adding the host anyway, because it is cheap and correct.** It is
+both. It is also 197 entries of field that nothing reads, and an unused field
+rots — it would have been stale the first time Brevo moved a service, with no
+gate able to tell, because nothing would have been consuming it.
+
+**Rejected: `execute_action` as the next step.** The gap list still carries it,
+and it is where this goes in production. It is not a weekend task, and shipping
+a half-built one would make every entry's unproven inputs load-bearing.
+
+**Cost accepted:** this catalogue cannot be wired to anything that acts without
+the host work being done first, and the person who does it will find a stale
+measurement rather than a field. The counterweight is that the 20-25 verified
+executions the reliability plan calls for all run through the real UI, where the
+host is whatever the browser used — so the plan does not depend on the gap being
+closed either.
+
+**And the lesson underneath it:** the framing was never written down, so it was
+never checked. Sixteen decisions recorded what was rejected and what it cost,
+and none recorded what the thing was *for*. Half a day of correct engineering
+went into a question nobody had asked.
