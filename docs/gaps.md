@@ -90,15 +90,12 @@ first number quoted was its own kind of wrong.
 
 ## The public API barely overlaps the product
 
-**2 of 197** catalogued endpoints appear in Brevo's published spec:
-`account.get_account` (`getAccount`) and `ecommerce.list_categories`
-(`getCategories`). Both are reads; no write matches. The earlier, smaller
-catalog matched the same 2 of 126 — tripling the capture did not add one.
-
-This document said **0 of 197** until an audit ran the figure back against
-`public_api.exists` in the 197 files and found 2. The conclusion survives at 1%;
-the number did not. A measured claim is only as good as the last time anyone
-measured it.
+**0 of 197** catalogued endpoints appear in Brevo's published spec. The
+`public_api.exists` field says 2, and both are false positives — the full
+account is in
+[its own section below](#the-public-api-overlap-0-then-2-then-0-again), because
+this figure has been 0, then 2, then 0 again, and the record of how is worth
+more than the number.
 
 Brevo's web app talks to about twenty internal microservices — `contacts-api`,
 `crm-backend-api`, `segments-api`, `workflow-apis`, `email-campaigns-backend`,
@@ -286,6 +283,122 @@ Sources: [Claude tool search](https://platform.claude.com/docs/en/agents-and-too
 - **Selector fragility.** The passes prefer accessible roles over CSS and warn
   rather than crash, but a renamed button silently reduces coverage. The printed
   write count is how that becomes visible.
+
+## The entries do not say which server to call
+
+**Found on 2026-11-08, and it is the most serious defect in the catalogue.**
+`internal_endpoint` carries a method, a path and a body example, and no host.
+The captures contain **51 distinct hosts**, and of the 153 actions whose request
+could be located in the capture, **152 are served by something other than
+`app.brevo.com`** — `contacts-api`, `crm-backend-api`, `segments-api`,
+`editor-api`, `workflow-apis`, and 46 more.
+
+So an agent reading an entry cannot construct the URL. `account.get_account`
+says `GET /account`; the real request is
+`GET https://editor-api.brevo.com/editor-api/account`.
+
+This is a correctness defect rather than a confidence one, and the distinction
+matters: an entry that was never executed but is accurate is useful, while an
+entry that cannot be called is not. **It does not reduce the 3 verified count,
+and fixing it will not raise it.**
+
+Three things make it cheap to fix, and all three were measured before claiming
+it:
+
+- The host is in the capture, on every record, as part of `url`.
+- **No route in the capture appears on more than one host**, so the mapping is
+  unambiguous. No model is needed and no guess is involved.
+- The remaining 44 of 197 whose request could not be located are a separate
+  question, and the gate below is what will force an answer rather than letting
+  them stay quietly unmatched.
+
+Two smaller defects came out of the same measurement:
+
+- **Four entries have a truncated path.** `account.get_account` stores
+  `/account` for `/editor-api/account`, `account.get_client_config` stores
+  `/client/config` for `/marketing-campaign/api/client/config`, and the same
+  for `ecommerce.get_settings` and `meetings.get_plan`. 153 of 197 match a
+  captured route exactly, so this is four bad rows rather than a systematic
+  rewrite.
+- **The public-API overlap is 0 of 197, not 2.** See below, because that one is
+  a correction of a correction.
+
+## The public-API overlap: 0, then 2, then 0 again
+
+This document has now carried three values for the same number, and the record
+is more useful than the figure.
+
+It said **0 of 197** for weeks, unmeasured. An audit recomputed it from
+`public_api.exists` across the 197 files, found **2**, and corrected it as a
+false claim. Measuring the host that same evening showed **both of those 2 are
+false positives**, for two different reasons:
+
+- `account.get_account` matched the public `getAccount` **only because its path
+  is truncated**. The stored `/account` collides with the spec's `/v3/account`;
+  the real route is `/editor-api/account`, which does not.
+- `ecommerce.list_categories` has a faithful path, `/categories`, and matched
+  `getCategories` because **the matcher compares paths and ignores hosts**. The
+  public operation lives on `api.brevo.com`; this request went to
+  `events-management-http.brevo.com`. Same string, different API.
+
+So the true overlap is **0 of 197**, which is what the document originally
+claimed, and nobody had the reason. The lesson is not "the first number was
+right": a number that happens to be correct for reasons nobody checked is not
+an asset, and the audit that changed it to 2 was right to change it on the
+evidence then available.
+
+**The state of the data as of this commit:** the `public_api.exists` field still
+reads `true` on those two entries, because fixing it means making the matcher
+host-aware, which is the same change as adding the host. Documenting the
+disagreement is not the same as fixing it, and this paragraph exists so the two
+cannot be confused.
+
+## The reliability plan: 20-25 representatives, not 197
+
+3 of 197 verified is the weakest number in this repository, and "verify
+everything" is not the fix. Verifying one action costs a hand-written Playwright
+recipe of around sixty lines, and the three that exist each took four runs to
+get right. 197 of those is weeks, and it would still not be possible:
+
+- **Some actions have no button.** They fire when a page loads, six at a time,
+  so no click can be attributed to one of them.
+- **Some sit behind five-screen wizards.** One of those costs what five flat
+  forms cost.
+- **Some are paid-plan features** that a free-tier account cannot reach at all.
+- **27 are platform plumbing.** Proving that the editor can list its fonts buys
+  nothing.
+
+So the target is representative coverage rather than exhaustive coverage,
+scaled by what a failure would cost: **every destructive action, plus one action
+per flow, plus one per response shape.** That is 20-25 executions, and it is a
+completion criterion that can actually be met and defended.
+
+The practice this borrows from is ordinary risk-based testing — prioritise by
+likelihood times consequence, and take one representative per class instead of
+exhausting the space. The adaptation is ours: the published guidance is about
+representative *inputs*, and treating one endpoint as representative of a class
+of endpoints is a judgement, not a cited practice.
+
+**What makes executing against a real account safe enough to do at all** is
+already half built, and the rest is cheap:
+
+- A name-scoped guard exists: a recipe reads the target off the page and refuses
+  anything that is not a `catalog-test-` fixture. That is what makes the delete
+  recipe real rather than theoretical.
+- **Missing: a ledger and a teardown.** Created ids should be written to a state
+  file and removed in a `finally`, so cleanup runs even when a recipe throws.
+  The proof that this is missing is sitting in the account right now — one
+  `catalog-test-*` contact and two `catalog-test-*` lists that nothing will
+  remove. Community practice adds a TTL and a scheduled sweeper as the backstop
+  for whatever teardown misses.
+- **For the one action whose effect leaves the account**, `campaigns.send_now`,
+  the fixture is a list containing a single address the operator owns. The send
+  is then genuinely executed and the blast radius is the operator's own inbox,
+  which is the only honest way to verify an irreversible action.
+
+An ephemeral tenant is the textbook answer and is not needed here: a dedicated
+free account, a name-scoped guard and a one-address list achieve the same
+isolation for a catalogue this size.
 
 ## What more time would buy, in order
 

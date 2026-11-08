@@ -45,12 +45,14 @@ perform them.
 
 Two things only showed up once it ran against a real account.
 
-**The public API and the product are different systems.** 2 of 197 catalogued
-endpoints appear in Brevo's published spec — `account.get_account` and
-`ecommerce.list_categories`, both reads. An earlier, smaller catalog matched the
-same 2 of 126: tripling the capture and adding every write flow did not add one
-match. The app runs on about 20 internal microservices the public `/v3` surface
-does not wrap.
+**The public API and the product are different systems.** 0 of 197 catalogued
+endpoints appear in Brevo's published spec. The `public_api.exists` field claims
+2, and both are false positives — one from a truncated path, one from a matcher
+that compares paths while ignoring hosts. That figure has now been 0, then 2,
+then 0 again, and
+[gaps.md](gaps.md#the-public-api-overlap-0-then-2-then-0-again) keeps the record
+because it is more instructive than the number. The app runs on more than fifty
+internal hosts that the public `/v3` surface does not wrap.
 
 **A crawl that clicks nothing produces a read-only catalog.** The first run
 produced 118 actions, 108 of them `get` or `list`, and exactly one write. The

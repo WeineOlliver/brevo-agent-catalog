@@ -16,7 +16,7 @@
 
 Brevo is an email marketing app. It publishes an API with 292 operations.
 
-**Only 2 of those 292 appear in the 197 endpoints the app actually calls.** The
+**None of those 292 appear in the 197 endpoints the app actually calls.** The
 public API and the product are different systems.
 
 So this repo does the obvious thing: it watches the real app, captures what it
@@ -32,7 +32,7 @@ calls, and turns that into a catalog an AI agent can use.
 | Write endpoints found / covered | **38 / 38** |
 | Can a model pick the right action? | **15 of 19** tasks (best run 17; see below) |
 | Actually executed and proven | **3** (194 are captured but unproven) |
-| Public API overlap | **2 of 197** |
+| Public API overlap | **0 of 197** ([three values, one record](docs/gaps.md#the-public-api-overlap-0-then-2-then-0-again)) |
 | Tests | **517** |
 
 ## How it works

@@ -23,6 +23,7 @@ import {
   describePlacement,
 } from '../src/browser/window.js';
 import { appContextOptions, appLaunchArgs } from '../src/browser/context.js';
+import { waitForSignIn } from '../src/crawl/session.js';
 
 const RECIPES: VerifyRecipe[] = [...contactsRecipes, ...listsRecipes];
 
@@ -52,9 +53,60 @@ if (selected.length === 0) {
 const launchArgs = appLaunchArgs(HEADED_VIEWPORT);
 console.log(describePlacement(launchArgs));
 
+/**
+ * `--login` signs in inside the context the recipes then run in.
+ *
+ * The saved-session path below is kept for the case where it works, but it
+ * mostly does not, and decision #10 says why: `storageState` carries cookies
+ * and localStorage and **not sessionStorage**, so a restored context lands on
+ * login.brevo.com. Measured again on 2026-11-08, headed and headless, with a
+ * state file twenty minutes old: rejected both times.
+ *
+ * Without this flag that failure arrives disguised. The first recipe's `goto`
+ * lands on the login page and reports "could not load", which reads as a broken
+ * selector, and the run ends having learned nothing about the catalog.
+ */
+const liveLogin = process.argv.includes('--login');
+
 const browser = await chromium.launch({ headless: false, args: launchArgs });
-const context = await browser.newContext(appContextOptions({ storageState: statePath }));
+const context = liveLogin
+  ? await browser.newContext(appContextOptions({ viewport: HEADED_VIEWPORT }))
+  : await browser.newContext(appContextOptions({ storageState: statePath }));
 const page = await context.newPage();
+
+if (liveLogin) {
+  await page.goto(config.appOrigin, { waitUntil: 'domcontentloaded' });
+  console.log(`
+A browser window is open at ${config.appOrigin}.
+Log in by hand, including any 2FA step. The recipes start by themselves in this
+same session the moment the dashboard appears.
+`);
+
+  const outcome = await waitForSignIn(page, context, {
+    timeoutMs: 25 * 60 * 1000,
+    pollIntervalMs: 2000,
+  });
+
+  if (outcome === 'timeout') {
+    console.error('\nNo sign-in detected. Nothing verified.');
+    await browser.close();
+    process.exit(1);
+  }
+
+  console.log(`signed in at ${page.url()}`);
+} else {
+  // Fail here rather than inside a recipe, where it would look like a selector
+  // problem instead of a session problem.
+  await page.goto(config.appOrigin, { waitUntil: 'domcontentloaded' });
+  if (page.url().includes('login.brevo.com')) {
+    console.error(
+      `\nThe saved session at ${statePath} was not accepted: landed on ${page.url()}.\n` +
+        'Re-run with --login and sign in inside the window (see decision #10).',
+    );
+    await browser.close();
+    process.exit(1);
+  }
+}
 
 mkdirSync('test-results', { recursive: true });
 
