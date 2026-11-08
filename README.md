@@ -11,7 +11,11 @@ its work first.
 > write endpoints in the capture has an entry.** The selection eval scores
 > **17 of 19 scoreable tasks**; the 20th names sender creation, which was never
 > demonstrated, and the eval reports that as a coverage gap on every run rather
-> than being satisfied by a near miss. Nothing is `verified`.
+> than being satisfied by a near miss. **3 of 197 entries are `verified`** by
+> executing them against the live account and matching the request that
+> actually happened: `create_contact` returned `{"contact_id":8}`,
+> `delete_contact` then deleted contact 8, and `create_list` returned 201. The
+> other 194 are `observed`.
 >
 > Reconnaissance measured why the automated ceiling was low: of the six routes
 > the write passes target, two are flat forms and four are multi-step wizards or

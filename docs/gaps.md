@@ -40,10 +40,25 @@ Two things the sessions did not get:
   flow was deferred and never demonstrated, so there is no entry, and the eval
   reports it as a coverage gap every run rather than being quietly satisfied by
   a near miss.
-- **`verified` is still 0.** Every entry is `observed`. Verification needs a
-  replay recipe per action, and asserting a catalog is correct because a model
-  drafted it from traffic it saw is exactly the claim this project exists to
-  distrust.
+- **`verified` is 3 of 197.** Verification executes an action against the live
+  account and matches the request that actually happened, so the three that
+  carry it are claims rather than readings: `contacts.create_contact` returned
+  `{"contact_id":8}`, `contacts.delete_contact` then deleted contact 8, and
+  `lists.create_list` returned 201. The create-then-delete pair is the useful
+  part — the same contact id appears on both sides, so the lifecycle is proved
+  rather than inferred.
+
+  The remaining 194 are `observed`, which means a model drafted them from
+  traffic it saw. That is the claim this project exists to distrust, and the
+  ratio is the honest statement of how far the distrust has been answered.
+
+  What it cost is the real finding. All three are flat forms or row actions, and
+  even those took four runs each to get right — see the commentary in
+  `src/verify/recipes/lists.ts`, where three consecutive failures were three
+  different wrong beliefs of mine and the dialog had been printing the answer
+  the whole time. A recipe for the 5-call campaign wizard is a different order
+  of work, which is why `campaigns.send_now` — the most dangerous entry in the
+  catalog — is still unverified.
 
 ### Why the committed record count is far below the observed one
 
@@ -184,9 +199,10 @@ than `free` with suspicion.
    then showed.
 
 1. **Verification recipes.** The one remaining structural claim this project
-   cannot yet make: `verified` is 0 of 197. Pick by what an agent is most likely
-   to call and what would hurt most if wrong, which after the sessions means
-   `campaigns.send_now` and `contacts.delete_contact` before anything else.
+   `verified` is 3 of 197, and `contacts.delete_contact` is one of them. What
+   remains is the expensive half: `campaigns.send_now` is the most dangerous
+   entry in the catalog and sits behind a five-call wizard, which is hours of
+   selector work rather than the afternoon the flat forms took.
 2. **Re-draft the 42 dangling cross-references** with the corrected prompt, then
    lower the ratchet in `scripts/validate.ts` to the new count. Mechanical, and
    it costs provider quota rather than judgement.

@@ -118,7 +118,9 @@ indexed, and a selection eval scored at **17 of 19 scoreable tasks**.
 Every one of the 38 distinct write endpoints in the capture has a catalog entry,
 including the irreversible `POST /marketing-campaign/api/campaign/2/send-now`
 that returned 204, and the 5-call campaign machine and 3-call CSV import wizard
-behind it. What is missing is `verified`, which is still 0, and sender creation.
+behind it. 3 entries are now `verified` by execution rather than by reading
+traffic, including the destructive `delete_contact`. The other 194 are
+`observed`, and sender creation is still missing entirely.
 No document here reports a
 number it has not measured; the ones that look bad are in
 [gaps.md](gaps.md) and [eval.md](eval.md) rather than omitted.
