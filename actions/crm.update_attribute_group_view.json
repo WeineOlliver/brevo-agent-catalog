@@ -1,0 +1,89 @@
+{
+  "id": "crm.update_attribute_group_view",
+  "module": "crm",
+  "name": "Update attribute group view",
+  "description": "Call this when an attribute group view that already exists in the CRM object configuration must be changed — renaming the group, or changing which attributes appear in it and in what order. Pass the full intended attribute list, because the observed body carries the complete set rather than a delta. Use crm.create_attribute_group_view instead when no group view exists yet for the object type and a new one must be added; use contacts.create_attribute instead when the underlying attribute itself does not exist, since this action only arranges attributes into a display group and does not define them.",
+  "preconditions": [
+    "The attribute group view identified by the :id path parameter must already exist.",
+    "The attributes named in \"attributes\" must already exist for the given objectType.",
+    "The account identified by accountId must be the account the session is authenticated against.",
+    "The caller must be authenticated against the CRM backend host (crm-backend-api.brevo.com); a CRM CSRF token may be required, obtainable via crm.get_csrf_token."
+  ],
+  "inputs": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "string",
+        "description": "Path parameter. Identifier of the attribute group view to update, e.g. \"6aee1aa276e0d73f452f617f\"."
+      },
+      "groupName": {
+        "type": "string",
+        "description": "Display name of the attribute group as shown in the record panel, e.g. \"Information\"."
+      },
+      "component": {
+        "type": "string",
+        "description": "Identifier of the UI component the group is rendered in. Observed value: \"details\". The full set of accepted values is not known from the evidence."
+      },
+      "attributes": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        },
+        "description": "Full ordered list of attribute codes to show in this group, e.g. [\"LASTNAME\",\"FIRSTNAME\",\"CRM__EMAIL\"]. The list replaces the previous contents of the group; order determines display order."
+      },
+      "objectType": {
+        "type": "string",
+        "description": "CRM object the group view belongs to. Observed value: \"contact\". Other object types exist in the CRM product but are not confirmed by this evidence."
+      },
+      "accountId": {
+        "type": "string",
+        "description": "Identifier of the Brevo account owning the configuration, e.g. \"6aedca5302b34f2d6e026f4a\"."
+      }
+    },
+    "required": [
+      "id",
+      "groupName",
+      "component",
+      "attributes",
+      "objectType",
+      "accountId"
+    ]
+  },
+  "outputs": {
+    "type": "object",
+    "description": "HTTP 200 on success. The response body was not captured in the available evidence, so its shape is unknown.",
+    "properties": {}
+  },
+  "side_effects": [
+    "The stored attribute group view is overwritten with the submitted group name and attribute list.",
+    "Attributes previously in the group but absent from the submitted list stop being displayed in that group.",
+    "The record detail panel for the given objectType changes for every user of the account, not only the caller."
+  ],
+  "destructive": false,
+  "idempotent": false,
+  "ui_path": [
+    "CRM",
+    "Contacts",
+    "Open a contact record",
+    "Details panel",
+    "Edit / manage fields",
+    "Save"
+  ],
+  "internal_endpoint": {
+    "method": "PATCH",
+    "path": "/crm/backend/object-config/attribute-group-view/:id",
+    "body_example": "{\"groupName\":\"Information\",\"component\":\"details\",\"attributes\":[\"LASTNAME\",\"FIRSTNAME\",\"CRM__EMAIL\",\"SMS\",\"EXT_ID\",\"CRM__ASSIGNED\",\"LANDLINE_NUMBER\",\"WHATSAPP\",\"_COUNTRY\"],\"objectType\":\"contact\",\"accountId\":\"6aedca5302b34f2d6e026f4a\"}"
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/har/block-c-email.json"
+    ],
+    "verified_at": null
+  }
+}

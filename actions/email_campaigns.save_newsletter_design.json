@@ -1,0 +1,104 @@
+{
+  "id": "email_campaigns.save_newsletter_design",
+  "module": "campaigns",
+  "name": "Save newsletter email design",
+  "description": "Call this when an existing newsletter/email-campaign design must be overwritten with a new drag-and-drop editor document, and you need the rendered HTML back. The newsletter must already exist and its numeric editor id must be known — this action replaces the whole stored design, it does not create one, so use the campaign-creation action (e.g. email_campaign.create_regular) first to obtain an id, and use the campaign-sending action (e.g. campaigns.send_now) when the goal is delivery rather than editing. Prefer a read-only preview or recipient-count action when you only need to inspect a campaign without changing it.",
+  "preconditions": [
+    "The newsletter must already exist and be addressable by the numeric id in the path.",
+    "The caller must be authenticated for the account that owns the newsletter.",
+    "The request body must carry a complete editor document, because the stored design is replaced rather than patched."
+  ],
+  "inputs": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "integer",
+        "description": "Path parameter. Numeric id of the newsletter whose design is being replaced, e.g. 2 or 3."
+      },
+      "source": {
+        "type": "string",
+        "description": "Query parameter identifying the editor that produced the document. Observed value: reactDnD.",
+        "enum": [
+          "reactDnD"
+        ]
+      },
+      "makeScreenshot": {
+        "type": "boolean",
+        "description": "Query parameter. When true, the server also generates a thumbnail/screenshot of the saved design."
+      },
+      "saveEditorVersion": {
+        "type": "boolean",
+        "description": "Query parameter. When true, the editor version used for this save is recorded alongside the design."
+      },
+      "content": {
+        "type": "object",
+        "description": "The complete drag-and-drop editor document to store for this newsletter.",
+        "properties": {
+          "author": {
+            "type": "string",
+            "description": "Author label stored with the design; observed as an empty string."
+          },
+          "body": {
+            "type": "object",
+            "description": "Root of the editor document tree.",
+            "properties": {
+              "content": {
+                "type": "array",
+                "description": "Ordered list of editor nodes. Each node nests further nodes via its own 'content' field and carries presentation metadata such as 'type' (e.g. \"text\"), 'title', 'align', 'label', 'isEmpty', and a 'layout' map keyed by breakpoint (e.g. \"default\", \"320px\") holding CSS-like properties. Text nodes hold an HTML string in 'content' and may contain template placeholders such as {{ mirror }}.",
+                "items": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "required": [
+      "id",
+      "content"
+    ]
+  },
+  "outputs": {
+    "type": "object",
+    "properties": {
+      "html": {
+        "type": "string",
+        "description": "The full rendered email HTML document for the saved design, including doctype, head styles and the campaign subject in the title."
+      }
+    }
+  },
+  "side_effects": [
+    "The newsletter's stored design is overwritten with the submitted editor document; the previous design is replaced.",
+    "The rendered HTML for the newsletter is regenerated, so any later preview, test send, or actual send uses the new content.",
+    "When makeScreenshot is true, a thumbnail/screenshot of the design is generated and stored.",
+    "When saveEditorVersion is true, the editor version is recorded for the newsletter."
+  ],
+  "destructive": false,
+  "idempotent": false,
+  "ui_path": [
+    "Campaigns",
+    "Email",
+    "Open an existing email campaign",
+    "Design",
+    "Edit the drag-and-drop template",
+    "Save"
+  ],
+  "internal_endpoint": {
+    "method": "PUT",
+    "path": "/editor-api/newsletters/:id",
+    "body_example": "{\"content\":{\"author\":\"\",\"body\":{\"content\":[{\"content\":[{\"align\":\"top\",\"content\":[{\"content\":[{\"content\":\"<p><a href=\\\"{{ mirror }}\\\">\\n                      <span style=\\\"font-family: arial,helvetica,sans-serif;color:#858588;font-size: 12px; text-decoration: underline;\\\">\\n                      View in browser</span></a></p>\",\"layout\":{\"320px\":{\"padding-left\":\"10px\",\"padding-right\":\"10px\",\"width\":\"100%\"},\"default\":{\"align\":\"center\",\"line-height\":\"16px\",\"padding-left\":\"30px\",\"padding-right\":\"30px\",\"text-align\":\"center\",\"width\":\"100%\"}},\"title\":\"Webversion\",\"type\":\"text\"}],\"isEmpty\":false,\"label\":\"Drop content here\",\"layout\":{\"320px\":[],\"default\":{\"padding-left\":\"0px\",\"padding-right\":\"0px\",\"valign\":\"top\"}},\"title\":\"column 1\",\"type\":\"grid-column\"}],\"dist\":\"12\",\"gutter\":\"0px\",\"layout\":{\"320px\":{\"display\":\"rows\",\"width\":\"100%\"},\"default\":{\"align\":\"center\",\"background-color\":\"transparent\",\"display\":\"none\",\"full-width\":true,\"padding-bottom\":\"5px\",\"padding-top\":\"5px\",\"valign\":\"top\",\"width\":\"100%\"}},\"moduleName\":\"viewInBrowser\",\"thumbnail\":\"/assets/img/editor/grid_12.svg\",\"title\":\"section\",\"type\":\"grid-row\"},{\"align\":\"top\",\"content\":[{\"content\":[{\"content\":{\"src\":\"https://creative-assets.mailinblue.com/editor/templates/logo-placeholder.png\"},\"label\":\"Replace\",\"layout\":{\"320px\":{\"max-width\":\"320px\",\"width\":\"100%\"},\"default\":{\"align\":\"center\",\"canvas-height\":\"76px\",\"valign\":\"top\",\"width\":\"200px\"}},\"moduleName\":\"brand-logo\",\"title\":\"Logo\",\"type\":\"image\"},{\"content\":\"<h2 class=\\\"default-heading2\\\"><strong><span style=\\\"font-size: 48px;\\\">Final hours.</span></strong></h2>\",\"layout\":{\"320px\":{\"width\":\"100%\"},\"default\":{\"align\":\"left\",\"padding-top\":\"15px\",\"text-align\":\"center\",\"text-valign\":\"top\",\"valign\":\"top\",\"width\":\"100%\"}},\"moduleName\":\"text-title\",\"title\":\"Title\",\"type\":\"text\"},{\"content\":\"<p><strong><span style=\\\"font-size: 18px;\\\">Black Friday ends tonight at midnight.</span></strong></p>\",\"layout\":{\"320px\":{\"width\":\"100%\"},\"default\":{\"align\":\"left\",\"padding-bottom\":\"15px\",\"padding-top\":\"15px\",\"text-align\":\"center\",\"text-valign\":\"top\",\"valign\":\"top\",\"width\":\"100%\"}},\"title\":\"Text\",\"type\":\"text\"},{\"content\":\"<div style=\\\"text-align:center;\\\"><img src=\\\"https://placehold.co/520x96/111111/fdd335/png?text=Countdown+to+midnight+(GIF)\\\" width=\\\"520\\\" alt=\\\"Ends tonight at midnight\\\" style=\\\"width:100%;max-width:520px;border-radius:8px;display:inline-block;\\\"></div>\",\"layout\":{\"320px\":{},\"default\":{\"padding-bottom\":\"15px\",\"padding-top\":\"15px\",\"width\":\"100%\"}},\"title\":\"HTML\",\"type\":\"raw-html\"},{\"content\":\"<p>Up to 40% off everything, free shipping over €50. After midnight, prices go back up.</p>\",\"layout\":{\"320px\":{\"width\":\"100%\"},\"default\":{\"align\":\"left\",\"padding-bottom\":\"15px\",\"padding-top\":\"15px\",\"text-align\":\"center\",\"text-valign\":\"top\",\"valign\":\"top\",\"width\":\"100%\"}},\"title\":\"Text\",\"type\":\"text\"},{\"content\":{\"href\":\"https://example.com/black-friday\",\"text\":\"<p><strong>Shop before midnight</strong></p>\",\"title\":\"\"},\"layout\":{\"320px\":{\"width\":\"100%\"},\"default\":{\"align\":\"center\",\"background-color\":\"#111111\",\"border-radius\":\"30px\",\"item-height\":\"42px\",\"margin-bottom\":\"15px\",\"margin-top\":\"15px\",\"padding-bottom\":\"12px\",\"padding-top\":\"12px\",\"text-align\":\"center\",\"text-valign\":\"top\",\"type\":\"absoluteLink\",\"valign\":\"top\"}},\"text\":\"<p><strong>Shop before midnight</strong></p>\",\"title\":\"Button\",\"type\":\"text-button\"}],\"isEmpty\":false,\"label\":\"Drop content here\",\"layout\":{\"320px\":[],\"default\":{\"padding-left\":\"0px\",\"padding-right\":\"0px\",\"valign\":\"top\"}},\"title\":\"grid-column\",\"type\":\"grid-column\"}],\"dist\":\"12\",\"gutter\":\"0px\",\"layout\":{\"320px\":{\"display\":\"rows\",\"width\":\"100%\"},\"default\":{\"align\":\"center\",\"background-color\":\"#fdd335\",\"valign\":\"top\",\"width\":\"100%\"}},\"moduleName\":\"header\",\"thumbnail\":\"/assets/img/editor/element-header.svg\",\"title\":\"Header\",\"type\":\"grid-row\"},{\"align\":\"top\",\"content\":[{\"content\":[{\"content\":\"<p><strong>Still thinking about these?</strong></p>\",\"layout\":{\"320px\":{\"width\":\"100%\"},\"default\":{\"align\":\"left\",\"padding-bottom\":\"15px\",\"padding-top\":\"15px\",\"text-align\":\"center\",\"text-valign\":\"top\",\"valign\":\"top\",\"width\":\"100%\"}},\"title\":\"Text\",\"type\":\"text\"}],\"isEmpty\":false,\"layout\":{\"320px\":{},\"default\":{\"padding-left\":\"0px\",\"padding-right\":\"0px\",\"valign\":\"top\"}},\"stylable\":false,\"title\":\"Column\",\"type\":\"grid-column\"}],\"dist\":\"12\",\"gutter\":\"30px\",\"layout\":{\"320px\":{\"display\":\"rows\",\"padding-left\":\"15px\",\"padding-right\":\"15px\",\"width\":\"100%\"},\"default\":{\"align\":\"center\",\"padding-bottom\":\"20px\",\"padding-top\":\"20px\",\"valign\":\"top\",\"width\":\"100%\"}},\"moduleName\":\"grid-row12\",\"stylable\":false,\"thumbnail\":\"/assets/img/editor/grid_12.svg\",\"title\":\"Section\",\"type\":\"grid-row\"},{\"content\":[{\"align\":\"top\",\"content\":[{\"content\":[{\"content\":[{\"content\":[{\"content\":{\"alt\":\"Product default image\",\"href\":\"https://creative-assets.mailinblue.com/react-editor/placeholder-images/defaultproduct.png\",\"src\":\"https://creative-assets.mailinblue.com/react-editor/placeholder-images/defaultproduct.png\"},\"dragable\":false,\"layout\":{\"320px\":{\"margin-bottom\":\"8px\",\"max-width\":\"320px\",\"width\":\"100%\"},\"default\":{\"align\":\"center\",\"height\":\"auto\",\"margin-bottom\":\"8px\",\"valign\":\"top\",\"width\":\"100%\"}},\"moduleName\":\"product-image\",\"stylable\":false,\"thumbnail\":\"/assets/img/editor/element_image.svg\",\"title\":\"Product Image\",\"type\":\"image\"}],\"dragable\":false,\"isResponsive\":false,\"layout\":{\"320px\":{},\"default\":{\"margin-bottom\":\"0px\",\"margin-top\":\"0px\",\"padding-left\":\"0px\",\"padding-right\":\"0px\",\"valign\":\"top\"}},\"moduleName\":\"product-image-column\",\"title\":\"Column\",\"type\":\"grid-column\"},{\"content\":[{\"content\":\"<p>The product you choose after clicking on “Add product” will be displayed here.</p>\",\"dragable\":false,\"layout\":{\"320px\":{\"margin-botton\":\"8px\",\"width\":\"100%\"},\"default\":{\"margin-bottom\":\"8px\",\"margin-top\":\"36px\",\"text-valign\":\"center\",\"v-align\":\"center\",\"valign\":\"top\",\"width\":\"100%\"}},\"moduleName\":\"product-title\",\"stylable\":false,\"thumbnail\":\"/assets/img/editor/element_text.svg\",\"title\":\"Product title\",\"type\":\"text\"},{\"content\":\"<p style=\\\"font-style: italic;\\\"></p>\",\"dragable\":false,\"layout\":{\"320px\":{\"display\":\"none\",\"margin-bottom\":\"8px\",\"width\":\"100%\"},\"default\":{\"align\":\"left\",\"data-display\":\"none\",\"display\":\"none\",\"margin-bottom\":\"8px\",\"text-align\":\"left\",\"text-valign\":\"top\",\"valign\":\"top\",\"width\":\"100%\"}},\"moduleName\":\"product-brand\",\"thumbnail\":\"/assets/img/editor/element_text.svg\",\"title\":\"Product brand\",\"type\":\"text\"},{\"content\":\"<p style=\\\"font-style: italic; text-decoration: line-through;\\\"></p>\",\"dragable\":false,\"layout\":{\"320px\":{\"display\":\"none\",\"margin-bottom\":\"8px\",\"width\":\"100%\"},\"default\":{\"align\":\"left\",\"data-display\":\"none\",\"display\":\"none\",\"margin-bottom\":\"8px\",\"text-align\":\"left\",\"text-valign\":\"top\",\"valign\":\"top\",\"width\":\"100%\"}},\"moduleName\":\"product-alternative-price\",\"thumbnail\":\"/assets/img/editor/element_text.svg\",\"title\":\"Product alternative price\",\"type\":\"text\"}],\"dragable\":false,\"isResponsive\":false,\"layout\":{\"320px\":{\"margin-bottom\":\"8px\"},\"default\":{\"align\":\"left\",\"margin-bottom\":\"0px\",\"margin-top\":\"0px\",\"padding-left\":\"0px\",\"padding-right\":\"0px\",\"text-align\":\"left\",\"valign\":\"top\"}},\"moduleName\":\"product-details-column\",\"title\":\"Column\",\"type\":\"grid-column\"}],\"dist\":\"5-7\",\"dragable\":false,\"gutter\":\"32px\",\"isDefaultProduct\":true,\"layout\":{\"320px\":{\"display\":\"rows\",\"width\":\"100%\"},\"default\":{\"padding-bottom\":\"20px\",\"padding-top\":\"20px\",\"valign\":\"top\",\"width\":\"100%\"}},\"moduleName\":\"product-item\",\"title\":\"Product\",\"type\":\"grid-row\"}],\"layout\":{\"320px\":{\"width\":\"100%\"},\"default\":{\"width\":\"100%\"}},\"moduleName\":\"product-section-group\",\"type\":\"rows\"}],\"dragable\":false,\"isEmpty\":false,\"isResponsive\":false,\"layout\":{\"320px\":{},\"default\":{\"margin-bottom\":\"0px\",\"margin-top\":\"0px\",\"padding-left\":\"0px\",\"padding-right\":\"0px\",\"valign\":\"top\"}},\"moduleName\":\"product-section-wrapper\",\"title\":\"Product\",\"type\":\"grid-column\"}],\"dist\":\"100\",\"fields\":{\"extraFields\":[],\"gridColumns\":3,\"imageColDist\":\"6\",\"imagePosition\":\"left\",\"layoutAlignment\":{\"default\":\"left\"},\"layoutMode\":\"list\",\"productButtonText\":\"View\",\"productNodesTemplates\":{\"product-alternative-price\":{\"content\":\"<p style=\\\"font-style: italic; text-decoration: line-through;\\\"></p>\",\"dragable\":false,\"layout"
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/har/block-c-email.json"
+    ],
+    "verified_at": null
+  }
+}

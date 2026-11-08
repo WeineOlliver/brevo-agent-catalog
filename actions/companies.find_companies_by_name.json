@@ -1,0 +1,55 @@
+{
+  "id": "companies.find_companies_by_name",
+  "module": "companies",
+  "name": "Find companies by name",
+  "description": "Call this when you have a company name string and need the matching company records in the CRM — typically to resolve a name to a company id, or to check whether a company already exists before creating one with companies.create_company. Use this for name-based lookup only; it takes a single name query parameter and returns an array that is empty when nothing matches. If you already hold a company id and want its full record, or you need to filter companies by attributes other than name, use the companies listing/detail action instead; to attach a contact to a company once you have resolved its id, use contacts.link_unlink_company.",
+  "preconditions": [
+    "The session must be authenticated against the CRM backend host (crm-backend-api.brevo.com).",
+    "The account must have the CRM companies feature available."
+  ],
+  "inputs": {
+    "type": "object",
+    "properties": {
+      "name": {
+        "type": "string",
+        "description": "Company name to look up, passed as a query parameter (observed: \"Stark Industries\"). Sent URL-encoded."
+      }
+    },
+    "required": [
+      "name"
+    ]
+  },
+  "outputs": {
+    "type": "array",
+    "description": "Array of matching company records; empty array when no company matches the supplied name. Only an empty array was observed, so the shape of a populated element is not known from the evidence.",
+    "items": {
+      "type": "object",
+      "description": "A matching company record. Field names and types were not observed."
+    }
+  },
+  "side_effects": [],
+  "destructive": false,
+  "idempotent": true,
+  "ui_path": [
+    "CRM",
+    "Companies",
+    "Search companies"
+  ],
+  "internal_endpoint": {
+    "method": "GET",
+    "path": "/crm/backend/attribute/companies",
+    "body_example": null
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/har/block-a-contacts.json"
+    ],
+    "verified_at": null
+  }
+}

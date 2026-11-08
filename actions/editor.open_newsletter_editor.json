@@ -1,0 +1,66 @@
+{
+  "id": "editor.open_newsletter_editor",
+  "module": "editor",
+  "name": "Open newsletter editor",
+  "description": "Call this when an agent needs to reach the drag-and-drop editor UI for an existing email campaign (newsletter) so a human or a UI-driving agent can edit its design, optionally starting from a chosen template. This only loads the editor single-page application shell; it returns no campaign data and saves nothing. To read or change campaign fields programmatically, use the email campaign actions instead (for example email_campaign.create_regular to create a campaign, or the campaign update/get actions), and campaigns.send_now to send one.",
+  "preconditions": [
+    "The newsletter (email campaign) identified by the path id must already exist on the account.",
+    "The session must be authenticated to the Brevo web app.",
+    "If templateId is supplied, that template must already exist on the account."
+  ],
+  "inputs": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "string",
+        "description": "Path parameter: numeric identifier of the newsletter (email campaign) whose editor should be opened, e.g. \"3\"."
+      },
+      "templateId": {
+        "type": "string",
+        "description": "Optional query parameter: identifier of the template to load into the editor for this newsletter, e.g. \"5ea1551d2e9ad34b8640be9f\"."
+      }
+    },
+    "required": [
+      "id"
+    ]
+  },
+  "outputs": {
+    "type": "object",
+    "properties": {
+      "contentType": {
+        "type": "string",
+        "description": "Response is an HTML document (text/html), not JSON."
+      },
+      "body": {
+        "type": "string",
+        "description": "The HTML shell of the Brevo editor single-page application, including a splash-screen stylesheet and the script bundles that load the editor client-side. It contains no newsletter content."
+      }
+    }
+  },
+  "side_effects": [],
+  "destructive": false,
+  "idempotent": true,
+  "ui_path": [
+    "Campaigns",
+    "Email",
+    "Select the campaign",
+    "Edit design"
+  ],
+  "internal_endpoint": {
+    "method": "GET",
+    "path": "/editor/newsletters/:id",
+    "body_example": null
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/har/block-c-email.json"
+    ],
+    "verified_at": null
+  }
+}

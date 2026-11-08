@@ -1,0 +1,96 @@
+{
+  "id": "contacts.bulk_modify_list",
+  "module": "contacts",
+  "name": "Bulk modify contacts list",
+  "description": "Call this when you need to apply a bulk action (e.g., delete contacts from a list) to a set of contacts selected in the UI. Use the single‑contact endpoint (contacts.remove_contact_from_list) when you only need to modify one contact, as it is more appropriate for that case.",
+  "preconditions": [
+    "The target contacts must exist.",
+    "The list(s) referenced in the request must already exist."
+  ],
+  "inputs": {
+    "type": "object",
+    "properties": {
+      "action": {
+        "type": "string",
+        "enum": [
+          "DELETE_FROM_LIST"
+        ],
+        "description": "The bulk action to perform. Currently supported: DELETE_FROM_LIST."
+      },
+      "is_all_selected": {
+        "type": "boolean",
+        "description": "Whether the action applies to all contacts matching the filter, ignoring the explicit ids array."
+      },
+      "ids": {
+        "type": "array",
+        "items": {
+          "type": "integer"
+        },
+        "description": "Array of contact IDs to which the action should be applied when is_all_selected is false."
+      },
+      "fe_query": {
+        "type": "object",
+        "description": "Frontend query object describing additional filter criteria for selecting contacts."
+      },
+      "searchBy": {
+        "type": "string",
+        "description": "Free‑text search term used in the UI to narrow the contact set."
+      },
+      "unlink_list_ids": {
+        "type": "array",
+        "items": {
+          "type": "integer"
+        },
+        "description": "List IDs from which the contacts should be removed."
+      }
+    },
+    "required": [
+      "action",
+      "is_all_selected",
+      "ids",
+      "unlink_list_ids"
+    ]
+  },
+  "outputs": {
+    "type": "object",
+    "properties": {
+      "message": {
+        "type": "string",
+        "description": "Confirmation that the bulk process has been dispatched."
+      }
+    },
+    "required": [
+      "message"
+    ]
+  },
+  "side_effects": [
+    "The specified contacts are removed from the given list(s)."
+  ],
+  "destructive": true,
+  "idempotent": false,
+  "ui_path": [
+    "Contacts",
+    "All contacts",
+    "Select contacts",
+    "Actions",
+    "Remove from list",
+    "Confirm"
+  ],
+  "internal_endpoint": {
+    "method": "POST",
+    "path": "/contact/backend/actions/list",
+    "body_example": "{\"action\":\"DELETE_FROM_LIST\",\"is_all_selected\":false,\"ids\":[3],\"fe_query\":{\"or\":[{\"and\":[{\"contact\":{\"field\":\"List\",\"dataType\":\"list\",\"operator\":\"in\",\"value\":[6]},\"isValidated\":true}]}]},\"searchBy\":\"\",\"unlink_list_ids\":[6]}"
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/har/block-a-contacts.json"
+    ],
+    "verified_at": null
+  }
+}

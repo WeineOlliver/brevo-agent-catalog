@@ -1,0 +1,62 @@
+{
+  "id": "editor.get_localization_settings",
+  "module": "editor",
+  "name": "Get editor localization settings",
+  "description": "Call this when you need to know whether multi-language (localization) content is available for the current account's email/page editor, and how many languages it allows, before offering or building a translated variant of a template. It reports capability only — it does not read or write any template's language content, and it is not the action for account-wide plan or feature lookup, where the account info action is the better fit.",
+  "preconditions": [
+    "The caller must be authenticated to the Brevo web app with a session that the editor API accepts."
+  ],
+  "inputs": {
+    "type": "object",
+    "properties": {},
+    "required": []
+  },
+  "outputs": {
+    "type": "object",
+    "properties": {
+      "featureEnabled": {
+        "type": "boolean",
+        "description": "Whether the multi-language localization feature is available to this account."
+      },
+      "maxLanguages": {
+        "type": "integer",
+        "description": "Maximum number of languages the account may use in a localized design; observed as 0 when the feature is disabled."
+      },
+      "pricingVersion": {
+        "type": "string",
+        "description": "Identifier of the pricing model the account is on, which gates the localization feature (observed value: \"v5\")."
+      }
+    },
+    "required": [
+      "featureEnabled",
+      "maxLanguages",
+      "pricingVersion"
+    ]
+  },
+  "side_effects": [],
+  "destructive": false,
+  "idempotent": true,
+  "ui_path": [
+    "Campaigns",
+    "Email template",
+    "Design",
+    "Languages"
+  ],
+  "internal_endpoint": {
+    "method": "GET",
+    "path": "/editor-api/localization/settings",
+    "body_example": null
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/har/block-c-email.json"
+    ],
+    "verified_at": null
+  }
+}

@@ -1,0 +1,72 @@
+{
+  "id": "newsletters.get_newsletter",
+  "module": "newsletters",
+  "name": "Get newsletter",
+  "description": "Call this when you need to retrieve the details of a specific newsletter (campaign) by its identifier, such as its name, content placeholder, and type. Use the list_newsletters action instead if you need to discover multiple newsletters at once.",
+  "preconditions": [],
+  "inputs": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "integer",
+        "description": "The unique identifier of the newsletter to retrieve."
+      },
+      "editorType": {
+        "type": "integer",
+        "description": "Optional editor mode flag used by the UI; observed value 6."
+      }
+    },
+    "required": [
+      "id"
+    ]
+  },
+  "outputs": {
+    "type": "object",
+    "properties": {
+      "name": {
+        "type": "string",
+        "description": "The display name of the newsletter."
+      },
+      "content": {
+        "type": [
+          "object",
+          "null"
+        ],
+        "description": "The newsletter's content payload; may be null if not yet defined."
+      },
+      "campaignType": {
+        "type": "string",
+        "description": "The type of campaign (e.g., classic)."
+      }
+    },
+    "required": [
+      "name",
+      "campaignType"
+    ]
+  },
+  "side_effects": [],
+  "destructive": false,
+  "idempotent": true,
+  "ui_path": [
+    "Campaigns",
+    "Newsletters",
+    "Edit newsletter"
+  ],
+  "internal_endpoint": {
+    "method": "GET",
+    "path": "/editor-api/newsletters/:id",
+    "body_example": null
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/har/block-c-email.json"
+    ],
+    "verified_at": null
+  }
+}

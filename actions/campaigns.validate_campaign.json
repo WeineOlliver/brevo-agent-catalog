@@ -1,0 +1,72 @@
+{
+  "id": "campaigns.validate_campaign",
+  "module": "campaigns",
+  "name": "Validate campaign before sending",
+  "description": "Call this when you have an existing marketing campaign and need to know whether it is ready to go out — before calling campaigns.send_now or scheduling it — so you can stop and report problems instead of sending something broken. It reports a single overall verdict plus the account's remaining daily email allowance, so it is also the check to make when you need to know whether the sending quota covers this campaign. If you instead need the campaign's own configuration (subject, sender, lists, content), use campaigns.get_campaign; if you need to check the HTML or template content specifically, use campaigns.validate_campaign_content.",
+  "preconditions": [
+    "A campaign with the given id must already exist in the account.",
+    "The caller must be authenticated to the Brevo account that owns the campaign."
+  ],
+  "inputs": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "integer",
+        "description": "Numeric id of the campaign to validate, taken from the campaign's URL or from a campaign listing action."
+      }
+    },
+    "required": [
+      "id"
+    ]
+  },
+  "outputs": {
+    "type": "object",
+    "properties": {
+      "is_valid": {
+        "type": "boolean",
+        "description": "Overall verdict: true when the campaign passed validation and is considered ready to send. Treat false as a blocker and do not proceed to send."
+      },
+      "inline_img_warning": {
+        "type": "boolean",
+        "description": "True when the campaign content triggers a warning about inline images. A warning, not a blocker — is_valid can still be true."
+      },
+      "remaining_email_pd": {
+        "type": "integer",
+        "description": "Number of emails the account may still send under its current daily sending allowance."
+      },
+      "still_to_process": {
+        "type": "integer",
+        "description": "Number of items the backend has not finished processing for this campaign yet; a non-zero value means validation data may still be settling."
+      }
+    },
+    "required": [
+      "is_valid"
+    ]
+  },
+  "side_effects": [],
+  "destructive": false,
+  "idempotent": true,
+  "ui_path": [
+    "Campaigns",
+    "Email",
+    "Select the campaign",
+    "Review and send"
+  ],
+  "internal_endpoint": {
+    "method": "GET",
+    "path": "/marketing-campaign/api/campaign/:id/validate",
+    "body_example": null
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/har/block-c-email.json"
+    ],
+    "verified_at": null
+  }
+}

@@ -1,0 +1,52 @@
+{
+  "id": "conversations.load_chat_widget_script",
+  "module": "conversations",
+  "name": "Load chat widget loader script",
+  "description": "Call this when you need the browser-side bootstrap script that injects and styles the Brevo Conversations chat widget on a page — for example to verify that the widget loader is being served for the account, or to inspect the CSS and DOM setup the widget applies. The response is JavaScript for a browser to execute, not structured data, so do not use it to read conversation or chat data. To turn the Conversations product on for the account, use the enable-conversations-app action instead; to read account-level Conversations configuration, use the account info actions.",
+  "preconditions": [
+    "The request must be made against the Conversations app host (conversations-app.brevo.com).",
+    "The Conversations app must be reachable for the account for the loader to be served."
+  ],
+  "inputs": {
+    "type": "object",
+    "properties": {},
+    "required": []
+  },
+  "outputs": {
+    "type": "object",
+    "properties": {
+      "body": {
+        "type": "string",
+        "description": "A JavaScript program (served as text, not JSON) that creates a style element with brevo-conversations CSS rules and appends it to document.head, bootstrapping the chat widget in the page."
+      }
+    },
+    "required": [
+      "body"
+    ]
+  },
+  "side_effects": [
+    "When the returned script is executed in a browser, a style element is appended to document.head and the chat widget is bootstrapped in the page. Fetching the script alone changes nothing server-side."
+  ],
+  "destructive": false,
+  "idempotent": true,
+  "ui_path": [
+    "Conversations"
+  ],
+  "internal_endpoint": {
+    "method": "GET",
+    "path": "/feApi/chatWidgetLoader",
+    "body_example": null
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/har/block-c-email.json"
+    ],
+    "verified_at": null
+  }
+}

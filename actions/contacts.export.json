@@ -1,0 +1,136 @@
+{
+  "id": "contacts.export",
+  "module": "contacts",
+  "name": "Export contacts",
+  "description": "Call this when you need to generate a CSV/Excel export of one or more contacts, optionally including subscription status and internal metadata. Use the neighbouring action \"contacts.get_export_status\" to check the export progress or retrieve the file once it is ready, instead of calling export again.",
+  "preconditions": [
+    "The contacts referenced by the provided ids must exist."
+  ],
+  "inputs": {
+    "type": "object",
+    "properties": {
+      "action": {
+        "type": "string",
+        "enum": [
+          "EXPORT"
+        ],
+        "description": "The export action identifier."
+      },
+      "ids": {
+        "type": "array",
+        "items": {
+          "type": "integer"
+        },
+        "description": "Array of contact IDs to export. Required when is_all_selected is false."
+      },
+      "is_all_selected": {
+        "type": "boolean",
+        "description": "If true, export all contacts matching the current filter instead of the ids list."
+      },
+      "fe_query": {
+        "type": "object",
+        "description": "Frontend query object representing additional filtering criteria."
+      },
+      "searchBy": {
+        "type": "string",
+        "description": "Search term applied to contacts before export."
+      },
+      "attributes": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        },
+        "description": "List of contact attributes/columns to include in the export."
+      },
+      "exportSubscriptionStatus": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "enum": [
+            "email_marketing",
+            "sms_marketing"
+          ]
+        },
+        "description": "Subscription statuses to include."
+      },
+      "exportInternalMetaData": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        },
+        "description": "Internal metadata fields to include, expressed as SQL‑like aliases."
+      },
+      "delimiter": {
+        "type": "string",
+        "description": "CSV delimiter character (e.g., \",\" or \";\")."
+      },
+      "sourceId": {
+        "type": [
+          "integer",
+          "null"
+        ],
+        "description": "Optional source identifier for the export request."
+      },
+      "sourceType": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "description": "Optional source type for the export request."
+      },
+      "send_email": {
+        "type": "boolean",
+        "description": "If true, an email containing the export link will be sent to the user."
+      }
+    },
+    "required": [
+      "action",
+      "is_all_selected",
+      "attributes",
+      "delimiter"
+    ]
+  },
+  "outputs": {
+    "type": "object",
+    "properties": {
+      "message": {
+        "type": "string",
+        "description": "Confirmation that the export job has been dispatched."
+      }
+    },
+    "required": [
+      "message"
+    ]
+  },
+  "side_effects": [
+    "An export job is queued and processed asynchronously.",
+    "If send_email is true, an email with a download link is sent to the requesting user."
+  ],
+  "destructive": false,
+  "idempotent": true,
+  "ui_path": [
+    "Contacts",
+    "Select contacts",
+    "Actions",
+    "Export",
+    "Configure export options",
+    "Start export"
+  ],
+  "internal_endpoint": {
+    "method": "POST",
+    "path": "/contact/backend/actions/export",
+    "body_example": "{\"action\":\"EXPORT\",\"ids\":[6,5,4,2,1],\"is_all_selected\":false,\"fe_query\":{},\"searchBy\":\"\",\"attributes\":[\"sib_contact_owner\",\"sib_next_task\",\"CONTACT ID\",\"LASTNAME\",\"FIRSTNAME\",\"_DETECTED_TIMEZONE\",\"_COUNTRY\",\"_DETECTED_COUNTRY\",\"_DETECTED_POSTALCODE\",\"_DETECTED_CITY\",\"_DETECTED_REGION\",\"_LAST_DETECTED_LOCATION_DATE\",\"_DETECTED_LANGUAGE\",\"DOUBLE_OPT-IN\",\"OPT_IN\",\"CONTACT_TIMEZONE\",\"EXT_ID\",\"LINKEDIN\",\"JOB_TITLE\",\"WHATSAPP\",\"LANDLINE_NUMBER\",\"SMS\"],\"exportSubscriptionStatus\":[\"email_marketing\",\"sms_marketing\"],\"exportInternalMetaData\":[\"email AS EMAIL\",\"entered AS ADDED_TIME\",\"last_modified AS MODIFIED_TIME\",\"listid.id AS _listIds\"],\"delimiter\":\";\",\"sourceId\":null,\"sourceType\":null,\"send_email_notification\":true}"
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/har/block-b-model.json"
+    ],
+    "verified_at": null
+  }
+}

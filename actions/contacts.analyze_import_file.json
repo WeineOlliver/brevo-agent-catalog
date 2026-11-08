@@ -1,0 +1,165 @@
+{
+  "id": "contacts.analyze_import_file",
+  "module": "contacts",
+  "name": "Analyze contact import file",
+  "description": "Call this when you have a contact file (e.g. CSV) and need Brevo to parse its headers and propose an attribute mapping before any contacts are actually imported. This is the first step of the file-based import flow: it returns the detected columns, sample values, inferred data types and which header maps to email/SMS/WhatsApp, so a later step can confirm the mapping and run the import. Use contacts.suggest_mapping_from_file instead if you only need a mapping suggestion for headers you already hold, and use the import-notification action (contacts.get_import_notification) to follow the progress of an import that has already been started. Do not use this to add a single known contact — use contacts.create_contact or contacts.update_contact for that.",
+  "preconditions": [
+    "The session must be authenticated against the Brevo web app (contacts-api-v2.brevo.com).",
+    "A contact file must be available to upload as multipart/form-data.",
+    "The uploaded file must contain a header row, since the response is built from the detected headers."
+  ],
+  "inputs": {
+    "type": "object",
+    "properties": {
+      "import_file": {
+        "type": "string",
+        "format": "binary",
+        "description": "The contact file to analyze, sent as a multipart/form-data file part. Observed with a .csv file and Content-Type text/csv."
+      },
+      "language": {
+        "type": "string",
+        "description": "UI language code used for the parsing/mapping response, e.g. \"en\" as observed."
+      }
+    },
+    "required": [
+      "import_file"
+    ]
+  },
+  "outputs": {
+    "type": "object",
+    "properties": {
+      "mappingDataHeader": {
+        "type": "array",
+        "description": "Column headers detected in the uploaded file, in file order.",
+        "items": {
+          "type": "string"
+        }
+      },
+      "mapping_data": {
+        "type": "object",
+        "description": "One entry per detected header, keyed by the header name.",
+        "additionalProperties": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "array",
+              "description": "Sample values taken from the file's first rows for this column.",
+              "items": {
+                "type": "string"
+              }
+            },
+            "datatype": {
+              "type": "string",
+              "description": "Inferred data type for the column, e.g. \"text\"."
+            },
+            "mapped": {
+              "type": "string",
+              "description": "Whether the column was matched to an existing contact attribute (\"1\" when mapped)."
+            }
+          }
+        }
+      },
+      "contact_id_tag_position": {
+        "description": "Zero-based index of the column holding the contact id, or \"NO\" when absent.",
+        "type": [
+          "integer",
+          "string"
+        ]
+      },
+      "ext_id_tag_position": {
+        "description": "Zero-based index of the column holding the external id, or \"NO\" when absent.",
+        "type": [
+          "integer",
+          "string"
+        ]
+      },
+      "email_tag_position": {
+        "description": "Zero-based index of the column holding the email address, or \"NO\" when absent.",
+        "type": [
+          "integer",
+          "string"
+        ]
+      },
+      "mobile_tag_position": {
+        "description": "Zero-based index of the column holding the mobile number, or \"NO\" when absent.",
+        "type": [
+          "integer",
+          "string"
+        ]
+      },
+      "whatsapp_tag_position": {
+        "description": "Zero-based index of the column holding the WhatsApp number, or \"NO\" when absent.",
+        "type": [
+          "integer",
+          "string"
+        ]
+      },
+      "landline_tag_position": {
+        "description": "Zero-based index of the column holding the landline number, or \"NO\" when absent.",
+        "type": [
+          "integer",
+          "string"
+        ]
+      },
+      "maxTranAttId": {
+        "type": "integer",
+        "description": "Highest transactional attribute id on the account."
+      },
+      "maxUserAttId": {
+        "type": "integer",
+        "description": "Highest normal (user) contact attribute id on the account."
+      },
+      "usersAttr": {
+        "type": "array",
+        "description": "Existing contact attributes available as mapping targets.",
+        "items": {
+          "type": "object",
+          "properties": {
+            "field": {
+              "type": "string",
+              "description": "Attribute name, e.g. \"EMAIL\"."
+            },
+            "dataType": {
+              "type": "string",
+              "description": "Attribute data type, e.g. \"text\"."
+            },
+            "field_key": {
+              "type": "string",
+              "description": "Internal key for the attribute, e.g. \"firstname\"."
+            }
+          }
+        }
+      }
+    }
+  },
+  "side_effects": [
+    "The uploaded file is sent to Brevo and held server-side for the subsequent import step.",
+    "Contact attribute metadata for the account is read and returned."
+  ],
+  "destructive": false,
+  "idempotent": true,
+  "ui_path": [
+    "Contacts",
+    "Imports",
+    "Import contacts",
+    "Upload a file",
+    "Select your file"
+  ],
+  "internal_endpoint": {
+    "method": "POST",
+    "path": "/import/index",
+    "body_example": "------WebKitFormBoundarytRaR1lgLng8JyxKJ\r\nContent-Disposition: form-data; name=\"import_file\"; filename=\"contacts-import-sample.csv\"\r\nContent-Type: text/csv\r\n\r\n\r\n------WebKitFormBoundarytRaR1lgLng8JyxKJ\r\nContent-Disposition: form-data; name=\"language\"\r\n\r\nen\r\n------WebKitFormBoundarytRaR1lgLng8JyxKJ--\r\n"
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/har/block-b-model.json"
+    ],
+    "verified_at": null
+  }
+}

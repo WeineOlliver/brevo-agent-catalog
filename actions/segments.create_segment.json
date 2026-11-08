@@ -1,0 +1,86 @@
+{
+  "id": "segments.create_segment",
+  "module": "segments",
+  "name": "Create segment",
+  "description": "Call this when you need to create a new contact segment based on a filter query. Use the update segment action instead if the segment already exists and only its definition needs to change.",
+  "preconditions": [],
+  "inputs": {
+    "type": "object",
+    "properties": {
+      "name": {
+        "type": "string",
+        "description": "The display name of the segment."
+      },
+      "fe_query": {
+        "type": "object",
+        "description": "The filter query defining which contacts belong to the segment. The exact structure follows Brevo's internal query format."
+      },
+      "category_id": {
+        "type": "string",
+        "description": "Identifier of the category under which the segment should be stored."
+      },
+      "source": {
+        "type": "string",
+        "description": "Origin of the segment creation request, e.g., \"listing\"."
+      }
+    },
+    "required": [
+      "name",
+      "fe_query",
+      "category_id",
+      "source"
+    ]
+  },
+  "outputs": {
+    "type": "object",
+    "properties": {
+      "data": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "Unique identifier of the newly created segment."
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "message": {
+        "type": "string",
+        "description": "Confirmation message from the API."
+      }
+    },
+    "required": [
+      "data",
+      "message"
+    ]
+  },
+  "side_effects": [
+    "A new segment is added to the account and can be used for targeting contacts."
+  ],
+  "destructive": false,
+  "idempotent": false,
+  "ui_path": [
+    "Segments",
+    "Create new segment",
+    "Save"
+  ],
+  "internal_endpoint": {
+    "method": "POST",
+    "path": "/segment",
+    "body_example": "{\"name\":\"Contact from Oscorp\",\"fe_query\":{\"or\":[{\"and\":[{\"contact\":{\"field\":\"List\",\"dataType\":\"list\",\"operator\":\"in\",\"value\":[6]},\"isValidated\":true}]}]},\"category_id\":\"6aee19a7568f9b6e8e111699\",\"source\":\"listing\"}"
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/har/block-b-model.json"
+    ],
+    "verified_at": null
+  }
+}

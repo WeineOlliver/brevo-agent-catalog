@@ -1,0 +1,79 @@
+{
+  "id": "contacts.get_preview",
+  "module": "contacts",
+  "name": "Preview contacts",
+  "description": "Call this when you need a quick view of specific contacts' basic information without loading full details. Provide one or more contact IDs to retrieve their preview data. Use the full contact retrieval action (e.g., contacts.get) when you need all contact attributes or to modify them.",
+  "preconditions": [],
+  "inputs": {
+    "type": "object",
+    "properties": {
+      "contactIds": {
+        "type": "array",
+        "items": {
+          "type": "integer"
+        },
+        "description": "List of contact IDs to preview."
+      }
+    },
+    "required": [
+      "contactIds"
+    ]
+  },
+  "outputs": {
+    "type": "object",
+    "properties": {
+      "items": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "email": {
+              "type": "string",
+              "description": "Contact email address."
+            },
+            "contactId": {
+              "type": "integer",
+              "description": "Unique identifier of the contact."
+            },
+            "attributes": {
+              "type": "object",
+              "description": "Custom attributes of the contact. Keys are attribute names, values are strings, booleans, or numbers."
+            }
+          },
+          "required": [
+            "email",
+            "contactId",
+            "attributes"
+          ]
+        }
+      }
+    },
+    "required": [
+      "items"
+    ]
+  },
+  "side_effects": [],
+  "destructive": false,
+  "idempotent": true,
+  "ui_path": [
+    "Contacts",
+    "Preview"
+  ],
+  "internal_endpoint": {
+    "method": "GET",
+    "path": "/crm/backend/contacts/preview",
+    "body_example": null
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/har/block-a-contacts.json"
+    ],
+    "verified_at": null
+  }
+}

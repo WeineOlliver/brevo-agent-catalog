@@ -1,0 +1,68 @@
+{
+  "id": "senders.unblock_sender",
+  "module": "senders",
+  "name": "Unblock sender",
+  "description": "Call this when a transactional sender address has been blocked and you need to restore its ability to send again, after the cause of the block has been addressed. Use it only for sender identities on the account; if the address you need to free is a recipient that was blocked or unsubscribed, use the contact-level action (contacts.update_contact) instead, and if the sender does not exist on the account yet, create it with the sender-creation action rather than unblocking.",
+  "preconditions": [
+    "The sender addresses passed in senderList must already exist on the account.",
+    "The senders must currently be in a blocked state; unblocking has no effect on an unblocked sender.",
+    "The caller must be an authenticated web-app session for the account that owns the senders."
+  ],
+  "inputs": {
+    "type": "object",
+    "properties": {
+      "email": {
+        "type": "string",
+        "format": "email",
+        "description": "Email address identifying the account-level sender context for the unblock request, as sent by the web app."
+      },
+      "senderList": {
+        "type": "array",
+        "description": "The sender email addresses to unblock. Observed with a single entry, but the field is a list.",
+        "items": {
+          "type": "string",
+          "format": "email",
+          "description": "A sender email address on the account to unblock."
+        }
+      }
+    },
+    "required": [
+      "email",
+      "senderList"
+    ]
+  },
+  "outputs": {
+    "type": "object",
+    "description": "HTTP 200 on success. The response body was not captured, so no fields are documented; treat a 200 status as confirmation that the unblock was accepted.",
+    "properties": {}
+  },
+  "side_effects": [
+    "Each listed sender is moved out of the blocked state and becomes usable for sending again.",
+    "Messages from the unblocked sender are no longer rejected on the basis of that block."
+  ],
+  "destructive": true,
+  "idempotent": false,
+  "ui_path": [
+    "Senders, Domains & Dedicated IPs",
+    "Senders",
+    "Select the blocked sender",
+    "Unblock"
+  ],
+  "internal_endpoint": {
+    "method": "POST",
+    "path": "/contact/backend/transactional/senders/unblock",
+    "body_example": "{\"email\":\"{{EMAIL}}\",\"senderList\":[\"{{EMAIL}}\"]}"
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/har/block-c-email.json"
+    ],
+    "verified_at": null
+  }
+}

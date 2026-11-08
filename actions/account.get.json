@@ -1,0 +1,166 @@
+{
+  "id": "account.get",
+  "module": "account",
+  "name": "Get account information",
+  "description": "Call this when you need to retrieve the current user's account details such as ID, name, locale, plan, and feature flags. Use the public /account endpoint instead if you require data that is exposed through the official API.",
+  "preconditions": [
+    "The user must be authenticated in the Brevo web application (valid session cookies)."
+  ],
+  "inputs": {
+    "type": "object",
+    "properties": {},
+    "required": []
+  },
+  "outputs": {
+    "type": "object",
+    "properties": {
+      "account": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique identifier of the account."
+          },
+          "name": {
+            "type": "string",
+            "description": "Name of the account holder."
+          },
+          "locale": {
+            "type": "string",
+            "description": "Locale setting for the account (e.g., en_US)."
+          }
+        },
+        "required": []
+      },
+      "locale": {
+        "type": "string",
+        "description": "Default locale for the account."
+      },
+      "id": {
+        "type": "string",
+        "description": "Account ID (duplicate of account.id for convenience)."
+      },
+      "plan": {
+        "type": "string",
+        "description": "Current plan tier (e.g., FREE, STARTER, etc.)."
+      },
+      "planVertical": {
+        "type": "string",
+        "description": "Vertical category of the plan (e.g., marketing)."
+      },
+      "isSubAccount": {
+        "type": "boolean",
+        "description": "Indicates if this is a sub‑account."
+      },
+      "dateFormat": {
+        "type": "string",
+        "description": "Preferred date format (e.g., dd-mm-yyyy)."
+      },
+      "timeFormat": {
+        "type": "integer",
+        "description": "Preferred time format (24 or 12)."
+      },
+      "timezone": {
+        "type": "string",
+        "description": "Timezone of the account (e.g., America/Sao_Paulo)."
+      },
+      "currency": {
+        "type": "string",
+        "description": "Default currency code for the account."
+      },
+      "features": {
+        "type": "object",
+        "properties": {
+          "plan-management-service": {
+            "type": "boolean"
+          },
+          "editor-v2-update": {
+            "type": "boolean"
+          },
+          "disableLogo": {
+            "type": "boolean"
+          },
+          "external-feed": {
+            "type": "boolean"
+          },
+          "finance": {
+            "type": "boolean"
+          },
+          "wallet": {
+            "type": "boolean"
+          },
+          "assetSharingSavedBlock": {
+            "type": "boolean"
+          },
+          "objects-query-language": {
+            "type": "boolean"
+          },
+          "newSignupFlow": {
+            "type": "boolean"
+          },
+          "per-contact-pixel-tracking-consent": {
+            "type": "boolean"
+          },
+          "content-hub": {
+            "type": "boolean"
+          },
+          "content-hub-picker": {
+            "type": "boolean"
+          }
+        },
+        "required": []
+      },
+      "company": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Company identifier."
+          },
+          "email": {
+            "type": "string",
+            "description": "Contact email for the company."
+          },
+          "name": {
+            "type": "string",
+            "description": "Company name."
+          },
+          "address": {
+            "type": "string",
+            "description": "Physical address of the company."
+          },
+          "postalCode": {
+            "type": "string",
+            "description": "Postal code of the company address."
+          }
+        },
+        "required": []
+      }
+    },
+    "required": []
+  },
+  "side_effects": [],
+  "destructive": false,
+  "idempotent": true,
+  "ui_path": [
+    "Account",
+    "Account Settings"
+  ],
+  "internal_endpoint": {
+    "method": "GET",
+    "path": "/editor-api/account",
+    "body_example": null
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/har/block-c-email.json"
+    ],
+    "verified_at": null
+  }
+}

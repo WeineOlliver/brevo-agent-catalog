@@ -1,0 +1,76 @@
+{
+  "id": "lists.create_list",
+  "module": "lists",
+  "name": "Create list",
+  "description": "Call this when you need to create a new contact list in Brevo. If you only need to create a folder (is_folder true), use the dedicated create_folder action instead.",
+  "preconditions": [
+    "The parent folder identified by folder_id must already exist."
+  ],
+  "inputs": {
+    "type": "object",
+    "properties": {
+      "name": {
+        "type": "string",
+        "description": "The name of the new list."
+      },
+      "is_folder": {
+        "type": "boolean",
+        "description": "Whether the created entity is a folder (true) or a regular list (false)."
+      },
+      "folder_id": {
+        "type": "integer",
+        "description": "Identifier of the parent folder where the list will be placed."
+      },
+      "folder_name": {
+        "type": "string",
+        "description": "Name of the parent folder."
+      }
+    },
+    "required": [
+      "name",
+      "is_folder",
+      "folder_id",
+      "folder_name"
+    ]
+  },
+  "outputs": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "integer",
+        "description": "Identifier of the newly created list."
+      }
+    },
+    "required": [
+      "id"
+    ]
+  },
+  "side_effects": [
+    "A new contact list (or folder) is added to the account."
+  ],
+  "destructive": false,
+  "idempotent": false,
+  "ui_path": [
+    "Contacts",
+    "Lists",
+    "Create list",
+    "Save"
+  ],
+  "internal_endpoint": {
+    "method": "POST",
+    "path": "/lists/create",
+    "body_example": "{\"name\":\"catalog-test-list\",\"is_folder\":false,\"folder_id\":1,\"folder_name\":\"Your First Folder\"}"
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/har/block-a-contacts.json"
+    ],
+    "verified_at": null
+  }
+}

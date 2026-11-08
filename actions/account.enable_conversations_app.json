@@ -1,0 +1,49 @@
+{
+  "id": "account.enable_conversations_app",
+  "module": "account",
+  "name": "Enable Conversations app",
+  "description": "Call this when the Conversations (live chat / inbox) app must be switched on for the current Brevo account before any chat, inbox, or chat-widget feature is used or configured. Use it only once, as a provisioning step — it does not configure the widget, create chat agents, or send messages. If the account already has Conversations active, skip this and go straight to the Conversations settings or inbox actions instead; if a different Brevo product needs turning on, use the corresponding /account/apps/enable/<app> action for that app rather than this one.",
+  "preconditions": [
+    "A signed-in Brevo account session with permission to change account-level app settings.",
+    "The request targets the account-app host (account-app.brevo.com), not the public API host."
+  ],
+  "inputs": {
+    "type": "object",
+    "properties": {},
+    "required": []
+  },
+  "outputs": {
+    "type": "object",
+    "properties": {},
+    "description": "A 200 response was observed; the response body was not captured, so its shape is unknown."
+  },
+  "side_effects": [
+    "The Conversations app is activated on the account, which may make chat/inbox surfaces appear in the Brevo UI.",
+    "Account-level app configuration is changed for every user of the account, not just the caller."
+  ],
+  "destructive": false,
+  "idempotent": false,
+  "ui_path": [
+    "Account",
+    "Apps",
+    "Conversations",
+    "Enable"
+  ],
+  "internal_endpoint": {
+    "method": "POST",
+    "path": "/account/apps/enable/conversations",
+    "body_example": null
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/har/block-c-email.json"
+    ],
+    "verified_at": null
+  }
+}

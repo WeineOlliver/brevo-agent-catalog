@@ -1,0 +1,53 @@
+{
+  "id": "contacts.get_event_status",
+  "module": "contacts",
+  "name": "Get enabled event channels",
+  "description": "Call this when you need to know which contact event channels are enabled for the account before reading or filtering event-based activity, so you can skip channels the account does not have. It returns only the channel identifiers; to get the filter definitions available for a contact's timeline use contacts.list_timeline_event_filters, and to read a contact's actual web activity use contacts.get_contact_visited_webpages.",
+  "preconditions": [
+    "The caller must be authenticated as a user of the Brevo account."
+  ],
+  "inputs": {
+    "type": "object",
+    "properties": {},
+    "required": []
+  },
+  "outputs": {
+    "type": "object",
+    "properties": {
+      "data": {
+        "type": "array",
+        "description": "Identifiers of the event channels enabled for the account. Observed values contained only \"email\".",
+        "items": {
+          "type": "string",
+          "description": "An event channel identifier, e.g. \"email\"."
+        }
+      }
+    },
+    "required": [
+      "data"
+    ]
+  },
+  "side_effects": [],
+  "destructive": false,
+  "idempotent": true,
+  "ui_path": [
+    "Contacts"
+  ],
+  "internal_endpoint": {
+    "method": "GET",
+    "path": "/contact/backend/events/status",
+    "body_example": null
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/har/block-b-model.json"
+    ],
+    "verified_at": null
+  }
+}

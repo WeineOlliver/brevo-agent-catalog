@@ -1,0 +1,56 @@
+{
+  "id": "crm.get_csrf_token",
+  "module": "crm",
+  "name": "Get CSRF token",
+  "description": "Call this when you need a CSRF token to include in a form submission (e.g., posting a company). Use a different form_id parameter for other forms; the same endpoint with a different form_id is the better fit for those cases.",
+  "preconditions": [],
+  "inputs": {
+    "type": "object",
+    "properties": {
+      "form_id": {
+        "type": "string",
+        "description": "Identifier of the form for which the CSRF token is requested (e.g., \"post.company\")."
+      }
+    },
+    "required": [
+      "form_id"
+    ]
+  },
+  "outputs": {
+    "type": "object",
+    "properties": {
+      "token": {
+        "type": "string",
+        "description": "The CSRF token string to be used in subsequent form submissions."
+      }
+    },
+    "required": [
+      "token"
+    ]
+  },
+  "side_effects": [],
+  "destructive": false,
+  "idempotent": true,
+  "ui_path": [
+    "CRM",
+    "Backend",
+    "CSRF Token"
+  ],
+  "internal_endpoint": {
+    "method": "GET",
+    "path": "/crm/backend/csrf/token",
+    "body_example": null
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/har/block-a-contacts.json"
+    ],
+    "verified_at": null
+  }
+}

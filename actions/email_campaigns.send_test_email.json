@@ -1,0 +1,68 @@
+{
+  "id": "email_campaigns.send_test_email",
+  "module": "campaigns",
+  "name": "Send test email for campaign",
+  "description": "Call this when you need to preview a draft email campaign in a real inbox before it goes out — the recipients are the test addresses you pass, not the campaign's audience. Use this to validate rendering, subject line, and personalization during editing. Do not use it to deliver the campaign: call the send-now action (campaigns.send_now) for the real audience, and the recipient-count action (email_campaigns.count_recipients) when you only need to know how many contacts the campaign would reach.",
+  "preconditions": [
+    "The newsletter/campaign identified by :id must already exist.",
+    "The campaign must have enough content saved (at least sender and body) for Brevo to build a sendable test message.",
+    "The session must be authenticated against the editor API for the account that owns the campaign."
+  ],
+  "inputs": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "string",
+        "description": "Path parameter. Identifier of the newsletter/email campaign to send a test of, as used on the editor route (observed value: \"2\")."
+      },
+      "emails": {
+        "type": "array",
+        "description": "Email addresses that should receive the test message. Observed as a single-element array; each entry is one recipient inbox.",
+        "items": {
+          "type": "string",
+          "description": "One recipient email address for the test send."
+        }
+      }
+    },
+    "required": [
+      "id",
+      "emails"
+    ]
+  },
+  "outputs": {
+    "type": "object",
+    "properties": {},
+    "description": "HTTP 200 on success. The response body was not captured in the observed example, so no fields are documented."
+  },
+  "side_effects": [
+    "A test copy of the campaign email is delivered to every address listed in \"emails\".",
+    "Test sends may count against the account's email sending allowance."
+  ],
+  "destructive": true,
+  "idempotent": false,
+  "ui_path": [
+    "Campaigns",
+    "Email",
+    "(open the campaign)",
+    "Send a test",
+    "Enter email address",
+    "Send"
+  ],
+  "internal_endpoint": {
+    "method": "POST",
+    "path": "/editor-api/newsletters/:id/sendtest",
+    "body_example": "{\"emails\":[\"{{EMAIL}}\"]}"
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/har/block-c-email.json"
+    ],
+    "verified_at": null
+  }
+}

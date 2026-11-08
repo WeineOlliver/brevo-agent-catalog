@@ -1,0 +1,210 @@
+{
+  "id": "contacts.update_contact",
+  "module": "contacts",
+  "name": "Update contact",
+  "description": "Call this when you need to modify an existing contact's information such as attributes, email address, assignment, or list memberships. Use the \"Create contact\" action instead when the contact does not yet exist.",
+  "preconditions": [
+    "The contact identified by `id` or `objectId` must already exist."
+  ],
+  "inputs": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "integer",
+        "description": "Internal numeric identifier of the contact."
+      },
+      "objectId": {
+        "type": "string",
+        "description": "Unique object identifier of the contact (used internally)."
+      },
+      "email": {
+        "type": "string",
+        "format": "email",
+        "description": "New email address for the contact. Required if the email is being changed."
+      },
+      "emailOld": {
+        "type": "string",
+        "format": "email",
+        "description": "Previous email address of the contact, required when changing the email."
+      },
+      "attributes": {
+        "type": "object",
+        "description": "Key‑value pairs of custom attributes to set on the contact.",
+        "additionalProperties": {
+          "type": [
+            "string",
+            "number",
+            "boolean",
+            "null"
+          ]
+        }
+      },
+      "assignToId": {
+        "type": [
+          "integer",
+          "null"
+        ],
+        "description": "Identifier of the user to assign the contact to, or null to remove assignment."
+      },
+      "assignToIdChanged": {
+        "type": "boolean",
+        "description": "Flag indicating whether the `assignToId` field has changed."
+      },
+      "unlinkListIds": {
+        "type": "array",
+        "description": "List identifiers from which the contact should be removed.",
+        "items": {
+          "type": "integer"
+        }
+      },
+      "linkListIds": {
+        "type": "array",
+        "description": "List identifiers to which the contact should be added.",
+        "items": {
+          "type": "integer"
+        }
+      }
+    },
+    "required": [
+      "id",
+      "objectId"
+    ]
+  },
+  "outputs": {
+    "type": "object",
+    "properties": {
+      "_id": {
+        "type": "string",
+        "description": "Internal object identifier of the contact."
+      },
+      "id": {
+        "type": "integer",
+        "description": "Numeric identifier of the contact."
+      },
+      "email": {
+        "type": "string",
+        "format": "email",
+        "description": "Current email address of the contact."
+      },
+      "emailTag": {
+        "type": "string",
+        "description": "Domain tag extracted from the email."
+      },
+      "emailBlacklisted": {
+        "type": "integer",
+        "description": "Flag indicating if the email is blacklisted (0 = no, 1 = yes)."
+      },
+      "attributes": {
+        "type": "object",
+        "description": "All custom attributes of the contact.",
+        "additionalProperties": {
+          "type": [
+            "string",
+            "number",
+            "boolean",
+            "null"
+          ]
+        }
+      },
+      "listid": {
+        "type": "object",
+        "description": "Lists the contact belongs to.",
+        "properties": {
+          "id": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            }
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "assignTo": {
+        "type": [
+          "object",
+          "null"
+        ],
+        "description": "User object the contact is assigned to, or null if unassigned."
+      },
+      "consentGroups": {
+        "type": "array",
+        "description": "Consent group information for the contact.",
+        "items": {
+          "type": "object"
+        }
+      },
+      "sc": {
+        "type": "integer",
+        "description": "Status code for the contact (internal use)."
+      },
+      "userHistory": {
+        "type": "array",
+        "description": "Historical actions performed on the contact.",
+        "items": {
+          "type": "object"
+        }
+      },
+      "smsBlacklisted": {
+        "type": "integer",
+        "description": "Flag indicating if the contact's phone number is SMS‑blacklisted."
+      },
+      "whatsappBlacklisted": {
+        "type": "integer",
+        "description": "Flag indicating if the contact's WhatsApp number is blacklisted."
+      },
+      "pushActive": {
+        "type": [
+          "boolean",
+          "null"
+        ],
+        "description": "Whether push notifications are active for the contact."
+      },
+      "blacklistForList": {
+        "type": "array",
+        "description": "List identifiers where the contact is blacklisted.",
+        "items": {
+          "type": "integer"
+        }
+      }
+    },
+    "required": [
+      "_id",
+      "id",
+      "email"
+    ]
+  },
+  "side_effects": [
+    "The contact's stored attributes are updated.",
+    "The contact's email address may be changed.",
+    "The contact may be assigned to a different user.",
+    "The contact is added to or removed from the specified lists."
+  ],
+  "destructive": false,
+  "idempotent": false,
+  "ui_path": [
+    "Contacts",
+    "Search contact",
+    "Open contact details",
+    "Edit",
+    "Save"
+  ],
+  "internal_endpoint": {
+    "method": "PATCH",
+    "path": "/contact/backend/contacts/update",
+    "body_example": "{\"email\":\"{{EMAIL}}\",\"emailOld\":\"{{EMAIL}}\",\"id\":3,\"objectId\":\"6aeec38738c28bb8c9fbb971\",\"attributes\":{\"LASTNAME\":\"Slark\"},\"assignToId\":null,\"assignToIdChanged\":false}"
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/har/block-a-contacts.json"
+    ],
+    "verified_at": null
+  }
+}

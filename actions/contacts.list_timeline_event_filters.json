@@ -1,0 +1,113 @@
+{
+  "id": "contacts.list_timeline_event_filters",
+  "module": "contacts",
+  "name": "List contact timeline event filters",
+  "description": "Call this when you need the set of event sources and event types that are valid filter values for a contact's activity timeline — for example before narrowing a timeline query to CRM meetings, phone calls, or transactional email events. It returns the filter vocabulary only, not any contact's events; to read the events themselves use the contact timeline/activity listing action, and to look up a contact's identity or attributes use the contact detail action instead.",
+  "preconditions": [
+    "The account (organization) identified by the path id must exist and the caller must be authenticated for it.",
+    "The caller's session must have access to the contacts module of that account."
+  ],
+  "inputs": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "string",
+        "description": "Account (organization) identifier whose contact timeline filter vocabulary is requested; appears as :id in the path and matches the ACCOUNT_ID in the app route."
+      }
+    },
+    "required": [
+      "id"
+    ]
+  },
+  "outputs": {
+    "type": "object",
+    "properties": {
+      "data": {
+        "type": "array",
+        "description": "Available filter groups, one per event source.",
+        "items": {
+          "type": "object",
+          "properties": {
+            "source": {
+              "type": "string",
+              "description": "Machine identifier of the event source, e.g. \"Meetings\", \"Phone\", \"google_calendar_sales\", \"transactional\". Use this value when filtering a timeline by source."
+            },
+            "label": {
+              "type": "string",
+              "description": "Display label for the source as shown in the UI; may differ from source (e.g. source \"transactional\" has label \"email_transactional\")."
+            },
+            "related_chips": {
+              "type": [
+                "array",
+                "null"
+              ],
+              "description": "Product-area tags the source is grouped under in the UI, e.g. [\"crm\"] or [\"marketing\"]; null when the source has no grouping.",
+              "items": {
+                "type": "string"
+              }
+            },
+            "is_unified": {
+              "type": "boolean",
+              "description": "Whether the source is part of the unified timeline. Absent on some sources."
+            },
+            "events": {
+              "type": "array",
+              "description": "Event types selectable within this source.",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "description": "Machine identifier of the event type, e.g. \"meeting_booked\", \"call_finished\", \"open\". Use this value when filtering a timeline by event type."
+                  },
+                  "label": {
+                    "type": "string",
+                    "description": "Display label for the event type."
+                  }
+                },
+                "required": [
+                  "type",
+                  "label"
+                ]
+              }
+            }
+          },
+          "required": [
+            "source",
+            "label",
+            "events"
+          ]
+        }
+      }
+    },
+    "required": [
+      "data"
+    ]
+  },
+  "side_effects": [],
+  "destructive": false,
+  "idempotent": true,
+  "ui_path": [
+    "Contacts",
+    "Select a contact",
+    "Timeline",
+    "Filter"
+  ],
+  "internal_endpoint": {
+    "method": "GET",
+    "path": "/organizations/:id/objects/contacts/filters",
+    "body_example": null
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/har/block-a-contacts.json"
+    ],
+    "verified_at": null
+  }
+}

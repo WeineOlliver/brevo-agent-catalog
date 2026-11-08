@@ -1,0 +1,57 @@
+{
+  "id": "profile_forms.list",
+  "module": "profile_forms",
+  "name": "List profile forms",
+  "description": "Call this when you need to retrieve the full list of profile forms configured in the editor. Use the get_profile_form action instead when you only need a specific form by its ID.",
+  "preconditions": [],
+  "inputs": {
+    "type": "object",
+    "properties": {},
+    "required": []
+  },
+  "outputs": {
+    "type": "array",
+    "items": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "The unique identifier of the profile form."
+        },
+        "name": {
+          "type": "string",
+          "description": "The display name of the profile form."
+        }
+      },
+      "required": [
+        "id",
+        "name"
+      ]
+    }
+  },
+  "side_effects": [],
+  "destructive": false,
+  "idempotent": true,
+  "ui_path": [
+    "Editor",
+    "Profile Forms",
+    "View all"
+  ],
+  "internal_endpoint": {
+    "method": "GET",
+    "path": "/editor-api/profile-forms",
+    "body_example": null
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/har/block-c-email.json"
+    ],
+    "verified_at": null
+  }
+}

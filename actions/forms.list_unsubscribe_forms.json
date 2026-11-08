@@ -1,0 +1,56 @@
+{
+  "id": "forms.list_unsubscribe_forms",
+  "module": "forms",
+  "name": "List unsubscribe forms",
+  "description": "Call this when you need the id of an unsubscribe page/form before referencing one elsewhere — for example to resolve a human-readable name like \"Default unsubscribe page\" into the id an editor or campaign setting expects, or to check which unsubscribe pages exist on the account. It returns only id and name, so if you need a campaign's own content or settings use campaigns.get_campaign instead, and if you need brand-level footer styling use branding.get_brand.",
+  "preconditions": [
+    "The session must be authenticated against the Brevo web app (this is an internal editor-api endpoint, not part of the public API)."
+  ],
+  "inputs": {
+    "type": "object",
+    "properties": {},
+    "required": []
+  },
+  "outputs": {
+    "type": "array",
+    "description": "All unsubscribe forms available on the account. The observed account returned a single built-in entry.",
+    "items": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Identifier of the unsubscribe form, e.g. \"6aedca5a474740f90d7b25c0\". Use this when another action needs to reference the form."
+        },
+        "name": {
+          "type": "string",
+          "description": "Display name of the unsubscribe form, e.g. \"Default unsubscribe page\"."
+        }
+      }
+    }
+  },
+  "side_effects": [],
+  "destructive": false,
+  "idempotent": true,
+  "ui_path": [
+    "Campaigns",
+    "Open the email editor",
+    "Unsubscribe page settings"
+  ],
+  "internal_endpoint": {
+    "method": "GET",
+    "path": "/editor-api/unsubscribe-forms",
+    "body_example": null
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/har/block-c-email.json"
+    ],
+    "verified_at": null
+  }
+}

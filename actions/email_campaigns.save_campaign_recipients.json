@@ -1,0 +1,118 @@
+{
+  "id": "email_campaigns.save_campaign_recipients",
+  "module": "email_campaigns",
+  "name": "Save email campaign recipients",
+  "description": "Call this when a draft email campaign already exists and you need to set or replace which lists, segments, or individual contacts it will target, including the exclusions. This only stores the audience selection on the campaign; call the campaign content/settings action to change subject or body, email_campaigns.count_recipients to preview how many contacts the current selection reaches before saving, and campaigns.send_now (or the scheduling action) once the audience is final. Note that this replaces the whole recipient selection rather than adding to it, so include every list, segment, and contact that should remain targeted.",
+  "preconditions": [
+    "An email campaign with the given id must already exist in the account.",
+    "Any list ids, segment ids, or contact ids referenced in the body must already exist in the account.",
+    "The caller must have an authenticated web-app session for the account that owns the campaign."
+  ],
+  "inputs": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "integer",
+        "description": "Path parameter: the id of the email campaign whose recipient selection is being saved (observed as 2 and 3)."
+      },
+      "filter_fe_query": {
+        "type": "object",
+        "description": "Front-end representation of the recipient filter builder state. Observed as an empty object when the audience is chosen as plain lists with no extra filtering."
+      },
+      "included_list_ids": {
+        "type": "array",
+        "items": {
+          "type": "integer"
+        },
+        "description": "Ids of contact lists whose contacts should receive the campaign."
+      },
+      "excluded_list_ids": {
+        "type": "array",
+        "items": {
+          "type": "integer"
+        },
+        "description": "Ids of contact lists whose contacts must be removed from the audience, even if they appear in an included list."
+      },
+      "included_segment_ids": {
+        "type": "array",
+        "items": {
+          "type": "integer"
+        },
+        "description": "Ids of segments whose contacts should receive the campaign."
+      },
+      "included_segment_names": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        },
+        "description": "Display names of the included segments, sent alongside included_segment_ids. Observed as an empty array."
+      },
+      "excluded_segment_ids": {
+        "type": "array",
+        "items": {
+          "type": "integer"
+        },
+        "description": "Ids of segments whose contacts must be removed from the audience."
+      },
+      "included_contacts": {
+        "type": "array",
+        "description": "Individual contacts to add to the audience outside of any list or segment. Observed only as an empty array, so the element shape is unknown."
+      },
+      "excluded_contacts": {
+        "type": "array",
+        "description": "Individual contacts to suppress from the audience. Observed only as an empty array, so the element shape is unknown."
+      },
+      "apply_unengage_filter": {
+        "type": "boolean",
+        "description": "Whether to exclude contacts the app considers unengaged from the audience."
+      }
+    },
+    "required": [
+      "id",
+      "included_list_ids",
+      "excluded_list_ids",
+      "included_segment_ids",
+      "excluded_segment_ids",
+      "included_contacts",
+      "excluded_contacts",
+      "apply_unengage_filter",
+      "filter_fe_query"
+    ]
+  },
+  "outputs": {
+    "type": "object",
+    "properties": {},
+    "description": "Returned HTTP 200 on success. The response body was not captured, so its shape is unknown."
+  },
+  "side_effects": [
+    "The campaign's stored recipient selection is replaced with the lists, segments, and contacts in the request; any previously saved audience for that campaign is discarded.",
+    "The audience that a later send or schedule of this campaign will deliver to changes."
+  ],
+  "destructive": false,
+  "idempotent": false,
+  "ui_path": [
+    "Campaigns",
+    "Email",
+    "(open the draft campaign)",
+    "Recipients",
+    "Select lists or segments",
+    "Save"
+  ],
+  "internal_endpoint": {
+    "method": "POST",
+    "path": "/email-campaign/api/:id/save-recipient",
+    "body_example": "{\"filter_fe_query\":{},\"included_list_ids\":[9],\"excluded_list_ids\":[],\"excluded_segment_ids\":[],\"apply_unengage_filter\":false,\"included_segment_ids\":[],\"included_segment_names\":[],\"included_contacts\":[],\"excluded_contacts\":[]}"
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/har/block-c-email.json"
+    ],
+    "verified_at": null
+  }
+}

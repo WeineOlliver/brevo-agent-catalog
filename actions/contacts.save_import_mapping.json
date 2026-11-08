@@ -1,0 +1,123 @@
+{
+  "id": "contacts.save_import_mapping",
+  "module": "contacts",
+  "name": "Save contact import mapping",
+  "description": "Call this when a contact import file has already been uploaded and analyzed and you need to commit the column-to-attribute mapping, the target lists, and the import options so the import job can run. Use contacts.suggest_mapping_from_file first to obtain a proposed column mapping, and contacts.analyze_import_file to obtain the process id and line count this call refers to; afterwards use contacts.get_import_notification to follow the resulting import. For adding or removing contacts on a list without a file, use contacts.bulk_modify_list instead.",
+  "preconditions": [
+    "An import file must already have been uploaded and analyzed, producing the process_id referenced here.",
+    "Each target list in `lists` must already exist.",
+    "The contact attributes named in `mapdata` must already exist (see contacts.create_attribute)."
+  ],
+  "inputs": {
+    "type": "object",
+    "properties": {
+      "mapdata": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        },
+        "description": "Ordered column mapping for the uploaded file: one contact attribute name per file column, in file column order (e.g. [\"EMAIL\",\"FIRSTNAME\",\"LASTNAME\"])."
+      },
+      "lists": {
+        "type": "object",
+        "description": "Target lists for the imported contacts, keyed by list id with the list id as value (e.g. {\"5\":5}).",
+        "additionalProperties": {
+          "type": "integer"
+        }
+      },
+      "totalLines": {
+        "type": "integer",
+        "description": "Number of data lines detected in the uploaded import file."
+      },
+      "listDetails": {
+        "type": "string",
+        "description": "Human-readable label for the selected lists as shown in the UI, e.g. \"[5] catalog-test-list\"."
+      },
+      "process_id": {
+        "type": "integer",
+        "description": "Identifier of the import process created when the file was uploaded and analyzed."
+      },
+      "countryCode": {
+        "type": "string",
+        "description": "Default country code used to interpret phone numbers in the file; empty string when none is selected."
+      },
+      "type": {
+        "type": "string",
+        "description": "Channel the import is keyed on.",
+        "enum": [
+          "email"
+        ]
+      },
+      "updateExistingContacts": {
+        "type": "boolean",
+        "description": "Whether contacts already present in the account are updated with values from the file."
+      },
+      "allowReplaceWithEmpty": {
+        "type": "boolean",
+        "description": "Whether empty values in the file overwrite existing attribute values."
+      },
+      "emailBlacklist": {
+        "type": "boolean",
+        "description": "Whether imported contacts are blacklisted for email."
+      },
+      "smsBlacklist": {
+        "type": "boolean",
+        "description": "Whether imported contacts are blacklisted for SMS."
+      },
+      "whatsappBlacklist": {
+        "type": "boolean",
+        "description": "Whether imported contacts are blacklisted for WhatsApp."
+      }
+    },
+    "required": [
+      "mapdata",
+      "lists",
+      "totalLines",
+      "process_id",
+      "type"
+    ]
+  },
+  "outputs": {
+    "type": "object",
+    "properties": {
+      "result": {
+        "type": "string",
+        "description": "Status of the save, observed as \"OK\" on success."
+      }
+    }
+  },
+  "side_effects": [
+    "The import mapping and options are stored against the import process, committing how the uploaded file's columns are interpreted.",
+    "Contacts from the file are added to the selected lists.",
+    "Existing contacts may be overwritten when updateExistingContacts is true, and existing attribute values may be cleared when allowReplaceWithEmpty is true.",
+    "Imported contacts may be blacklisted for email, SMS, or WhatsApp depending on the blacklist flags."
+  ],
+  "destructive": false,
+  "idempotent": false,
+  "ui_path": [
+    "Contacts",
+    "Imports",
+    "Import contacts",
+    "Upload a file",
+    "Map your file columns to Brevo contact attributes",
+    "Select lists",
+    "Import contacts"
+  ],
+  "internal_endpoint": {
+    "method": "POST",
+    "path": "/import/save-mapping",
+    "body_example": "{\"mapdata\":[\"EMAIL\",\"FIRSTNAME\",\"LASTNAME\"],\"lists\":{\"5\":5},\"totalLines\":5,\"listDetails\":\"[5] catalog-test-list\",\"process_id\":6,\"countryCode\":\"\",\"type\":\"email\",\"updateExistingContacts\":true,\"allowReplaceWithEmpty\":false,\"emailBlacklist\":false,\"smsBlacklist\":false,\"whatsappBlacklist\":false}"
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/har/block-b-model.json"
+    ],
+    "verified_at": null
+  }
+}

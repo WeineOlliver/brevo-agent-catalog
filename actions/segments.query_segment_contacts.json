@@ -1,0 +1,171 @@
+{
+  "id": "segments.query_segment_contacts",
+  "module": "segments",
+  "name": "Query segment contacts",
+  "description": "Call this when you need the actual contact rows that a segment filter resolves to — either to preview who an unsaved segment definition would match before saving it, or to page through the members of a filter you already hold. Pass the filter as `fe_query` and read contacts from `data`; the matched total comes back in `metadata.contact_count`. Use segments.get_segment_contact_count instead when you only need the size of a segment and not the rows, and use the contacts listing action when you want all contacts or the members of a plain list rather than a filter-defined segment.",
+  "preconditions": [
+    "Any list, attribute, or segment referenced inside fe_query must already exist on the account.",
+    "The session must be authenticated against the Brevo web app (this is an internal web-app endpoint, not part of the public API)."
+  ],
+  "inputs": {
+    "type": "object",
+    "properties": {
+      "fe_query": {
+        "type": "object",
+        "description": "The front-end segment filter definition to evaluate. An empty object matches every contact on the account. The internal filter grammar is not documented by this endpoint's evidence; pass through a definition obtained from the segment builder rather than composing one blind."
+      },
+      "page": {
+        "type": "integer",
+        "description": "1-based page number of the result set to return."
+      },
+      "limit": {
+        "type": "integer",
+        "description": "Maximum number of contacts to return in this page."
+      },
+      "force_refresh": {
+        "type": "boolean",
+        "description": "When true, re-evaluates the filter instead of serving a cached result set."
+      }
+    },
+    "required": [
+      "fe_query"
+    ]
+  },
+  "outputs": {
+    "type": "object",
+    "properties": {
+      "data": {
+        "type": "array",
+        "description": "Contacts matching the filter, for the requested page.",
+        "items": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "integer",
+              "description": "Numeric contact id."
+            },
+            "email": {
+              "type": "string",
+              "description": "Contact email address."
+            },
+            "attributes": {
+              "type": "array",
+              "description": "Contact attribute values, as rendered for the segment table.",
+              "items": {
+                "type": "object"
+              }
+            },
+            "entered": {
+              "type": "string",
+              "description": "ISO 8601 timestamp of when the contact was created."
+            },
+            "last_modified": {
+              "type": "string",
+              "description": "ISO 8601 timestamp of the contact's last modification."
+            },
+            "blacklisted": {
+              "type": "integer",
+              "description": "Blocklist indicator as returned by this endpoint (0 was observed for non-blocklisted contacts)."
+            },
+            "sc": {
+              "type": "integer",
+              "description": "Message/send counter for the contact as returned by this endpoint."
+            },
+            "sib_order": {
+              "type": "integer",
+              "description": "Order count attributed to the contact."
+            },
+            "sib_revenue": {
+              "type": "number",
+              "description": "Revenue attributed to the contact."
+            },
+            "pushSubscribed": {
+              "type": [
+                "boolean",
+                "null"
+              ],
+              "description": "Push subscription state, null when unknown."
+            },
+            "is_anonymous": {
+              "type": "boolean",
+              "description": "Whether the contact is anonymous (tracked without an identified email)."
+            },
+            "subscriptions": {
+              "type": "object",
+              "description": "Per-channel subscription state.",
+              "properties": {
+                "email": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "description": "Email subscription status, e.g. \"subscribed\"."
+                    }
+                  }
+                }
+              }
+            },
+            "assignTo": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "description": "CRM owner the contact is assigned to, null when unassigned."
+            },
+            "nextTaskStartAt": {
+              "type": "string",
+              "description": "Start time of the contact's next CRM task; empty string when there is none."
+            }
+          }
+        }
+      },
+      "metadata": {
+        "type": "object",
+        "description": "Result-set metadata for the evaluated filter.",
+        "properties": {
+          "contact_count": {
+            "type": "integer",
+            "description": "Number of contacts matching the filter."
+          },
+          "total_count": {
+            "type": "integer",
+            "description": "Total count reported for the result set."
+          },
+          "segmentation": {
+            "type": "object",
+            "description": "Segmentation detail returned alongside the results."
+          }
+        }
+      }
+    }
+  },
+  "side_effects": [
+    "A segment result set may be computed and cached server-side, and recomputed when force_refresh is true."
+  ],
+  "destructive": false,
+  "idempotent": true,
+  "ui_path": [
+    "Contacts",
+    "Segments",
+    "Create a segment",
+    "Set filters",
+    "Search / Preview results"
+  ],
+  "internal_endpoint": {
+    "method": "POST",
+    "path": "/contact/backend/segment/query",
+    "body_example": "{\"fe_query\":{},\"page\":1,\"limit\":20,\"force_refresh\":true}"
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/har/block-b-model.json"
+    ],
+    "verified_at": null
+  }
+}

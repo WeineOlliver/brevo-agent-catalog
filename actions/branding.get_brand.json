@@ -1,0 +1,103 @@
+{
+  "id": "branding.get_brand",
+  "module": "branding",
+  "name": "Get brand assets",
+  "description": "Call this when you need the account's stored brand identity — the brand website, name, logo, colour palette and fonts — before generating or styling content such as a campaign or template so it matches the account's branding. The response carries a `branding.fetched` flag; when it is false the brand has not been scraped yet and the fields are empty, so treat the palette and fonts as unavailable rather than as deliberate empty values. This is read-only: use the account settings action to read general account details, and the editor actions to apply styling to a specific design.",
+  "preconditions": [
+    "An authenticated web-app session for the Brevo account whose brand is being read."
+  ],
+  "inputs": {
+    "type": "object",
+    "properties": {},
+    "required": []
+  },
+  "outputs": {
+    "type": "object",
+    "properties": {
+      "website": {
+        "type": "string",
+        "description": "The website URL the brand was derived from. Empty string when no brand website has been set."
+      },
+      "branding": {
+        "type": "object",
+        "description": "The stored brand identity. Fields are empty or null placeholders until the brand has been fetched.",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Brand name."
+          },
+          "domain": {
+            "type": "string",
+            "description": "Domain the brand belongs to."
+          },
+          "description": {
+            "type": "string",
+            "description": "Short description of the brand."
+          },
+          "fetched": {
+            "type": "boolean",
+            "description": "True once brand details have been successfully retrieved from the website; false means the remaining fields are unpopulated placeholders."
+          },
+          "logo": {
+            "type": "string",
+            "description": "Brand logo reference, empty when not fetched."
+          },
+          "colors": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "description": "Brand colour palette, null when not fetched."
+          },
+          "fonts": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "description": "Brand fonts, null when not fetched."
+          },
+          "fetchRetryCount": {
+            "type": "integer",
+            "description": "Number of attempts made to fetch the brand from the website."
+          },
+          "fetchedAt": {
+            "type": "string",
+            "description": "Timestamp of the last successful fetch; the zero value \"0001-01-01T00:00:00Z\" means never fetched."
+          },
+          "updatedAt": {
+            "type": "string",
+            "description": "Timestamp of the last update to the stored brand; the zero value \"0001-01-01T00:00:00Z\" means never updated."
+          }
+        }
+      }
+    },
+    "required": [
+      "website",
+      "branding"
+    ]
+  },
+  "side_effects": [],
+  "destructive": false,
+  "idempotent": true,
+  "ui_path": [
+    "Settings",
+    "Brand"
+  ],
+  "internal_endpoint": {
+    "method": "GET",
+    "path": "/branding-api/brand",
+    "body_example": null
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/har/block-c-email.json"
+    ],
+    "verified_at": null
+  }
+}

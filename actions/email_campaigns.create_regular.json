@@ -1,0 +1,62 @@
+{
+  "id": "email_campaigns.create_regular",
+  "module": "email_campaigns",
+  "name": "Create regular email campaign",
+  "description": "Call this when you need to create a new regular (non‑automated) email campaign in Brevo. Use the scheduled‑campaign setup action instead when the campaign should be sent at a future date/time.",
+  "preconditions": [],
+  "inputs": {
+    "type": "object",
+    "properties": {
+      "camp_name": {
+        "type": "string",
+        "description": "The name of the campaign to be created."
+      },
+      "folder_path": {
+        "type": "string",
+        "description": "The path of the folder where the campaign will be stored. Use an empty string for the root folder."
+      },
+      "tag_ids": {
+        "type": "array",
+        "items": {
+          "type": "integer"
+        },
+        "description": "A list of tag identifiers to associate with the campaign."
+      }
+    },
+    "required": [
+      "camp_name"
+    ]
+  },
+  "outputs": {
+    "type": "object",
+    "description": "Details of the newly created campaign, such as its identifier."
+  },
+  "side_effects": [
+    "A new regular email campaign is added to the account."
+  ],
+  "destructive": false,
+  "idempotent": false,
+  "ui_path": [
+    "Email Campaigns",
+    "Create Campaign",
+    "Regular",
+    "Save"
+  ],
+  "internal_endpoint": {
+    "method": "POST",
+    "path": "/email-campaign/api/regular/setup",
+    "body_example": "{\"camp_name\":\"Catalog Me campaign\",\"folder_path\":\"\",\"tag_ids\":[]}"
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/har/block-c-email.json"
+    ],
+    "verified_at": null
+  }
+}

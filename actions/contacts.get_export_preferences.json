@@ -1,0 +1,77 @@
+{
+  "id": "contacts.get_export_preferences",
+  "module": "contacts",
+  "name": "Get export preferences",
+  "description": "Call this when you need to know which subscription fields, system fields, and saved column preferences are available for a contact export, before building an export request. Use it to discover the valid field names to include, then call contacts.export to actually start the export job; if you only need the stored attribute definitions rather than export-specific field groups, use contacts.create_attribute's listing counterpart instead.",
+  "preconditions": [
+    "An authenticated Brevo web app session for the account whose export preferences are read."
+  ],
+  "inputs": {
+    "type": "object",
+    "properties": {
+      "objectType": {
+        "type": "string",
+        "description": "The kind of record the export preferences apply to. Observed value: \"contact\".",
+        "enum": [
+          "contact"
+        ]
+      }
+    },
+    "required": [
+      "objectType"
+    ]
+  },
+  "outputs": {
+    "type": "object",
+    "properties": {
+      "subscriptions": {
+        "type": "array",
+        "description": "Subscription field names that can be included in an export, e.g. \"email_marketing\", \"sms_marketing\".",
+        "items": {
+          "type": "string"
+        }
+      },
+      "systemData": {
+        "type": "array",
+        "description": "System field names that can be included in an export, e.g. \"listId\".",
+        "items": {
+          "type": "string"
+        }
+      },
+      "exportPreferences": {
+        "type": "object",
+        "description": "Previously saved export preferences for this object type; empty when the user has never saved any."
+      }
+    },
+    "required": [
+      "subscriptions",
+      "systemData",
+      "exportPreferences"
+    ]
+  },
+  "side_effects": [],
+  "destructive": false,
+  "idempotent": true,
+  "ui_path": [
+    "Contacts",
+    "Contacts",
+    "Export contacts"
+  ],
+  "internal_endpoint": {
+    "method": "GET",
+    "path": "/export/preferences",
+    "body_example": null
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/har/block-b-model.json"
+    ],
+    "verified_at": null
+  }
+}

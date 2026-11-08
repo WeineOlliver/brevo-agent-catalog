@@ -1,0 +1,56 @@
+{
+  "id": "campaigns.suspend_campaign",
+  "module": "campaigns",
+  "name": "Suspend email campaign",
+  "description": "Call this when an email campaign that is already scheduled or sending must be put on hold, so that it stops going out while its draft, audience and content stay intact for later. Use campaigns.schedule_campaign to put a suspended or draft campaign back on a send date, campaigns.send_now when it should go out immediately instead, and campaigns.validate_campaign or campaigns.validate_campaign_content when the goal is only to check a campaign for problems without changing its send state.",
+  "preconditions": [
+    "The email campaign identified by the path id must already exist in the account.",
+    "The caller must be an authenticated session of the web app that owns the campaign."
+  ],
+  "inputs": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "integer",
+        "description": "Numeric identifier of the email campaign to suspend, taken from the campaign's app route or from a campaign listing (observed value: 3)."
+      }
+    },
+    "required": [
+      "id"
+    ]
+  },
+  "outputs": {
+    "type": "object",
+    "properties": {},
+    "description": "No response body. Success is signalled by HTTP 204 No Content."
+  },
+  "side_effects": [
+    "The campaign's send state changes to suspended, so a pending scheduled or in-progress send stops.",
+    "Recipients who have not yet been reached at the moment of suspension do not receive the campaign."
+  ],
+  "destructive": false,
+  "idempotent": false,
+  "ui_path": [
+    "Campaigns",
+    "Email",
+    "Open the campaign",
+    "Suspend"
+  ],
+  "internal_endpoint": {
+    "method": "PUT",
+    "path": "/email-campaign/api/:id/suspend",
+    "body_example": null
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/har/block-d-cancel.json"
+    ],
+    "verified_at": null
+  }
+}

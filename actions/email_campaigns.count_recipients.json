@@ -1,0 +1,116 @@
+{
+  "id": "email_campaigns.count_recipients",
+  "module": "email_campaigns",
+  "name": "Count campaign recipients",
+  "description": "Call this when you need the number of contacts a campaign audience selection would reach, before committing to it — for example while assembling included/excluded lists and segments for an email campaign and wanting to show or check the resulting audience size. Use this instead of fetching every contact of each list and de-duplicating them yourself. If you only need the size of a single saved segment, use contacts.get_segment_contact_count; if you need the number of campaigns rather than recipients, use email_campaigns.get_campaign_count; and once the audience is settled, apply it with the campaign create/update action (e.g. email_campaign.create_regular) rather than this one.",
+  "preconditions": [
+    "Every list id passed in included_list_ids or excluded_list_ids must already exist in the account.",
+    "Every segment id passed in included_segment_ids or excluded_segment_ids must already exist in the account.",
+    "Any contact id passed in included_contacts or excluded_contacts must already exist in the account.",
+    "The caller must have an authenticated Brevo web-app session for the account that owns the lists and segments (the endpoint is served by the web app backend, not the public API)."
+  ],
+  "inputs": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "integer",
+        "description": "Identifier carried in the request path (POST /email-campaign/api/:id/recipient-count). Observed values: 2 and 3. Its exact meaning is not established by the available evidence, so pass through the value the web app uses for the context you are working in rather than guessing."
+      },
+      "included_segment_ids": {
+        "type": "array",
+        "items": {
+          "type": "integer"
+        },
+        "description": "Ids of segments whose contacts should be counted as part of the audience. Empty array in all observed examples."
+      },
+      "included_list_ids": {
+        "type": "array",
+        "items": {
+          "type": "integer"
+        },
+        "description": "Ids of contact lists whose contacts should be counted as part of the audience. Observed as [9]."
+      },
+      "excluded_list_ids": {
+        "type": "array",
+        "items": {
+          "type": "integer"
+        },
+        "description": "Ids of contact lists whose contacts must be subtracted from the audience. Empty array in all observed examples."
+      },
+      "excluded_segment_ids": {
+        "type": "array",
+        "items": {
+          "type": "integer"
+        },
+        "description": "Ids of segments whose contacts must be subtracted from the audience. Empty array in all observed examples."
+      },
+      "included_contacts": {
+        "type": "array",
+        "items": {
+          "type": "integer"
+        },
+        "description": "Ids of individual contacts to add to the audience on top of the included lists and segments. Empty array in all observed examples."
+      },
+      "excluded_contacts": {
+        "type": "array",
+        "items": {
+          "type": "integer"
+        },
+        "description": "Ids of individual contacts to remove from the audience. Empty array in all observed examples."
+      },
+      "apply_unengage_filter": {
+        "type": "boolean",
+        "description": "Whether to exclude unengaged contacts from the count. Observed as false."
+      },
+      "filter_fe_query": {
+        "type": "object",
+        "description": "Additional front-end filter query describing the audience selection built in the UI. Observed as an empty object; its internal structure is not established by the available evidence."
+      }
+    },
+    "required": [
+      "included_segment_ids",
+      "included_list_ids",
+      "excluded_list_ids",
+      "excluded_segment_ids",
+      "included_contacts",
+      "excluded_contacts",
+      "apply_unengage_filter",
+      "filter_fe_query"
+    ]
+  },
+  "outputs": {
+    "type": "object",
+    "description": "Returns HTTP 200 on success. The response body was not captured in the available evidence, so no field names or types can be stated; expect it to carry the computed recipient count for the submitted audience selection.",
+    "properties": {},
+    "additionalProperties": true
+  },
+  "side_effects": [
+    "None observed: the request submits an audience selection and the account's lists, segments and contacts are unchanged. Note that this is a POST, so a side effect cannot be ruled out from the evidence alone."
+  ],
+  "destructive": false,
+  "idempotent": true,
+  "ui_path": [
+    "Campaigns",
+    "Email",
+    "Create a campaign",
+    "Recipients",
+    "Select lists or segments"
+  ],
+  "internal_endpoint": {
+    "method": "POST",
+    "path": "/email-campaign/api/:id/recipient-count",
+    "body_example": "{\"included_segment_ids\":[],\"included_list_ids\":[9],\"excluded_list_ids\":[],\"excluded_segment_ids\":[],\"included_contacts\":[],\"excluded_contacts\":[],\"apply_unengage_filter\":false,\"filter_fe_query\":{}}"
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/har/block-c-email.json"
+    ],
+    "verified_at": null
+  }
+}

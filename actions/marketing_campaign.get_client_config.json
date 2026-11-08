@@ -1,0 +1,259 @@
+{
+  "id": "marketing_campaign.get_client_config",
+  "module": "marketing_campaign",
+  "name": "Get client configuration",
+  "description": "Call this when you need to retrieve the current marketing campaign client configuration, including organization details, plan information, limits, and authorized actions. Use a different action if you need to modify any of these settings.",
+  "preconditions": [],
+  "inputs": {
+    "type": "object",
+    "properties": {},
+    "required": []
+  },
+  "outputs": {
+    "type": "object",
+    "properties": {
+      "editor_domain_key": {
+        "type": "string",
+        "description": "Domain key used by the editor component."
+      },
+      "organization_name": {
+        "type": "string",
+        "description": "Name of the organization."
+      },
+      "delay": {
+        "type": "integer",
+        "description": "Configured delay in seconds."
+      },
+      "plan_info": {
+        "type": "object",
+        "properties": {
+          "plan_name": {
+            "type": "string",
+            "description": "Name of the current plan."
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "FREE",
+              "PAID"
+            ],
+            "description": "Plan type."
+          },
+          "free_plan_end_at": {
+            "type": "string",
+            "description": "Timestamp (Unix epoch) when the free plan ends."
+          },
+          "pushCredits": {
+            "type": "array",
+            "items": {},
+            "description": "Array of push credit objects (structure not documented)."
+          },
+          "emailCredits": {
+            "type": "object",
+            "properties": {
+              "enabled": {
+                "type": "string",
+                "description": "Whether email credits are enabled (\"1\" for true)."
+              },
+              "limit": {
+                "type": "string",
+                "description": "Maximum number of email credits."
+              },
+              "used": {
+                "type": "string",
+                "description": "Number of email credits already used."
+              }
+            },
+            "required": [
+              "enabled",
+              "limit",
+              "used"
+            ]
+          },
+          "ab_test_addon": {
+            "type": "boolean",
+            "description": "Indicates if the A/B testing addon is active."
+          },
+          "marketingContact": {
+            "type": "object",
+            "properties": {
+              "enabled": {
+                "type": "string",
+                "description": "Whether marketing contacts are enabled (\"1\" for true)."
+              },
+              "limit": {
+                "type": "string",
+                "description": "Maximum number of marketing contacts."
+              },
+              "used": {
+                "type": "string",
+                "description": "Number of marketing contacts already used."
+              }
+            },
+            "required": [
+              "enabled",
+              "limit",
+              "used"
+            ]
+          }
+        },
+        "required": [
+          "plan_name",
+          "type",
+          "free_plan_end_at",
+          "pushCredits",
+          "emailCredits",
+          "ab_test_addon",
+          "marketingContact"
+        ]
+      },
+      "plans_max_emails_limit": {
+        "type": "object",
+        "properties": {
+          "Micro": {
+            "type": "integer"
+          },
+          "Lite": {
+            "type": "integer"
+          },
+          "Bronze": {
+            "type": "integer"
+          },
+          "Silver": {
+            "type": "integer"
+          },
+          "Gold": {
+            "type": "integer"
+          },
+          "Platinum": {
+            "type": "integer"
+          },
+          "Diamond": {
+            "type": "integer"
+          },
+          "Atomic": {
+            "type": "integer"
+          }
+        },
+        "description": "Maximum email limits per plan tier."
+      },
+      "tags": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        },
+        "description": "List of tags associated with the client."
+      },
+      "sms_credits": {
+        "type": "integer",
+        "description": "Remaining SMS credits."
+      },
+      "authorized_actions": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "object",
+            "properties": {
+              "crud": {
+                "type": "boolean"
+              },
+              "send": {
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "crud",
+              "send"
+            ]
+          },
+          "sms": {
+            "type": "object",
+            "properties": {
+              "crud": {
+                "type": "boolean"
+              },
+              "send": {
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "crud",
+              "send"
+            ]
+          },
+          "facebook_ads": {
+            "type": "object",
+            "properties": {
+              "crud": {
+                "type": "boolean"
+              },
+              "send": {
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "crud",
+              "send"
+            ]
+          }
+        },
+        "required": [
+          "email",
+          "sms",
+          "facebook_ads"
+        ],
+        "description": "Actions the client is authorized to perform."
+      },
+      "is_chargebee_user": {
+        "type": "boolean",
+        "description": "Indicates if the client uses Chargebee for billing."
+      },
+      "new_pricing_enabled": {
+        "type": "boolean",
+        "description": "Flag for new pricing model availability."
+      },
+      "pricing_ver": {
+        "type": "string",
+        "description": "Version identifier for pricing configuration."
+      }
+    },
+    "required": [
+      "editor_domain_key",
+      "organization_name",
+      "delay",
+      "plan_info",
+      "plans_max_emails_limit",
+      "tags",
+      "sms_credits",
+      "authorized_actions",
+      "is_chargebee_user",
+      "new_pricing_enabled",
+      "pricing_ver"
+    ]
+  },
+  "side_effects": [],
+  "destructive": false,
+  "idempotent": true,
+  "ui_path": [
+    "Marketing Campaign",
+    "Settings",
+    "Configuration"
+  ],
+  "internal_endpoint": {
+    "method": "GET",
+    "path": "/marketing-campaign/api/client/config",
+    "body_example": null
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/har/block-c-email.json"
+    ],
+    "verified_at": null
+  }
+}

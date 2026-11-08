@@ -1,0 +1,67 @@
+{
+  "id": "contacts.get_segment_contact_count",
+  "module": "contacts",
+  "name": "Get segment contact count",
+  "description": "Call this when you need the total number of contacts that match a segment query without retrieving the full list. Use the \"List contacts in segment\" action instead if you need the actual contact data.",
+  "preconditions": [],
+  "inputs": {
+    "type": "object",
+    "properties": {
+      "fe_query": {
+        "type": "object",
+        "description": "Front‑end query object defining filter criteria for contacts."
+      },
+      "searchBy": {
+        "type": "string",
+        "description": "Optional search string to further filter contacts; can be empty."
+      }
+    },
+    "required": [
+      "fe_query",
+      "searchBy"
+    ]
+  },
+  "outputs": {
+    "type": "object",
+    "properties": {
+      "contact_count": {
+        "type": "integer",
+        "description": "Number of contacts returned in the current response page."
+      },
+      "total_count": {
+        "type": "integer",
+        "description": "Total number of contacts that match the query."
+      }
+    },
+    "required": [
+      "contact_count",
+      "total_count"
+    ]
+  },
+  "side_effects": [],
+  "destructive": false,
+  "idempotent": true,
+  "ui_path": [
+    "Contacts",
+    "Segments",
+    "Select segment",
+    "View contact count"
+  ],
+  "internal_endpoint": {
+    "method": "POST",
+    "path": "/contact/backend/segment/contact/count",
+    "body_example": "{\"fe_query\":{},\"searchBy\":\"\"}"
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/har/block-b-model.json"
+    ],
+    "verified_at": null
+  }
+}

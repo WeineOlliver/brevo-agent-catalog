@@ -1,0 +1,64 @@
+{
+  "id": "newsletters.preview",
+  "module": "newsletters",
+  "name": "Preview newsletter",
+  "description": "Call this when you need to generate a preview of a specific newsletter (optionally for a given A/B version and language) before publishing or sending. Use the send test email action instead if you want to deliver the content to an actual email address.",
+  "preconditions": [
+    "The newsletter with the given ID must already exist."
+  ],
+  "inputs": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "integer",
+        "description": "The unique identifier of the newsletter to preview."
+      },
+      "abVersion": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "description": "The A/B test version to preview. Null for the default version."
+      },
+      "language": {
+        "type": "string",
+        "description": "Language code for the preview content (e.g., \"en\", \"fr\")."
+      }
+    },
+    "required": [
+      "id"
+    ]
+  },
+  "outputs": {
+    "type": "object",
+    "additionalProperties": true,
+    "description": "An object containing the generated preview data, such as HTML content or a preview URL."
+  },
+  "side_effects": [
+    "A preview of the newsletter is generated and returned."
+  ],
+  "destructive": false,
+  "idempotent": true,
+  "ui_path": [
+    "Newsletters",
+    "Select newsletter",
+    "Preview"
+  ],
+  "internal_endpoint": {
+    "method": "POST",
+    "path": "/editor-api/newsletters/:id/preview",
+    "body_example": "{\"abVersion\":null,\"language\":\"\"}"
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/har/block-c-email.json"
+    ],
+    "verified_at": null
+  }
+}

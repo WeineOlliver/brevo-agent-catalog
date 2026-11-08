@@ -1,0 +1,104 @@
+{
+  "id": "contacts.suggest_mapping_from_file",
+  "module": "contacts",
+  "name": "Suggest mapping from file",
+  "description": "Call this when you have a CSV file of contacts and want the system to propose how its columns map to contact attributes before performing an import. Use the contacts.import_contacts action instead if you are ready to actually import the data.",
+  "preconditions": [],
+  "inputs": {
+    "type": "object",
+    "properties": {
+      "file": {
+        "type": "string",
+        "format": "binary",
+        "description": "CSV file containing contacts to import."
+      },
+      "import_field_delimiter": {
+        "type": "string",
+        "description": "Delimiter used to separate fields in the CSV file, e.g., ',' or ';'."
+      }
+    },
+    "required": [
+      "file",
+      "import_field_delimiter"
+    ]
+  },
+  "outputs": {
+    "type": "object",
+    "properties": {
+      "mappings": {
+        "type": "object",
+        "additionalProperties": {
+          "type": "object",
+          "properties": {
+            "attribute_name": {
+              "type": "string",
+              "description": "Name of the contact attribute."
+            },
+            "action": {
+              "type": "string",
+              "enum": [
+                "mapping"
+              ],
+              "description": "Indicates that this entry is a mapping suggestion."
+            },
+            "type": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "description": "Optional type information for the attribute."
+            },
+            "confidence_score": {
+              "type": "number",
+              "description": "Confidence score (0‑1) for the suggested mapping."
+            },
+            "data": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "Sample values from the uploaded file that led to this suggestion."
+            }
+          },
+          "required": [
+            "attribute_name",
+            "action",
+            "confidence_score",
+            "data"
+          ]
+        },
+        "description": "Dictionary where each key is a contact attribute and the value contains the suggested mapping details."
+      }
+    },
+    "required": [
+      "mappings"
+    ]
+  },
+  "side_effects": [
+    "Provides suggested attribute mappings for the uploaded CSV file."
+  ],
+  "destructive": false,
+  "idempotent": true,
+  "ui_path": [
+    "Contacts",
+    "Import",
+    "Suggest mapping"
+  ],
+  "internal_endpoint": {
+    "method": "POST",
+    "path": "/import/suggest-mapping-from-file",
+    "body_example": "------WebKitFormBoundaryBJG3pKNWGJYlBIVN\r\nContent-Disposition: form-data; name=\"file\"; filename=\"contacts-import-sample.csv\"\r\nContent-Type: text/csv\r\n\r\n\r\n------WebKitFormBoundaryBJG3pKNWGJYlBIVN\r\nContent-Disposition: form-data; name=\"import_field_delimiter\"\r\n\r\n,\r\n------WebKitFormBoundaryBJG3pKNWGJYlBIVN--\r\n"
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/har/block-b-model.json"
+    ],
+    "verified_at": null
+  }
+}

@@ -1,0 +1,66 @@
+{
+  "id": "contacts.get_import_notification",
+  "module": "contacts",
+  "name": "Get import notification",
+  "description": "Call this when you need to check the current status of a contacts import job and retrieve any process data that may be attached. Use a dedicated import‑details action if you need to fetch the full import results or modify the import.",
+  "preconditions": [],
+  "inputs": {
+    "type": "object",
+    "properties": {},
+    "required": []
+  },
+  "outputs": {
+    "type": "object",
+    "properties": {
+      "time": {
+        "type": "string",
+        "description": "Timestamp (HH:MM:SS) when the notification was generated."
+      },
+      "status": {
+        "type": "string",
+        "enum": [
+          "OK",
+          "KO"
+        ],
+        "description": "Overall status of the import job."
+      },
+      "allProcessData": {
+        "type": "array",
+        "items": {
+          "type": "object"
+        },
+        "description": "Array containing detailed process data for the import, may be empty."
+      }
+    },
+    "required": [
+      "time",
+      "status",
+      "allProcessData"
+    ]
+  },
+  "side_effects": [],
+  "destructive": false,
+  "idempotent": true,
+  "ui_path": [
+    "Contacts",
+    "Import",
+    "Notification"
+  ],
+  "internal_endpoint": {
+    "method": "GET",
+    "path": "/contact/backend/contacts/get-import-notification",
+    "body_example": null
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/har/block-a-contacts.json"
+    ],
+    "verified_at": null
+  }
+}

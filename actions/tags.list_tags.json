@@ -1,0 +1,80 @@
+{
+  "id": "tags.list_tags",
+  "module": "tags",
+  "name": "List tags",
+  "description": "Call this when an agent needs to discover which tags exist in the account — for example to resolve a tag name to its identifier before applying it, or to check whether a tag has already been created. This is a read-only listing served by the web app's tag-engine service; it is not part of Brevo's public API, so no documented counterpart exists. Paginate with limit and offset when the returned total exceeds the page size. Use the contacts attribute or segment actions instead when the goal is to inspect contact fields or segment membership rather than the tag vocabulary itself.",
+  "preconditions": [
+    "The session must be authenticated against the Brevo web app so that the tag-engine host accepts the request.",
+    "The account must have access to the tag-engine service used by the web app."
+  ],
+  "inputs": {
+    "type": "object",
+    "properties": {
+      "limit": {
+        "type": "integer",
+        "description": "Maximum number of tags to return in one page. Observed value: 10."
+      },
+      "offset": {
+        "type": "integer",
+        "description": "Number of tags to skip before collecting the page, used for pagination. Observed value: 0."
+      }
+    },
+    "required": []
+  },
+  "outputs": {
+    "type": "object",
+    "properties": {
+      "items": {
+        "type": "array",
+        "description": "The page of tags. Observed empty in the captured response, so the per-tag field structure is unknown.",
+        "items": {
+          "type": "object",
+          "description": "A single tag. Field structure not observable from the evidence."
+        }
+      },
+      "total": {
+        "type": "integer",
+        "description": "Total number of tags available across all pages, independent of limit and offset."
+      },
+      "offset": {
+        "type": "integer",
+        "description": "The offset that was applied to this page."
+      },
+      "limit": {
+        "type": "integer",
+        "description": "The page size that was applied to this page."
+      }
+    },
+    "required": [
+      "items",
+      "total",
+      "offset",
+      "limit"
+    ]
+  },
+  "side_effects": [],
+  "destructive": false,
+  "idempotent": true,
+  "ui_path": [
+    "Contacts",
+    "Settings",
+    "Tags"
+  ],
+  "internal_endpoint": {
+    "method": "GET",
+    "path": "/v2/tags",
+    "body_example": null
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/har/block-c-email.json"
+    ],
+    "verified_at": null
+  }
+}

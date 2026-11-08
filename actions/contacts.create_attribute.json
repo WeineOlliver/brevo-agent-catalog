@@ -1,0 +1,98 @@
+{
+  "id": "contacts.create_attribute",
+  "module": "contacts",
+  "name": "Create contact attribute",
+  "description": "Call this when you need to add a new custom attribute to contacts. If the attribute already exists, use the update attribute action instead.",
+  "preconditions": [],
+  "inputs": {
+    "type": "object",
+    "properties": {
+      "label": {
+        "type": "string",
+        "description": "Human‑readable name of the attribute."
+      },
+      "type": {
+        "type": "string",
+        "enum": [
+          "text",
+          "date",
+          "float",
+          "boolean",
+          "category",
+          "email",
+          "url",
+          "phone",
+          "number",
+          "price",
+          "currency"
+        ],
+        "description": "Data type of the attribute."
+      },
+      "key": {
+        "type": "string",
+        "description": "Unique identifier for the attribute (used in API calls)."
+      }
+    },
+    "required": [
+      "label",
+      "type",
+      "key"
+    ]
+  },
+  "outputs": {
+    "type": "object",
+    "properties": {
+      "key": {
+        "type": "string",
+        "description": "Unique identifier of the created attribute."
+      },
+      "label": {
+        "type": "string",
+        "description": "Human‑readable name of the attribute."
+      },
+      "type": {
+        "type": "string",
+        "description": "Data type of the attribute."
+      },
+      "id": {
+        "type": "integer",
+        "description": "Internal identifier of the attribute."
+      }
+    },
+    "required": [
+      "key",
+      "label",
+      "type",
+      "id"
+    ]
+  },
+  "side_effects": [
+    "A new custom attribute becomes available for all contacts.",
+    "Future contact records can store values for this attribute."
+  ],
+  "destructive": false,
+  "idempotent": false,
+  "ui_path": [
+    "Contacts",
+    "Attributes",
+    "Add attribute",
+    "Save"
+  ],
+  "internal_endpoint": {
+    "method": "POST",
+    "path": "/app/objects/contact/attributes",
+    "body_example": "{\"label\":\"Created_attr\",\"type\":\"text\",\"key\":\"CREATED_ATTR\"}"
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/har/block-c-email.json"
+    ],
+    "verified_at": null
+  }
+}

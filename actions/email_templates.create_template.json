@@ -1,0 +1,172 @@
+{
+  "id": "email_templates.create_template",
+  "module": "templates",
+  "name": "Create email template",
+  "description": "Call this when the user wants a new reusable email template saved in the template library — typically to create an empty or lightly pre-filled draft that is then edited in the template designer. The created template starts inactive, so follow it with the template update/activate action before it can be used by campaigns or transactional sends. Use the regular email campaign creation action instead when the goal is a one-off campaign to send to lists rather than a reusable template, and use the template update action instead when a template with this name/id already exists and only its content or settings need changing.",
+  "preconditions": [
+    "The user must be authenticated in the Brevo web app with access to the email templates area.",
+    "The sender referenced by sender_id (and its from_email/from_name pair) must already exist and be configured on the account."
+  ],
+  "inputs": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": [
+          "integer",
+          "null"
+        ],
+        "description": "Template identifier. Observed as null when creating a new template; the server assigns the id."
+      },
+      "type": {
+        "type": "string",
+        "enum": [
+          "template"
+        ],
+        "description": "Record type being created. Observed value is \"template\"."
+      },
+      "name": {
+        "type": "string",
+        "description": "Internal name of the template, shown in the template list (e.g. \"New template\")."
+      },
+      "subject": {
+        "type": "string",
+        "description": "Subject line of the email produced by this template."
+      },
+      "preview": {
+        "type": "string",
+        "description": "Preview/preheader text shown after the subject in the inbox."
+      },
+      "content": {
+        "type": "string",
+        "description": "HTML body of the template. Observed empty on creation, with the body added later in the editor."
+      },
+      "sender_id": {
+        "type": "integer",
+        "description": "Identifier of the registered sender used as the From address for this template."
+      },
+      "from_email": {
+        "type": "string",
+        "description": "From email address matching the chosen sender."
+      },
+      "from_name": {
+        "type": "string",
+        "description": "From display name matching the chosen sender."
+      },
+      "reply_to": {
+        "type": "string",
+        "description": "Reply-To address. Observed empty, meaning the sender address is used."
+      },
+      "to_field": {
+        "type": "string",
+        "description": "Personalised To field expression (e.g. contact attribute placeholders). Observed empty."
+      },
+      "tag": {
+        "type": "string",
+        "description": "Free-text tag attached to the template for reporting/filtering. Observed empty."
+      },
+      "attachment_url": {
+        "type": "string",
+        "description": "URL of a file to attach to emails built from this template. Observed empty."
+      },
+      "profile_update_form": {
+        "type": "string",
+        "description": "Reference to a profile update form linked to this template. Observed empty."
+      },
+      "is_active": {
+        "type": "boolean",
+        "description": "Whether the template is active and usable for sending. Observed false on creation."
+      },
+      "tracking": {
+        "type": "object",
+        "description": "Link-tracking and UTM configuration for the template.",
+        "properties": {
+          "google_analytics_active": {
+            "type": "boolean",
+            "description": "Whether Google Analytics tracking is enabled for links in this template."
+          },
+          "utm_campaign": {
+            "type": "string",
+            "description": "UTM campaign value used when UTM tagging is enabled."
+          },
+          "utm_id_active": {
+            "type": "boolean",
+            "description": "Whether a UTM id parameter is appended to tracked links."
+          },
+          "utm_settings": {
+            "type": "array",
+            "description": "Per-parameter UTM configuration.",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "enum": [
+                    "utm_source",
+                    "utm_medium",
+                    "utm_campaign"
+                  ],
+                  "description": "UTM parameter name."
+                },
+                "value": {
+                  "type": "string",
+                  "description": "Value for the parameter; may contain placeholders such as [TEMPLATE_NAME]."
+                },
+                "enabled": {
+                  "type": "boolean",
+                  "description": "Whether this UTM parameter is appended to tracked links."
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "required": [
+      "name",
+      "subject",
+      "sender_id",
+      "from_email",
+      "from_name"
+    ]
+  },
+  "outputs": {
+    "type": "object",
+    "description": "Created template record returned with HTTP 201. The exact response shape was not captured; expect the saved template including its server-assigned identifier.",
+    "properties": {
+      "id": {
+        "type": "integer",
+        "description": "Server-assigned identifier of the new template, used by subsequent update, preview, and send actions."
+      }
+    }
+  },
+  "side_effects": [
+    "A new email template record is created in the account's template library and appears in the templates list.",
+    "The template is stored inactive (is_active false), so it is not yet available for sending until activated.",
+    "No email is sent by this call."
+  ],
+  "destructive": false,
+  "idempotent": false,
+  "ui_path": [
+    "Campaigns",
+    "Templates",
+    "Create a new template",
+    "Save"
+  ],
+  "internal_endpoint": {
+    "method": "POST",
+    "path": "/email/templates",
+    "body_example": "{\"id\":null,\"type\":\"template\",\"attachment_url\":\"\",\"from_email\":\"{{EMAIL}}\",\"from_name\":\"TestBoxTest\",\"name\":\"New template\",\"preview\":\"Hi this is a preview text\",\"profile_update_form\":\"\",\"reply_to\":\"\",\"sender_id\":1,\"subject\":\"Hi this is a template email\",\"content\":\"\",\"tag\":\"\",\"to_field\":\"\",\"is_active\":false,\"tracking\":{\"google_analytics_active\":false,\"utm_campaign\":\"\",\"utm_id_active\":false,\"utm_settings\":[{\"name\":\"utm_source\",\"value\":\"brevo\",\"enabled\":true},{\"name\":\"utm_medium\",\"value\":\"email\",\"enabled\":true},{\"name\":\"utm_campaign\",\"value\":\"[TEMPLATE_NAME]\",\"enabled\":true}]}}"
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/har/block-c-email.json"
+    ],
+    "verified_at": null
+  }
+}

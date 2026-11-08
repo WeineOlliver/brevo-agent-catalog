@@ -1,0 +1,148 @@
+{
+  "id": "contacts.get_list_folders",
+  "module": "contacts",
+  "name": "Get list folders and lists",
+  "description": "Call this when you need to retrieve the hierarchical structure of contact list folders and the lists they contain in the Brevo UI. Use the \"Get all contacts\" action instead if you only need contact data without folder organization.",
+  "preconditions": [],
+  "inputs": {
+    "type": "object",
+    "properties": {},
+    "required": []
+  },
+  "outputs": {
+    "type": "array",
+    "items": {
+      "type": "object",
+      "properties": {
+        "folder": {
+          "type": "object",
+          "description": "Folder metadata",
+          "properties": {
+            "id": {
+              "type": "integer",
+              "description": "Folder identifier"
+            },
+            "name": {
+              "type": "string",
+              "description": "Folder name"
+            },
+            "listParent": {
+              "type": "integer",
+              "description": "Parent folder identifier (0 for root)"
+            },
+            "isFolder": {
+              "type": "integer",
+              "description": "Flag indicating this is a folder (always 0 for folder objects)"
+            },
+            "blacklisted": {
+              "type": "integer",
+              "description": "Whether the folder is blacklisted"
+            },
+            "count": {
+              "type": "integer",
+              "description": "Number of lists in the folder"
+            },
+            "listOrder": {
+              "type": "integer",
+              "description": "Display order of the folder"
+            },
+            "entered": {
+              "type": "string",
+              "description": "Creation timestamp"
+            }
+          },
+          "required": [
+            "id",
+            "name",
+            "listParent",
+            "isFolder",
+            "blacklisted",
+            "count",
+            "listOrder",
+            "entered"
+          ]
+        },
+        "list": {
+          "type": "array",
+          "description": "Lists contained in the folder",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer",
+                "description": "List identifier"
+              },
+              "name": {
+                "type": "string",
+                "description": "List name"
+              },
+              "listParent": {
+                "type": "integer",
+                "description": "Identifier of the parent folder"
+              },
+              "isFolder": {
+                "type": "integer",
+                "description": "Flag indicating this is a folder (0 for list objects)"
+              },
+              "blacklisted": {
+                "type": "integer",
+                "description": "Whether the list is blacklisted"
+              },
+              "count": {
+                "type": "integer",
+                "description": "Number of contacts in the list"
+              },
+              "listOrder": {
+                "type": "integer",
+                "description": "Display order of the list within its folder"
+              },
+              "entered": {
+                "type": "string",
+                "description": "Creation timestamp"
+              }
+            },
+            "required": [
+              "id",
+              "name",
+              "listParent",
+              "isFolder",
+              "blacklisted",
+              "count",
+              "listOrder",
+              "entered"
+            ]
+          }
+        }
+      },
+      "required": [
+        "folder",
+        "list"
+      ]
+    }
+  },
+  "side_effects": [],
+  "destructive": false,
+  "idempotent": true,
+  "ui_path": [
+    "Contacts",
+    "Settings",
+    "Lists"
+  ],
+  "internal_endpoint": {
+    "method": "GET",
+    "path": "/contact/backend/settings/lists",
+    "body_example": null
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/har/block-a-contacts.json"
+    ],
+    "verified_at": null
+  }
+}

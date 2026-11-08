@@ -1,0 +1,122 @@
+{
+  "id": "crm.create_attribute_group_view",
+  "module": "crm",
+  "name": "Create CRM attribute group view",
+  "description": "Call this when you need a new named section (attribute group) in the CRM record layout for an object type such as contact, so that attributes can later be grouped under it in the UI. Use this only for creating the group container itself; to create the underlying custom attribute that will sit inside a group, use contacts.create_attribute instead, and to read or list the existing layout views use views.list.",
+  "preconditions": [
+    "The CRM account identified by accountId must exist and the caller must be authenticated for it.",
+    "The object type being configured must be one the CRM supports (observed: contact).",
+    "Any attribute identifiers passed in attributes must already exist on that object type."
+  ],
+  "inputs": {
+    "type": "object",
+    "properties": {
+      "groupName": {
+        "type": "string",
+        "description": "Name of the attribute group to create, as stored and shown in the record layout, e.g. \"CATALOG_TIER\"."
+      },
+      "accountId": {
+        "type": "string",
+        "description": "Identifier of the Brevo CRM account the group belongs to."
+      },
+      "description": {
+        "type": "string",
+        "description": "Free-text description of the group, e.g. \"Default group description\"."
+      },
+      "component": {
+        "type": "string",
+        "description": "The CRM record UI component the group is rendered in. Observed value: \"details\"."
+      },
+      "objectType": {
+        "type": "string",
+        "description": "The CRM object whose layout the group belongs to. Observed value: \"contact\"."
+      },
+      "attributes": {
+        "type": "array",
+        "description": "Attributes to place in the group at creation time; observed empty, meaning an empty group is created.",
+        "items": {
+          "type": "string",
+          "description": "Identifier of an attribute to include in the group."
+        }
+      }
+    },
+    "required": [
+      "groupName",
+      "accountId",
+      "component",
+      "objectType"
+    ]
+  },
+  "outputs": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "string",
+        "description": "Identifier of the newly created attribute group view."
+      },
+      "accountId": {
+        "type": "string",
+        "description": "Account the group was created under."
+      },
+      "groupName": {
+        "type": "string",
+        "description": "Stored name of the group."
+      },
+      "description": {
+        "type": "string",
+        "description": "Stored description of the group."
+      },
+      "component": {
+        "type": "string",
+        "description": "UI component the group is rendered in."
+      },
+      "objectType": {
+        "type": "string",
+        "description": "CRM object type the group belongs to."
+      },
+      "createdAt": {
+        "type": "string",
+        "description": "RFC 3339 timestamp of creation."
+      }
+    },
+    "required": [
+      "id",
+      "accountId",
+      "groupName",
+      "component",
+      "objectType",
+      "createdAt"
+    ]
+  },
+  "side_effects": [
+    "A new attribute group is persisted on the CRM object configuration for the account.",
+    "The CRM record layout for the given object type and component gains an additional section visible to all users of the account."
+  ],
+  "destructive": false,
+  "idempotent": false,
+  "ui_path": [
+    "CRM",
+    "Settings",
+    "Contacts",
+    "Manage attributes",
+    "Add group",
+    "Save"
+  ],
+  "internal_endpoint": {
+    "method": "POST",
+    "path": "/crm/backend/object-config/attribute-group-view",
+    "body_example": "{\"groupName\":\"CATALOG_TIER\",\"accountId\":\"6aedca5302b34f2d6e026f4a\",\"description\":\"Default group description\",\"component\":\"details\",\"objectType\":\"contact\",\"attributes\":[]}"
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/har/block-b-model.json"
+    ],
+    "verified_at": null
+  }
+}

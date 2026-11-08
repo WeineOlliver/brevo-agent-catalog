@@ -1,0 +1,76 @@
+{
+  "id": "email_campaigns.save_subject",
+  "module": "email_campaigns",
+  "name": "Save campaign subject",
+  "description": "Call this when you need to update the subject line (and preheader) of an existing email campaign in the editor. Use the action to create a new campaign instead when the campaign does not yet exist.",
+  "preconditions": [
+    "The campaign with the given ID must already exist."
+  ],
+  "inputs": {
+    "type": "object",
+    "properties": {
+      "campaign_id": {
+        "type": "integer",
+        "description": "Identifier of the email campaign to update (the :id part of the URL)."
+      },
+      "subject": {
+        "type": "string",
+        "description": "The new subject line for the campaign."
+      },
+      "preheaderSetup": {
+        "type": "string",
+        "description": "The preheader text associated with the campaign."
+      },
+      "subjectLineSource": {
+        "type": "string",
+        "enum": [
+          "manual"
+        ],
+        "description": "Indicates how the subject line was set; currently only 'manual' is supported."
+      },
+      "subjectModifiedAfterAIUse": {
+        "type": "boolean",
+        "description": "Flag indicating whether the subject was edited after any AI‑generated suggestion."
+      }
+    },
+    "required": [
+      "campaign_id",
+      "subject",
+      "preheaderSetup",
+      "subjectLineSource",
+      "subjectModifiedAfterAIUse"
+    ]
+  },
+  "outputs": {
+    "type": "object",
+    "properties": {}
+  },
+  "side_effects": [
+    "The campaign's subject line and preheader are updated."
+  ],
+  "destructive": false,
+  "idempotent": false,
+  "ui_path": [
+    "Email Campaigns",
+    "Edit campaign",
+    "Subject",
+    "Save"
+  ],
+  "internal_endpoint": {
+    "method": "POST",
+    "path": "/email-campaign/api/:id/save-subject",
+    "body_example": "{\"subject\":\"Campaign me test ok\",\"preheaderSetup\":\"Something\",\"subjectLineSource\":\"manual\",\"subjectModifiedAfterAIUse\":false}"
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/har/block-c-email.json"
+    ],
+    "verified_at": null
+  }
+}

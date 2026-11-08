@@ -1,0 +1,129 @@
+{
+  "id": "editor.list_modules",
+  "module": "editor",
+  "name": "List editor content modules",
+  "description": "Call this when you need the catalogue of drag-and-drop content blocks available inside the Brevo email/newsletter editor — either the built-in default blocks (Title, Text, and similar) or the account's saved custom modules — before composing or patching editor content. Pass showCollectionBlock / showNewProdBlock / showProductFeedBlock to include the product and collection block types; pass sortField, orderDir, offset and limit to page through saved custom modules instead. Use editor.open_newsletter_editor to launch the editor itself, and editor.list_fonts for the typography choices rather than this action.",
+  "preconditions": [
+    "The user must be authenticated against the editor API for the account whose modules are being listed."
+  ],
+  "inputs": {
+    "type": "object",
+    "properties": {
+      "showCollectionBlock": {
+        "type": "boolean",
+        "description": "Include collection blocks in the returned module list."
+      },
+      "showNewProdBlock": {
+        "type": "boolean",
+        "description": "Include the newer product block type in the returned module list."
+      },
+      "showProductFeedBlock": {
+        "type": "boolean",
+        "description": "Include product feed blocks in the returned module list."
+      },
+      "sortField": {
+        "type": "string",
+        "description": "Field used to order the returned modules. Observed value: created_at.",
+        "enum": [
+          "created_at"
+        ]
+      },
+      "orderDir": {
+        "type": "string",
+        "description": "Sort direction applied to sortField.",
+        "enum": [
+          "asc",
+          "desc"
+        ]
+      },
+      "offset": {
+        "type": "integer",
+        "description": "Number of modules to skip before the returned page; 0 starts at the first module."
+      },
+      "limit": {
+        "type": "integer",
+        "description": "Maximum number of modules to return in this page."
+      }
+    },
+    "required": []
+  },
+  "outputs": {
+    "type": "object",
+    "properties": {
+      "modules": {
+        "type": [
+          "array",
+          "null"
+        ],
+        "description": "The matching modules, or null when the account has none. Each entry describes one editor block.",
+        "items": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "description": "Identifier of the module."
+            },
+            "name": {
+              "type": "string",
+              "description": "Display name of the module, e.g. Title or Text."
+            },
+            "content": {
+              "type": "object",
+              "description": "The block definition the editor inserts, including its HTML content, responsive layout map, moduleName, title and type."
+            },
+            "thumbnailUrl": {
+              "type": "string",
+              "description": "Path to the icon shown for this module in the editor sidebar."
+            },
+            "order": {
+              "type": "integer",
+              "description": "Sort position of the module within its sidebar section."
+            },
+            "sidebarSection": {
+              "type": "string",
+              "description": "Sidebar grouping the module appears under, e.g. block."
+            },
+            "type": {
+              "type": "string",
+              "description": "Module category, e.g. default for built-in blocks."
+            }
+          }
+        }
+      },
+      "count": {
+        "type": "integer",
+        "description": "Total number of modules matching the query, used for paging."
+      },
+      "customModuleHasBeenTried": {
+        "type": "boolean",
+        "description": "Whether the account has previously tried creating a custom module."
+      }
+    }
+  },
+  "side_effects": [],
+  "destructive": false,
+  "idempotent": true,
+  "ui_path": [
+    "Campaigns",
+    "Create an email campaign",
+    "Design",
+    "Blocks"
+  ],
+  "internal_endpoint": {
+    "method": "GET",
+    "path": "/editor-api/modules",
+    "body_example": null
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/har/block-c-email.json"
+    ],
+    "verified_at": null
+  }
+}

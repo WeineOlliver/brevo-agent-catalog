@@ -1,0 +1,65 @@
+{
+  "id": "contacts.delete_contact",
+  "module": "contacts",
+  "name": "Delete contact",
+  "description": "Call this when the user wants a contact permanently removed from the whole Brevo account, not just taken off one mailing list. If the goal is only to stop sending to a contact while keeping their record and history, use contacts.update_contact to set them to blocklisted instead, and if the goal is to take them off a specific list or add them to another, use contacts.bulk_modify_list. Resolve the numeric contact id first (for example via the contact index or contacts.get_preview) because this action identifies the contact by internal id, not by email.",
+  "preconditions": [
+    "The contact must already exist and be identified by its internal numeric id.",
+    "The session must be authenticated against the web app backend on contacts-api.brevo.com (cookie/session based, not an API key)."
+  ],
+  "inputs": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "integer",
+        "description": "Internal numeric id of the contact to delete, taken from the URL path (observed value: 3). This is the web app's contact id, not the contact's email address."
+      }
+    },
+    "required": [
+      "id"
+    ]
+  },
+  "outputs": {
+    "type": "object",
+    "properties": {
+      "message": {
+        "type": "string",
+        "description": "Human-readable confirmation of the deletion, e.g. \"Contact has been successfully deleted\"."
+      }
+    },
+    "required": [
+      "message"
+    ]
+  },
+  "side_effects": [
+    "The contact record is removed from the account.",
+    "The contact disappears from every list and segment it belonged to.",
+    "Subsequent lookups of this contact id fail."
+  ],
+  "destructive": true,
+  "idempotent": false,
+  "ui_path": [
+    "Contacts",
+    "Contacts",
+    "Open the contact",
+    "Delete",
+    "Confirm deletion"
+  ],
+  "internal_endpoint": {
+    "method": "DELETE",
+    "path": "/contact/backend/contacts/:id",
+    "body_example": null
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/har/block-a-contacts.json"
+    ],
+    "verified_at": null
+  }
+}

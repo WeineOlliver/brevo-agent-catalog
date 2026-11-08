@@ -1,0 +1,54 @@
+{
+  "id": "email_campaigns.get_campaign_count",
+  "module": "email_campaigns",
+  "name": "Get campaign count",
+  "description": "Call this when you need to know how many email campaigns exist in the account and how many of them are scheduled. Use the list campaigns action instead if you need details about each campaign.",
+  "preconditions": [],
+  "inputs": {
+    "type": "object",
+    "properties": {},
+    "required": []
+  },
+  "outputs": {
+    "type": "object",
+    "properties": {
+      "total_campaigns": {
+        "type": "integer",
+        "description": "Total number of email campaigns in the account."
+      },
+      "scheduled_campaigns": {
+        "type": "integer",
+        "description": "Number of email campaigns that are currently scheduled."
+      }
+    },
+    "required": [
+      "total_campaigns",
+      "scheduled_campaigns"
+    ]
+  },
+  "side_effects": [],
+  "destructive": false,
+  "idempotent": true,
+  "ui_path": [
+    "Email Campaigns",
+    "Dashboard",
+    "Campaign count"
+  ],
+  "internal_endpoint": {
+    "method": "GET",
+    "path": "/email-campaign/api/campaign-count",
+    "body_example": null
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/har/block-c-email.json"
+    ],
+    "verified_at": null
+  }
+}

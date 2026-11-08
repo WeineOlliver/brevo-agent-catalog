@@ -1,0 +1,94 @@
+{
+  "id": "account.get_client_info",
+  "module": "account",
+  "name": "Get client info",
+  "description": "Call this when you need the signed-in user's own identity and entitlement context before acting — their user id, account id, display name, email, phone, whether the account is invalidated, and which Brevo applications are activated (use the activated_applications list to decide whether an app-specific action such as a CRM, WhatsApp, or conversations call is reachable at all). Prefer this over broader account-settings reads when all you need is who is logged in and what is switched on; use the account settings action instead when you need company, plan, or billing details, and the brand action when you need branding.",
+  "preconditions": [
+    "A valid authenticated web-app session for the Brevo marketing-campaign API."
+  ],
+  "inputs": {
+    "type": "object",
+    "properties": {},
+    "required": []
+  },
+  "outputs": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "string",
+        "description": "Identifier of the signed-in client/user."
+      },
+      "account_id": {
+        "type": "string",
+        "description": "Identifier of the Brevo account the user belongs to."
+      },
+      "name": {
+        "type": "string",
+        "description": "Display name of the signed-in user."
+      },
+      "auth_token": {
+        "type": "string",
+        "description": "Session auth token returned for the signed-in user. Treat as a secret: do not log, store, or forward it."
+      },
+      "email": {
+        "type": "string",
+        "description": "Email address of the signed-in user."
+      },
+      "account_invalidated": {
+        "type": "boolean",
+        "description": "True when the account has been invalidated and app actions are expected to fail."
+      },
+      "activated_applications": {
+        "type": "array",
+        "description": "Brevo applications activated for this account.",
+        "items": {
+          "type": "string",
+          "enum": [
+            "automation",
+            "email-campaigns",
+            "transactional-emails",
+            "crm",
+            "whatsapp",
+            "phone",
+            "meetings",
+            "sms-campaigns",
+            "conversations"
+          ]
+        }
+      },
+      "phoneNumber": {
+        "type": "string",
+        "description": "Phone number on the signed-in user's profile."
+      }
+    },
+    "required": [
+      "id",
+      "account_id",
+      "name",
+      "email",
+      "account_invalidated",
+      "activated_applications"
+    ]
+  },
+  "side_effects": [],
+  "destructive": false,
+  "idempotent": true,
+  "ui_path": [],
+  "internal_endpoint": {
+    "method": "GET",
+    "path": "/marketing-campaign/api/client/info",
+    "body_example": null
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/har/block-c-email.json"
+    ],
+    "verified_at": null
+  }
+}

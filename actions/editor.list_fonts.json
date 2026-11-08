@@ -1,0 +1,61 @@
+{
+  "id": "editor.list_fonts",
+  "module": "editor",
+  "name": "List fonts",
+  "description": "Call this when you need to retrieve the collection of web fonts available in the Brevo editor. If you need details for a specific font, use a dedicated font‑detail action instead.",
+  "preconditions": [],
+  "inputs": {
+    "type": "object",
+    "properties": {
+      "orderDir": {
+        "type": "string",
+        "enum": [
+          "asc",
+          "desc"
+        ],
+        "description": "Sort direction for the returned fonts list; defaults to ascending."
+      }
+    },
+    "required": []
+  },
+  "outputs": {
+    "type": "object",
+    "properties": {
+      "webFonts": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "description": "An object describing a web font."
+        },
+        "description": "Array of available web fonts."
+      }
+    },
+    "required": [
+      "webFonts"
+    ]
+  },
+  "side_effects": [],
+  "destructive": false,
+  "idempotent": true,
+  "ui_path": [
+    "Editor",
+    "Fonts"
+  ],
+  "internal_endpoint": {
+    "method": "GET",
+    "path": "/editor-api/fonts",
+    "body_example": null
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/har/block-c-email.json"
+    ],
+    "verified_at": null
+  }
+}

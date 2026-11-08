@@ -1,0 +1,68 @@
+{
+  "id": "campaigns.validate_campaign_content",
+  "module": "campaigns",
+  "name": "Validate campaign content",
+  "description": "Call this when you need to check whether a specific email campaign's content passes Brevo's pre-send validation checks, and you want the list of blocking problems before committing to a send. Use it as the gate ahead of campaigns.send_now, so a send is only attempted once hasError is false. To read the campaign's own definition (subject, sender, recipients, status) rather than its validation state, use campaigns.get_campaign instead; to deliver the campaign once validation is clean, use campaigns.send_now.",
+  "preconditions": [
+    "The campaign must already exist and be identified by its numeric campaign id.",
+    "The caller must be authenticated to the Brevo web app account that owns the campaign."
+  ],
+  "inputs": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "integer",
+        "description": "Numeric id of the campaign whose content should be validated, taken from the campaign's URL or from a campaign listing action. Observed value: 3."
+      }
+    },
+    "required": [
+      "id"
+    ]
+  },
+  "outputs": {
+    "type": "object",
+    "properties": {
+      "hasError": {
+        "type": "boolean",
+        "description": "True when at least one validation problem was found, false when the campaign content passed every check performed."
+      },
+      "errors": {
+        "type": "array",
+        "description": "The validation problems found. Observed empty on a campaign that passed; the shape of individual entries was not observed.",
+        "items": {
+          "description": "A single validation problem reported for the campaign content. Structure not observed in the available evidence."
+        }
+      }
+    },
+    "required": [
+      "hasError",
+      "errors"
+    ]
+  },
+  "side_effects": [],
+  "destructive": false,
+  "idempotent": true,
+  "ui_path": [
+    "Campaigns",
+    "Email",
+    "Open the campaign",
+    "Review and send"
+  ],
+  "internal_endpoint": {
+    "method": "GET",
+    "path": "/marketing-campaign/api/campaign/:id/validate-content",
+    "body_example": null
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/har/block-c-email.json"
+    ],
+    "verified_at": null
+  }
+}

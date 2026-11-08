@@ -1,0 +1,105 @@
+{
+  "id": "editor.get_template",
+  "module": "editor",
+  "name": "Get email template",
+  "description": "Call this when you have a template id and need that template's full stored definition — its name, category, published state, thumbnail URL, and the complete drag-and-drop content tree — for example before rendering it in the editor or copying its structure. The id must already be known; this action does not search or list, so use the editor template-listing action to find candidate ids first, and use the campaign actions when you need the content of a saved campaign rather than a reusable template.",
+  "preconditions": [
+    "A template with the given id must exist and be visible to the authenticated account.",
+    "The caller must be an authenticated Brevo web-app session with access to the account that owns the template."
+  ],
+  "inputs": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "string",
+        "description": "Identifier of the template to retrieve, taken from the request path. Observed as a 24-character hexadecimal object id, e.g. \"5ea1551d2e9ad34b8640be9f\"."
+      }
+    },
+    "required": [
+      "id"
+    ]
+  },
+  "outputs": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "string",
+        "description": "Identifier of the template, matching the requested id."
+      },
+      "EntityType": {
+        "type": "string",
+        "description": "Kind of content this template defines. Observed value: \"email\"."
+      },
+      "publisherNewsletterId": {
+        "type": "integer",
+        "description": "Numeric id of the underlying newsletter/template record in the publisher system."
+      },
+      "publisherAccountId": {
+        "type": "integer",
+        "description": "Numeric id of the Brevo account the template belongs to."
+      },
+      "name": {
+        "type": "string",
+        "description": "Human-readable template name, e.g. \"Default template\"."
+      },
+      "category": {
+        "type": "string",
+        "description": "Grouping label used by the template gallery. Observed value: \"Layout\"."
+      },
+      "published": {
+        "type": "boolean",
+        "description": "Whether the template is published and therefore selectable in the editor."
+      },
+      "thumbnailUrl": {
+        "type": "string",
+        "description": "Absolute URL of the generated preview image for the template."
+      },
+      "order": {
+        "type": "integer",
+        "description": "Sort weight used to position the template within its category."
+      },
+      "content": {
+        "type": "object",
+        "description": "The editor's structured template definition: the document tree of rows, columns and blocks plus authoring metadata. Rendered HTML fragments inside it may contain template placeholders such as {{ mirror }} and {{ label.template.footer.view_in_browser }}.",
+        "properties": {
+          "author": {
+            "type": "string",
+            "description": "Author metadata stored with the template; observed empty."
+          },
+          "body": {
+            "type": "object",
+            "description": "Root node of the template document, whose nested \"content\" arrays hold the rows, columns and content blocks of the design."
+          }
+        }
+      }
+    }
+  },
+  "side_effects": [],
+  "destructive": false,
+  "idempotent": true,
+  "ui_path": [
+    "Campaigns",
+    "Email",
+    "Create an email campaign",
+    "Design",
+    "Templates",
+    "Select a template"
+  ],
+  "internal_endpoint": {
+    "method": "GET",
+    "path": "/editor-api/templates/:id",
+    "body_example": null
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/har/block-c-email.json"
+    ],
+    "verified_at": null
+  }
+}

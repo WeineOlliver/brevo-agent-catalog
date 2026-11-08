@@ -1,0 +1,166 @@
+{
+  "id": "campaigns.get_campaign",
+  "module": "campaigns",
+  "name": "Get email campaign",
+  "description": "Call this when you have an internal email campaign id and need that one campaign's full editor-level record — its status (e.g. Draft), type, name, creation and modification timestamps, scheduling and unsubscribe-page flags, and the internal object/template references the web editor uses. Use this before deciding whether a campaign can still be edited or scheduled, and to resolve a campaign id into its current state. For a list of campaigns to pick an id from, use the campaigns listing action instead; for the public, documented campaign representation (including recipients and statistics as the public API models them), prefer the public GET /v3/emailCampaigns/{campaignId} operation — this web-app endpoint returns editor-internal fields that the public API does not expose and that may change without notice.",
+  "preconditions": [
+    "The campaign must already exist and be visible to the authenticated account.",
+    "The caller must be an authenticated session of the account that owns the campaign (this is a web-app endpoint, not the public API-key surface)."
+  ],
+  "inputs": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "integer",
+        "description": "Internal numeric id of the email campaign, taken from the path (e.g. 3). This is the web app's campaign id, not an object id or a public API campaign id guaranteed to match."
+      }
+    },
+    "required": [
+      "id"
+    ]
+  },
+  "outputs": {
+    "type": "object",
+    "properties": {
+      "campaign": {
+        "type": "object",
+        "description": "The campaign record.",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "Internal numeric campaign id, matching the id in the path."
+          },
+          "camp_name": {
+            "type": "string",
+            "description": "Campaign name shown in the UI."
+          },
+          "campaign_type": {
+            "type": "string",
+            "description": "Campaign family as reported by the web app, e.g. \"regular\"."
+          },
+          "type": {
+            "type": "string",
+            "description": "Editor/content type of the campaign, e.g. \"classic\"."
+          },
+          "status": {
+            "type": "string",
+            "description": "Current lifecycle status as a display string, e.g. \"Draft\"."
+          },
+          "created_at": {
+            "type": "string",
+            "description": "ISO 8601 timestamp with offset for when the campaign was created."
+          },
+          "modified_at": {
+            "type": "string",
+            "description": "ISO 8601 timestamp with offset for the last modification."
+          },
+          "version": {
+            "type": "integer",
+            "description": "Internal campaign record version."
+          },
+          "objectId": {
+            "type": "string",
+            "description": "Internal object identifier for the campaign document."
+          },
+          "is_ax_testing": {
+            "type": "boolean",
+            "description": "Whether the campaign is set up as an A/X test."
+          },
+          "sendintime": {
+            "type": "boolean",
+            "description": "Whether send-time optimisation is enabled."
+          },
+          "delay": {
+            "type": "boolean",
+            "description": "Whether a send delay is configured."
+          },
+          "cancelled": {
+            "type": "boolean",
+            "description": "Whether the campaign was cancelled."
+          },
+          "archived": {
+            "type": "boolean",
+            "description": "Whether the campaign is archived."
+          },
+          "unsubscribePageAdded": {
+            "type": "boolean",
+            "description": "Whether an unsubscribe page has been attached."
+          },
+          "auto_unsubscribe_page_added": {
+            "type": "boolean",
+            "description": "Whether the unsubscribe page was added automatically."
+          },
+          "list_and_segment_combined": {
+            "type": "boolean",
+            "description": "Whether recipients are expressed as a combined list-and-segment selection."
+          },
+          "ashtml": {
+            "type": "integer",
+            "description": "Flag for whether the campaign is handled as raw HTML."
+          },
+          "was_subject_modified_after_use": {
+            "type": "boolean",
+            "description": "Whether the subject line changed after it was already used."
+          },
+          "thumblink_outdated": {
+            "type": "boolean",
+            "description": "Whether the stored thumbnail preview is stale."
+          },
+          "ga_active": {
+            "type": "boolean",
+            "description": "Whether Google Analytics tracking is enabled."
+          },
+          "utm_id_active": {
+            "type": "boolean",
+            "description": "Whether UTM id tagging is enabled."
+          },
+          "mirror_active": {
+            "type": "boolean",
+            "description": "Whether the web-mirror version of the email is enabled."
+          },
+          "has_attach": {
+            "type": "boolean",
+            "description": "Whether the campaign has attachments."
+          },
+          "inline_image": {
+            "type": "boolean",
+            "description": "Whether images are inlined."
+          },
+          "created_ip": {
+            "type": "string",
+            "description": "IP address recorded at creation."
+          },
+          "updated_ip": {
+            "type": "string",
+            "description": "IP address recorded at the last update."
+          }
+        }
+      }
+    }
+  },
+  "side_effects": [],
+  "destructive": false,
+  "idempotent": true,
+  "ui_path": [
+    "Campaigns",
+    "Email",
+    "Select a campaign"
+  ],
+  "internal_endpoint": {
+    "method": "GET",
+    "path": "/email-campaign/api/campaign/:id",
+    "body_example": null
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/har/block-c-email.json"
+    ],
+    "verified_at": null
+  }
+}

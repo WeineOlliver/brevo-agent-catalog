@@ -1,17 +1,33 @@
 {
-  "generated_at": "2026-11-07T03:36:18.760Z",
-  "count": 136,
+  "generated_at": "2026-11-07T11:16:14.877Z",
+  "count": 197,
   "by_status": {
     "verified": 0,
-    "observed": 136,
+    "observed": 197,
     "inferred": 0
   },
   "actions": [
+    {
+      "id": "account.enable_conversations_app",
+      "module": "account",
+      "name": "Enable Conversations app",
+      "description": "Call this when the Conversations (live chat / inbox) app must be switched on for the current Brevo account before any chat, inbox, or chat-widget feature is used or configured. Use it only once, as a provisioning step — it does not configure the widget, create chat agents, or send messages. If the account already has Conversations active, skip this and go straight to the Conversations settings or inbox actions instead; if a different Brevo product needs turning on, use the corresponding /account/apps/enable/<app> action for that app rather than this one.",
+      "status": "observed",
+      "destructive": false
+    },
     {
       "id": "account.enable_sms_campaigns_app",
       "module": "account",
       "name": "Enable SMS Campaigns app",
       "description": "Call this when an account needs the SMS Campaigns feature turned on before SMS work can begin — for example a campaigns listing shows SMS as unavailable or locked, or a subsequent SMS campaign call fails because the app is not enabled. This only flips the account-level app entitlement; to create, edit, or send an actual SMS campaign, use the SMS campaign actions instead, and to read which apps are already on, use the feature-toggle read action rather than calling this to find out.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
+      "id": "account.get",
+      "module": "account",
+      "name": "Get account information",
+      "description": "Call this when you need to retrieve the current user's account details such as ID, name, locale, plan, and feature flags. Use the public /account endpoint instead if you require data that is exposed through the official API.",
       "status": "observed",
       "destructive": false
     },
@@ -36,6 +52,14 @@
       "module": "account",
       "name": "Get client config",
       "description": "Call this when you need the signed-in account's display and locale context — organization name, timezone, time format — or to check whether a given app (e.g. SMS campaigns) is already activated before driving a campaign flow, since the response reports activation state per app. Use this as the read-only check that pairs with the separate app-activation action (account.enable_sms_campaigns_app) when activation turns out to be needed; prefer the organization details action (organization.get_details) when you need fuller organization metadata rather than app activation and formatting flags.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
+      "id": "account.get_client_info",
+      "module": "account",
+      "name": "Get client info",
+      "description": "Call this when you need the signed-in user's own identity and entitlement context before acting — their user id, account id, display name, email, phone, whether the account is invalidated, and which Brevo applications are activated (use the activated_applications list to decide whether an app-specific action such as a CRM, WhatsApp, or conversations call is reachable at all). Prefer this over broader account-settings reads when all you need is who is logged in and what is switched on; use the account settings action instead when you need company, plan, or billing details, and the brand action when you need branding.",
       "status": "observed",
       "destructive": false
     },
@@ -168,10 +192,34 @@
       "destructive": false
     },
     {
+      "id": "branding.get_brand",
+      "module": "branding",
+      "name": "Get brand assets",
+      "description": "Call this when you need the account's stored brand identity — the brand website, name, logo, colour palette and fonts — before generating or styling content such as a campaign or template so it matches the account's branding. The response carries a `branding.fetched` flag; when it is false the brand has not been scraped yet and the fields are empty, so treat the palette and fonts as unavailable rather than as deliberate empty values. This is read-only: use the account settings action to read general account details, and the editor actions to apply styling to a specific design.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
       "id": "campaigns.get_calendar",
       "module": "campaigns",
       "name": "Get campaign calendar",
       "description": "Call this when you need to retrieve the list of dates on which campaigns occurred within a specific date range for reporting purposes. Use a detailed campaign report action instead when you need metrics or performance data for those campaigns.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
+      "id": "campaigns.get_campaign",
+      "module": "campaigns",
+      "name": "Get email campaign",
+      "description": "Call this when you have an internal email campaign id and need that one campaign's full editor-level record — its status (e.g. Draft), type, name, creation and modification timestamps, scheduling and unsubscribe-page flags, and the internal object/template references the web editor uses. Use this before deciding whether a campaign can still be edited or scheduled, and to resolve a campaign id into its current state. For a list of campaigns to pick an id from, use the campaigns listing action instead; for the public, documented campaign representation (including recipients and statistics as the public API models them), prefer the public GET /v3/emailCampaigns/{campaignId} operation — this web-app endpoint returns editor-internal fields that the public API does not expose and that may change without notice.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
+      "id": "campaigns.get_campaign_stats",
+      "module": "campaigns",
+      "name": "Get campaign statistics",
+      "description": "Call this when you need delivery, open, click, unsubscribe and conversion counters for one or more email campaigns you already know the numeric IDs of, including comparing several campaigns in a single call. Use campaigns.get_campaign instead when you need a campaign's configuration, content or status rather than its performance numbers, and use the campaign listing action first if you still need to discover campaign IDs.",
       "status": "observed",
       "destructive": false
     },
@@ -256,10 +304,66 @@
       "destructive": false
     },
     {
+      "id": "campaigns.schedule_campaign",
+      "module": "campaigns",
+      "name": "Schedule campaign",
+      "description": "Call this when a drafted email campaign should go out automatically at a specific future date and time rather than right away. Set the campaign's content and recipients first, and validate it, before scheduling. Use campaigns.send_now instead when the campaign should go out immediately with no delay; use campaigns.validate_campaign or campaigns.validate_campaign_content first if you are not yet sure the campaign is ready to send; use campaigns.get_campaign to read back the campaign's current status and scheduled time.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
+      "id": "campaigns.send_now",
+      "module": "campaigns",
+      "name": "Send campaign now",
+      "description": "Call this when you need to send a marketing campaign immediately. Use the \"schedule campaign\" action instead if you want to set a future send time rather than sending instantly.",
+      "status": "observed",
+      "destructive": true
+    },
+    {
+      "id": "campaigns.suspend_campaign",
+      "module": "campaigns",
+      "name": "Suspend email campaign",
+      "description": "Call this when an email campaign that is already scheduled or sending must be put on hold, so that it stops going out while its draft, audience and content stay intact for later. Use campaigns.schedule_campaign to put a suspended or draft campaign back on a send date, campaigns.send_now when it should go out immediately instead, and campaigns.validate_campaign or campaigns.validate_campaign_content when the goal is only to check a campaign for problems without changing its send state.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
+      "id": "campaigns.validate_campaign",
+      "module": "campaigns",
+      "name": "Validate campaign before sending",
+      "description": "Call this when you have an existing marketing campaign and need to know whether it is ready to go out — before calling campaigns.send_now or scheduling it — so you can stop and report problems instead of sending something broken. It reports a single overall verdict plus the account's remaining daily email allowance, so it is also the check to make when you need to know whether the sending quota covers this campaign. If you instead need the campaign's own configuration (subject, sender, lists, content), use campaigns.get_campaign; if you need to check the HTML or template content specifically, use campaigns.validate_campaign_content.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
+      "id": "campaigns.validate_campaign_content",
+      "module": "campaigns",
+      "name": "Validate campaign content",
+      "description": "Call this when you need to check whether a specific email campaign's content passes Brevo's pre-send validation checks, and you want the list of blocking problems before committing to a send. Use it as the gate ahead of campaigns.send_now, so a send is only attempted once hasError is false. To read the campaign's own definition (subject, sender, recipients, status) rather than its validation state, use campaigns.get_campaign instead; to deliver the campaign once validation is clean, use campaigns.send_now.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
       "id": "client.get_feature_toggles",
       "module": "client",
       "name": "Get feature toggles",
       "description": "Call this when you need to know which feature flags are enabled for the current Brevo account, for example to adjust UI behavior. Use a more specific feature‑check endpoint if one exists for the particular capability you are interested in.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
+      "id": "companies.create_company",
+      "module": "companies",
+      "name": "Create company",
+      "description": "Call this when you need to create a new company record in the CRM. Use the update company action instead if you already have the company's ID and only want to modify its data.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
+      "id": "companies.find_companies_by_name",
+      "module": "companies",
+      "name": "Find companies by name",
+      "description": "Call this when you have a company name string and need the matching company records in the CRM — typically to resolve a name to a company id, or to check whether a company already exists before creating one with companies.create_company. Use this for name-based lookup only; it takes a single name query parameter and returns an array that is empty when nothing matches. If you already hold a company id and want its full record, or you need to filter companies by attributes other than name, use the companies listing/detail action instead; to attach a contact to a company once you have resolved its id, use contacts.link_unlink_company.",
       "status": "observed",
       "destructive": false
     },
@@ -312,6 +416,22 @@
       "destructive": false
     },
     {
+      "id": "contacts.analyze_import_file",
+      "module": "contacts",
+      "name": "Analyze contact import file",
+      "description": "Call this when you have a contact file (e.g. CSV) and need Brevo to parse its headers and propose an attribute mapping before any contacts are actually imported. This is the first step of the file-based import flow: it returns the detected columns, sample values, inferred data types and which header maps to email/SMS/WhatsApp, so a later step can confirm the mapping and run the import. Use contacts.suggest_mapping_from_file instead if you only need a mapping suggestion for headers you already hold, and use the import-notification action (contacts.get_import_notification) to follow the progress of an import that has already been started. Do not use this to add a single known contact — use contacts.create_contact or contacts.update_contact for that.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
+      "id": "contacts.bulk_modify_list",
+      "module": "contacts",
+      "name": "Bulk modify contacts list",
+      "description": "Call this when you need to apply a bulk action (e.g., delete contacts from a list) to a set of contacts selected in the UI. Use the single‑contact endpoint (contacts.remove_contact_from_list) when you only need to modify one contact, as it is more appropriate for that case.",
+      "status": "observed",
+      "destructive": true
+    },
+    {
       "id": "contacts.check_duplicate_contact",
       "module": "contacts",
       "name": "Check duplicate contact",
@@ -320,10 +440,34 @@
       "destructive": false
     },
     {
+      "id": "contacts.create_attribute",
+      "module": "contacts",
+      "name": "Create contact attribute",
+      "description": "Call this when you need to add a new custom attribute to contacts. If the attribute already exists, use the update attribute action instead.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
       "id": "contacts.create_contact",
       "module": "contacts",
       "name": "Create contact",
       "description": "Call this when you need to add a single new contact to the account from an email address, optionally placing it on lists and setting attribute values at the same time. The response returns the new contact's internal numeric id, so call this when a later step needs that id. Check first with contacts.check_duplicate_contact if you are unsure whether the email already exists, since this endpoint's behaviour for an existing email is not established by the evidence. For adding many contacts at once prefer the account's import flow rather than looping this action, and to put an already-existing contact onto a list use the list-membership action instead of re-creating it.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
+      "id": "contacts.delete_contact",
+      "module": "contacts",
+      "name": "Delete contact",
+      "description": "Call this when the user wants a contact permanently removed from the whole Brevo account, not just taken off one mailing list. If the goal is only to stop sending to a contact while keeping their record and history, use contacts.update_contact to set them to blocklisted instead, and if the goal is to take them off a specific list or add them to another, use contacts.bulk_modify_list. Resolve the numeric contact id first (for example via the contact index or contacts.get_preview) because this action identifies the contact by internal id, not by email.",
+      "status": "observed",
+      "destructive": true
+    },
+    {
+      "id": "contacts.export",
+      "module": "contacts",
+      "name": "Export contacts",
+      "description": "Call this when you need to generate a CSV/Excel export of one or more contacts, optionally including subscription status and internal metadata. Use the neighbouring action \"contacts.get_export_status\" to check the export progress or retrieve the file once it is ready, instead of calling export again.",
       "status": "observed",
       "destructive": false
     },
@@ -376,6 +520,14 @@
       "destructive": false
     },
     {
+      "id": "contacts.get_contact_visited_webpages",
+      "module": "contacts",
+      "name": "Get contact visited webpages",
+      "description": "Call this when you need to retrieve the list of webpages a contact has visited, as shown in the contact's detail view under \"Visited webpages\". Use the list contacts action instead if you only need basic contact information without webpage history.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
       "id": "contacts.get_contact_workflows",
       "module": "contacts",
       "name": "Get contact workflows",
@@ -392,10 +544,42 @@
       "destructive": false
     },
     {
+      "id": "contacts.get_event_status",
+      "module": "contacts",
+      "name": "Get enabled event channels",
+      "description": "Call this when you need to know which contact event channels are enabled for the account before reading or filtering event-based activity, so you can skip channels the account does not have. It returns only the channel identifiers; to get the filter definitions available for a contact's timeline use contacts.list_timeline_event_filters, and to read a contact's actual web activity use contacts.get_contact_visited_webpages.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
+      "id": "contacts.get_export_preferences",
+      "module": "contacts",
+      "name": "Get export preferences",
+      "description": "Call this when you need to know which subscription fields, system fields, and saved column preferences are available for a contact export, before building an export request. Use it to discover the valid field names to include, then call contacts.export to actually start the export job; if you only need the stored attribute definitions rather than export-specific field groups, use contacts.create_attribute's listing counterpart instead.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
       "id": "contacts.get_feature_toggles",
       "module": "contacts",
       "name": "Get feature toggles",
       "description": "Call this when you need to know whether specific optional features (e.g., tags, deduplication, AI assistant, SMS nudge banner) are enabled for the current account or context. Use a broader account‑settings action instead if you need more than just feature flags.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
+      "id": "contacts.get_import_notification",
+      "module": "contacts",
+      "name": "Get import notification",
+      "description": "Call this when you need to check the current status of a contacts import job and retrieve any process data that may be attached. Use a dedicated import‑details action if you need to fetch the full import results or modify the import.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
+      "id": "contacts.get_list_folders",
+      "module": "contacts",
+      "name": "Get list folders and lists",
+      "description": "Call this when you need to retrieve the hierarchical structure of contact list folders and the lists they contain in the Brevo UI. Use the \"Get all contacts\" action instead if you only need contact data without folder organization.",
       "status": "observed",
       "destructive": false
     },
@@ -422,6 +606,30 @@
       "description": "Call this when you need to retrieve the presentation configuration used for displaying a contact's events in the UI. Use a different action (e.g., a configuration update endpoint) if you need to modify the presentation settings.",
       "status": "observed",
       "destructive": false
+    },
+    {
+      "id": "contacts.get_preview",
+      "module": "contacts",
+      "name": "Preview contacts",
+      "description": "Call this when you need a quick view of specific contacts' basic information without loading full details. Provide one or more contact IDs to retrieve their preview data. Use the full contact retrieval action (e.g., contacts.get) when you need all contact attributes or to modify them.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
+      "id": "contacts.get_segment_contact_count",
+      "module": "contacts",
+      "name": "Get segment contact count",
+      "description": "Call this when you need the total number of contacts that match a segment query without retrieving the full list. Use the \"List contacts in segment\" action instead if you need the actual contact data.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
+      "id": "contacts.link_unlink_company",
+      "module": "contacts",
+      "name": "Link or unlink companies for a contact",
+      "description": "Call this when you need to add new company links to a contact or remove existing company links. Use the separate action \"contacts.update_contact\" if you only need to modify the contact's own fields.",
+      "status": "observed",
+      "destructive": true
     },
     {
       "id": "contacts.list_activities",
@@ -456,6 +664,54 @@
       "destructive": false
     },
     {
+      "id": "contacts.list_timeline_event_filters",
+      "module": "contacts",
+      "name": "List contact timeline event filters",
+      "description": "Call this when you need the set of event sources and event types that are valid filter values for a contact's activity timeline — for example before narrowing a timeline query to CRM meetings, phone calls, or transactional email events. It returns the filter vocabulary only, not any contact's events; to read the events themselves use the contact timeline/activity listing action, and to look up a contact's identity or attributes use the contact detail action instead.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
+      "id": "contacts.save_export_preferences",
+      "module": "contacts",
+      "name": "Save contact export preferences",
+      "description": "Call this when the user wants their chosen export layout — which standard, custom, subscription and system fields to include, the CSV delimiter, and whether to be emailed when an export finishes — remembered as the default for future contact exports. Use contacts.get_export_preferences first to read the currently saved selection so you only change the fields the user asked about, since this call replaces the whole preference set rather than merging into it. Use contacts.export when the goal is to actually produce an export file, not to change the remembered settings.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
+      "id": "contacts.save_import_mapping",
+      "module": "contacts",
+      "name": "Save contact import mapping",
+      "description": "Call this when a contact import file has already been uploaded and analyzed and you need to commit the column-to-attribute mapping, the target lists, and the import options so the import job can run. Use contacts.suggest_mapping_from_file first to obtain a proposed column mapping, and contacts.analyze_import_file to obtain the process id and line count this call refers to; afterwards use contacts.get_import_notification to follow the resulting import. For adding or removing contacts on a list without a file, use contacts.bulk_modify_list instead.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
+      "id": "contacts.suggest_mapping_from_file",
+      "module": "contacts",
+      "name": "Suggest mapping from file",
+      "description": "Call this when you have a CSV file of contacts and want the system to propose how its columns map to contact attributes before performing an import. Use the contacts.import_contacts action instead if you are ready to actually import the data.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
+      "id": "contacts.update_contact",
+      "module": "contacts",
+      "name": "Update contact",
+      "description": "Call this when you need to modify an existing contact's information such as attributes, email address, assignment, or list memberships. Use the \"Create contact\" action instead when the contact does not yet exist.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
+      "id": "conversations.load_chat_widget_script",
+      "module": "conversations",
+      "name": "Load chat widget loader script",
+      "description": "Call this when you need the browser-side bootstrap script that injects and styles the Brevo Conversations chat widget on a page — for example to verify that the widget loader is being served for the account, or to inspect the CSS and DOM setup the widget applies. The response is JavaScript for a browser to execute, not structured data, so do not use it to read conversation or chat data. To turn the Conversations product on for the account, use the enable-conversations-app action instead; to read account-level Conversations configuration, use the account info actions.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
       "id": "conversions.get_config",
       "module": "conversions",
       "name": "Get conversion goals configuration",
@@ -480,10 +736,26 @@
       "destructive": false
     },
     {
+      "id": "crm.create_attribute_group_view",
+      "module": "crm",
+      "name": "Create CRM attribute group view",
+      "description": "Call this when you need a new named section (attribute group) in the CRM record layout for an object type such as contact, so that attributes can later be grouped under it in the UI. Use this only for creating the group container itself; to create the underlying custom attribute that will sit inside a group, use contacts.create_attribute instead, and to read or list the existing layout views use views.list.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
       "id": "crm.get_account_settings",
       "module": "crm",
       "name": "Get account settings",
       "description": "Call this when you need to read the current CRM account configuration such as notification preferences, attribute list views, and sales stepper flags. Use the neighboring action \"crm.update_account_settings\" if you need to modify any of these settings instead.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
+      "id": "crm.get_csrf_token",
+      "module": "crm",
+      "name": "Get CSRF token",
+      "description": "Call this when you need a CSRF token to include in a form submission (e.g., posting a company). Use a different form_id parameter for other forms; the same endpoint with a different form_id is the better fit for those cases.",
       "status": "observed",
       "destructive": false
     },
@@ -508,6 +780,14 @@
       "module": "crm",
       "name": "List CRM contact attributes",
       "description": "Call this when you need the schema of contact fields the CRM knows about — their keys, labels, value types, and whether each is a system field or read-only — before reading or writing contact data on deals, pipelines, or CRM forms. Use it to resolve a human-facing field label to the attribute key other calls expect, and to find out which fields must be left alone because they are system-owned or read-only. This returns definitions of fields, not any contact's values: to read or change values on a specific contact, use the contacts actions instead; to fetch the attribute definitions for a non-contact CRM object such as a deal or a company, use the equivalent object-schema action for that object type.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
+      "id": "crm.update_attribute_group_view",
+      "module": "crm",
+      "name": "Update attribute group view",
+      "description": "Call this when an attribute group view that already exists in the CRM object configuration must be changed — renaming the group, or changing which attributes appear in it and in what order. Pass the full intended attribute list, because the observed body carries the complete set rather than a delta. Use crm.create_attribute_group_view instead when no group view exists yet for the object type and a new one must be added; use contacts.create_attribute instead when the underlying attribute itself does not exist, since this action only arranges attributes into a display group and does not define them.",
       "status": "observed",
       "destructive": false
     },
@@ -584,6 +864,118 @@
       "destructive": false
     },
     {
+      "id": "editor.get_localization_settings",
+      "module": "editor",
+      "name": "Get editor localization settings",
+      "description": "Call this when you need to know whether multi-language (localization) content is available for the current account's email/page editor, and how many languages it allows, before offering or building a translated variant of a template. It reports capability only — it does not read or write any template's language content, and it is not the action for account-wide plan or feature lookup, where the account info action is the better fit.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
+      "id": "editor.get_template",
+      "module": "editor",
+      "name": "Get email template",
+      "description": "Call this when you have a template id and need that template's full stored definition — its name, category, published state, thumbnail URL, and the complete drag-and-drop content tree — for example before rendering it in the editor or copying its structure. The id must already be known; this action does not search or list, so use the editor template-listing action to find candidate ids first, and use the campaign actions when you need the content of a saved campaign rather than a reusable template.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
+      "id": "editor.list_fonts",
+      "module": "editor",
+      "name": "List fonts",
+      "description": "Call this when you need to retrieve the collection of web fonts available in the Brevo editor. If you need details for a specific font, use a dedicated font‑detail action instead.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
+      "id": "editor.list_modules",
+      "module": "editor",
+      "name": "List editor content modules",
+      "description": "Call this when you need the catalogue of drag-and-drop content blocks available inside the Brevo email/newsletter editor — either the built-in default blocks (Title, Text, and similar) or the account's saved custom modules — before composing or patching editor content. Pass showCollectionBlock / showNewProdBlock / showProductFeedBlock to include the product and collection block types; pass sortField, orderDir, offset and limit to page through saved custom modules instead. Use editor.open_newsletter_editor to launch the editor itself, and editor.list_fonts for the typography choices rather than this action.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
+      "id": "editor.open_newsletter_editor",
+      "module": "editor",
+      "name": "Open newsletter editor",
+      "description": "Call this when an agent needs to reach the drag-and-drop editor UI for an existing email campaign (newsletter) so a human or a UI-driving agent can edit its design, optionally starting from a chosen template. This only loads the editor single-page application shell; it returns no campaign data and saves nothing. To read or change campaign fields programmatically, use the email campaign actions instead (for example email_campaign.create_regular to create a campaign, or the campaign update/get actions), and campaigns.send_now to send one.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
+      "id": "email_campaigns.count_recipients",
+      "module": "email_campaigns",
+      "name": "Count campaign recipients",
+      "description": "Call this when you need the number of contacts a campaign audience selection would reach, before committing to it — for example while assembling included/excluded lists and segments for an email campaign and wanting to show or check the resulting audience size. Use this instead of fetching every contact of each list and de-duplicating them yourself. If you only need the size of a single saved segment, use contacts.get_segment_contact_count; if you need the number of campaigns rather than recipients, use email_campaigns.get_campaign_count; and once the audience is settled, apply it with the campaign create/update action (e.g. email_campaign.create_regular) rather than this one.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
+      "id": "email_campaigns.create_regular",
+      "module": "email_campaigns",
+      "name": "Create regular email campaign",
+      "description": "Call this when you need to create a new regular (non‑automated) email campaign in Brevo. Use the scheduled‑campaign setup action instead when the campaign should be sent at a future date/time.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
+      "id": "email_campaigns.get_campaign_count",
+      "module": "email_campaigns",
+      "name": "Get campaign count",
+      "description": "Call this when you need to know how many email campaigns exist in the account and how many of them are scheduled. Use the list campaigns action instead if you need details about each campaign.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
+      "id": "email_campaigns.get_sending_health",
+      "module": "email_campaigns",
+      "name": "Get sending health",
+      "description": "Call this when you need the account-level sending health verdict before creating or sending an email campaign, so you can warn the user that deliverability or reputation checks may block or degrade a send. It reports a single account-wide verdict and whether the account is new; it says nothing about any individual campaign, so use the campaign validation action instead to check a specific campaign's readiness, and use the account action instead for plan, credit, or identity details.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
+      "id": "email_campaigns.save_campaign_recipients",
+      "module": "email_campaigns",
+      "name": "Save email campaign recipients",
+      "description": "Call this when a draft email campaign already exists and you need to set or replace which lists, segments, or individual contacts it will target, including the exclusions. This only stores the audience selection on the campaign; call the campaign content/settings action to change subject or body, email_campaigns.count_recipients to preview how many contacts the current selection reaches before saving, and campaigns.send_now (or the scheduling action) once the audience is final. Note that this replaces the whole recipient selection rather than adding to it, so include every list, segment, and contact that should remain targeted.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
+      "id": "email_campaigns.save_newsletter_design",
+      "module": "campaigns",
+      "name": "Save newsletter email design",
+      "description": "Call this when an existing newsletter/email-campaign design must be overwritten with a new drag-and-drop editor document, and you need the rendered HTML back. The newsletter must already exist and its numeric editor id must be known — this action replaces the whole stored design, it does not create one, so use the campaign-creation action (e.g. email_campaign.create_regular) first to obtain an id, and use the campaign-sending action (e.g. campaigns.send_now) when the goal is delivery rather than editing. Prefer a read-only preview or recipient-count action when you only need to inspect a campaign without changing it.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
+      "id": "email_campaigns.save_subject",
+      "module": "email_campaigns",
+      "name": "Save campaign subject",
+      "description": "Call this when you need to update the subject line (and preheader) of an existing email campaign in the editor. Use the action to create a new campaign instead when the campaign does not yet exist.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
+      "id": "email_campaigns.send_test_email",
+      "module": "campaigns",
+      "name": "Send test email for campaign",
+      "description": "Call this when you need to preview a draft email campaign in a real inbox before it goes out — the recipients are the test addresses you pass, not the campaign's audience. Use this to validate rendering, subject line, and personalization during editing. Do not use it to deliver the campaign: call the send-now action (campaigns.send_now) for the real audience, and the recipient-count action (email_campaigns.count_recipients) when you only need to know how many contacts the campaign would reach.",
+      "status": "observed",
+      "destructive": true
+    },
+    {
+      "id": "email_templates.create_template",
+      "module": "templates",
+      "name": "Create email template",
+      "description": "Call this when the user wants a new reusable email template saved in the template library — typically to create an empty or lightly pre-filled draft that is then edited in the template designer. The created template starts inactive, so follow it with the template update/activate action before it can be used by campaigns or transactional sends. Use the regular email campaign creation action instead when the goal is a one-off campaign to send to lists rather than a reusable template, and use the template update action instead when a template with this name/id already exists and only its content or settings need changing.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
       "id": "email_templates.list_templates",
       "module": "email_templates",
       "name": "List email templates",
@@ -648,6 +1040,14 @@
       "destructive": false
     },
     {
+      "id": "forms.list_unsubscribe_forms",
+      "module": "forms",
+      "name": "List unsubscribe forms",
+      "description": "Call this when you need the id of an unsubscribe page/form before referencing one elsewhere — for example to resolve a human-readable name like \"Default unsubscribe page\" into the id an editor or campaign setting expects, or to check which unsubscribe pages exist on the account. It returns only id and name, so if you need a campaign's own content or settings use campaigns.get_campaign instead, and if you need brand-level footer styling use branding.get_brand.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
       "id": "homepage.list_user_widgets",
       "module": "homepage",
       "name": "List user homepage widgets",
@@ -660,6 +1060,14 @@
       "module": "integrations",
       "name": "List integrations",
       "description": "Call this when you need to retrieve the collection of integrations available for a specific UI location, such as the contact details view. Use a more specific integration‑detail action (e.g., integrations.get_integration_details) if you need information about a single integration rather than the list.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
+      "id": "lists.create_list",
+      "module": "lists",
+      "name": "Create list",
+      "description": "Call this when you need to create a new contact list in Brevo. If you only need to create a folder (is_folder true), use the dedicated create_folder action instead.",
       "status": "observed",
       "destructive": false
     },
@@ -720,6 +1128,14 @@
       "destructive": false
     },
     {
+      "id": "marketing_campaign.get_client_config",
+      "module": "marketing_campaign",
+      "name": "Get client configuration",
+      "description": "Call this when you need to retrieve the current marketing campaign client configuration, including organization details, plan information, limits, and authorized actions. Use a different action if you need to modify any of these settings.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
       "id": "marketing_campaign.get_features",
       "module": "marketing_campaign",
       "name": "Get feature toggles",
@@ -764,6 +1180,22 @@
       "module": "navigation",
       "name": "Get marketing site header menu",
       "description": "Call this when an agent needs the marketing/corporate website's top navigation tree — menu tab names, item titles, slugs and link URLs — for example to resolve where a public Brevo page lives before navigating to it. This serves the public corp site chrome, not the logged-in product UI: it carries no account, contact or campaign data, so use a contacts, campaigns or lists read action instead for anything account-specific, and use the feature-toggle or plan-info reads instead to learn what the current account can access.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
+      "id": "newsletters.get_newsletter",
+      "module": "newsletters",
+      "name": "Get newsletter",
+      "description": "Call this when you need to retrieve the details of a specific newsletter (campaign) by its identifier, such as its name, content placeholder, and type. Use the list_newsletters action instead if you need to discover multiple newsletters at once.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
+      "id": "newsletters.preview",
+      "module": "newsletters",
+      "name": "Preview newsletter",
+      "description": "Call this when you need to generate a preview of a specific newsletter (optionally for a given A/B version and language) before publishing or sending. Use the send test email action instead if you want to deliver the content to an actual email address.",
       "status": "observed",
       "destructive": false
     },
@@ -832,6 +1264,14 @@
       "destructive": false
     },
     {
+      "id": "profile_forms.list",
+      "module": "profile_forms",
+      "name": "List profile forms",
+      "description": "Call this when you need to retrieve the full list of profile forms configured in the editor. Use the get_profile_form action instead when you only need a specific form by its ID.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
       "id": "reference.list_countries",
       "module": "reference",
       "name": "List countries",
@@ -860,6 +1300,22 @@
       "module": "security",
       "name": "List authorized IPs",
       "description": "Call this when you need to retrieve the current list of IP addresses authorized for the account. If you need to add, update, or remove an IP address, use the corresponding security.add_authorized_ip or security.remove_authorized_ip actions instead.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
+      "id": "segments.count_paginated",
+      "module": "segments",
+      "name": "Get paginated count of segment",
+      "description": "Call this when you need to know the total number of contacts that match a segment query without retrieving the actual contacts. Use the segment list retrieval endpoint instead when you need the contact data itself.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
+      "id": "segments.create_segment",
+      "module": "segments",
+      "name": "Create segment",
+      "description": "Call this when you need to create a new contact segment based on a filter query. Use the update segment action instead if the segment already exists and only its definition needs to change.",
       "status": "observed",
       "destructive": false
     },
@@ -928,20 +1384,28 @@
       "destructive": false
     },
     {
-      "id": "segments.paginated_count",
-      "module": "segments",
-      "name": "Get paginated count of segment",
-      "description": "Call this when you need to know the total number of contacts that match a segment query without retrieving the actual contacts. Use the segment list retrieval endpoint instead when you need the contact data itself.",
-      "status": "observed",
-      "destructive": true
-    },
-    {
       "id": "segments.query_contacts",
       "module": "segments",
       "name": "Query segment contacts",
       "description": "Call this when you need to list contacts — either everyone in the account or the members of one segment. An empty `fe_query` returns the whole contact base, which is how the product renders its main contacts table; pass a segment query to narrow it. Supports pagination and an optional forced refresh of the segment calculation. Use the contact-detail action instead when you already know which single contact you want.",
       "status": "observed",
       "destructive": false
+    },
+    {
+      "id": "segments.query_segment_contacts",
+      "module": "segments",
+      "name": "Query segment contacts",
+      "description": "Call this when you need the actual contact rows that a segment filter resolves to — either to preview who an unsaved segment definition would match before saving it, or to page through the members of a filter you already hold. Pass the filter as `fe_query` and read contacts from `data`; the matched total comes back in `metadata.contact_count`. Use segments.get_segment_contact_count instead when you only need the size of a segment and not the rows, and use the contacts listing action when you want all contacts or the members of a plain list rather than a filter-defined segment.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
+      "id": "senders.unblock_sender",
+      "module": "senders",
+      "name": "Unblock sender",
+      "description": "Call this when a transactional sender address has been blocked and you need to restore its ability to send again, after the cause of the block has been addressed. Use it only for sender identities on the account; if the address you need to free is a recipient that was blocked or unsubscribed, use the contact-level action (contacts.update_contact) instead, and if the sender does not exist on the account yet, create it with the sender-creation action rather than unblocking.",
+      "status": "observed",
+      "destructive": true
     },
     {
       "id": "settings.get_phone_call_enabled",
@@ -992,6 +1456,14 @@
       "destructive": false
     },
     {
+      "id": "tags.list_tags",
+      "module": "tags",
+      "name": "List tags",
+      "description": "Call this when an agent needs to discover which tags exist in the account — for example to resolve a tag name to its identifier before applying it, or to check whether a tag has already been created. This is a read-only listing served by the web app's tag-engine service; it is not part of Brevo's public API, so no documented counterpart exists. Paginate with limit and offset when the returned total exceeds the page size. Use the contacts attribute or segment actions instead when the goal is to inspect contact fields or segment membership rather than the tag vocabulary itself.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
       "id": "tasks.list_tasktypes",
       "module": "tasks",
       "name": "List task types",
@@ -1014,6 +1486,14 @@
       "description": "Call this when you need to retrieve the details of a specific transactional sender identified by its email address. Use a list‑senders action instead if you need to enumerate all senders.",
       "status": "observed",
       "destructive": false
+    },
+    {
+      "id": "transactional.block_sender",
+      "module": "transactional",
+      "name": "Block transactional sender",
+      "description": "Call this when you need to prevent a specific sender from being used for a contact's transactional emails. Use the corresponding unblock action if you instead need to lift the block.",
+      "status": "observed",
+      "destructive": true
     },
     {
       "id": "transactional.fetch_email_logs",
@@ -1068,6 +1548,14 @@
       "module": "views",
       "name": "Get visible listing",
       "description": "Call this when you need to retrieve the currently visible items for a specific object type (e.g., companies or contacts) as shown in the list view of the Brevo web app. Use the more specific object‑type endpoints (such as the contacts or companies APIs) if you need full detail or to perform actions on individual records.",
+      "status": "observed",
+      "destructive": false
+    },
+    {
+      "id": "views.list",
+      "module": "views",
+      "name": "List views",
+      "description": "Call this when you need to retrieve the collection of saved views for a specific object type (e.g., contacts). Use a more specific action such as \"views.get\" if you need details of a single view instead of the full list.",
       "status": "observed",
       "destructive": false
     },

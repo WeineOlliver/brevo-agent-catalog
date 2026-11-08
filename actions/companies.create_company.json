@@ -1,0 +1,176 @@
+{
+  "id": "companies.create_company",
+  "module": "companies",
+  "name": "Create company",
+  "description": "Call this when you need to create a new company record in the CRM. Use the update company action instead if you already have the company's ID and only want to modify its data.",
+  "preconditions": [],
+  "inputs": {
+    "type": "object",
+    "properties": {
+      "attributes": {
+        "type": "object",
+        "description": "Core properties of the company to be created.",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "The name of the company."
+          },
+          "owner": {
+            "type": "string",
+            "description": "Identifier of the user who will own the company."
+          }
+        },
+        "required": [
+          "name",
+          "owner"
+        ]
+      },
+      "gtm": {
+        "type": "object",
+        "description": "Google Tag Manager analytics payload.",
+        "properties": {
+          "event": {
+            "type": "string",
+            "description": "Analytics event name."
+          },
+          "eventCategory": {
+            "type": "string",
+            "description": "Category of the analytics event."
+          },
+          "eventAction": {
+            "type": "string",
+            "description": "Action of the analytics event."
+          },
+          "eventLabel": {
+            "type": "string",
+            "description": "Label of the analytics event."
+          },
+          "source": {
+            "type": "string",
+            "description": "Source of the analytics event."
+          }
+        },
+        "required": [
+          "event",
+          "eventCategory",
+          "eventAction",
+          "eventLabel",
+          "source"
+        ]
+      }
+    },
+    "required": [
+      "attributes"
+    ]
+  },
+  "outputs": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "string",
+        "description": "Unique identifier of the newly created company."
+      },
+      "attributes": {
+        "type": "object",
+        "description": "Metadata of the created company.",
+        "properties": {
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Timestamp when the company was created."
+          },
+          "last_contacted_date": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Timestamp of the last contact with the company."
+          },
+          "last_updated_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Timestamp of the last update to the company."
+          },
+          "name": {
+            "type": "string",
+            "description": "Name of the company."
+          },
+          "number_of_contacts": {
+            "type": "integer",
+            "description": "Number of contacts linked to the company."
+          },
+          "number_of_times_contacted": {
+            "type": "integer",
+            "description": "How many times the company has been contacted."
+          },
+          "owner": {
+            "type": "string",
+            "description": "Identifier of the user who owns the company."
+          },
+          "owner_assign_date": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Timestamp when the owner was assigned."
+          }
+        },
+        "required": [
+          "created_at",
+          "last_contacted_date",
+          "last_updated_at",
+          "name",
+          "owner"
+        ]
+      },
+      "linkedContactsIds": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        },
+        "description": "List of contact IDs linked to the company."
+      },
+      "createdBy": {
+        "type": "string",
+        "description": "Identifier of the user who created the company."
+      },
+      "linkedDealsIds": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        },
+        "description": "List of deal IDs linked to the company."
+      }
+    },
+    "required": [
+      "id",
+      "attributes",
+      "createdBy"
+    ]
+  },
+  "side_effects": [
+    "A new company record is added to the CRM system.",
+    "An analytics event is logged via GTM."
+  ],
+  "destructive": false,
+  "idempotent": false,
+  "ui_path": [
+    "CRM",
+    "Companies",
+    "Add a company",
+    "Create"
+  ],
+  "internal_endpoint": {
+    "method": "POST",
+    "path": "/crm/backend/company",
+    "body_example": "{\"attributes\":{\"name\":\"Stark Industries\",\"owner\":\"6aedca5302b34f2d6e026f4a\"},\"gtm\":{\"event\":\"analyticsEvent\",\"eventCategory\":\"CrmActivity\",\"eventAction\":\"CompanyAction\",\"eventLabel\":\"Created\",\"source\":\"contact_listing\"}}"
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/har/block-a-contacts.json"
+    ],
+    "verified_at": null
+  }
+}

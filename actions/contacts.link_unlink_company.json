@@ -1,0 +1,71 @@
+{
+  "id": "contacts.link_unlink_company",
+  "module": "contacts",
+  "name": "Link or unlink companies for a contact",
+  "description": "Call this when you need to add new company links to a contact or remove existing company links. Use the separate action \"contacts.update_contact\" if you only need to modify the contact's own fields.",
+  "preconditions": [
+    "The contact must already exist.",
+    "The specified company IDs must refer to existing companies."
+  ],
+  "inputs": {
+    "type": "object",
+    "properties": {
+      "contactId": {
+        "type": "integer",
+        "description": "The unique identifier of the contact to modify."
+      },
+      "unlinkedCompanyIds": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        },
+        "description": "Array of company IDs to remove from the contact. Can be empty."
+      },
+      "newLinkedCompanyIds": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        },
+        "description": "Array of company IDs to add to the contact. Can be empty."
+      }
+    },
+    "required": [
+      "contactId",
+      "unlinkedCompanyIds",
+      "newLinkedCompanyIds"
+    ]
+  },
+  "outputs": {
+    "type": "null"
+  },
+  "side_effects": [
+    "The contact's linked companies are updated according to the provided arrays."
+  ],
+  "destructive": true,
+  "idempotent": false,
+  "ui_path": [
+    "Contacts",
+    "Search contact",
+    "Open contact details",
+    "Linked companies",
+    "Link/Unlink companies",
+    "Save"
+  ],
+  "internal_endpoint": {
+    "method": "PATCH",
+    "path": "/crm/backend/contact/link-unlink",
+    "body_example": "{\"contactId\":3,\"unlinkedCompanyIds\":[],\"newLinkedCompanyIds\":[\"6aeec350d9194b5fe7df5c0c\"]}"
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/har/block-a-contacts.json"
+    ],
+    "verified_at": null
+  }
+}

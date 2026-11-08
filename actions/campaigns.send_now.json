@@ -1,0 +1,55 @@
+{
+  "id": "campaigns.send_now",
+  "module": "campaigns",
+  "name": "Send campaign now",
+  "description": "Call this when you need to send a marketing campaign immediately. Use the \"schedule campaign\" action instead if you want to set a future send time rather than sending instantly.",
+  "preconditions": [
+    "The campaign with the given ID must exist."
+  ],
+  "inputs": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "integer",
+        "description": "Identifier of the campaign to send immediately."
+      }
+    },
+    "required": [
+      "id"
+    ],
+    "additionalProperties": false
+  },
+  "outputs": {
+    "type": "object",
+    "properties": {},
+    "additionalProperties": false
+  },
+  "side_effects": [
+    "The campaign is sent immediately to its intended recipients."
+  ],
+  "destructive": true,
+  "idempotent": false,
+  "ui_path": [
+    "Marketing Campaign",
+    "Campaigns",
+    "Select campaign",
+    "Send now"
+  ],
+  "internal_endpoint": {
+    "method": "POST",
+    "path": "/marketing-campaign/api/campaign/:id/send-now",
+    "body_example": "{}"
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/har/block-c-email.json"
+    ],
+    "verified_at": null
+  }
+}

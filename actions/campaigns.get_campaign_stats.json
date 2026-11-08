@@ -1,0 +1,143 @@
+{
+  "id": "campaigns.get_campaign_stats",
+  "module": "campaigns",
+  "name": "Get campaign statistics",
+  "description": "Call this when you need delivery, open, click, unsubscribe and conversion counters for one or more email campaigns you already know the numeric IDs of, including comparing several campaigns in a single call. Use campaigns.get_campaign instead when you need a campaign's configuration, content or status rather than its performance numbers, and use the campaign listing action first if you still need to discover campaign IDs.",
+  "preconditions": [
+    "Each campaign ID passed must belong to an existing email campaign in the authenticated account.",
+    "Statistics are only meaningful for campaigns that have already been sent; unsent campaigns return no counters.",
+    "The session must be authenticated against the Brevo web app backend (email-campaigns-backend.brevo.com)."
+  ],
+  "inputs": {
+    "type": "object",
+    "properties": {
+      "campaignIds": {
+        "type": "string",
+        "description": "Comma-separated list of numeric email campaign IDs to fetch statistics for, e.g. \"2\" or \"3,2\". IDs with no statistics are omitted from the response."
+      }
+    },
+    "required": [
+      "campaignIds"
+    ]
+  },
+  "outputs": {
+    "type": "object",
+    "properties": {
+      "campaignClickStats": {
+        "type": "object",
+        "description": "Map keyed by campaign ID (as a string) to that campaign's statistics. Requested IDs with no available statistics are absent from the map.",
+        "additionalProperties": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "integer",
+              "description": "Numeric campaign ID."
+            },
+            "sent": {
+              "type": "integer",
+              "description": "Number of messages sent for the campaign."
+            },
+            "clicker": {
+              "type": "integer",
+              "description": "Number of unique recipients who clicked."
+            },
+            "viewed": {
+              "type": "integer",
+              "description": "Number of recipients recorded as having viewed the campaign."
+            },
+            "unsubStats": {
+              "type": "integer",
+              "description": "Number of unsubscribes attributed to the campaign."
+            },
+            "smtpDelivered": {
+              "type": "integer",
+              "description": "Number of messages accepted for delivery by the receiving servers."
+            },
+            "knownOpens": {
+              "type": "integer",
+              "description": "Opens confirmed by tracking, excluding estimated ones."
+            },
+            "estimatedOpens": {
+              "type": "integer",
+              "description": "Opens inferred rather than directly confirmed."
+            },
+            "proxyViewedUnique": {
+              "type": "integer",
+              "description": "Unique opens recorded through an image proxy."
+            },
+            "opensWithAppleMpp": {
+              "type": "integer",
+              "description": "Opens attributed to Apple Mail Privacy Protection prefetching."
+            },
+            "opensWithAppleMppRatePercentage": {
+              "type": "number",
+              "description": "Apple MPP opens as a percentage."
+            },
+            "knownOpensRatePercentage": {
+              "type": "number",
+              "description": "Known opens as a percentage."
+            },
+            "knownClickRatePercentage": {
+              "type": "number",
+              "description": "Known clicks as a percentage."
+            },
+            "conversionCount": {
+              "type": "integer",
+              "description": "Number of conversions attributed to the campaign."
+            },
+            "conversionAmount": {
+              "type": "number",
+              "description": "Total monetary value of attributed conversions."
+            },
+            "conversionRatePercentage": {
+              "type": "number",
+              "description": "Conversions as a percentage."
+            },
+            "calculatedOpens": {
+              "type": "integer",
+              "description": "Open count after Brevo's adjustment for privacy-driven prefetching."
+            },
+            "calculatedOpenRate": {
+              "type": "number",
+              "description": "Adjusted open count as a rate."
+            },
+            "calculatedClicks": {
+              "type": "integer",
+              "description": "Click count after Brevo's adjustment."
+            },
+            "calculatedClickRate": {
+              "type": "number",
+              "description": "Adjusted click count as a rate."
+            }
+          }
+        }
+      }
+    }
+  },
+  "side_effects": [],
+  "destructive": false,
+  "idempotent": true,
+  "ui_path": [
+    "Campaigns",
+    "Email",
+    "select a sent campaign",
+    "Statistics"
+  ],
+  "internal_endpoint": {
+    "method": "GET",
+    "path": "/email-campaign/api/campaigns/stats",
+    "body_example": null
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/har/block-c-email.json"
+    ],
+    "verified_at": null
+  }
+}

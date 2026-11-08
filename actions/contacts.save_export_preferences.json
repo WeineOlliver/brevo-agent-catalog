@@ -1,0 +1,111 @@
+{
+  "id": "contacts.save_export_preferences",
+  "module": "contacts",
+  "name": "Save contact export preferences",
+  "description": "Call this when the user wants their chosen export layout — which standard, custom, subscription and system fields to include, the CSV delimiter, and whether to be emailed when an export finishes — remembered as the default for future contact exports. Use contacts.get_export_preferences first to read the currently saved selection so you only change the fields the user asked about, since this call replaces the whole preference set rather than merging into it. Use contacts.export when the goal is to actually produce an export file, not to change the remembered settings.",
+  "preconditions": [
+    "An authenticated Brevo web-app session for the account whose export preferences are being saved.",
+    "Every attribute name passed must already exist on the account as a standard or custom contact attribute."
+  ],
+  "inputs": {
+    "type": "object",
+    "properties": {
+      "objectType": {
+        "type": "string",
+        "description": "The record type these export preferences apply to. Observed value: \"contact\"."
+      },
+      "standardAttributes": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        },
+        "description": "Built-in contact attribute names to include as export columns, e.g. \"CONTACT ID\", \"FIRSTNAME\", \"LASTNAME\", \"sib_email\", \"_DETECTED_COUNTRY\", \"OPT_IN\". Names are account-specific; read them from contacts.get_export_preferences or the account's attribute list rather than guessing."
+      },
+      "customAttributes": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        },
+        "description": "Account-defined custom contact attribute names to include as export columns, e.g. \"sib_next_task\"."
+      },
+      "subscriptions": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        },
+        "description": "Subscription status columns to include. Observed values: \"email_marketing\", \"sms_marketing\"."
+      },
+      "systemData": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        },
+        "description": "System metadata columns to include. Observed value: \"listId\"."
+      },
+      "delimiter": {
+        "type": "string",
+        "description": "Single character used to separate columns in the exported CSV file. Observed value: \";\"."
+      },
+      "saveExportSettings": {
+        "type": "boolean",
+        "description": "Whether this field selection and delimiter should be persisted as the account's default export configuration."
+      },
+      "sendEmailNotification": {
+        "type": "boolean",
+        "description": "Whether the account should receive an email notification when an export completes."
+      }
+    },
+    "required": [
+      "objectType",
+      "standardAttributes",
+      "customAttributes",
+      "subscriptions",
+      "systemData",
+      "delimiter",
+      "saveExportSettings",
+      "sendEmailNotification"
+    ]
+  },
+  "outputs": {
+    "type": "object",
+    "properties": {
+      "result": {
+        "type": "string",
+        "description": "Status string for the save. Observed value: \"OK\"."
+      }
+    },
+    "required": [
+      "result"
+    ]
+  },
+  "side_effects": [
+    "The account's stored contact export preferences are replaced with the submitted selection; any previously saved column choice or delimiter not resent is dropped.",
+    "Future contact exports started from the web app default to the newly saved column selection and delimiter.",
+    "Export-completion email notifications are turned on or off for the account."
+  ],
+  "destructive": false,
+  "idempotent": false,
+  "ui_path": [
+    "Contacts",
+    "Export contacts",
+    "Select fields to export",
+    "Save export settings"
+  ],
+  "internal_endpoint": {
+    "method": "PUT",
+    "path": "/export/preferences",
+    "body_example": "{\"sendEmailNotification\":true,\"saveExportSettings\":true,\"objectType\":\"contact\",\"customAttributes\":[\"sib_next_task\"],\"standardAttributes\":[\"CONTACT ID\",\"LASTNAME\",\"FIRSTNAME\",\"_DETECTED_TIMEZONE\",\"_COUNTRY\",\"_DETECTED_COUNTRY\",\"_DETECTED_POSTALCODE\",\"_DETECTED_CITY\",\"_DETECTED_REGION\",\"_LAST_DETECTED_LOCATION_DATE\",\"_DETECTED_LANGUAGE\",\"DOUBLE_OPT-IN\",\"OPT_IN\",\"CONTACT_TIMEZONE\",\"EXT_ID\",\"LINKEDIN\",\"JOB_TITLE\",\"WHATSAPP\",\"LANDLINE_NUMBER\",\"SMS\",\"sib_email\",\"sib_last_changed\",\"sib_date_added\",\"sib_contact_owner\"],\"subscriptions\":[\"email_marketing\",\"sms_marketing\"],\"systemData\":[\"listId\"],\"delimiter\":\";\"}"
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/har/block-b-model.json"
+    ],
+    "verified_at": null
+  }
+}

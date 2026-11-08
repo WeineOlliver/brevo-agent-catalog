@@ -1,0 +1,59 @@
+{
+  "id": "views.list",
+  "module": "views",
+  "name": "List views",
+  "description": "Call this when you need to retrieve the collection of saved views for a specific object type (e.g., contacts). Use a more specific action such as \"views.get\" if you need details of a single view instead of the full list.",
+  "preconditions": [],
+  "inputs": {
+    "type": "object",
+    "properties": {
+      "objectType": {
+        "type": "string",
+        "description": "The type of object for which to list views (e.g., \"contact\")."
+      }
+    },
+    "required": [
+      "objectType"
+    ]
+  },
+  "outputs": {
+    "type": "object",
+    "properties": {
+      "data": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "description": "A view definition object. The exact structure is not documented."
+        },
+        "description": "Array of view objects."
+      }
+    },
+    "required": [
+      "data"
+    ]
+  },
+  "side_effects": [],
+  "destructive": false,
+  "idempotent": true,
+  "ui_path": [
+    "Views",
+    "Listing"
+  ],
+  "internal_endpoint": {
+    "method": "GET",
+    "path": "/view/listing",
+    "body_example": null
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/har/block-b-model.json"
+    ],
+    "verified_at": null
+  }
+}

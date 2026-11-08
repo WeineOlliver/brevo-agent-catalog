@@ -1,0 +1,73 @@
+{
+  "id": "transactional.block_sender",
+  "module": "transactional",
+  "name": "Block transactional sender",
+  "description": "Call this when you need to prevent a specific sender from being used for a contact's transactional emails. Use the corresponding unblock action if you instead need to lift the block.",
+  "preconditions": [
+    "The contact identified by the email must already exist."
+  ],
+  "inputs": {
+    "type": "object",
+    "properties": {
+      "email": {
+        "type": "string",
+        "description": "The email address of the contact whose sender is being blocked."
+      },
+      "sender": {
+        "type": "string",
+        "description": "The email address of the sender to block."
+      },
+      "senderFrom": {
+        "type": "string",
+        "description": "A label or identifier for the sender (e.g., a friendly name)."
+      }
+    },
+    "required": [
+      "email",
+      "sender",
+      "senderFrom"
+    ],
+    "additionalProperties": false
+  },
+  "outputs": {
+    "type": "object",
+    "properties": {
+      "status": {
+        "type": "string",
+        "description": "Result status, typically \"success\" when the block is applied."
+      }
+    },
+    "required": [
+      "status"
+    ],
+    "additionalProperties": true
+  },
+  "side_effects": [
+    "The specified sender is blocked for the given contact, preventing future transactional emails from that sender to the contact."
+  ],
+  "destructive": true,
+  "idempotent": false,
+  "ui_path": [
+    "Contacts",
+    "Transactional",
+    "Senders",
+    "Block Sender"
+  ],
+  "internal_endpoint": {
+    "method": "POST",
+    "path": "/contact/backend/transactional/senders/block",
+    "body_example": "{\"email\":\"{{EMAIL}}\",\"sender\":\"{{EMAIL}}\",\"senderFrom\":\"TestBoxTest\"}"
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/har/block-c-email.json"
+    ],
+    "verified_at": null
+  }
+}

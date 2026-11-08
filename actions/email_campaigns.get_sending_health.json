@@ -1,0 +1,55 @@
+{
+  "id": "email_campaigns.get_sending_health",
+  "module": "email_campaigns",
+  "name": "Get sending health",
+  "description": "Call this when you need the account-level sending health verdict before creating or sending an email campaign, so you can warn the user that deliverability or reputation checks may block or degrade a send. It reports a single account-wide verdict and whether the account is new; it says nothing about any individual campaign, so use the campaign validation action instead to check a specific campaign's readiness, and use the account action instead for plan, credit, or identity details.",
+  "preconditions": [
+    "The session must be authenticated against the email campaigns backend for an existing Brevo account."
+  ],
+  "inputs": {
+    "type": "object",
+    "properties": {},
+    "required": []
+  },
+  "outputs": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "description": "The account's sending health assessment. Only the value \"none\" has been observed, returned for a brand-new account with no sending history; other values exist but are not evidenced here."
+      },
+      "newAccount": {
+        "type": "boolean",
+        "description": "True when the account is new, meaning there is not enough sending history to produce a health assessment."
+      }
+    },
+    "required": [
+      "verdict",
+      "newAccount"
+    ]
+  },
+  "side_effects": [],
+  "destructive": false,
+  "idempotent": true,
+  "ui_path": [
+    "Campaigns",
+    "Email"
+  ],
+  "internal_endpoint": {
+    "method": "GET",
+    "path": "/email-campaign/api/sending-health",
+    "body_example": null
+  },
+  "public_api": {
+    "exists": false,
+    "operationId": null
+  },
+  "plan_tier": "unknown",
+  "verification": {
+    "status": "observed",
+    "evidence": [
+      "captures/clean/har/block-c-email.json"
+    ],
+    "verified_at": null
+  }
+}
