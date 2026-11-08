@@ -140,6 +140,12 @@ listing, then the model picks from names it can see. Trusting the top three
 search hits would make an agent worse than handing it everything, and the
 command says so in its own output.
 
+Not building a real retrieval layer is a decision, not an omission: the whole
+index is 18 519 tokens against the ~200 000 under which published guidance says
+to skip retrieval entirely. [gaps.md](docs/gaps.md#why-there-is-no-retrieval-layer-and-what-one-would-look-like)
+has the token maths, the sources, and the hybrid-plus-rerank design to reach for
+if the catalog ever grows an order of magnitude.
+
 ## 197 actions do not say what order to call them in
 
 A flat catalog answers *what can this app do* and is silent on *and then what*.

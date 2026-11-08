@@ -171,6 +171,80 @@ enforced. It is the `platform` area in `src/catalog/areas.ts`, every action
 resolves to exactly one area, and a module with no area fails `pnpm validate`
 and `pnpm build:index` rather than defaulting into the catch-all.
 
+## Why there is no retrieval layer, and what one would look like
+
+The catalog is read whole. `pnpm catalog search` exists and is weak on purpose
+(2 of 19 first, 5 of 19 in the top three), and the recommended path is
+browse-then-read with the model doing the narrowing. That is a decision against
+the obvious engineering instinct, so here is the reasoning and the evidence.
+
+**The whole index is 18 519 tokens.** Anthropic's own guidance is that a
+knowledge base under roughly 200 000 tokens can go into the prompt without
+retrieval at all. This one is eleven times under that line, and the measurement
+agrees with the guidance rather than contradicting it:
+
+| Path | Right answer found |
+|:--|:--|
+| Model reads all 197 entries | **15 of 19** |
+| Lexical search, top 3 | 5 of 19 |
+| Lexical search, anywhere in 10 | 8 of 19 |
+
+Building retrieval here would spend a day to make the answer worse. The reason
+it would be worse is the eval's first design rule: a task never reuses the
+catalog's wording, so *"I need a new audience group"* has to reach
+`lists.create_list` without sharing a word with it. Bridging that is what a
+model is for.
+
+**The honest counter-argument is cost, not accuracy.** Reading everything costs
+18 500 input tokens per decision, and that scales linearly with how often an
+agent decides. Retrieval is how that becomes flat. With prompt caching it is
+mostly moot at this size; without it, and at high query volume, the crossover
+arrives.
+
+**What the upgrade looks like, if the catalog grows an order of magnitude.** Not
+invented here — this is the current consensus shape, and it is deliberately
+written down so the question "what if it scales?" has an answer that is not a
+guess:
+
+1. **Hybrid retrieval, not one or the other.** BM25 for exact identifiers and
+   rare tokens, dense embeddings for a person's phrasing. Embeddings alone
+   handle ids badly; lexical alone is what this repository just measured.
+2. **Fuse by rank, not by score.** Reciprocal Rank Fusion with k=60 is the
+   default, because BM25 scores are unbounded and cosine similarity is not, so
+   averaging the two raw lets BM25 dominate. RRF uses only positions, so no
+   normalisation is needed.
+3. **Rerank the fused top 20 to a top 3–5** with a cross-encoder, which is where
+   most of the precision comes from.
+4. **Route obvious queries.** A query that is plainly an id lookup goes straight
+   to BM25 and skips the embedding call.
+5. **Expose it as a search meta-tool, not as a bigger prompt.** Progressive
+   discovery — the agent searches, then loads only the schemas it needs — is
+   what Claude Code's own tool search does, returning about five results per
+   search. Anthropic reports selection accuracy degrading past roughly 30–50
+   *tools* loaded at once; a 2026 cloud-scale study found naive exposure
+   degrading as the pool grew while a hybrid retriever held about 82% accuracy
+   at ~3 600 tools.
+
+Worth noting where that 30–50 figure does and does not apply: it is about tool
+*definitions* occupying the model's context, while these 197 entries are data
+the model reads once per decision. That is why 197 scores 15 of 19 here instead
+of collapsing, and it is also why the same 197 would collapse if they were
+turned into 197 live tools. Any `execute_action` work should start from that
+distinction.
+
+**And the caveat every source repeats:** retrieval does not fix bad
+descriptions. This catalog's two remaining selection misses are three
+near-duplicate list reads and a two-step task, and no reranker repairs either.
+
+Sources: [Claude tool search](https://platform.claude.com/docs/en/agents-and-tools/tool-use/tool-search-tool),
+[Claude Code tool search](https://code.claude.com/docs/en/agent-sdk/tool-search),
+[MCP client best practices](https://modelcontextprotocol.io/docs/2026-07-28/develop/clients/client-best-practices),
+[Scalable LLM Agent Tool Access in the Cloud](https://arxiv.org/pdf/2607.15593),
+[ScaleMCP](https://arxiv.org/pdf/2505.06416),
+[OpenSearch hybrid search](https://opensearch.org/blog/building-effective-hybrid-search-in-opensearch-techniques-and-best-practices/),
+[Hybrid search for RAG](https://denser.ai/blog/hybrid-search-for-rag/),
+[When not to use RAG](https://ai-tldr.dev/learn/rag/rag-fundamentals/when-not-to-use-rag/).
+
 ## Deliberately out of scope
 
 - **Partner and reseller APIs.** 79 of the spec's 292 operations are
