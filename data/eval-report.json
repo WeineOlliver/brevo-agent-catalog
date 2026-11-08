@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-08T00:45:53.005Z",
+  "generated_at": "2026-11-08T10:48:06.750Z",
   "provider": "claude-code-cli",
   "unscoreable": [
     {
@@ -9,7 +9,7 @@
   ],
   "total": 19,
   "scored": 19,
-  "correct": 17,
+  "correct": 14,
   "inputsCorrect": 1,
   "providerFailures": 0,
   "cases": [
@@ -48,8 +48,8 @@
         "prompt": "put everyone from the Black Friday list into the VIP list too",
         "expectedActionId": "contacts.bulk_modify_list"
       },
-      "chosenActionId": "contacts.bulk_modify_list",
-      "correct": true,
+      "chosenActionId": null,
+      "correct": false,
       "inputsCorrect": null
     },
     {
@@ -79,8 +79,8 @@
         "prompt": "remove maria@example.com from Brevo entirely, she exercised her right to erasure",
         "expectedActionId": "contacts.delete_contact"
       },
-      "chosenActionId": "contacts.delete_contact",
-      "correct": true,
+      "chosenActionId": null,
+      "correct": false,
       "inputsCorrect": null
     },
     {
@@ -97,8 +97,8 @@
         "prompt": "the spring sale email is ready — push it out to everyone right now",
         "expectedActionId": "campaigns.send_now"
       },
-      "chosenActionId": "campaigns.send_now",
-      "correct": true,
+      "chosenActionId": "campaigns.list_campaigns",
+      "correct": false,
       "inputsCorrect": null
     },
     {

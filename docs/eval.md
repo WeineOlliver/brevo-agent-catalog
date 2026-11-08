@@ -33,6 +33,9 @@ Scoring rules that keep the number meaningful:
 | | Crawl only | + write passes | + id reconciliation | + HAR sessions | + fixture fix |
 |:--|:--|:--|:--|:--|:--|
 | Correct action | — | 1 / 1 | 2 / 3 | 15 / 19 | **17 / 19** |
+
+That last column is a single run. Re-running it a day later gave 14–15; the
+section below records why, and the badge follows the reproducible figure.
 | Correct inputs | — | 1 / 1 | 1 / 1 | 1 / 1 | 1 / 1 |
 | Scoreable of 20 | 0 | 1 | 3 | 19 | 19 |
 
@@ -84,6 +87,51 @@ measures the fixture, so `acceptableActionIds` exists, is used on this one task,
 and every pass through it prints as `(accepted alternative to ...)` so the
 widening is never quiet.
 
+## Re-measured on 2026-11-08: 15 of 19, not 17
+
+The 17 came from one run on 2026-11-07. Four runs the next day, against a
+catalogue whose only change was prose on one entry, scored **15, 14, and 15**,
+plus one run abandoned with three provider failures. So the reproducible figure
+is **14–15 of 19** and the badge now carries 15.
+
+`data/eval-report.json` holds the **most recent** run, not the best one, so it
+currently reads `correct: 14` while the badge reads 15. Pinning the report to the
+run that flatters the badge is how a measurement stops being one.
+
+Nothing was patched to recover the 17. Two findings came out of re-running
+instead:
+
+**`campaigns.send_now` is a third recurring miss, and it is the stats failure
+again.** For *"the spring sale email is ready — push it out to everyone right
+now"* the model chose `campaigns.list_campaigns`. The task names the campaign in
+words; `send_now` takes an `id`; so the model reaches for the listing that turns
+a name into an id. That is the same two-step shape as the campaign-stats miss
+below, on a different task, which makes it a property of a one-shot selection
+eval rather than two unlucky descriptions.
+
+It was briefly misdiagnosed as self-inflicted. The audit that hardened this
+entry's preconditions also rewrote its description to say the preconditions were
+inferred and that the call is the last of five; the next run missed, which looked
+like cause and effect. Restoring the original description verbatim and re-running
+missed again. **The description was never the variable** — and a one-run
+before/after is not evidence of a regression, which is the same lesson the
+provider-flakiness run already taught in the other direction.
+
+**`(nothing parseable)` is scored as a miss, and it should not be.** It appeared
+on 3 of 4 runs, on `contacts.bulk_modify_list` and once on
+`contacts.delete_contact` — entries nothing touched. The scorer excludes a
+provider that *never answers*, on the stated grounds that infrastructure noise
+measures nothing about a description, then counts a provider whose answer arrives
+truncated as a wrong choice. Those are the same event. The rule that a model
+answering *badly* is scored is right, and an unparseable answer is not a bad
+choice; it is no choice. Until that is separated, every published figure here is
+depressed by roughly one task of noise, and the honest reading of 15 of 19 is
+"15 right, 2 known description problems, and about 2 the harness could not
+score".
+
+That is a defect in the measuring instrument, found by re-running it on a day it
+had nothing new to measure.
+
 ## The two misses that remain
 
 **One is a limit of the eval, not the catalog.** For *"how did the spring sale
@@ -96,7 +144,8 @@ picked the right **first** action for a two-step task.
 It stays a miss. The bar for an accepted alternative is that it performs the same
 user action, and `list_campaigns` returns no open or click counters: it is a
 prerequisite, not an equivalent. A one-shot selection eval cannot fairly score a
-two-step task, which is worth knowing before reading 17/19 as a ceiling.
+two-step task, which is worth knowing before reading any of these numbers as a
+ceiling. `campaigns.send_now` fails the same way, and that is recorded above.
 
 **One is an ambiguous task, kept on purpose.** For *"what audience groups do we
 have"* the model chose `contacts.get_lists_and_segments` over `lists.get_lists`.

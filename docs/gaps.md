@@ -90,8 +90,15 @@ first number quoted was its own kind of wrong.
 
 ## The public API barely overlaps the product
 
-**0 of 197** catalogued endpoints appear in Brevo's published spec. The earlier,
-smaller catalog managed 2 of 126; tripling the capture did not add one.
+**2 of 197** catalogued endpoints appear in Brevo's published spec:
+`account.get_account` (`getAccount`) and `ecommerce.list_categories`
+(`getCategories`). Both are reads; no write matches. The earlier, smaller
+catalog matched the same 2 of 126 — tripling the capture did not add one.
+
+This document said **0 of 197** until an audit ran the figure back against
+`public_api.exists` in the 197 files and found 2. The conclusion survives at 1%;
+the number did not. A measured claim is only as good as the last time anyone
+measured it.
 
 Brevo's web app talks to about twenty internal microservices — `contacts-api`,
 `crm-backend-api`, `segments-api`, `workflow-apis`, `email-campaigns-backend`,
@@ -103,6 +110,53 @@ leans on — inherit required fields, enums and limits from Brevo's own contract
 almost never fires. So **the typed inputs here are mostly inferred by a model
 from captured traffic, not taken from a published contract.** Treat `inputs` on
 an `observed` entry as a hypothesis about a request's shape, not a spec.
+
+## 23 of the 197 are app plumbing, not business actions
+
+The catalogue is what the app calls, and an app calls things that are not
+business actions. Counted by hand, **23 entries are the shell rather than the
+product** — static reference assets, feature flags, editor furniture, UI view
+config, and two endpoints that belong to the brevo.com marketing site rather
+than to the app at all.
+
+```
+ui.load_home                       navigation.get_header_menu
+marketing_site.get_footer          locales.fetch_english
+countries.list                     reference.list_countries
+localization.list_languages        editor.list_fonts
+editor.list_modules                editor.get_localization_settings
+editor.open_newsletter_editor      homepage.list_user_widgets
+widgets.list                       views.list
+views.list_hidden                  views.get_visible_listing
+client.get_feature_toggles         user.get_feature_toggles
+features.get                       features.check_accessibility
+branding.get_brand                 phone.get_auth
+analytics.get_live_updates_token
+```
+
+**So the honest headline is 174 product actions, not 197.** All 23 are reads and
+none is destructive, so the write figures are untouched: 38 of 38 write endpoints
+still have an entry, and the 3 verified actions are all product actions.
+
+Two of them are defects rather than noise. `ui.load_home` has
+`internal_endpoint.path` of `/undefined` — a crawler artifact that should not
+have survived into a catalogue entry. And `countries.list`
+(`/js/countries.json`) and `reference.list_countries`
+(`/js/countries-production.json`) are the same static asset in two modules,
+which is the near-duplicate problem the eval already found on the list reads,
+showing up again under two different module names.
+
+They are still in the catalogue, flagged here rather than quietly deleted, for
+one reason: every count in this repository — 197, 38/38, the eval, the badges —
+was measured against this exact file set, and deleting entries the night before
+a deadline would have re-stated eight numbers to make one of them prettier. The
+cost of keeping them is that an agent selecting over `index.json` reads 23
+entries it will never need.
+
+**This split is a hand classification, not a gate.** Unlike the cross-reference
+count or the schema check, nothing in `pnpm validate` enforces it, so it can
+drift as the catalogue grows. Making `surface: product | plumbing` a schema
+field is how it would stop drifting.
 
 ## Deliberately out of scope
 

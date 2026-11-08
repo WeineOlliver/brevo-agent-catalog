@@ -49,7 +49,8 @@ documentation, and declining to do it is free.
 - **Verification** (`pnpm verify`) executes an action for real and compares what
   the entry claimed against what happened. 3 of 197 so far.
 - **The selection eval** (`pnpm eval`) checks whether a model resolves a
-  naturally-phrased task to the right entry. **17 of 19.**
+  naturally-phrased task to the right entry. **15 of 19 reproducibly, 17 on the
+  best single run** — see [eval.md](eval.md) for why the two differ.
 - **The leak gate** (`pnpm scan`) re-derives its patterns instead of asking the
   redactor what it would have replaced, because a gate implemented by calling
   the thing it checks cannot fail. It has caught the redactor twice.

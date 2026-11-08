@@ -41,9 +41,10 @@ The catalog describes actions; it does not perform them.
 
 Two things only showed up once it ran against a real account.
 
-**The public API and the product are different systems.** 0 of 197 catalogued
-endpoints appear in Brevo's published spec. An earlier, smaller catalog managed
-2 of 126 — tripling the capture and adding every write flow did not add one
+**The public API and the product are different systems.** 2 of 197 catalogued
+endpoints appear in Brevo's published spec — `account.get_account` and
+`ecommerce.list_categories`, both reads. An earlier, smaller catalog matched the
+same 2 of 126: tripling the capture and adding every write flow did not add one
 match. The app runs on about 20 internal microservices the public `/v3` surface
 does not wrap.
 
@@ -66,7 +67,8 @@ crawling is only reconnaissance.
 
 470 tests, strict TypeScript, leak gate clean. Run end to end against a live
 account: 38 routes crawled plus four HAR sessions, 38 132 requests observed and
-2 147 committed, 197 actions validated and indexed, eval at **17 of 19**.
+2 147 committed, 197 actions validated and indexed, eval at **15 of 19**
+(17 on its best single run; [eval.md](eval.md) records both).
 
 All 38 write endpoints in the capture have an entry — including the irreversible
 `POST /marketing-campaign/api/campaign/2/send-now` that returned 204, the 5-call

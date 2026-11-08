@@ -4,7 +4,10 @@
   "name": "Send campaign now",
   "description": "Call this when you need to send a marketing campaign immediately. Use the \"schedule campaign\" action instead if you want to set a future send time rather than sending instantly.",
   "preconditions": [
-    "The campaign with the given ID must exist."
+    "The campaign with the given ID must exist.",
+    "Inferred from the send wizard, not observed: the campaign must have a validated sender, a saved recipient list or segment, and a saved subject and design. The wizard enforces these in order and this endpoint is the last of five calls, so it was never reached with any of them missing.",
+    "Inferred: the campaign must still be a draft. A campaign already sent, scheduled or suspended is not re-sendable through this endpoint.",
+    "Inferred: the account's sending allowance for the day must not be exhausted. The capture comes from a free-tier account, where that allowance is a daily cap rather than a plan quota."
   ],
   "inputs": {
     "type": "object",
@@ -25,7 +28,8 @@
     "additionalProperties": false
   },
   "side_effects": [
-    "The campaign is sent immediately to its intended recipients."
+    "The campaign is sent immediately to its intended recipients.",
+    "Irreversible. Real people receive the email and there is no recall, which is why this entry is destructive even though it creates nothing and deletes nothing."
   ],
   "destructive": true,
   "idempotent": false,
