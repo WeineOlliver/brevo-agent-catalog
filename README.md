@@ -5,7 +5,8 @@ around the product — in a form an AI agent can act on without a human checking
 its work first.
 
 > **Status: the write surface is catalogued and the eval scores it.**
-> 38 132 requests captured across four hand-driven sessions plus the crawl,
+> 38 132 requests observed across four hand-driven sessions plus the crawl, of
+> which the 2 034 that are Brevo's own traffic are committed,
 > **197 actions catalogued** in 62 modules, and **every one of the 38 distinct
 > write endpoints in the capture has an entry.** The selection eval scores
 > **17 of 19 scoreable tasks**; the 20th names sender creation, which was never

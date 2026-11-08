@@ -9,7 +9,8 @@ and after side by side, because the fix was not more engineering.
 
 | | Before the HAR sessions | Now |
 |---|---|---|
-| Captured records | 3 097 | 38 132 across 65 files |
+| Records observed | 3 097 | 38 132 |
+| Records committed as evidence | 3 097 | 2 034 across 65 files |
 | Catalogued actions | 136 | 197 across 62 modules |
 | Distinct write endpoints in the capture | 4 | 38 |
 | Write endpoints with a catalog entry | 4 | 38 |
@@ -43,6 +44,25 @@ Two things the sessions did not get:
   replay recipe per action, and asserting a catalog is correct because a model
   drafted it from traffic it saw is exactly the claim this project exists to
   distrust.
+
+### Why the committed record count is far below the observed one
+
+`captures/clean/` holds 2 034 records, not 38 132. A fifteen-minute DevTools
+recording is mostly not Brevo: of the 35 035 records in the four HAR sessions,
+1 324 were Brevo's own traffic and 33 711 were analytics, CDN assets and
+third-party trackers — 2.8 MB against 67.8 MB.
+
+`pnpm sanitize` drops the latter before redacting. Committing it would have put
+77 MB in a public repository's permanent history, 96% of it traffic every stage
+of this pipeline already discards, since extraction and the coverage
+measurements all run through `isAppTraffic`.
+
+Nothing any claim rests on is lost, and that was measured rather than assumed
+before the filter was written: every action cites a capture *file* rather than a
+record id, no file is emptied by the filter, all 197 evidence paths still
+resolve, and all 38 distinct write endpoints are still present afterwards. The
+unfiltered logs stay in gitignored `captures/raw/`, so the observed number is
+reproducible from a local run; the committed number is what a reviewer can audit.
 
 ## Descriptions cite action ids that do not exist
 
