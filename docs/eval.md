@@ -117,20 +117,65 @@ missed again. **The description was never the variable** — and a one-run
 before/after is not evidence of a regression, which is the same lesson the
 provider-flakiness run already taught in the other direction.
 
-**`(nothing parseable)` is scored as a miss, and it should not be.** It appeared
-on 3 of 4 runs, on `contacts.bulk_modify_list` and once on
-`contacts.delete_contact` — entries nothing touched. The scorer excludes a
-provider that *never answers*, on the stated grounds that infrastructure noise
-measures nothing about a description, then counts a provider whose answer arrives
-truncated as a wrong choice. Those are the same event. The rule that a model
-answering *badly* is scored is right, and an unparseable answer is not a bad
-choice; it is no choice. Until that is separated, every published figure here is
-depressed by roughly one task of noise, and the honest reading of 15 of 19 is
-"15 right, 2 known description problems, and about 2 the harness could not
-score".
+**`(nothing parseable)` was the wrong label on the loudest finding here.** This
+document said, for one commit, that those cases were harness noise scored as
+misses, and that the scorer should stop counting them. That was wrong, and it was
+wrong in the same way the `0 of 197` was wrong: a number read off a label instead
+of the data under it.
 
-That is a defect in the measuring instrument, found by re-running it on a day it
-had nothing new to measure.
+The report stores `chosenActionId: null` and `note: null` for those cases. A null
+note means extraction **succeeded** — the model returned well-formed JSON whose
+`action_id` was `null`, which is the escape hatch the system prompt offers for
+*"the task calls for an action that is not in the catalog"*. So the model did not
+fail to answer. It answered that **this catalogue cannot do that** — for *"put
+everyone from the Black Friday list into the VIP list too"*, and for *"remove
+maria@example.com from Brevo entirely, she exercised her right to erasure"*,
+where `contacts.delete_contact` not only exists but is one of the three entries
+executed against a real account.
+
+That is the most informative result the eval can produce and it had been printing
+under a parser's error message for seven runs, because one label covered two
+causes. The runner now says *"the model answered that no catalog action fits"*,
+the case carries a `declinedNoAction` flag, and five tests hold the distinction
+in place. It stays scored as a miss — the model did answer, and the answer was
+wrong.
+
+## The misses are concentrated in the destructive actions
+
+Slicing the 19 tasks by whether the expected answer is flagged `destructive`:
+
+| Expected action is | Correct | Missed |
+|:--|:--|:--|
+| `destructive` | **1** | **3** |
+| everything else | 13 | 2 |
+
+The two non-destructive misses are the two description problems documented below.
+Which means **essentially the whole remaining error of this eval sits on the four
+tasks whose answer is a destructive action**, and it fails in two different
+shapes: twice the model answers that no action fits, and once it picks a safe
+neighbour (`campaigns.list_campaigns` instead of `campaigns.send_now`). The one
+destructive task that passes is `email_campaigns.send_test_email` — the only one
+of the four whose blast radius is the operator's own inbox.
+
+The suspect is this repository's own safety mechanism. `renderCatalog` appends
+` [destructive]` to each flagged entry, so the model chooses from a list where
+exactly those four carry a warning. A flag written to stop an agent deleting the
+wrong contact may be stopping it from deleting the right one.
+
+**That is a hypothesis, and it is one run away from being settled.**
+`pnpm eval --no-risk-labels` renders the catalogue unmarked; published figures
+always come from the default. If the tasks recover, the flag suppresses
+selection, and risk has to be carried where an agent reads it as information
+rather than as permission withheld — the schema's `destructive` field, consumed
+by whatever executes, not prose in the selection prompt. If they stay missed, the
+model is declining the *request*, no wording fixes it, and a catalogue for agents
+needs an authorisation story rather than a vocabulary fix.
+
+**The run has not happened.** The first attempt died with 15 of 19 tasks
+returning `claude CLI exited 1` and scored 3 of 4, which measures nothing. It is
+recorded here unfinished rather than guessed at, because both answers are
+plausible and publishing either as a cause is how the `(nothing parseable)`
+mistake happened in the first place.
 
 ## The two misses that remain
 

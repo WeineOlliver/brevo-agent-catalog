@@ -215,3 +215,70 @@ describe('a provider failure is not a description defect', () => {
     expect(report.providerFailures).toBe(1);
   });
 });
+
+describe('a model answering that no action fits', () => {
+  // This shape was scored correctly and reported as something else for seven
+  // runs: a null chosenActionId printed as "(nothing parseable)", which is an
+  // extraction failure's label. Two causes, one label, and the louder cause
+  // hidden under the quieter one.
+  const declines: LlmProvider = {
+    name: 'fake-declines',
+    async complete() {
+      return JSON.stringify({ action_id: null, inputs: {} });
+    },
+  };
+
+  it('is a miss, and is flagged as its own kind of miss', async () => {
+    const report = await scoreSelection([task], index, declines);
+    expect(report.cases[0]?.correct).toBe(false);
+    expect(report.cases[0]?.declinedNoAction).toBe(true);
+    expect(report.cases[0]?.note).toMatch(/no catalog action fits/i);
+  });
+
+  it('stays in the denominator, because the model did answer', async () => {
+    // The opposite of a provider failure: there is nothing wrong with the
+    // harness here, and excluding it would delete the finding.
+    const report = await scoreSelection([task], index, declines);
+    expect(report.scored).toBe(1);
+    expect(report.providerFailures).toBe(0);
+    expect(report.cases[0]?.providerFailed).toBeUndefined();
+  });
+
+  it('is not confused with an unparseable answer', async () => {
+    const report = await scoreSelection([task], index, alwaysProse);
+    expect(report.cases[0]?.correct).toBe(false);
+    expect(report.cases[0]?.declinedNoAction).toBeUndefined();
+  });
+});
+
+describe('the destructive marker in the rendered catalog', () => {
+  function capturePrompt(): { provider: LlmProvider; seen: () => string } {
+    let user = '';
+    return {
+      provider: {
+        name: 'fake-capture',
+        async complete(request) {
+          user = request.user;
+          return JSON.stringify({ action_id: 'contacts.create_contact', inputs: {} });
+        },
+      },
+      seen: () => user,
+    };
+  }
+
+  it('is present by default, because an agent reading the catalog sees it', async () => {
+    const { provider, seen } = capturePrompt();
+    await scoreSelection([task], index, provider);
+    expect(seen()).toContain('[destructive]');
+  });
+
+  it('can be withheld for the diagnostic run, and only then', async () => {
+    // The published number always comes from the default. This exists to test
+    // whether the marker, rather than any description, is what loses the tasks
+    // whose answer is destructive — a question worth one run and not a guess.
+    const { provider, seen } = capturePrompt();
+    await scoreSelection([task], index, provider, { riskLabels: false });
+    expect(seen()).not.toContain('[destructive]');
+    expect(seen()).toContain('contacts.delete_contact');
+  });
+});

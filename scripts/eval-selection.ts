@@ -36,6 +36,13 @@ function argValue(name: string, fallback: string): string {
 const config = loadConfig();
 const providerName = argValue('provider', 'claude');
 
+/**
+ * Diagnostic only. Renders the catalog without the `[destructive]` marker to
+ * test whether that marker, not the descriptions, is what loses the tasks whose
+ * answer is destructive. Published figures come from a run without this flag.
+ */
+const riskLabels = !process.argv.includes('--no-risk-labels');
+
 const indexPath = join(config.paths.actions, 'index.json');
 if (!existsSync(indexPath)) {
   console.error(`No catalog index at ${indexPath}. Run "pnpm build:index" first.`);
@@ -78,7 +85,14 @@ if (scoreable.length === 0) {
 
 console.log(`scoring ${scoreable.length} task(s) against ${index.count} action(s) with ${provider.name}\n`);
 
-const report = await scoreSelection(scoreable, index, provider);
+if (!riskLabels) {
+  console.log(
+    '--no-risk-labels: destructive entries are rendered unmarked. This is a diagnostic,\n' +
+      'not a published configuration — an agent reading the real catalog sees the marker.\n',
+  );
+}
+
+const report = await scoreSelection(scoreable, index, provider, { riskLabels });
 
 for (const result of report.cases) {
   if (result.correct && result.inputsCorrect !== false) {
@@ -101,7 +115,18 @@ for (const result of report.cases) {
   }
 
   console.log(`  × "${result.task.prompt}"`);
-  console.log(`      expected ${result.task.expectedActionId}, chose ${result.chosenActionId ?? '(nothing parseable)'}`);
+  if (result.declinedNoAction === true) {
+    // Scored as a miss, but a different defect: the model read the whole
+    // catalog and concluded the capability is not in it. Printing this as
+    // "(nothing parseable)" hid it for seven runs behind a parser's label.
+    console.log(
+      `      expected ${result.task.expectedActionId}, and the model answered that no catalog action fits`,
+    );
+  } else {
+    console.log(
+      `      expected ${result.task.expectedActionId}, chose ${result.chosenActionId ?? '(nothing parseable)'}`,
+    );
+  }
   if (result.inputsCorrect === false && result.correct) {
     console.log('      right action, wrong inputs');
   }
@@ -116,8 +141,13 @@ writeFileSync(
   'utf8',
 );
 
+const declined = report.cases.filter((c) => c.declinedNoAction === true).length;
+
 console.log(
   `\nselection: ${report.correct}/${report.scored} scored` +
+    (declined > 0
+      ? `   (${declined} of the misses are the model saying no catalog action fits)`
+      : '') +
     (withInputs > 0 ? `   inputs: ${report.inputsCorrect}/${withInputs}` : '') +
     (report.providerFailures > 0
       ? `\n${report.providerFailures} task(s) excluded: the provider never answered, which measures nothing about the catalog. Re-run those.`

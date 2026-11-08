@@ -9,8 +9,8 @@
  * if a model cannot find the action, an agent in production will not either.
  *
  * A provider that errors or answers in prose is never a thrown exception — an
- * eval that dies on one bad response measures nothing. But those two are not
- * the same failure, and counting them together makes the number lie:
+ * eval that dies on one bad response measures nothing. But a non-answer has
+ * three distinct shapes, and counting them together makes the number lie:
  *
  * - **Prose instead of JSON** is the model answering badly. It is scored, and
  *   it is a real defect in the catalog or the prompt.
@@ -18,6 +18,15 @@
  *   nothing about any description. A run hit a usage limit mid-way and reported
  *   1 of 3 with two "misses" whose token counts were zero; read as a quality
  *   signal, that is noise presented as regression.
+ * - **Well-formed JSON carrying `action_id: null`** is the model taking the
+ *   escape hatch the prompt offers it: *no action in this catalog does that*.
+ *   That is a judgement about coverage, and the loudest signal this eval can
+ *   produce — an agent that believes a capability is absent does not attempt it.
+ *
+ * The third shape was invisible for seven runs. The report stored a null
+ * `chosenActionId` for it, and the runner printed `(nothing parseable)`, which
+ * is what an extraction failure prints. One label over two causes had it read
+ * as harness noise. It is scored as a miss, correctly, and it is now named.
  *
  * So provider failures are recorded, excluded from the denominator, and always
  * printed. Excluding them silently would be the worse error of the two.
@@ -60,6 +69,13 @@ export type EvalCase = {
   note?: string;
   /** The provider never answered. Not evidence about any description. */
   providerFailed?: boolean;
+  /**
+   * The model answered, in valid JSON, that no catalog action fits.
+   *
+   * A miss like any other, and the most informative kind: the catalog being
+   * judged incomplete rather than a description being misread.
+   */
+  declinedNoAction?: boolean;
 };
 
 export type EvalReport = {
@@ -85,11 +101,29 @@ Reply with one JSON object and nothing else:
 Use an action_id exactly as it appears in the catalog. If the task calls for an
 action that is not in the catalog, use null for action_id.`;
 
-function renderCatalog(index: CatalogIndex): string {
+export type ScoreOptions = {
+  /**
+   * Whether the rendered catalog marks destructive entries.
+   *
+   * True in every published run: an agent reading this catalog sees the flag,
+   * so the eval scores what an agent would actually read.
+   *
+   * It is a switch because the flag became a suspect. Of 19 tasks, the 4 whose
+   * answer is destructive scored 1, while the other 15 scored 13. If dropping
+   * the label recovers those tasks, the label is suppressing selection, and
+   * risk has to be carried somewhere an agent does not read as permission
+   * withheld. If they stay missed, the model is declining the request itself
+   * and no wording fixes that. Either way it is one run — and either cause,
+   * guessed, would have been published as fact.
+   */
+  riskLabels?: boolean;
+};
+
+function renderCatalog(index: CatalogIndex, riskLabels: boolean): string {
   return index.actions
     .map(
       (entry) =>
-        `- ${entry.id} — ${entry.name}${entry.destructive ? ' [destructive]' : ''}\n  ${entry.description}`,
+        `- ${entry.id} — ${entry.name}${entry.destructive && riskLabels ? ' [destructive]' : ''}\n  ${entry.description}`,
     )
     .join('\n');
 }
@@ -108,8 +142,10 @@ export async function scoreSelection(
   tasks: EvalTask[],
   index: CatalogIndex,
   provider: LlmProvider,
+  options: ScoreOptions = {},
 ): Promise<EvalReport> {
-  const catalog = renderCatalog(index);
+  const riskLabels = options.riskLabels ?? true;
+  const catalog = renderCatalog(index, riskLabels);
   const cases: EvalCase[] = [];
 
   for (const task of tasks) {
@@ -117,6 +153,7 @@ export async function scoreSelection(
     let actualInputs: Record<string, unknown> = {};
     let note: string | undefined;
     let providerFailed = false;
+    let declinedNoAction = false;
 
     try {
       const raw = await provider.complete({
@@ -129,6 +166,13 @@ export async function scoreSelection(
       if (extracted.ok) {
         const value = extracted.value as { action_id?: unknown; inputs?: unknown };
         if (typeof value.action_id === 'string') chosenActionId = value.action_id;
+        else {
+          // The prompt offers null for "not in the catalog". Taking that offer
+          // is an answer. Conflating it with a parse failure is how it hid:
+          // both end up with a null chosenActionId and nothing else recorded.
+          declinedNoAction = true;
+          note = 'the model answered that no catalog action fits (action_id: null)';
+        }
         if (value.inputs !== null && typeof value.inputs === 'object') {
           actualInputs = value.inputs as Record<string, unknown>;
         }
@@ -160,6 +204,7 @@ export async function scoreSelection(
       ...(viaAlternative ? { viaAlternative: true } : {}),
       ...(note ? { note } : {}),
       ...(providerFailed ? { providerFailed: true } : {}),
+      ...(declinedNoAction ? { declinedNoAction: true } : {}),
     });
   }
 
