@@ -52,6 +52,17 @@ const READ_VERBS = new Set([
   "export",
   "describe",
   "read",
+  // Both of these arrived with the second extraction pass, and both had been
+  // drafted `destructive: true`. `suggest` is the worst of the pair:
+  // `POST /import/suggest-mapping-from-file` uploads a CSV and returns a
+  // proposed column mapping, importing nothing — a read-via-POST of exactly
+  // the kind this module exists to stop being flagged as a mutation.
+  "find",
+  "suggest",
+  // `POST /import/index` uploads the CSV and returns detected columns, sample
+  // values and inferred types. It uploads, but it imports nothing, which is
+  // the same shape as `suggest` above — so the two stay classified alike.
+  "analyze",
 ]);
 
 /** Mutations confined to the account and undoable by another action. */
@@ -80,6 +91,21 @@ const REVERSIBLE_VERBS = new Set([
   "sync",
   "refresh",
   "recalculate",
+  // Attaching a company to a contact adds an association and removes nothing.
+  // Its partner `unlink` is in the irreversible group, so the real catalog id
+  // `contacts.link_unlink_company` escalates on its worse half, which is the
+  // whole-name scan working as designed.
+  "link",
+  // The inverse pair for a scheduled send. `schedule` is already here, and the
+  // reason it is safe to call is that this undoes it: a suspended campaign
+  // returns to draft and can be scheduled again. Flagging the undo as
+  // destructive while calling the thing it undoes reversible is incoherent.
+  //
+  // `cancel` stays in the irreversible group and is not a synonym here. Cancel
+  // is the word a product uses for terminating a plan or a subscription, which
+  // does not come back; suspend is the word for a pause.
+  "suspend",
+  "resume",
 ]);
 
 /** Irreversible, or observable by someone outside the account. */
@@ -108,7 +134,33 @@ const IRREVERSIBLE_VERBS = new Set([
   "invite",
   "charge",
   "refund",
+  // Severing an association destroys the record of what it was. Re-linking is
+  // possible only for someone who still knows, which an agent that just
+  // unlinked the wrong company does not.
+  "unlink",
+  // Not a verb, and here on purpose. `POST /contact/backend/actions/list` is a
+  // dispatcher: its payload names the operation, and the catalog entry for it
+  // says "e.g., delete contacts from a list". A name cannot tell you what a
+  // dispatcher will do, so every one of them escalates. Leaving it
+  // unclassified would have been right by luck — the drafted flag happened to
+  // be true — and luck is not a safety property.
+  "bulk",
+  // Ambiguous, and the ambiguity has compliance teeth. Unblocking a *sender*
+  // re-enables an address we own and is reversible. Unblocking a *contact*
+  // re-enables mail to someone who opted out, which is a violation and is not
+  // undone by blocking them again. One verb, two objects, and the module rule
+  // for that case is the fail-safe group.
+  "unblock",
 ]);
+
+/**
+ * Tokens that mean an id names more than one operation.
+ *
+ * These are what separates `create_and_send_campaign`, where the name is a
+ * promise about behaviour, from `list_unsubscribe_forms`, where the dangerous
+ * word is part of the name of the thing being listed.
+ */
+const COMPOUND_TOKENS = new Set(['and', 'then', 'plus']);
 
 export type Risk = { destructive: boolean; idempotent: boolean };
 
@@ -160,10 +212,41 @@ export function classifyRisk(id: string): RiskVerdict | null {
   const first = tokens[0];
   if (first === undefined) return null;
 
-  // A dangerous verb anywhere escalates, wherever it sits. This scans the whole
-  // name because an id that says two things is as dangerous as its worst part —
-  // `create_and_send_campaign` is a send — and because escalation only ever
-  // errs towards a confirmation nobody needed.
+  // A read verb in first position settles it, and a dangerous word later in
+  // the name belongs to the OBJECT rather than to the operation. This runs
+  // before the escalation scan because the scan got one wrong in the real
+  // catalog: `forms.list_unsubscribe_forms` is `GET /editor-api/unsubscribe-
+  // forms`, and it shipped `destructive: true` because "unsubscribe" is in the
+  // name of the form being listed. That is the method-derived bug restated —
+  // an agent refusing to list a form, and then learning to discount a flag it
+  // has watched be wrong.
+  //
+  // "Escalation only errs towards a needless confirmation" was the argument
+  // for scanning everything, and it is false. A read flagged destructive is
+  // not a free click; it is the catalog teaching its consumer that the flag
+  // does not mean anything.
+  //
+  // Unless the name says the action does two things, in which case the scan
+  // still runs and still wins.
+  const compound = tokens.some((token) => COMPOUND_TOKENS.has(token));
+  if (!compound && READ_VERBS.has(first)) {
+    // The reason is the audit trail an operator reads when a flag is
+    // corrected, so it says which of the two things happened rather than
+    // blaming Brevo's POST habit for a GET.
+    const shadowed = tokens.slice(1).find((token) => IRREVERSIBLE_VERBS.has(token));
+    return {
+      destructive: false,
+      idempotent: true,
+      reason:
+        shadowed === undefined
+          ? `"${first}" reads; Brevo reads via POST`
+          : `"${first}" reads; "${shadowed}" names the object, not the act`,
+    };
+  }
+
+  // A dangerous verb anywhere else escalates, wherever it sits. This scans the
+  // whole name because an id that says two things is as dangerous as its worst
+  // part — `create_and_send_campaign` is a send.
   const irreversible = tokens.find((token) => IRREVERSIBLE_VERBS.has(token));
   if (irreversible !== undefined) {
     return {
@@ -198,5 +281,18 @@ export function classifyRisk(id: string): RiskVerdict | null {
   // An unrecognised first token keeps the fail-safe draft. `paginated_count`
   // lands here: its verb is third, which is a naming defect in the id and is
   // fixed by renaming the action, not by teaching this to parse English.
+  //
+  // Two verbs in the real catalog are left here on purpose, because they mean
+  // different things depending on their object and a table maps verbs only:
+  //
+  // - `validate` reads when the object is campaign content
+  //   (`GET /marketing-campaign/api/:id/validate-content`) and leaves the
+  //   account when the object is a sender, where validating emails a code.
+  // - `open` reads when the object is a page (`GET /editor/newsletters/:id`)
+  //   and creates when the object is a conversation or a ticket.
+  //
+  // Adding either would assert a safe idempotent read over a mutation the
+  // first time the other object showed up — the original method-derived bug,
+  // rebuilt by hand. An ambiguous verb is worth a rename, not a guess.
   return null;
 }

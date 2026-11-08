@@ -93,6 +93,97 @@ describe('classifyRisk', () => {
     expect(classifyRisk('segments.paginated_count')).toBeNull();
   });
 
+  it('clears the two reads the second extraction pass drafted as destructive', () => {
+    // Both are real catalog ids. `suggest_mapping_from_file` posts a CSV and
+    // gets back a proposed mapping; nothing is imported until a later action.
+    for (const id of ['contacts.suggest_mapping_from_file', 'companies.find_companies_by_name']) {
+      const risk = classifyRisk(id);
+      expect(risk?.destructive, id).toBe(false);
+      expect(risk?.idempotent, id).toBe(true);
+    }
+  });
+
+  it('escalates an id that both links and unlinks', () => {
+    // `contacts.link_unlink_company` is one endpoint doing two things. Linking
+    // is additive; unlinking destroys the record of an association. The
+    // whole-name scan is supposed to take the worse half.
+    expect(classifyRisk('contacts.link_company')?.destructive).toBe(false);
+    expect(classifyRisk('contacts.link_unlink_company')?.destructive).toBe(true);
+  });
+
+  it('escalates a bulk dispatcher, whose payload picks the operation', () => {
+    // POST /contact/backend/actions/list can delete. No name can say so.
+    const risk = classifyRisk('contacts.bulk_modify_list');
+    expect(risk?.destructive).toBe(true);
+    expect(risk?.idempotent).toBe(false);
+  });
+
+  it('classifies the renamed count that used to be flagged destructive', () => {
+    // Was `segments.paginated_count`: verb third, so it fell through to the
+    // fail-safe default and a count shipped as destructive. Fixed by renaming
+    // the action, which is what the rule below still demands.
+    const risk = classifyRisk('segments.count_paginated');
+    expect(risk?.destructive).toBe(false);
+    expect(risk?.idempotent).toBe(true);
+  });
+
+  it('treats suspending a scheduled send as the reversible undo it is', () => {
+    // PUT /email-campaign/api/:id/suspend returns a scheduled campaign to
+    // draft. `schedule` is classified reversible *because* this exists, so
+    // this cannot be destructive without making that classification a lie.
+    const risk = classifyRisk('campaigns.suspend_campaign');
+    expect(risk?.destructive).toBe(false);
+    expect(risk?.idempotent).toBe(false);
+    expect(classifyRisk('campaigns.schedule_campaign')?.destructive).toBe(false);
+  });
+
+  it('still treats cancel as irreversible, which suspend is not', () => {
+    // Different words doing different jobs: a pause comes back, a termination
+    // does not. Conflating them is how a flag stops meaning anything.
+    expect(classifyRisk('billing.cancel_plan')?.destructive).toBe(true);
+  });
+
+  it('fails safe on unblock, whose risk depends on its object', () => {
+    // Unblocking a sender is reversible. Unblocking a contact re-enables mail
+    // to someone who opted out, and blocking them again does not undo it.
+    expect(classifyRisk('senders.unblock_sender')?.destructive).toBe(true);
+  });
+
+  it('clears analyze, which uploads a file and imports nothing', () => {
+    const risk = classifyRisk('contacts.analyze_import_file');
+    expect(risk?.destructive).toBe(false);
+    expect(risk?.idempotent).toBe(true);
+  });
+
+  it('leaves a verb whose meaning depends on its object unclassified', () => {
+    // `validate` reads campaign content and emails a code for a sender.
+    // `open` reads a page and creates a conversation. A verb table cannot
+    // tell those apart, so it declines to, and the draft stands.
+    expect(classifyRisk('campaigns.validate_campaign_content')).toBeNull();
+    expect(classifyRisk('editor.open_newsletter_editor')).toBeNull();
+  });
+
+  it('does not escalate a read because its object is named after a danger', () => {
+    // `forms.list_unsubscribe_forms` is GET /editor-api/unsubscribe-forms. It
+    // shipped destructive because "unsubscribe" sits in the name of the thing
+    // being listed, which is the one real false positive the whole-name scan
+    // produced across 197 actions.
+    const risk = classifyRisk('forms.list_unsubscribe_forms');
+    expect(risk?.destructive).toBe(false);
+    expect(risk?.idempotent).toBe(true);
+
+    // Same shape, other dangerous nouns.
+    expect(classifyRisk('contacts.list_blocked_contacts')?.destructive).toBe(false);
+    expect(classifyRisk('campaigns.count_sent_campaigns')?.destructive).toBe(false);
+  });
+
+  it('still escalates a read verb when the name promises two operations', () => {
+    // A compound name is a claim about behaviour, not about an object, so the
+    // scan wins there. Without this, `preview_and_send` would read as safe.
+    expect(classifyRisk('campaigns.preview_and_send_campaign')?.destructive).toBe(true);
+    expect(classifyRisk('contacts.export_then_purge')?.destructive).toBe(true);
+  });
+
   it('takes the most dangerous verb in an id, not the first', () => {
     expect(classifyRisk('campaigns.create_and_send_campaign')?.destructive).toBe(true);
   });
