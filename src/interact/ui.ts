@@ -44,13 +44,35 @@ export async function tryFill(
   return false;
 }
 
+/**
+ * Navigates, and reports whether we ended up there.
+ *
+ * `networkidle` is the right wait for this app and the wrong failure signal.
+ * Brevo keeps long-polling connections open and fires analytics beacons
+ * continuously, so the wait times out on some routes while the page is
+ * perfectly usable -- which the previous version of this function said in a
+ * comment and then contradicted by returning false.
+ *
+ * That cost a wrong diagnosis. A verification recipe reported "could not open
+ * the create-list dialog" when the dialog was fine and the navigation had
+ * merely not settled; the selector it was blamed on resolves exactly one
+ * element when probed by hand. So a timeout now asks the only question that
+ * matters -- are we on the page we asked for -- and answers from the URL.
+ */
 export async function goto(page: Page, url: string): Promise<boolean> {
   try {
     await page.goto(url, { waitUntil: 'networkidle', timeout: 30_000 });
     return true;
   } catch {
-    // Brevo's SPA keeps long-polling connections open, so networkidle times out
-    // on some routes even though the page is usable.
+    return onPath(page, url);
+  }
+}
+
+/** Whether the page's current path is the one `url` asked for. */
+function onPath(page: Page, url: string): boolean {
+  try {
+    return new URL(page.url()).pathname === new URL(url).pathname;
+  } catch {
     return false;
   }
 }
@@ -70,6 +92,24 @@ export function openDialog(page: Page): Locator {
  * the selector reconnaissance run, where /contact/list offered six controls
  * matching the old pattern and only one of them saved anything.
  */
+/**
+ * A whole-label match, tolerating surrounding whitespace.
+ *
+ * Built with a RegExp string rather than a template literal on purpose. The
+ * first version wrote `^\s*${name}\s*$` inside a template literal, where
+ * `\s` is not a recognised escape and collapses to a literal "s" -- the
+ * pattern became `^s*create lists*$`, which matches the exact label by luck
+ * and fails the moment there is a space around it. The whitespace tolerance
+ * the code appeared to have never existed.
+ *
+ * The label is escaped because it is a label, not a pattern: a button reading
+ * "Create (new)" would otherwise be a syntax error.
+ */
+export function exactLabel(name: string): RegExp {
+  const escaped = name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  return new RegExp('^\\s*' + escaped + '\\s*$', 'i');
+}
+
 export async function submitDialog(
   page: Page,
   options: { testIds?: string[]; names: string[] },
@@ -97,9 +137,7 @@ export async function submitDialog(
   for (const scope of [openDialog(page), page]) {
     for (const name of options.names) {
       try {
-        const button = scope
-          .getByRole('button', { name: new RegExp(`^\s*${name}\s*$`, 'i') })
-          .first();
+        const button = scope.getByRole('button', { name: exactLabel(name) }).first();
         await button.waitFor({ state: 'visible', timeout: CANDIDATE_TIMEOUT_MS });
         await button.click({ timeout: ACTION_TIMEOUT_MS });
         return true;
