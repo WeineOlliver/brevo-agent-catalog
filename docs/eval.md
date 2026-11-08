@@ -179,8 +179,10 @@ Three things these two runs caught, and one of them was mine:
 
 What neither run caught, and measurement did: 41 invented action ids cited 42
 times across the descriptions. The eval cannot see those, because it scores the
-action a model picks rather than the guidance it reads on the way. That gap is
-why `pnpm validate` now counts them. See [gaps.md](gaps.md).
+action a model picks rather than the guidance it reads on the way — a selector
+can choose the right entry and still be sent nowhere by the sentence it reads
+next. That gap is why `pnpm validate` counts them, and they are now at 0. See
+[gaps.md](gaps.md).
 
 ## What the failures will mean
 

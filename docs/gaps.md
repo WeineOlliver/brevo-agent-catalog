@@ -83,7 +83,8 @@ reproducible from a local run; the committed number is what a reviewer can audit
 
 Measured, and the cause is in our own prompt rather than in the model.
 
-**41 invented action ids, cited 42 times.** The extraction prompt asked each
+**Fixed: 42 citations down to 0.** The original measurement was 41 invented
+action ids cited 42 times. The extraction prompt asked each
 description to "name the neighbouring action to use instead", while drafting
 every candidate in isolation with no list of which ids exist. So the model
 guessed plausible ones. An agent that reads "Use `contacts.import_contacts`
@@ -100,8 +101,25 @@ descriptions:
   is a ratchet, not an allowance — a measured defect that cannot grow back while
   nobody is looking.
 
-Clearing the existing 42 needs a re-draft of the affected entries, which costs
-provider quota and has not been spent. The count is the honest status.
+The 39 entries already written down were cleared by `pnpm fix:crossrefs`, and
+the ratchet now sits at **zero** — so it has stopped being a tolerance and
+become an ordinary gate: any entry naming an action the catalog does not have
+fails the build.
+
+Clearing them did **not** go through `pnpm extract --force`, and the reason is
+the interesting part. A re-draft asks the model for the whole entry including
+the `id`, so a model that picks a different id leaves an orphan file beside the
+old one — 39 of them — and it overwrites `verification`, which would have
+quietly un-verified the three actions that had just been executed against the
+live account. Neither is a price worth paying to fix a sentence.
+
+So the fix is surgical: it replaces `description`, `preconditions` and
+`side_effects` and nothing else, and that restriction lives in
+`rewriteProse` with tests on it rather than in a comment. The model was also
+given something it never had on the first pass — the real ids in the same
+module — which is why the rewrites name a real neighbour or describe the
+capability in words instead of inventing one. Measured afterwards: exactly 39
+action files changed, and none of the three verified entries was among them.
 
 A first naive scan of this reported 47 ids and 52 citations. The real figures are
 41 and 42; the difference is a rule that only counts a citation whose module
@@ -203,9 +221,8 @@ than `free` with suspicion.
    remains is the expensive half: `campaigns.send_now` is the most dangerous
    entry in the catalog and sits behind a five-call wizard, which is hours of
    selector work rather than the afternoon the flat forms took.
-2. **Re-draft the 42 dangling cross-references** with the corrected prompt, then
-   lower the ratchet in `scripts/validate.ts` to the new count. Mechanical, and
-   it costs provider quota rather than judgement.
+~~2. Re-draft the 42 dangling cross-references.~~ **Done** — 0 remain, and the
+   ratchet in `scripts/validate.ts` is now a gate at zero.
 3. **The sender-creation flow**, the eval's one unanswered task. One more
    fifteen-minute recording closes it.
 4. **Resolve the near-duplicate reads the eval exposed.** It missed "what
