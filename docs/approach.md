@@ -111,7 +111,7 @@ measurement did.
 The pipeline is complete and tested — 461 tests, strict TypeScript, clean
 typecheck, leak gate clean across every tracked file. It has run end to end
 against a live account: 38 routes crawled plus four hand-driven HAR sessions,
-38 132 requests observed and 2 034 committed after sanitizing, 197 actions
+38 132 requests observed and 2 147 committed after sanitizing, 197 actions
 catalogued, validated and
 indexed, and a selection eval scored at **17 of 19 scoreable tasks**.
 

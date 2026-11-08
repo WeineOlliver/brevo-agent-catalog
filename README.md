@@ -1,101 +1,127 @@
 # brevo-agent-catalog
 
-A catalog of Brevo's **business actions** — everything a user can do by clicking
-around the product — in a form an AI agent can act on without a human checking
-its work first.
+**A catalog of Brevo's business actions — everything a user can do by clicking
+around the product — in a form an AI agent can act on.**
 
-> **Status: the write surface is catalogued and the eval scores it.**
-> 38 132 requests observed across four hand-driven sessions plus the crawl, of
-> which the 2 034 that are Brevo's own traffic are committed,
-> **197 actions catalogued** in 62 modules, and **every one of the 38 distinct
-> write endpoints in the capture has an entry.** The selection eval scores
-> **17 of 19 scoreable tasks**; the 20th names sender creation, which was never
-> demonstrated, and the eval reports that as a coverage gap on every run rather
-> than being satisfied by a near miss. **3 of 197 entries are `verified`** by
-> executing them against the live account and matching the request that
-> actually happened: `create_contact` returned `{"contact_id":8}`,
-> `delete_contact` then deleted contact 8, and `create_list` returned 201. The
-> other 194 are `observed`.
->
-> Reconnaissance measured why the automated ceiling was low: of the six routes
-> the write passes target, two are flat forms and four are multi-step wizards or
-> dead URLs. Driving a wizard by selector costs hours per flow and breaks on the
-> next release; a person does it in thirty seconds. So the coverage came through
-> `pnpm import:har` instead — perform the flow once in your own browser, export
-> the network log, and the same sanitize → extract → normalize pipeline ingests
-> it. That is how the write count went from 4 to 38. See
-> [docs/gaps.md](docs/gaps.md) and [docs/eval.md](docs/eval.md) — every number in
-> this repository is measured, and the uncomfortable ones are stated first.
+Brevo's public API does not describe its product. This repository reverse
+engineers what the product actually does, from the product's own traffic, and
+ships it as a typed, validated, agent-consumable catalog with an eval that
+scores whether a model can use it.
 
-## Why this exists
+---
 
-Many systems have no public API, or one that does not cover what the product
-actually does. An agent operating software like that needs to know what the
-software can do before it can do anything.
+## The result
 
-Brevo turns out to be a clean example, and the gap is measurable. Brevo publishes
-an OpenAPI 3.0.1 specification (`data/brevo-openapi.yml`, committed) with
-**292 operations across 208 paths**. But the public API and the product only
-*overlap*:
+| | |
+|:--|:--|
+| **Actions catalogued** | **197** across 62 modules |
+| **Write endpoints in the capture / covered** | **38 / 38** |
+| **Selection eval** | **17 of 19** scoreable tasks |
+| **Executed against the live account** | **3** `verified`, 194 `observed` |
+| **Requests observed / committed as evidence** | 38 132 / 2 147 |
+| **Overlap with Brevo's published OpenAPI spec** | **0 of 197** |
+| **Tests / typecheck / leak gate** | 470 passing · strict · clean |
 
-- **79 of those 292 operations** are master-account, balance, program, reward,
-  tier and wallet surface — partner and reseller APIs that no ordinary user ever
-  meets in the UI.
-- There is **no tagged coverage at all** for automation and workflows, landing
-  pages, forms, meetings or push notifications — all of which exist in the
-  product.
+The last row is the finding the project rests on. Brevo publishes an OpenAPI
+3.0.1 spec with **292 operations across 208 paths**, and not one of the 197
+endpoints this catalog documents appears in it. An earlier, smaller catalog
+managed 2 of 126; tripling the capture and adding every write flow did not add a
+single match. **The overlap is not small because the coverage is thin — these
+are different APIs.** Reading the docs is not a substitute for clicking around
+the app, which is the whole argument for building it this way.
 
-So reading the API docs is not a substitute for clicking around the app. That is
-the whole argument for this project, and it is why the pipeline starts in a
-browser rather than in a specification.
+### The headline caveat, stated first
+
+**194 of 197 entries are `observed`, not `verified`.** That means a model drafted
+them from captured traffic — the endpoint, method and body shape are factual,
+but nothing executed them. Three entries were executed end to end against a real
+account and matched the request that actually happened:
+
+```
+contacts.create_contact   POST   /contact/backend/contacts/add-contact  → 200  {"contact_id":8}
+contacts.delete_contact   DELETE /contact/backend/contacts/8            → 200
+lists.create_list         POST   /lists/create                          → 201  {"id":11}
+```
+
+The create-then-delete pair is the useful part: the same contact id appears on
+both sides, so the lifecycle is proved rather than inferred. Everything else is
+a well-evidenced hypothesis, and [docs/gaps.md](docs/gaps.md) says so at length.
+
+---
+
+## Start here
+
+Pick the path that matches what you want to judge.
+
+| If you have | Read this | Why |
+|:--|:--|:--|
+| **2 minutes** | this page, then [`actions/index.json`](actions/index.json) | The result, then the artifact itself |
+| **10 minutes, and you want to judge the engineering** | [docs/decisions.md](docs/decisions.md) | 13 decisions, each with its rejected alternative and the cost accepted |
+| **10 minutes, and you want to judge the AI usage** | [docs/ai-usage.md](docs/ai-usage.md) and *[Built with AI](#built-with-ai-and-what-that-actually-looked-like)* below | What the model was spent on, and every place it was wrong |
+| **You want to know what is broken** | [docs/gaps.md](docs/gaps.md) | Every gap, measured, with what more time would buy |
+| **You want proof it works** | [docs/eval.md](docs/eval.md) | Seven eval runs, including the ones that failed |
+| **You want the full inventory** | [docs/modules.md](docs/modules.md) | Generated: every module, action and uncovered route |
+
+Every number in this repository is measured rather than estimated, and the
+uncomfortable ones are stated before the flattering ones. Where a claim was
+disproved by a run, the claim was changed — the git history is the audit trail.
+
+---
 
 ## How to read the catalog
 
 | Path | What it is |
-|---|---|
-| `actions/index.json` | Load this first. Every action's id, module, name, description, confidence and destructive flag. One small file. |
-| `actions/<id>.json` | One action in full: typed inputs, outputs, preconditions, side effects, UI path, internal endpoint, public-API mapping, verification. |
-| `schema/action.schema.json` | The contract, JSON Schema draft 2020-12. Generated from `src/types.ts`; a test fails if the two drift. |
+|:--|:--|
+| [`actions/index.json`](actions/index.json) | **Load this first.** Every action's id, module, name, description, status and risk flags, in one small file |
+| `actions/<id>.json` | One action in full: typed inputs, outputs, preconditions, side effects, UI path, internal endpoint, public-API mapping, verification evidence |
+| [`schema/action.schema.json`](schema/action.schema.json) | The contract, JSON Schema draft 2020-12. Generated from `src/types.ts`; a test fails if the two drift |
+| `captures/clean/` | The sanitized traffic every entry is derived from. This is what `verification.evidence` points at |
 
 Ids are `module.verb_object` in snake_case — `contacts.create_contact`,
-`campaigns.send_campaign`.
+`campaigns.send_now`, `segments.count_paginated`.
 
-### What the confidence levels mean
+### What the status means
 
-This is the part to read before trusting anything. The catalog does not pretend
-to uniform confidence.
+The catalog does not claim uniform confidence, and the distinction is enforced
+in code rather than described in prose.
 
-| Status | Earned when | Evidence |
-|---|---|---|
-| `verified` | The harness executed the action end to end against a real account, and the observed request and response match what the entry claims | The sanitized real request/response, plus `verified_at` |
-| `observed` | The action's internal endpoint was captured in **real traffic** — method, path and body shape are factual — but it was never executed, or only partly | A path into `captures/clean/` |
-| `inferred` | No captured traffic. Derived from UI affordances, the public OpenAPI spec, or model judgment | What it was derived from, named |
+| Status | Earned when | Count |
+|:--|:--|:--|
+| `verified` | The harness executed the action against a real account, and the request that happened matches what the entry claims | **3** |
+| `observed` | The endpoint was captured in real traffic — method, path and body shape are factual — but it was never executed, or only partly | **194** |
+| `inferred` | No captured traffic. Derived from UI affordances, the spec, or model judgment | **0** |
 
-Two rules hold, and `observed`/`verified` are enforced in code:
+Two rules hold, both in `src/verify/harness.ts`:
 
-- **Spec-derived does not beat `inferred`.** An entry whose inputs come from
-  Brevo's published spec is still unexecuted. `public_api.exists` tells you the
-  inputs come from a published contract; it does not promote the status. *(This
-  is currently a design rule rather than a code path: the extraction pipeline
-  only ever emits `observed`, because it only drafts from captured traffic.
-  `inferred` is reserved for UI-only actions discovered without a capture, which
-  nothing produces yet — see [docs/gaps.md](docs/gaps.md).)*
 - **Partial execution does not earn `verified`.** A request that ran and returned
-  4xx is `observed`, with the reason recorded. So is a request that matched the
-  path but came from a non-Brevo host. Both are enforced in
-  `src/verify/harness.ts`.
+  4xx stays `observed`, with the reason recorded. So does one that matched the
+  path but came from a non-Brevo host — otherwise a third-party widget answering
+  the same path could stamp an action verified.
+- **A re-run never demotes.** A recipe that breaks because Brevo moved its
+  markup has learned nothing about the original execution, and overwriting that
+  evidence destroys it for no gain.
 
-### The `destructive` and `idempotent` flags are fail-safe
+### `destructive` is a fact about Brevo, not about the HTTP method
 
-A harness uses `destructive` to decide whether to stop and ask a human, so a
-wrong value there is the most expensive error this catalog could carry. Until
-execution proves otherwise, **every non-read action is `destructive: true` and
-`idempotent: false`**. That is applied in code before schema validation, not
-merely requested of the model. Only a `verified` outcome can relax either flag.
+An agent uses `destructive` to decide whether to stop and ask a human, so a
+wrong value here is the most expensive error this catalog could carry. It means
+**irreversible, or visible outside the account** — which is not the same as "not
+a read":
 
-If an entry is `inferred` and says `destructive: true`, that may mean "we know
-this deletes things" or "we have not proven it doesn't". Check
-`verification.status` before reading anything into the flags.
+- `contacts.create_contact` mutates and is **not** destructive: reversible, and
+  it touches only data the account owns.
+- `campaigns.send_now` creates nothing and **is** destructive: it mails real
+  people, and there is no undo.
+
+Deriving this from the method was tried and failed, because **Brevo reads through
+POST** (`segment/count`, `segment/query`, `paginated_count`). That rule shipped
+`get_count` and `fetch_email_logs` as `destructive: true` — an agent obeying the
+flag refuses four harmless reads, and an agent that learns to ignore it on reads
+will ignore it on `delete` too. 7 of 197 entries are destructive. The rule, its
+failures in both directions, and the two verbs it deliberately refuses to
+classify are in [`src/catalog/risk.ts`](src/catalog/risk.ts) and decision #12.
+
+---
 
 ## How it was built
 
@@ -104,93 +130,146 @@ flowchart TD
     S0[fetch-openapi: public spec to index] --> S4
     S1[login: manual, saves session] --> S2
     S2[crawl: BFS routes, record XHR] --> S3
-    H[manual HAR export: fallback source] --> S3
+    H[import-har: a human demonstrates a flow] --> S3
     S2 --> I[interact: throwaway fixtures, capture writes]
     I --> S3
-    S3[sanitize: placeholders, raw to clean] --> S4
-    S4[extract: cluster + join spec + LLM draft] --> S5
-    S5[validate: ajv hard gate] --> S6
-    S6[verify: execute via UI, stamp verified] --> S7
+    S3[sanitize: redact, drop third-party, raw to clean] --> S4
+    S4[extract: cluster + join spec + LLM draft] --> N
+    N[normalize: merge, rename, enforce risk] --> S5
+    S5[validate: schema gate + cross-reference gate] --> S6
+    S6[verify: execute via the real UI, stamp verified] --> S7
     S7[eval: can a model pick the right action] --> S8
     S8[publish: actions, index, docs]
 ```
 
-The design principle is to spend the model only on what cannot be derived. Where
-a captured endpoint maps onto a public operation, the required fields, enums and
-limits are inherited from Brevo's own specification deterministically — no
-guessing, and `public_api` fills itself. The model is asked only for semantics:
-the agent-facing description, preconditions, side effects, and the risk
-judgments. Mechanical fields (`internal_endpoint`, `public_api`,
-`verification`) are filled from evidence in code, because asking a model for
-facts you already hold is the main source of fabricated documentation.
+**The principle is to spend the model only on what cannot be derived.** Every
+mechanical field — `internal_endpoint`, `public_api`, `verification` — is filled
+from evidence in code, because asking a model for facts you already hold is the
+main source of fabricated documentation. The model is asked for semantics only:
+the agent-facing description, preconditions, side effects.
 
-Two models, for a reason: **Groq** runs the high-volume breadth pass across every
-discovered route, and **headless Claude Code** handles the core tier and the
-judgment-heavy fields. Both sit behind one interface (`src/providers/types.ts`),
-so the Groq key is optional and a reviewer can substitute their own provider.
+**The stage that mattered most was not the one designed to matter.** Driving
+writes by selector reached **two of six** target routes — a segment builder, a
+campaign split-button, the drag-and-drop template editor and a wrong senders URL
+all defeated it. Each wizard is hours of selector work that breaks on the next
+release; a person performs the same flow in thirty seconds. So the coverage came
+from four hand-driven DevTools recordings imported through `pnpm import:har`,
+which took the write endpoints from 4 to 38. `parseHar` had been written and
+tested in the first week with no caller.
+
+---
+
+## Built with AI, and what that actually looked like
+
+This was built with Claude Code, and the honest version of that story is more
+useful than a tooling list. Two models sit behind one interface
+([`src/providers/types.ts`](src/providers/types.ts)) and are split by job: **Groq**
+runs the high-volume breadth pass across every discovered route, **headless
+Claude Code** handles judgment and verification. The Groq key is optional and a
+reviewer can substitute their own provider.
+
+What is worth your attention is where the model was wrong, because every one of
+these was caught by a check rather than by reading the output:
+
+| What went wrong | How it was caught | The fix |
+|:--|:--|:--|
+| **6 fabricated actions.** I had suggested fetching `/mark_NN_<flow>` URLs as session markers; the extractor treated them as real endpoints and the model wrote confident entries with invented outputs | Reading the catalog for a different reason | Deleted, plus `OPERATOR_MARKER` in `isNoise` with a test that a real `/marketing/*` route still survives |
+| **41 invented action ids, cited 42 times** — "Use `contacts.import_contacts` instead", which does not exist | A checker written specifically to look | The prompt now asks for the neighbour *by what it does*; `pnpm validate` gates the count at zero |
+| **Risk flags wrong in both directions** — reads flagged destructive, and a bulk dispatcher right only by luck | Measuring the rule against all 197 ids | Read-verb-first beats the dangerous-token scan; `bulk` escalates because no name can classify a dispatcher |
+| **Two PII leak classes the gate called clean** — phone numbers had no rule, and `%40`-encoded emails defeated a literal-`@` regex | Grepping the committed captures by hand | Keyed phone rule, encoded-email shapes, and a redact-then-scan round-trip test |
+| **An opaque failure message cost two extraction runs** — `withDeadline` swallowed the provider's error, so a 429, a dead key and a bad response read identically | Instrumenting the swallowed error | The real cause turned out to be Groq's **tokens-per-day** cap, not per-minute — so pacing could never have fixed it |
+
+The eval is the part designed to resist me. It scores whether a model can pick
+the right action from a natural-language task, and one of its two remaining
+misses is a limit of the harness rather than a defect in the catalog — a
+one-shot selection eval cannot fairly score a two-step task.
+[docs/eval.md](docs/eval.md) has all seven runs, including the run where my own
+expected answer was wrong and the model's was right.
+
+---
 
 ## Running it
 
 Requires Node 20+ and pnpm. `pnpm install`, then:
 
 | Command | Stage | Needs |
-|---|---|---|
+|:--|:--|:--|
+| `pnpm build:schema` | Regenerate `schema/action.schema.json` from `src/types.ts` | nothing |
 | `pnpm fetch:openapi` | Download and index Brevo's public spec | nothing |
 | `pnpm brevo:login` | Save an authenticated session to `.auth/` | **a manual login by hand** |
-| `pnpm crawl --login` | Sign in, then BFS the app in the same session, recording XHR | **a manual login** |
+| `pnpm crawl` | BFS the app, recording XHR | a saved session |
 | `pnpm interact` | Write passes with throwaway fixtures | a saved session |
+| `pnpm explore` | Selector reconnaissance: what a create control actually opens | a saved session |
+| `pnpm import:har` | Ingest a DevTools HAR export | a `.har` file |
 | `pnpm sanitize` | `captures/raw` → `captures/clean`, redacted | captures |
 | `pnpm extract` | Draft catalog entries | clean captures + a provider |
-| `pnpm validate` | ajv gate over `actions/` | drafted actions |
+| `pnpm normalize` | Merge duplicates, enforce the risk rule | drafted actions |
+| `pnpm validate` | Schema gate **and** cross-reference gate | drafted actions |
 | `pnpm build:index` | Write `actions/index.json` | valid actions |
-| `pnpm verify` | Execute chosen actions, stamp `verified` | a saved session + a catalog |
+| `pnpm verify` | Execute chosen actions, stamp `verified` | a saved session |
 | `pnpm eval` | Score whether a model picks the right action | a catalog index |
+| `pnpm fix:crossrefs` | Rewrite prose citing ids that do not exist | a catalog + a provider |
 | `pnpm build:docs` | Regenerate `docs/modules.md` | a catalog index |
 | `pnpm scan` | **Leak gate.** Run before any push | nothing |
-| `pnpm test` / `pnpm typecheck` | 268 tests, strict TypeScript | nothing |
+| `pnpm test` / `pnpm typecheck` | 470 tests, strict TypeScript | nothing |
 
-**Credentials.** Nothing in this repository contains any, and none is committed.
-`pnpm extract` with `--provider groq` wants `GROQ_API_KEY` in `.env` (see
-`.env.example`); with `--provider claude` it shells out to an already
-authenticated `claude` CLI and needs no key at all. There is **no Brevo API key**
-anywhere — verification drives the real UI instead, which is the only way to
-reach the UI-only surfaces where this catalog is worth the most.
+**Reproducibility.** `captures/clean/` **is committed**, so everything from
+`extract` onward runs offline for anyone, against the same evidence this catalog
+was built from. The capture stages (`login`, `crawl`, `interact`, `import:har`)
+need a Brevo account of your own.
 
-**Reproducibility, honestly.** Stage 0 runs offline for anyone, from the
-committed spec. Stages 4–8 are designed to run offline from committed clean
-captures, but **no captures are committed yet** because the crawl has not run, so
-today they exit with an instruction rather than a result. The crawl stages need a
-Brevo account of your own and are documented rather than runnable — which the
-brief explicitly allows. Once the crawl has run, `captures/clean/` is committed
-and stages 4–8 become reproducible by anyone.
+**Credentials.** None are committed. `pnpm extract --provider groq` wants
+`GROQ_API_KEY` in `.env` (see [`.env.example`](.env.example)); `--provider claude`
+shells out to an already-authenticated `claude` CLI and needs no key. There is
+**no Brevo API key anywhere** — verification drives the real UI instead, which is
+the only way to reach the UI-only surfaces where this catalog is worth the most.
+
+---
 
 ## Safety
 
-This repository is public, so the pipeline treats that as a hard constraint.
+This repository is public, so that is treated as a hard constraint rather than a
+disclaimer.
 
-- `.env`, `.auth/` and `captures/raw/` are gitignored from the first commit.
-- Sanitization is **by shape, wherever it occurs** — a key in a query string, a
-  token nested deep in a body, a cookie header. Not just known field names.
+- `.env`, `.auth/`, `captures/raw/` and `test-results/` are gitignored. The raw
+  logs hold session cookies and a signed-in email; a Playwright trace holds
+  screenshots of a logged-in account. None of it is committed, and that was
+  verified against the git history before the first push.
+- **Sanitization is by shape, wherever it occurs** — a key in a query string, a
+  token nested deep in a body, a cookie header. Not just known field names. One
+  exception is deliberate: a phone number cannot be found by shape, because it
+  is indistinguishable from an epoch timestamp, so that rule is keyed on the
+  JSON field name instead.
 - Identifiers become structure-preserving placeholders (`{{ACCOUNT_ID}}`,
   `{{LIST_ID}}`, `{{EMAIL}}`), never bare removal, so `body_example` stays usable
   by an agent.
-- `pnpm scan` is an **independent** second opinion — it re-derives the patterns
+- `pnpm scan` is an **independent** second opinion: it re-derives the patterns
   rather than asking the redactor what it would have replaced, because a gate
-  implemented by calling the thing it checks cannot fail.
-- The crawl is capped at 1 request/second, clicks nothing, and never follows a
-  log-out link. Writes happen only in the explicit `interact` and `verify`
-  stages, only ever creating `catalog-test-`-prefixed fixtures, and nothing in
-  this repository deletes account data.
+  implemented by calling the thing it checks cannot fail. It has caught the
+  redactor twice.
+- `pnpm sanitize` commits only Brevo's own traffic. Of 35 035 records in the HAR
+  sessions, 1 324 were Brevo and 33 711 were analytics and trackers — 2.8 MB
+  against 67.8 MB — and third-party requests are the worst PII surface in a
+  capture and the least useful.
+- The crawl is capped at 1 request/second and never follows a log-out link.
+- **One recipe deletes account data**, with the account owner's explicit
+  approval, because `destructive: true` is the flag an agent obeys and leaving
+  the destructive entries unverified means the part of the catalog that matters
+  most is the part nothing has proved. The caution lives in a guard rather than
+  in abstention: it reads the address off the page it is about to act on and
+  refuses anything that is not one of its own `catalog-test-` fixtures.
+
+---
 
 ## Documents
 
 | Document | What it covers |
-|---|---|
-| [docs/approach.md](docs/approach.md) | How the problem was framed and what was prioritized |
-| [docs/decisions.md](docs/decisions.md) | Every architectural decision, its rejected alternatives, and the cost accepted |
+|:--|:--|
+| [docs/approach.md](docs/approach.md) | How the problem was framed, what was prioritized, and what the runs disproved |
+| [docs/decisions.md](docs/decisions.md) | 13 decisions, each with its rejected alternative and the cost accepted |
 | [docs/ai-usage.md](docs/ai-usage.md) | Tools, models, workflow, and what had to be fixed by hand |
-| [docs/gaps.md](docs/gaps.md) | Known gaps and limitations, and what more time would buy |
-| [docs/eval.md](docs/eval.md) | Selection-eval results and what the failures taught |
+| [docs/gaps.md](docs/gaps.md) | Known gaps and limitations, measured, and what more time would buy |
+| [docs/eval.md](docs/eval.md) | Selection-eval results across seven runs and what each failure taught |
 | [docs/modules.md](docs/modules.md) | Generated inventory of modules, actions and uncovered routes |
 | [docs/superpowers/specs/](docs/superpowers/specs/) | The design document, written before any code |
 | [docs/superpowers/plans/](docs/superpowers/plans/) | The implementation plan it produced |

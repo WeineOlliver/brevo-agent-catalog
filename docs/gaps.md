@@ -10,7 +10,7 @@ and after side by side, because the fix was not more engineering.
 | | Before the HAR sessions | Now |
 |---|---|---|
 | Records observed | 3 097 | 38 132 |
-| Records committed as evidence | 3 097 | 2 034 across 65 files |
+| Records committed as evidence | 3 097 | 2 147 across 68 files |
 | Catalogued actions | 136 | 197 across 62 modules |
 | Distinct write endpoints in the capture | 4 | 38 |
 | Write endpoints with a catalog entry | 4 | 38 |
@@ -62,7 +62,7 @@ Two things the sessions did not get:
 
 ### Why the committed record count is far below the observed one
 
-`captures/clean/` holds 2 034 records, not 38 132. A fifteen-minute DevTools
+`captures/clean/` holds 2 147 records, not 38 132. A fifteen-minute DevTools
 recording is mostly not Brevo: of the 35 035 records in the four HAR sessions,
 1 324 were Brevo's own traffic and 33 711 were analytics, CDN assets and
 third-party trackers — 2.8 MB against 67.8 MB.
