@@ -2,7 +2,7 @@
   "id": "deals.list",
   "module": "deals",
   "name": "List deals",
-  "description": "Call this when you need to retrieve the list of deals linked to a specific contact. Use the \"deals.get\" action instead when you need details of a single deal, or \"deals.create\" when you need to add a new deal.",
+  "description": "Call this when you need to retrieve the list of deals linked to a specific contact. Use the action that fetches a single deal’s details when you need information about one deal, or the action that creates a new deal when you need to add one.",
   "preconditions": [
     "The contact with the given ID exists."
   ],

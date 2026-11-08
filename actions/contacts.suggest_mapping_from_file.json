@@ -2,7 +2,7 @@
   "id": "contacts.suggest_mapping_from_file",
   "module": "contacts",
   "name": "Suggest mapping from file",
-  "description": "Call this when you have a CSV file of contacts and want the system to propose how its columns map to contact attributes before performing an import. Use the contacts.import_contacts action instead if you are ready to actually import the data.",
+  "description": "Call this when you have a CSV file of contacts and want the system to propose how its columns map to contact attributes before performing an import. Use the contacts.analyze_import_file action instead if you are ready to actually import the data.",
   "preconditions": [],
   "inputs": {
     "type": "object",

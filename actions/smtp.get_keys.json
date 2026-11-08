@@ -2,7 +2,7 @@
   "id": "smtp.get_keys",
   "module": "smtp",
   "name": "Get SMTP keys",
-  "description": "Call this when you need to retrieve the current SMTP relay configuration and any existing SMTP keys for the account. Use a separate action (e.g., smtp.create_key or smtp.update_key) if you need to add or modify keys instead.",
+  "description": "Call this when you need to retrieve the current SMTP relay configuration and any existing SMTP keys for the account. Use a separate action that creates or updates keys if you need to add or modify keys instead.",
   "preconditions": [],
   "inputs": {
     "type": "object",

@@ -2,7 +2,7 @@
   "id": "organizations.get_details",
   "module": "organizations",
   "name": "Get organization details",
-  "description": "Call this when you need to retrieve basic information about the current Brevo organization, such as its ID, client ID, type, and status flags. Use a more specific action like \"account.get_subscription\" if you only need subscription or pricing details instead.",
+  "description": "Call this when you need to retrieve basic information about the current Brevo organization, such as its ID, client ID, type, and status flags. Use a more specific action like organizations.get_features_and_channels if you only need subscription or pricing details instead.",
   "preconditions": [],
   "inputs": {
     "type": "object",

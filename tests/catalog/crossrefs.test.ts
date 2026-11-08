@@ -5,7 +5,12 @@
  */
 
 import { describe, expect, it } from 'vitest';
-import { findDanglingRefs, textOf } from '../../src/catalog/crossrefs.js';
+import {
+  REWRITABLE_FIELDS,
+  findDanglingRefs,
+  rewriteProse,
+  textOf,
+} from '../../src/catalog/crossrefs.js';
 
 describe('findDanglingRefs', () => {
   it('finds an id cited in prose that the catalog does not have', () => {
@@ -79,5 +84,69 @@ describe('textOf', () => {
     expect(text).toContain('A contact appears in the list.');
     expect(text).toContain('Create contact');
     expect(text).not.toContain('ignored: not guidance');
+  });
+});
+
+describe('rewriteProse', () => {
+  const verified = {
+    id: 'contacts.delete_contact',
+    module: 'contacts',
+    name: 'Delete contact',
+    description: 'Call this when you need to remove a contact. Use contacts.archive_contact instead.',
+    preconditions: ['The contact must exist.'],
+    side_effects: ['The contact is gone.'],
+    destructive: true,
+    idempotent: false,
+    internal_endpoint: { method: 'DELETE', path: '/contact/backend/contacts/:id' },
+    verification: {
+      status: 'verified',
+      evidence: ['executed DELETE /contact/backend/contacts/8 -> 200'],
+      verified_at: '2026-11-08T01:30:00.000Z',
+    },
+  };
+
+  it('takes the prose and leaves everything else identical', () => {
+    const out = rewriteProse(verified, {
+      description: 'Call this when you need to remove a contact. There is no archive action.',
+      preconditions: ['The contact must exist in the account.'],
+      side_effects: ['The contact is permanently removed.'],
+    });
+
+    expect(out.description).toContain('no archive action');
+    expect(out.preconditions).toEqual(['The contact must exist in the account.']);
+
+    // The whole point: a prose fix cannot rename, re-flag or un-verify an entry.
+    expect(out.id).toBe('contacts.delete_contact');
+    expect(out.destructive).toBe(true);
+    expect(out.internal_endpoint).toEqual(verified.internal_endpoint);
+    expect(out.verification).toEqual(verified.verification);
+  });
+
+  it('ignores an attempt to change anything else', () => {
+    // A model that returns extra fields does not get to apply them.
+    const out = rewriteProse(verified, {
+      id: 'contacts.remove_contact',
+      destructive: false,
+      verification: { status: 'observed', evidence: [], verified_at: null },
+      internal_endpoint: { method: 'GET', path: '/elsewhere' },
+      description: 'Call this when removing a contact.',
+    });
+
+    expect(out.id).toBe('contacts.delete_contact');
+    expect(out.destructive).toBe(true);
+    expect(out.verification).toEqual(verified.verification);
+    expect(out.internal_endpoint).toEqual(verified.internal_endpoint);
+  });
+
+  it('keeps the original when the rewrite is malformed or empty', () => {
+    // Degrading to no change beats degrading to a wrong entry.
+    const out = rewriteProse(verified, { description: '', preconditions: 'not an array' });
+    expect(out.description).toBe(verified.description);
+    expect(out.preconditions).toEqual(verified.preconditions);
+    expect(out.side_effects).toEqual(verified.side_effects);
+  });
+
+  it('names exactly the three fields it may touch', () => {
+    expect([...REWRITABLE_FIELDS]).toEqual(['description', 'preconditions', 'side_effects']);
   });
 });

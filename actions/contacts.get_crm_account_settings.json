@@ -2,7 +2,7 @@
   "id": "contacts.get_crm_account_settings",
   "module": "contacts",
   "name": "Get CRM account settings",
-  "description": "Call this when you need to retrieve the CRM account field mapping settings for a specific contact. Use the neighboring action contacts.update_crm_account_settings if you need to modify those settings instead.",
+  "description": "Call this when you need to retrieve the CRM account field mapping settings for a specific contact. Use the action that updates those settings instead.",
   "preconditions": [
     "A contact must be selected (its ID is known) and the user must have permission to view its CRM settings."
   ],

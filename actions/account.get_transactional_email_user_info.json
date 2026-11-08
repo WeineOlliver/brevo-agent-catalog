@@ -2,10 +2,10 @@
   "id": "account.get_transactional_email_user_info",
   "module": "account",
   "name": "Get transactional email user info",
-  "description": "Call this when you need the transactional-email context for the signed-in user before working in the Transactional > Email area: which applications are activated, whether the transactional email privileges list grants access, and the display conventions (timezone, date and time format) needed to interpret or render email log timestamps. Use it to decide whether a transactional email feature is reachable at all before calling a logs or real-time events action, and to learn the timezone those timestamps should be read in. For general account or organization details outside transactional email, prefer organization.get_details or crm.get_organization_info; for product-wide flags prefer features.get_feature_toggles.",
+  "description": "Call this when you need the transactional‑email context for the signed‑in user before working in the Transactional > Email area: which applications are activated, whether the transactional email privileges list grants access, and the display conventions (timezone, date and time format) needed to interpret or render email‑log timestamps. Use it to decide whether a transactional email feature is reachable at all before calling a logs or real‑time events action, and to learn the timezone those timestamps should be read in. For general account details outside transactional email, prefer the account.get_info action; for product‑wide feature flags, refer to the generic feature‑flag lookup capability.",
   "preconditions": [
-    "A browser session authenticated to the Brevo web app must be present; the endpoint returns info for the currently signed-in user.",
-    "The account must have the transactional email application available in order for \"transactional-emails\" to appear in activatedApplications."
+    "A browser session authenticated to the Brevo web app must be present; the endpoint returns info for the currently signed‑in user.",
+    "The account must have the transactional email application available in order for \"transactional‑emails\" to appear in activatedApplications."
   ],
   "inputs": {
     "type": "object",

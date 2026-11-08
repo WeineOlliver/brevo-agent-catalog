@@ -2,7 +2,7 @@
   "id": "widgets.list",
   "module": "widgets",
   "name": "List homepage widgets",
-  "description": "Call this when you need to retrieve the collection of widgets that are available on the homepage for display or configuration. Use a specific widget‑detail action (e.g., widgets.get) if you only need information about a single widget.",
+  "description": "Call this when you need to retrieve the collection of widgets that are available on the homepage for display or configuration. Use the action that fetches details for an individual widget if you only need information about a single widget.",
   "preconditions": [],
   "inputs": {
     "type": "object",

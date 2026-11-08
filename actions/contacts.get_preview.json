@@ -2,7 +2,7 @@
   "id": "contacts.get_preview",
   "module": "contacts",
   "name": "Preview contacts",
-  "description": "Call this when you need a quick view of specific contacts' basic information without loading full details. Provide one or more contact IDs to retrieve their preview data. Use the full contact retrieval action (e.g., contacts.get) when you need all contact attributes or to modify them.",
+  "description": "Call this when you need a quick view of specific contacts' basic information without loading full details. Provide one or more contact IDs to retrieve their preview data. Use the full contact retrieval action (e.g., contacts.get_contact) when you need all contact attributes or to modify them.",
   "preconditions": [],
   "inputs": {
     "type": "object",

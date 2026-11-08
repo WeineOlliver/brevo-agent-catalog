@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-08T01:35:59.555Z",
+  "generated_at": "2026-11-08T04:25:13.733Z",
   "count": 197,
   "by_status": {
     "verified": 3,
@@ -35,7 +35,7 @@
       "id": "account.get_account",
       "module": "account",
       "name": "Get account information",
-      "description": "Call this when you need to retrieve the organization’s account details such as plan type, pricing version, and analytics status. Use an update action (e.g., account.update_settings) if you need to modify these settings instead.",
+      "description": "Call this when you need to retrieve the organization’s account details such as plan type, pricing version, and analytics status. Use an action that updates the account’s settings if you need to modify these settings instead.",
       "status": "observed",
       "destructive": false
     },
@@ -83,7 +83,7 @@
       "id": "account.get_settings",
       "module": "account",
       "name": "Get account settings",
-      "description": "Call this when you need to read the current account configuration such as timezone, date format, locale and notification preferences. If you need to change any of these values, use the neighbouring action `account.update_settings` instead.",
+      "description": "Call this when you need to read the current account configuration such as timezone, date format, locale and notification preferences. If you need to change any of these values, use the action that updates account settings instead.",
       "status": "observed",
       "destructive": false
     },
@@ -91,7 +91,7 @@
       "id": "account.get_transactional_email_user_info",
       "module": "account",
       "name": "Get transactional email user info",
-      "description": "Call this when you need the transactional-email context for the signed-in user before working in the Transactional > Email area: which applications are activated, whether the transactional email privileges list grants access, and the display conventions (timezone, date and time format) needed to interpret or render email log timestamps. Use it to decide whether a transactional email feature is reachable at all before calling a logs or real-time events action, and to learn the timezone those timestamps should be read in. For general account or organization details outside transactional email, prefer organization.get_details or crm.get_organization_info; for product-wide flags prefer features.get_feature_toggles.",
+      "description": "Call this when you need the transactional‑email context for the signed‑in user before working in the Transactional > Email area: which applications are activated, whether the transactional email privileges list grants access, and the display conventions (timezone, date and time format) needed to interpret or render email‑log timestamps. Use it to decide whether a transactional email feature is reachable at all before calling a logs or real‑time events action, and to learn the timezone those timestamps should be read in. For general account details outside transactional email, prefer the account.get_info action; for product‑wide feature flags, refer to the generic feature‑flag lookup capability.",
       "status": "observed",
       "destructive": false
     },
@@ -131,7 +131,7 @@
       "id": "attributes.get_rules",
       "module": "attributes",
       "name": "Get attribute rules",
-      "description": "Call this when you need to retrieve the validation and system‑rule metadata for a specific CRM object type (e.g., deals, contacts, companies). Use the \"attributes.update_rule\" action instead if you need to modify these rules.",
+      "description": "Call this when you need to retrieve the validation and system‑rule metadata for a specific CRM object type (e.g., deals, contacts, companies). If you need to modify these rules, use the action that updates a rule.",
       "status": "observed",
       "destructive": false
     },
@@ -147,7 +147,7 @@
       "id": "automation.get_deferred_count",
       "module": "automation",
       "name": "Get deferred email count",
-      "description": "Call this when you need to retrieve the current number of deferred emails and related processing status for automation workflows, as shown in the sidebar of the Advanced Automation UI. Use the automation.get_rate_limit_status action instead if you only need rate‑limit information without the deferred count.",
+      "description": "Call this when you need to retrieve the current number of deferred emails and related processing status for automation workflows, as shown in the sidebar of the Advanced Automation UI. Use the automation.get_processing_details action if you only need processing details without the deferred count.",
       "status": "observed",
       "destructive": false
     },
@@ -155,7 +155,7 @@
       "id": "automation.get_meta_info",
       "module": "automation",
       "name": "Get Automation Meta Info",
-      "description": "Call this when you need to retrieve the current user's automation configuration, privileges, and feature flags (e.g., object‑based workflow, classic editor status, premium status). Use a different action such as automation.update_settings if you need to modify any of these values.",
+      "description": "Call this when you need to retrieve the current user's automation configuration, privileges, and feature flags (e.g., object‑based workflow, classic editor status, premium status). Use an action that updates automation settings if you need to modify any of these values.",
       "status": "observed",
       "destructive": false
     },
@@ -163,7 +163,7 @@
       "id": "automation.get_processing_details",
       "module": "automation",
       "name": "Get processing details",
-      "description": "Call this when you need to retrieve the current processing status, pending counts, and rate limits of the automation engine. Use a summary endpoint (e.g., automation.get_automation_summary) instead if you only need high‑level automation information.",
+      "description": "Call this when you need to retrieve the current processing status, pending counts, and rate limits of the automation engine. Use automation.get_meta_info instead if you only need high‑level automation information.",
       "status": "observed",
       "destructive": false
     },
@@ -195,7 +195,7 @@
       "id": "branding.get_brand",
       "module": "branding",
       "name": "Get brand assets",
-      "description": "Call this when you need the account's stored brand identity — the brand website, name, logo, colour palette and fonts — before generating or styling content such as a campaign or template so it matches the account's branding. The response carries a `branding.fetched` flag; when it is false the brand has not been scraped yet and the fields are empty, so treat the palette and fonts as unavailable rather than as deliberate empty values. This is read-only: use the account settings action to read general account details, and the editor actions to apply styling to a specific design.",
+      "description": "Call this when you need the account's stored brand identity — the brand website, name, logo, colour palette and fonts — before generating or styling content such as a campaign or template so it matches the account's branding. The response includes a flag indicating whether the brand has already been scraped; when the flag is false the brand fields are empty, so treat the palette and fonts as unavailable rather than as deliberately empty values. This operation is read‑only: use the account‑settings capability to read general account details, and the editor capabilities to apply styling to a specific design.",
       "status": "observed",
       "destructive": false
     },
@@ -227,7 +227,7 @@
       "id": "campaigns.get_config",
       "module": "campaigns",
       "name": "Get campaign configuration",
-      "description": "Call this when you need to retrieve the current account's email‑campaign configuration, such as organization name, plan limits, authorized actions, and remaining email credits. Use the \"campaigns.list\" action instead when you need to fetch the list of actual campaigns rather than the configuration.",
+      "description": "Call this when you need to retrieve the current account's email‑campaign configuration, such as organization name, plan limits, authorized actions, and remaining email credits. Use the campaigns.list_campaigns action instead when you need to fetch the list of actual campaigns rather than the configuration.",
       "status": "observed",
       "destructive": false
     },
@@ -299,7 +299,7 @@
       "id": "campaigns.list_tags",
       "module": "campaigns",
       "name": "List tags",
-      "description": "Call this when you need to retrieve the collection of tags displayed on the campaign listing page. Use the contacts.list_tags action instead if you need tags associated with contacts rather than campaigns.",
+      "description": "Call this when you need to retrieve the collection of tags displayed on the campaign listing page. Use the capability that lists tags associated with contacts rather than campaigns.",
       "status": "observed",
       "destructive": false
     },
@@ -387,7 +387,7 @@
       "id": "companies.list_attributes",
       "module": "companies",
       "name": "List company attributes",
-      "description": "Call this when you need to retrieve the definitions of custom attributes that exist for company objects, for example to display them in a UI or to validate data before creating or updating a company. Use the create attribute action (companies.create_attribute) if you need to add a new attribute instead.",
+      "description": "Call this when you need to retrieve the definitions of custom attributes that exist for company objects, for example to display them in a UI or to validate data before creating or updating a company. Use the action that adds a new custom attribute for a company if you need to add a new attribute instead.",
       "status": "observed",
       "destructive": false
     },
@@ -427,7 +427,7 @@
       "id": "contacts.bulk_modify_list",
       "module": "contacts",
       "name": "Bulk modify contacts list",
-      "description": "Call this when you need to apply a bulk action (e.g., delete contacts from a list) to a set of contacts selected in the UI. Use the single‑contact endpoint (contacts.remove_contact_from_list) when you only need to modify one contact, as it is more appropriate for that case.",
+      "description": "Call this when you need to apply a bulk action (e.g., delete contacts from a list) to a set of contacts selected in the UI. Use the single‑contact endpoint (the action that removes a single contact from a list) when you only need to modify one contact, as it is more appropriate for that case.",
       "status": "observed",
       "destructive": true
     },
@@ -467,7 +467,7 @@
       "id": "contacts.export",
       "module": "contacts",
       "name": "Export contacts",
-      "description": "Call this when you need to generate a CSV/Excel export of one or more contacts, optionally including subscription status and internal metadata. Use the neighbouring action \"contacts.get_export_status\" to check the export progress or retrieve the file once it is ready, instead of calling export again.",
+      "description": "Call this when you need to generate a CSV/Excel export of one or more contacts, optionally including subscription status and internal metadata. Use the action that checks export progress and retrieves the file once it is ready, instead of calling export again.",
       "status": "observed",
       "destructive": false
     },
@@ -491,7 +491,7 @@
       "id": "contacts.get_backend_settings",
       "module": "contacts",
       "name": "Get backend settings",
-      "description": "Call this when you need to retrieve the organization configuration and the current account details displayed in the contacts UI. Use a more specific endpoint such as \"contacts.get_current_account\" if you only require the current account information without the organization config.",
+      "description": "Call this when you need to retrieve the organization configuration and the current account details displayed in the contacts UI. Use a more specific endpoint such as contacts.get_crm_account_settings if you only require the current account information without the organization config.",
       "status": "observed",
       "destructive": false
     },
@@ -539,7 +539,7 @@
       "id": "contacts.get_crm_account_settings",
       "module": "contacts",
       "name": "Get CRM account settings",
-      "description": "Call this when you need to retrieve the CRM account field mapping settings for a specific contact. Use the neighboring action contacts.update_crm_account_settings if you need to modify those settings instead.",
+      "description": "Call this when you need to retrieve the CRM account field mapping settings for a specific contact. Use the action that updates those settings instead.",
       "status": "observed",
       "destructive": false
     },
@@ -611,7 +611,7 @@
       "id": "contacts.get_preview",
       "module": "contacts",
       "name": "Preview contacts",
-      "description": "Call this when you need a quick view of specific contacts' basic information without loading full details. Provide one or more contact IDs to retrieve their preview data. Use the full contact retrieval action (e.g., contacts.get) when you need all contact attributes or to modify them.",
+      "description": "Call this when you need a quick view of specific contacts' basic information without loading full details. Provide one or more contact IDs to retrieve their preview data. Use the full contact retrieval action (e.g., contacts.get_contact) when you need all contact attributes or to modify them.",
       "status": "observed",
       "destructive": false
     },
@@ -691,7 +691,7 @@
       "id": "contacts.suggest_mapping_from_file",
       "module": "contacts",
       "name": "Suggest mapping from file",
-      "description": "Call this when you have a CSV file of contacts and want the system to propose how its columns map to contact attributes before performing an import. Use the contacts.import_contacts action instead if you are ready to actually import the data.",
+      "description": "Call this when you have a CSV file of contacts and want the system to propose how its columns map to contact attributes before performing an import. Use the contacts.analyze_import_file action instead if you are ready to actually import the data.",
       "status": "observed",
       "destructive": false
     },
@@ -747,7 +747,7 @@
       "id": "crm.get_account_settings",
       "module": "crm",
       "name": "Get account settings",
-      "description": "Call this when you need to read the current CRM account configuration such as notification preferences, attribute list views, and sales stepper flags. Use the neighboring action \"crm.update_account_settings\" if you need to modify any of these settings instead.",
+      "description": "Call this when you need to read the current CRM account configuration such as notification preferences, attribute list views, and sales stepper flags. Use the action crm.update_attribute_group_view if you need to modify any of these settings instead.",
       "status": "observed",
       "destructive": false
     },
@@ -771,7 +771,7 @@
       "id": "crm.get_organization_info",
       "module": "crm",
       "name": "Get organization info",
-      "description": "Call this when you need to retrieve the list of activated applications and the current feature toggles for the organization. Use the \"crm.update_organization_settings\" action instead if you need to modify these settings.",
+      "description": "Call this when you need to retrieve the list of activated applications and the current feature toggles for the organization. Use the appropriate action to modify these settings (for example, the action that updates organization settings) if you need to change them.",
       "status": "observed",
       "destructive": false
     },
@@ -803,7 +803,7 @@
       "id": "dashboard.get_information",
       "module": "dashboard",
       "name": "Get dashboard information",
-      "description": "Call this when you need to retrieve the current user's dashboard overview, including account details, plan, activated applications, and feature flags. Use a more specific endpoint such as \"account.get_details\" if you only need basic account metadata without the full dashboard payload.",
+      "description": "Call this when you need to retrieve the current user's dashboard overview, including account details, plan, activated applications, and feature flags. Use a more specific endpoint such as the action that provides basic account metadata if you only need that information without the full dashboard payload.",
       "status": "observed",
       "destructive": false
     },
@@ -819,7 +819,7 @@
       "id": "deals.list",
       "module": "deals",
       "name": "List deals",
-      "description": "Call this when you need to retrieve the list of deals linked to a specific contact. Use the \"deals.get\" action instead when you need details of a single deal, or \"deals.create\" when you need to add a new deal.",
+      "description": "Call this when you need to retrieve the list of deals linked to a specific contact. Use the action that fetches a single deal’s details when you need information about one deal, or the action that creates a new deal when you need to add one.",
       "status": "observed",
       "destructive": false
     },
@@ -843,7 +843,7 @@
       "id": "ecommerce.get_onboarding",
       "module": "ecommerce",
       "name": "Get ecommerce onboarding status",
-      "description": "Call this when you need to retrieve the current onboarding status of the ecommerce integration for the account, including whether a store is connected and if the account is eligible for onboarding. Use the ecommerce.start_onboarding action instead when you need to initiate the onboarding process.",
+      "description": "Call this when you need to retrieve the current onboarding status of the ecommerce integration for the account, including whether a store is connected and if the account is eligible for onboarding. Use the action that initiates onboarding when you need to start the onboarding process.",
       "status": "observed",
       "destructive": false
     },
@@ -995,7 +995,7 @@
       "id": "events.list",
       "module": "events",
       "name": "List events",
-      "description": "Call this when you need to retrieve a paginated list of events for a given time range, date, and filter criteria. Use the \"events.export\" action instead if you need a downloadable export of all matching events rather than a limited, sortable view.",
+      "description": "Call this when you need to retrieve a paginated list of events for a given time range, date, and filter criteria. Use the events.list_dates action instead if you need a list of the dates that contain events rather than a detailed, sortable view.",
       "status": "observed",
       "destructive": false
     },
@@ -1003,7 +1003,7 @@
       "id": "events.list_dates",
       "module": "events",
       "name": "List event dates",
-      "description": "Call this when you need to retrieve the calendar dates on which events are scheduled within a specific date range and timezone. Use the broader \"events.list_events\" action if you need full event details rather than just the dates.",
+      "description": "Call this when you need to retrieve the calendar dates on which events are scheduled within a specific date range and timezone. Use the broader \"events.list\" action if you need full event details rather than just the dates.",
       "status": "observed",
       "destructive": false
     },
@@ -1059,7 +1059,7 @@
       "id": "integrations.list_integrations",
       "module": "integrations",
       "name": "List integrations",
-      "description": "Call this when you need to retrieve the collection of integrations available for a specific UI location, such as the contact details view. Use a more specific integration‑detail action (e.g., integrations.get_integration_details) if you need information about a single integration rather than the list.",
+      "description": "Call this when you need to retrieve the collection of integrations available for a specific UI location, such as the contact details view. Use a more specific action that retrieves details for a single integration if you need information about just one integration rather than the full list.",
       "status": "observed",
       "destructive": false
     },
@@ -1075,7 +1075,7 @@
       "id": "lists.get_folders",
       "module": "lists",
       "name": "Get list folders",
-      "description": "Call this when you need to retrieve the folders that contain contact lists, including their IDs, names, list counts, and default status. Use the action to populate folder selection UI. If you need to create a new folder instead, use lists.create_folder.",
+      "description": "Call this when you need to retrieve the folders that contain contact lists, including their IDs, names, list counts, and default status. Use the action to populate folder selection UI. If you need to create a new folder instead, use the action that creates a list (lists.create_list).",
       "status": "observed",
       "destructive": false
     },
@@ -1139,7 +1139,7 @@
       "id": "marketing_campaign.get_features",
       "module": "marketing_campaign",
       "name": "Get feature toggles",
-      "description": "Call this when you need to retrieve the current set of feature flags enabled for the client in the Marketing Campaign module. Use the (hypothetical) \"marketing_campaign.update_features\" action if you need to modify any of these flags instead.",
+      "description": "Call this when you need to retrieve the current set of feature flags enabled for the client in the Marketing Campaign module. To change these flags, use the action that updates the client configuration or consult the related documentation.",
       "status": "observed",
       "destructive": false
     },
@@ -1155,7 +1155,7 @@
       "id": "meetings.get_expert_user",
       "module": "meetings",
       "name": "Get expert user",
-      "description": "Call this when you need to retrieve the expert user profile associated with the current Brevo account. Use the \"meetings.list_offers\" action instead if you need a list of meeting offers rather than the expert user details.",
+      "description": "Call this when you need to retrieve the expert user profile associated with the current Brevo account. Use the action that lists meeting offers if you need a list of meeting offers rather than the expert user details.",
       "status": "observed",
       "destructive": false
     },
@@ -1203,7 +1203,7 @@
       "id": "objects.get_plan",
       "module": "objects",
       "name": "Get objects plan",
-      "description": "Call this when you need to retrieve the current plan limits and feature flags for the custom objects module in the account. Use the object‑listing action (e.g., objects.list_objects) when you need to work with the actual objects instead of the plan information.",
+      "description": "Call this when you need to retrieve the current plan limits and feature flags for the custom objects module in the account. Use the object‑listing action (i.e., the action that lists objects) when you need to work with the actual objects instead of the plan information.",
       "status": "observed",
       "destructive": false
     },
@@ -1227,7 +1227,7 @@
       "id": "organizations.get_details",
       "module": "organizations",
       "name": "Get organization details",
-      "description": "Call this when you need to retrieve basic information about the current Brevo organization, such as its ID, client ID, type, and status flags. Use a more specific action like \"account.get_subscription\" if you only need subscription or pricing details instead.",
+      "description": "Call this when you need to retrieve basic information about the current Brevo organization, such as its ID, client ID, type, and status flags. Use a more specific action like organizations.get_features_and_channels if you only need subscription or pricing details instead.",
       "status": "observed",
       "destructive": false
     },
@@ -1243,7 +1243,7 @@
       "id": "phone.get_auth",
       "module": "phone",
       "name": "Get authentication info",
-      "description": "Call this when you need to retrieve the current organization's authentication details and onboarding status during phone provisioning. Use the phone.start_onboarding action instead if you need to initiate or continue the onboarding flow.",
+      "description": "Call this when you need to retrieve the current organization's authentication details and onboarding status during phone provisioning. Use the action that starts the onboarding flow if you need to initiate or continue onboarding.",
       "status": "observed",
       "destructive": false
     },
@@ -1291,7 +1291,7 @@
       "id": "scores.get_history",
       "module": "scores",
       "name": "Get scores history",
-      "description": "Call this when you need to retrieve the historical scoring data for the current organization. If you only need the latest score, use the \"scores.get_current\" action instead.",
+      "description": "Call this when you need to retrieve the historical scoring data for the current organization. For a single‑day score, use the scores.get_days action instead.",
       "status": "observed",
       "destructive": false
     },
@@ -1299,7 +1299,7 @@
       "id": "security.list_authorized_ips",
       "module": "security",
       "name": "List authorized IPs",
-      "description": "Call this when you need to retrieve the current list of IP addresses authorized for the account. If you need to add, update, or remove an IP address, use the corresponding security.add_authorized_ip or security.remove_authorized_ip actions instead.",
+      "description": "Call this when you need to retrieve the current list of IP addresses authorized for the account. If you need to add, update, or remove an IP address, use the actions that manage authorized IPs instead.",
       "status": "observed",
       "destructive": false
     },
@@ -1339,7 +1339,7 @@
       "id": "segments.get_lists",
       "module": "segments",
       "name": "Get lists",
-      "description": "Call this when you need to retrieve the contact lists grouped by folder as displayed in the Contacts → List view. Use the action to create a new list (e.g., segments.create_list) instead when you need to add a list rather than just read them.",
+      "description": "Call this when you need to retrieve the contact lists grouped by folder as displayed in the Contacts → List view. Use the action that creates a segment (segments.create_segment) instead when you need to add a list rather than just read them.",
       "status": "observed",
       "destructive": false
     },
@@ -1395,7 +1395,7 @@
       "id": "segments.query_segment_contacts",
       "module": "segments",
       "name": "Query segment contacts",
-      "description": "Call this when you need the actual contact rows that a segment filter resolves to — either to preview who an unsaved segment definition would match before saving it, or to page through the members of a filter you already hold. Pass the filter as `fe_query` and read contacts from `data`; the matched total comes back in `metadata.contact_count`. Use segments.get_segment_contact_count instead when you only need the size of a segment and not the rows, and use the contacts listing action when you want all contacts or the members of a plain list rather than a filter-defined segment.",
+      "description": "Call this when you need the actual contact rows that a segment filter resolves to — either to preview who an unsaved segment definition would match before saving it, or to page through the members of a filter you already hold. Pass the filter as `fe_query` and read contacts from `data`; the matched total comes back in `metadata.contact_count`. Use segments.get_count when you only need the size of a segment and not the rows, and use segments.query_contacts when you want all contacts or the members of a plain list rather than a filter-defined segment.",
       "status": "observed",
       "destructive": false
     },
@@ -1451,7 +1451,7 @@
       "id": "smtp.get_keys",
       "module": "smtp",
       "name": "Get SMTP keys",
-      "description": "Call this when you need to retrieve the current SMTP relay configuration and any existing SMTP keys for the account. Use a separate action (e.g., smtp.create_key or smtp.update_key) if you need to add or modify keys instead.",
+      "description": "Call this when you need to retrieve the current SMTP relay configuration and any existing SMTP keys for the account. Use a separate action that creates or updates keys if you need to add or modify keys instead.",
       "status": "observed",
       "destructive": false
     },
@@ -1467,7 +1467,7 @@
       "id": "tasks.list_tasktypes",
       "module": "tasks",
       "name": "List task types",
-      "description": "Call this when you need to retrieve the list of predefined task types (e.g., Email, Call, Meeting) that can be used when creating or filtering tasks. Use tasks.create_task if you need to create a new task instead.",
+      "description": "Call this when you need to retrieve the list of predefined task types (e.g., Email, Call, Meeting) that can be used when creating or filtering tasks. If you need to create a new task, use the action that creates tasks.",
       "status": "observed",
       "destructive": false
     },
@@ -1555,7 +1555,7 @@
       "id": "views.list",
       "module": "views",
       "name": "List views",
-      "description": "Call this when you need to retrieve the collection of saved views for a specific object type (e.g., contacts). Use a more specific action such as \"views.get\" if you need details of a single view instead of the full list.",
+      "description": "Call this when you need to retrieve the collection of saved views for a specific object type (e.g., contacts). Use a more specific action such as \"views.get_visible_listing\" if you need details of a single view rather than the full list.",
       "status": "observed",
       "destructive": false
     },
@@ -1579,7 +1579,7 @@
       "id": "widgets.list",
       "module": "widgets",
       "name": "List homepage widgets",
-      "description": "Call this when you need to retrieve the collection of widgets that are available on the homepage for display or configuration. Use a specific widget‑detail action (e.g., widgets.get) if you only need information about a single widget.",
+      "description": "Call this when you need to retrieve the collection of widgets that are available on the homepage for display or configuration. Use the action that fetches details for an individual widget if you only need information about a single widget.",
       "status": "observed",
       "destructive": false
     }

@@ -2,7 +2,7 @@
   "id": "dashboard.get_information",
   "module": "dashboard",
   "name": "Get dashboard information",
-  "description": "Call this when you need to retrieve the current user's dashboard overview, including account details, plan, activated applications, and feature flags. Use a more specific endpoint such as \"account.get_details\" if you only need basic account metadata without the full dashboard payload.",
+  "description": "Call this when you need to retrieve the current user's dashboard overview, including account details, plan, activated applications, and feature flags. Use a more specific endpoint such as the action that provides basic account metadata if you only need that information without the full dashboard payload.",
   "preconditions": [
     "The user must be authenticated."
   ],

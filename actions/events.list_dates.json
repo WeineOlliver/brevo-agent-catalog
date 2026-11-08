@@ -2,7 +2,7 @@
   "id": "events.list_dates",
   "module": "events",
   "name": "List event dates",
-  "description": "Call this when you need to retrieve the calendar dates on which events are scheduled within a specific date range and timezone. Use the broader \"events.list_events\" action if you need full event details rather than just the dates.",
+  "description": "Call this when you need to retrieve the calendar dates on which events are scheduled within a specific date range and timezone. Use the broader \"events.list\" action if you need full event details rather than just the dates.",
   "preconditions": [],
   "inputs": {
     "type": "object",

@@ -2,7 +2,7 @@
   "id": "account.get_settings",
   "module": "account",
   "name": "Get account settings",
-  "description": "Call this when you need to read the current account configuration such as timezone, date format, locale and notification preferences. If you need to change any of these values, use the neighbouring action `account.update_settings` instead.",
+  "description": "Call this when you need to read the current account configuration such as timezone, date format, locale and notification preferences. If you need to change any of these values, use the action that updates account settings instead.",
   "preconditions": [],
   "inputs": {
     "type": "object",

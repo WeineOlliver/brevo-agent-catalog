@@ -2,7 +2,7 @@
   "id": "contacts.get_backend_settings",
   "module": "contacts",
   "name": "Get backend settings",
-  "description": "Call this when you need to retrieve the organization configuration and the current account details displayed in the contacts UI. Use a more specific endpoint such as \"contacts.get_current_account\" if you only require the current account information without the organization config.",
+  "description": "Call this when you need to retrieve the organization configuration and the current account details displayed in the contacts UI. Use a more specific endpoint such as contacts.get_crm_account_settings if you only require the current account information without the organization config.",
   "preconditions": [],
   "inputs": {
     "type": "object",

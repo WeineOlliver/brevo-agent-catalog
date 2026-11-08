@@ -2,7 +2,7 @@
   "id": "phone.get_auth",
   "module": "phone",
   "name": "Get authentication info",
-  "description": "Call this when you need to retrieve the current organization's authentication details and onboarding status during phone provisioning. Use the phone.start_onboarding action instead if you need to initiate or continue the onboarding flow.",
+  "description": "Call this when you need to retrieve the current organization's authentication details and onboarding status during phone provisioning. Use the action that starts the onboarding flow if you need to initiate or continue onboarding.",
   "preconditions": [],
   "inputs": {
     "type": "object",

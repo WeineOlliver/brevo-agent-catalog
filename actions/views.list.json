@@ -2,7 +2,7 @@
   "id": "views.list",
   "module": "views",
   "name": "List views",
-  "description": "Call this when you need to retrieve the collection of saved views for a specific object type (e.g., contacts). Use a more specific action such as \"views.get\" if you need details of a single view instead of the full list.",
+  "description": "Call this when you need to retrieve the collection of saved views for a specific object type (e.g., contacts). Use a more specific action such as \"views.get_visible_listing\" if you need details of a single view rather than the full list.",
   "preconditions": [],
   "inputs": {
     "type": "object",

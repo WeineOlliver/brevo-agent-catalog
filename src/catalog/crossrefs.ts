@@ -4,7 +4,8 @@
  * The extraction prompt asks each description to point at the neighbouring
  * action to use instead, and each candidate is drafted alone, with no list of
  * which ids exist. So the model guessed: the first full run produced 41
- * distinct invented ids, cited 42 times, and every one is a dead end for an
+ * distinct invented ids, cited 42 times (now cleared by
+ * `pnpm fix:crossrefs`), and every one was a dead end for an
  * agent that reads "Use `contacts.import_contacts` instead" and looks it up.
  *
  * A naive scan said 47 and 52. The difference is this module's module-prefix
@@ -70,4 +71,38 @@ export function textOf(action: Record<string, unknown>): string {
   push(action.side_effects);
   push(action.name);
   return parts.join('\n');
+}
+
+/** The only fields a cross-reference rewrite is allowed to change. */
+export const REWRITABLE_FIELDS = ['description', 'preconditions', 'side_effects'] as const;
+
+/**
+ * An entry with its prose replaced, and nothing else touched.
+ *
+ * The safety property of the cross-reference fix lives here rather than in a
+ * comment, so a test can hold it. Re-drafting a whole entry would have been the
+ * obvious way to fix invented ids, and it would have let the model choose a new
+ * `id` — leaving an orphan file beside the old one — and overwrite
+ * `verification`, quietly un-verifying an action that had been executed against
+ * the live account. Neither is a price worth paying to fix a sentence.
+ *
+ * So this copies the entry and takes exactly three fields from the rewrite. A
+ * field the rewrite omits, or supplies with the wrong type, keeps its original
+ * value: a malformed answer degrades to no change rather than to a wrong entry.
+ */
+export function rewriteProse(
+  action: Record<string, unknown>,
+  rewrite: Record<string, unknown>,
+): Record<string, unknown> {
+  return {
+    ...action,
+    description:
+      typeof rewrite.description === 'string' && rewrite.description.length > 0
+        ? rewrite.description
+        : action.description,
+    preconditions: Array.isArray(rewrite.preconditions)
+      ? rewrite.preconditions
+      : action.preconditions,
+    side_effects: Array.isArray(rewrite.side_effects) ? rewrite.side_effects : action.side_effects,
+  };
 }

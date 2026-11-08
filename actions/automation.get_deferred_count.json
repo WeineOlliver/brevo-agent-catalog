@@ -2,7 +2,7 @@
   "id": "automation.get_deferred_count",
   "module": "automation",
   "name": "Get deferred email count",
-  "description": "Call this when you need to retrieve the current number of deferred emails and related processing status for automation workflows, as shown in the sidebar of the Advanced Automation UI. Use the automation.get_rate_limit_status action instead if you only need rate‑limit information without the deferred count.",
+  "description": "Call this when you need to retrieve the current number of deferred emails and related processing status for automation workflows, as shown in the sidebar of the Advanced Automation UI. Use the automation.get_processing_details action if you only need processing details without the deferred count.",
   "preconditions": [],
   "inputs": {
     "type": "object",

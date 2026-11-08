@@ -2,7 +2,7 @@
   "id": "objects.get_plan",
   "module": "objects",
   "name": "Get objects plan",
-  "description": "Call this when you need to retrieve the current plan limits and feature flags for the custom objects module in the account. Use the object‑listing action (e.g., objects.list_objects) when you need to work with the actual objects instead of the plan information.",
+  "description": "Call this when you need to retrieve the current plan limits and feature flags for the custom objects module in the account. Use the object‑listing action (i.e., the action that lists objects) when you need to work with the actual objects instead of the plan information.",
   "preconditions": [],
   "inputs": {
     "type": "object",

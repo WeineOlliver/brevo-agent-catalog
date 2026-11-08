@@ -2,7 +2,7 @@
   "id": "marketing_campaign.get_features",
   "module": "marketing_campaign",
   "name": "Get feature toggles",
-  "description": "Call this when you need to retrieve the current set of feature flags enabled for the client in the Marketing Campaign module. Use the (hypothetical) \"marketing_campaign.update_features\" action if you need to modify any of these flags instead.",
+  "description": "Call this when you need to retrieve the current set of feature flags enabled for the client in the Marketing Campaign module. To change these flags, use the action that updates the client configuration or consult the related documentation.",
   "preconditions": [],
   "inputs": {
     "type": "object",

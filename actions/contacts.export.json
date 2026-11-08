@@ -2,7 +2,7 @@
   "id": "contacts.export",
   "module": "contacts",
   "name": "Export contacts",
-  "description": "Call this when you need to generate a CSV/Excel export of one or more contacts, optionally including subscription status and internal metadata. Use the neighbouring action \"contacts.get_export_status\" to check the export progress or retrieve the file once it is ready, instead of calling export again.",
+  "description": "Call this when you need to generate a CSV/Excel export of one or more contacts, optionally including subscription status and internal metadata. Use the action that checks export progress and retrieves the file once it is ready, instead of calling export again.",
   "preconditions": [
     "The contacts referenced by the provided ids must exist."
   ],

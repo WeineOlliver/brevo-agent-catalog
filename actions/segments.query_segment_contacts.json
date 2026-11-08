@@ -2,7 +2,7 @@
   "id": "segments.query_segment_contacts",
   "module": "segments",
   "name": "Query segment contacts",
-  "description": "Call this when you need the actual contact rows that a segment filter resolves to — either to preview who an unsaved segment definition would match before saving it, or to page through the members of a filter you already hold. Pass the filter as `fe_query` and read contacts from `data`; the matched total comes back in `metadata.contact_count`. Use segments.get_segment_contact_count instead when you only need the size of a segment and not the rows, and use the contacts listing action when you want all contacts or the members of a plain list rather than a filter-defined segment.",
+  "description": "Call this when you need the actual contact rows that a segment filter resolves to — either to preview who an unsaved segment definition would match before saving it, or to page through the members of a filter you already hold. Pass the filter as `fe_query` and read contacts from `data`; the matched total comes back in `metadata.contact_count`. Use segments.get_count when you only need the size of a segment and not the rows, and use segments.query_contacts when you want all contacts or the members of a plain list rather than a filter-defined segment.",
   "preconditions": [
     "Any list, attribute, or segment referenced inside fe_query must already exist on the account.",
     "The session must be authenticated against the Brevo web app (this is an internal web-app endpoint, not part of the public API)."

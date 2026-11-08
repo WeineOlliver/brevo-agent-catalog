@@ -14,19 +14,21 @@ import { validateAction } from '../src/catalog/validate.js';
 import { findDanglingRefs, textOf } from '../src/catalog/crossrefs.js';
 
 /**
- * Dangling cross-references the catalog is known to carry.
+ * Dangling cross-references the catalog is allowed to carry: none.
  *
- * This number may only ever go DOWN. It is not a target and not an allowance:
- * it is a ratchet, so a defect that is already measured cannot grow back while
- * nobody is looking. The schema cannot catch these, because an invented id is
- * a well-formed string in a field allowed to hold any text.
+ * This started at 42 and is a ratchet -- it may only ever go DOWN, so a defect
+ * that has been measured cannot grow back while nobody is looking. It is now at
+ * zero, which makes it an ordinary gate rather than a tolerance: any entry that
+ * names an action the catalog does not have fails the build.
  *
- * The cause was the extraction prompt asking each description to name the
- * neighbouring action by id while drafting that entry in isolation, with no way
- * to know which ids exist. The prompt now asks for the neighbour by what it
- * does, so re-drafting is what actually clears this.
+ * The schema cannot catch these, because an invented id is a well-formed string
+ * in a field allowed to hold any text. The cause was the extraction prompt
+ * asking each description to name the neighbouring action by id while drafting
+ * that entry in isolation, with no way to know which ids exist. Two changes
+ * closed it: the prompt now asks for the neighbour by what it does, and
+ * `pnpm fix:crossrefs` rewrote the 39 entries already written down.
  */
-const KNOWN_DANGLING_CITATIONS = 42;
+const KNOWN_DANGLING_CITATIONS = 0;
 
 const config = loadConfig();
 const dir = config.paths.actions;

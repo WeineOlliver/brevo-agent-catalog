@@ -2,7 +2,7 @@
   "id": "ecommerce.get_onboarding",
   "module": "ecommerce",
   "name": "Get ecommerce onboarding status",
-  "description": "Call this when you need to retrieve the current onboarding status of the ecommerce integration for the account, including whether a store is connected and if the account is eligible for onboarding. Use the ecommerce.start_onboarding action instead when you need to initiate the onboarding process.",
+  "description": "Call this when you need to retrieve the current onboarding status of the ecommerce integration for the account, including whether a store is connected and if the account is eligible for onboarding. Use the action that initiates onboarding when you need to start the onboarding process.",
   "preconditions": [],
   "inputs": {
     "type": "object",

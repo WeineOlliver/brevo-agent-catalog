@@ -2,7 +2,7 @@
   "id": "automation.get_processing_details",
   "module": "automation",
   "name": "Get processing details",
-  "description": "Call this when you need to retrieve the current processing status, pending counts, and rate limits of the automation engine. Use a summary endpoint (e.g., automation.get_automation_summary) instead if you only need high‑level automation information.",
+  "description": "Call this when you need to retrieve the current processing status, pending counts, and rate limits of the automation engine. Use automation.get_meta_info instead if you only need high‑level automation information.",
   "preconditions": [],
   "inputs": {
     "type": "object",

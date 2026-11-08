@@ -2,7 +2,7 @@
   "id": "automation.get_meta_info",
   "module": "automation",
   "name": "Get Automation Meta Info",
-  "description": "Call this when you need to retrieve the current user's automation configuration, privileges, and feature flags (e.g., object‑based workflow, classic editor status, premium status). Use a different action such as automation.update_settings if you need to modify any of these values.",
+  "description": "Call this when you need to retrieve the current user's automation configuration, privileges, and feature flags (e.g., object‑based workflow, classic editor status, premium status). Use an action that updates automation settings if you need to modify any of these values.",
   "preconditions": [],
   "inputs": {
     "type": "object",

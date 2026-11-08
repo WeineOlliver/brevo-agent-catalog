@@ -2,7 +2,7 @@
   "id": "account.get_account",
   "module": "account",
   "name": "Get account information",
-  "description": "Call this when you need to retrieve the organization’s account details such as plan type, pricing version, and analytics status. Use an update action (e.g., account.update_settings) if you need to modify these settings instead.",
+  "description": "Call this when you need to retrieve the organization’s account details such as plan type, pricing version, and analytics status. Use an action that updates the account’s settings if you need to modify these settings instead.",
   "preconditions": [],
   "inputs": {
     "type": "object",

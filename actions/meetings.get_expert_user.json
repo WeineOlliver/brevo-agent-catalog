@@ -2,7 +2,7 @@
   "id": "meetings.get_expert_user",
   "module": "meetings",
   "name": "Get expert user",
-  "description": "Call this when you need to retrieve the expert user profile associated with the current Brevo account. Use the \"meetings.list_offers\" action instead if you need a list of meeting offers rather than the expert user details.",
+  "description": "Call this when you need to retrieve the expert user profile associated with the current Brevo account. Use the action that lists meeting offers if you need a list of meeting offers rather than the expert user details.",
   "preconditions": [],
   "inputs": {
     "type": "object",

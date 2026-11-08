@@ -2,7 +2,7 @@
   "id": "attributes.get_rules",
   "module": "attributes",
   "name": "Get attribute rules",
-  "description": "Call this when you need to retrieve the validation and system‑rule metadata for a specific CRM object type (e.g., deals, contacts, companies). Use the \"attributes.update_rule\" action instead if you need to modify these rules.",
+  "description": "Call this when you need to retrieve the validation and system‑rule metadata for a specific CRM object type (e.g., deals, contacts, companies). If you need to modify these rules, use the action that updates a rule.",
   "preconditions": [
     "The object type (e.g., deals, contacts, companies) must be a valid CRM entity."
   ],

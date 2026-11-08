@@ -2,7 +2,7 @@
   "id": "events.list",
   "module": "events",
   "name": "List events",
-  "description": "Call this when you need to retrieve a paginated list of events for a given time range, date, and filter criteria. Use the \"events.export\" action instead if you need a downloadable export of all matching events rather than a limited, sortable view.",
+  "description": "Call this when you need to retrieve a paginated list of events for a given time range, date, and filter criteria. Use the events.list_dates action instead if you need a list of the dates that contain events rather than a detailed, sortable view.",
   "preconditions": [],
   "inputs": {
     "type": "object",

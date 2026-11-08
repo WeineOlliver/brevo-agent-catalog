@@ -2,7 +2,7 @@
   "id": "companies.list_attributes",
   "module": "companies",
   "name": "List company attributes",
-  "description": "Call this when you need to retrieve the definitions of custom attributes that exist for company objects, for example to display them in a UI or to validate data before creating or updating a company. Use the create attribute action (companies.create_attribute) if you need to add a new attribute instead.",
+  "description": "Call this when you need to retrieve the definitions of custom attributes that exist for company objects, for example to display them in a UI or to validate data before creating or updating a company. Use the action that adds a new custom attribute for a company if you need to add a new attribute instead.",
   "preconditions": [],
   "inputs": {
     "type": "object",

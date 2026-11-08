@@ -2,7 +2,7 @@
   "id": "crm.get_organization_info",
   "module": "crm",
   "name": "Get organization info",
-  "description": "Call this when you need to retrieve the list of activated applications and the current feature toggles for the organization. Use the \"crm.update_organization_settings\" action instead if you need to modify these settings.",
+  "description": "Call this when you need to retrieve the list of activated applications and the current feature toggles for the organization. Use the appropriate action to modify these settings (for example, the action that updates organization settings) if you need to change them.",
   "preconditions": [],
   "inputs": {
     "type": "object",

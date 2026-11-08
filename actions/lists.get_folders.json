@@ -2,7 +2,7 @@
   "id": "lists.get_folders",
   "module": "lists",
   "name": "Get list folders",
-  "description": "Call this when you need to retrieve the folders that contain contact lists, including their IDs, names, list counts, and default status. Use the action to populate folder selection UI. If you need to create a new folder instead, use lists.create_folder.",
+  "description": "Call this when you need to retrieve the folders that contain contact lists, including their IDs, names, list counts, and default status. Use the action to populate folder selection UI. If you need to create a new folder instead, use the action that creates a list (lists.create_list).",
   "preconditions": [],
   "inputs": {
     "type": "object",

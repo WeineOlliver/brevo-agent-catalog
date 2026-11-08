@@ -2,7 +2,7 @@
   "id": "scores.get_history",
   "module": "scores",
   "name": "Get scores history",
-  "description": "Call this when you need to retrieve the historical scoring data for the current organization. If you only need the latest score, use the \"scores.get_current\" action instead.",
+  "description": "Call this when you need to retrieve the historical scoring data for the current organization. For a single‑day score, use the scores.get_days action instead.",
   "preconditions": [],
   "inputs": {
     "type": "object",

@@ -2,7 +2,7 @@
   "id": "segments.get_lists",
   "module": "segments",
   "name": "Get lists",
-  "description": "Call this when you need to retrieve the contact lists grouped by folder as displayed in the Contacts → List view. Use the action to create a new list (e.g., segments.create_list) instead when you need to add a list rather than just read them.",
+  "description": "Call this when you need to retrieve the contact lists grouped by folder as displayed in the Contacts → List view. Use the action that creates a segment (segments.create_segment) instead when you need to add a list rather than just read them.",
   "preconditions": [],
   "inputs": {
     "type": "object",

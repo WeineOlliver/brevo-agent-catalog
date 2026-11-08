@@ -2,7 +2,7 @@
   "id": "campaigns.list_tags",
   "module": "campaigns",
   "name": "List tags",
-  "description": "Call this when you need to retrieve the collection of tags displayed on the campaign listing page. Use the contacts.list_tags action instead if you need tags associated with contacts rather than campaigns.",
+  "description": "Call this when you need to retrieve the collection of tags displayed on the campaign listing page. Use the capability that lists tags associated with contacts rather than campaigns.",
   "preconditions": [],
   "inputs": {
     "type": "object",

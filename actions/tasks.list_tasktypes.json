@@ -2,7 +2,7 @@
   "id": "tasks.list_tasktypes",
   "module": "tasks",
   "name": "List task types",
-  "description": "Call this when you need to retrieve the list of predefined task types (e.g., Email, Call, Meeting) that can be used when creating or filtering tasks. Use tasks.create_task if you need to create a new task instead.",
+  "description": "Call this when you need to retrieve the list of predefined task types (e.g., Email, Call, Meeting) that can be used when creating or filtering tasks. If you need to create a new task, use the action that creates tasks.",
   "preconditions": [],
   "inputs": {
     "type": "object",

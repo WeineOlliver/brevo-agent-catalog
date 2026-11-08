@@ -2,7 +2,7 @@
   "id": "security.list_authorized_ips",
   "module": "security",
   "name": "List authorized IPs",
-  "description": "Call this when you need to retrieve the current list of IP addresses authorized for the account. If you need to add, update, or remove an IP address, use the corresponding security.add_authorized_ip or security.remove_authorized_ip actions instead.",
+  "description": "Call this when you need to retrieve the current list of IP addresses authorized for the account. If you need to add, update, or remove an IP address, use the actions that manage authorized IPs instead.",
   "preconditions": [],
   "inputs": {
     "type": "object",

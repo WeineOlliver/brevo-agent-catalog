@@ -2,7 +2,7 @@
   "id": "crm.get_account_settings",
   "module": "crm",
   "name": "Get account settings",
-  "description": "Call this when you need to read the current CRM account configuration such as notification preferences, attribute list views, and sales stepper flags. Use the neighboring action \"crm.update_account_settings\" if you need to modify any of these settings instead.",
+  "description": "Call this when you need to read the current CRM account configuration such as notification preferences, attribute list views, and sales stepper flags. Use the action crm.update_attribute_group_view if you need to modify any of these settings instead.",
   "preconditions": [],
   "inputs": {
     "type": "object",

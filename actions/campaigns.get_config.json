@@ -2,7 +2,7 @@
   "id": "campaigns.get_config",
   "module": "campaigns",
   "name": "Get campaign configuration",
-  "description": "Call this when you need to retrieve the current account's email‑campaign configuration, such as organization name, plan limits, authorized actions, and remaining email credits. Use the \"campaigns.list\" action instead when you need to fetch the list of actual campaigns rather than the configuration.",
+  "description": "Call this when you need to retrieve the current account's email‑campaign configuration, such as organization name, plan limits, authorized actions, and remaining email credits. Use the campaigns.list_campaigns action instead when you need to fetch the list of actual campaigns rather than the configuration.",
   "preconditions": [],
   "inputs": {
     "type": "object",

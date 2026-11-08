@@ -2,7 +2,7 @@
   "id": "integrations.list_integrations",
   "module": "integrations",
   "name": "List integrations",
-  "description": "Call this when you need to retrieve the collection of integrations available for a specific UI location, such as the contact details view. Use a more specific integration‑detail action (e.g., integrations.get_integration_details) if you need information about a single integration rather than the list.",
+  "description": "Call this when you need to retrieve the collection of integrations available for a specific UI location, such as the contact details view. Use a more specific action that retrieves details for a single integration if you need information about just one integration rather than the full list.",
   "preconditions": [],
   "inputs": {
     "type": "object",

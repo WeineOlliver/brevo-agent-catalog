@@ -2,7 +2,7 @@
   "id": "contacts.bulk_modify_list",
   "module": "contacts",
   "name": "Bulk modify contacts list",
-  "description": "Call this when you need to apply a bulk action (e.g., delete contacts from a list) to a set of contacts selected in the UI. Use the single‑contact endpoint (contacts.remove_contact_from_list) when you only need to modify one contact, as it is more appropriate for that case.",
+  "description": "Call this when you need to apply a bulk action (e.g., delete contacts from a list) to a set of contacts selected in the UI. Use the single‑contact endpoint (the action that removes a single contact from a list) when you only need to modify one contact, as it is more appropriate for that case.",
   "preconditions": [
     "The target contacts must exist.",
     "The list(s) referenced in the request must already exist."
