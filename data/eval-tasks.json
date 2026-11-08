@@ -1,5 +1,5 @@
 {
-  "note": "Tasks are phrased the way a user would phrase them, deliberately NOT reusing the catalog's own description wording — otherwise the eval measures retrieval of its own phrasing rather than comprehension. Expected ids follow the module.verb_object convention and must be reconciled against the real catalog after extraction; `pnpm eval` reports any expected id that is missing from the index rather than scoring it as a miss.",
+  "note": "Tasks are phrased the way a user would phrase them, deliberately NOT reusing the catalog's own description wording — otherwise the eval measures retrieval of its own phrasing rather than comprehension. Expected ids follow the module.verb_object convention and must be reconciled against the real catalog after extraction; `pnpm eval` reports any expected id that is missing from the index rather than scoring it as a miss. Reconciled on 2026-11-07 against the 197-action catalog: 11 ids were renamed to the entry the capture proves answers the prompt, justified one by one in docs/decisions.md. `senders.create_sender` was left pointing at nothing on purpose — the sender-creation flow was never demonstrated, so the eval must keep reporting it as a coverage gap rather than being quietly satisfied by a near-miss.",
   "pairs": [
     "create vs update contact",
     "send now vs schedule a campaign",
@@ -10,7 +10,9 @@
     {
       "prompt": "add john@example.com to my newsletter list",
       "expectedActionId": "contacts.create_contact",
-      "expectedInputs": { "email": "john@example.com" }
+      "expectedInputs": {
+        "email": "john@example.com"
+      }
     },
     {
       "prompt": "john@example.com is already in Brevo but his first name is spelled wrong — fix it to Jonathan",
@@ -22,15 +24,18 @@
     },
     {
       "prompt": "put everyone from the Black Friday list into the VIP list too",
-      "expectedActionId": "lists.add_contacts_to_list"
+      "expectedActionId": "contacts.bulk_modify_list"
     },
     {
       "prompt": "take maria@example.com off the Black Friday list but keep her in Brevo",
-      "expectedActionId": "lists.remove_contact_from_list"
+      "expectedActionId": "contacts.update_contact",
+      "acceptableActionIds": [
+        "contacts.bulk_modify_list"
+      ]
     },
     {
       "prompt": "maria@example.com asked to stop receiving everything from us",
-      "expectedActionId": "contacts.unsubscribe_contact"
+      "expectedActionId": "contacts.update_contact"
     },
     {
       "prompt": "remove maria@example.com from Brevo entirely, she exercised her right to erasure",
@@ -38,11 +43,11 @@
     },
     {
       "prompt": "start a new email blast for the spring sale",
-      "expectedActionId": "campaigns.create_email_campaign"
+      "expectedActionId": "email_campaigns.create_regular"
     },
     {
       "prompt": "the spring sale email is ready — push it out to everyone right now",
-      "expectedActionId": "campaigns.send_campaign"
+      "expectedActionId": "campaigns.send_now"
     },
     {
       "prompt": "queue the spring sale email to go out Friday at 9am instead of now",
@@ -50,11 +55,11 @@
     },
     {
       "prompt": "before we send it, let me see the spring sale email in my own inbox",
-      "expectedActionId": "campaigns.send_test_email"
+      "expectedActionId": "email_campaigns.send_test_email"
     },
     {
       "prompt": "how did the spring sale email do — opens, clicks, that sort of thing",
-      "expectedActionId": "campaigns.get_campaign_report"
+      "expectedActionId": "campaigns.get_campaign_stats"
     },
     {
       "prompt": "show me everyone currently in Brevo",
@@ -66,15 +71,15 @@
     },
     {
       "prompt": "I want a reusable design I can start future emails from",
-      "expectedActionId": "templates.create_template"
+      "expectedActionId": "email_templates.create_template"
     },
     {
       "prompt": "I have a spreadsheet of 2000 subscribers to get into Brevo",
-      "expectedActionId": "contacts.import_contacts"
+      "expectedActionId": "contacts.analyze_import_file"
     },
     {
       "prompt": "export our whole subscriber base so I can back it up",
-      "expectedActionId": "contacts.export_contacts"
+      "expectedActionId": "contacts.export"
     },
     {
       "prompt": "we need a new From address — set up marketing@example.com so we can send from it",
@@ -86,7 +91,7 @@
     },
     {
       "prompt": "build me a segment of people who opened the last email but didn't click",
-      "expectedActionId": "contacts.create_segment"
+      "expectedActionId": "segments.create_segment"
     }
   ]
 }

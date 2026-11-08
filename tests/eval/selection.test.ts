@@ -41,6 +41,42 @@ describe('scoreSelection', () => {
     expect((await scoreSelection([task], index, picks('contacts.create_contact'))).correct).toBe(1);
   });
 
+  it('accepts a listed alternative and says that it did', async () => {
+    // Brevo removes one contact from one list two ways, and both are in the
+    // capture. Scoring either as wrong would measure the fixture.
+    const twoAnswers: EvalTask = {
+      prompt: 'take maria off the Black Friday list but keep her in Brevo',
+      expectedActionId: 'contacts.create_contact',
+      acceptableActionIds: ['contacts.delete_contact'],
+    };
+    const report = await scoreSelection([twoAnswers], index, picks('contacts.delete_contact'));
+    expect(report.correct).toBe(1);
+    expect(report.cases[0]?.viaAlternative).toBe(true);
+    expect(report.cases[0]?.chosenActionId).toBe('contacts.delete_contact');
+  });
+
+  it('does not mark an exact hit as an alternative', async () => {
+    // The flag drives what the run prints, so a false one would claim the
+    // fixture had been widened when it had not.
+    const report = await scoreSelection(
+      [{ ...task, acceptableActionIds: ['contacts.delete_contact'] }],
+      index,
+      picks('contacts.create_contact'),
+    );
+    expect(report.correct).toBe(1);
+    expect(report.cases[0]?.viaAlternative).toBeUndefined();
+  });
+
+  it('still misses an id that is in neither list', async () => {
+    const report = await scoreSelection(
+      [{ ...task, acceptableActionIds: ['contacts.update_contact'] }],
+      index,
+      picks('contacts.delete_contact'),
+    );
+    expect(report.correct).toBe(0);
+    expect(report.cases[0]?.viaAlternative).toBeUndefined();
+  });
+
   it('scores a wrong selection as incorrect and records what was chosen', async () => {
     const report = await scoreSelection([task], index, picks('contacts.delete_contact'));
     expect(report.correct).toBe(0);

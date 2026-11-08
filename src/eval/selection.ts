@@ -31,12 +31,30 @@ export type EvalTask = {
   prompt: string;
   expectedActionId: string;
   expectedInputs?: Record<string, unknown>;
+  /**
+   * Other ids that answer the prompt just as well.
+   *
+   * Not a way to soften a miss. It exists because one task genuinely has two
+   * answers in the product: Brevo removes a single contact from a list from the
+   * contact form, `PATCH /contact/backend/contacts/update` with `unlinkListIds`,
+   * and from the listing row, `POST /contact/backend/actions/list` with
+   * `action: DELETE_FROM_LIST` and `ids: [3]`. Both are in the capture, both on
+   * one contact. Scoring one of them as wrong measures the fixture, not the
+   * catalog.
+   *
+   * The bar for adding an entry here is evidence that the alternative performs
+   * the same user action, and every pass through it is printed, so a fixture
+   * cannot get quietly generous.
+   */
+  acceptableActionIds?: string[];
 };
 
 export type EvalCase = {
   task: EvalTask;
   chosenActionId: string | null;
   correct: boolean;
+  /** Correct, but via `acceptableActionIds` rather than the expected id. */
+  viaAlternative?: boolean;
   /** Null when the task declares no expected inputs. */
   inputsCorrect: boolean | null;
   note?: string;
@@ -123,7 +141,12 @@ export async function scoreSelection(
       note = `provider never answered: ${String(error).slice(0, 180)}`;
     }
 
-    const correct = chosenActionId === task.expectedActionId;
+    const exact = chosenActionId === task.expectedActionId;
+    const viaAlternative =
+      !exact &&
+      chosenActionId !== null &&
+      (task.acceptableActionIds ?? []).includes(chosenActionId);
+    const correct = exact || viaAlternative;
     const inputsCorrect =
       task.expectedInputs === undefined
         ? null
@@ -134,6 +157,7 @@ export async function scoreSelection(
       chosenActionId,
       correct,
       inputsCorrect,
+      ...(viaAlternative ? { viaAlternative: true } : {}),
       ...(note ? { note } : {}),
       ...(providerFailed ? { providerFailed: true } : {}),
     });

@@ -82,7 +82,15 @@ const report = await scoreSelection(scoreable, index, provider);
 
 for (const result of report.cases) {
   if (result.correct && result.inputsCorrect !== false) {
-    console.log(`  ✓ ${result.task.expectedActionId}`);
+    // A pass through an accepted alternative is always named. An eval that can
+    // widen what counts as right has to show every time it does.
+    if (result.viaAlternative === true) {
+      console.log(
+        `  ✓ ${result.chosenActionId ?? '?'}  (accepted alternative to ${result.task.expectedActionId})`,
+      );
+    } else {
+      console.log(`  ✓ ${result.task.expectedActionId}`);
+    }
     continue;
   }
   if (result.providerFailed === true) {
