@@ -38,21 +38,6 @@ const requested = argValue('actions', RECIPES.map((r) => r.actionId).join(','))
   .map((id) => id.trim())
   .filter((id) => id.length > 0);
 
-const statePath = join(config.paths.auth, 'state.json');
-if (!existsSync(statePath)) {
-  console.error(`No saved session at ${statePath}. Run "pnpm brevo:login" first.`);
-  process.exit(1);
-}
-
-const selected = RECIPES.filter((recipe) => requested.includes(recipe.actionId));
-if (selected.length === 0) {
-  console.error(`No matching recipes. Registered: ${RECIPES.map((r) => r.actionId).join(', ')}`);
-  process.exit(1);
-}
-
-const launchArgs = appLaunchArgs(HEADED_VIEWPORT);
-console.log(describePlacement(launchArgs));
-
 /**
  * `--login` signs in inside the context the recipes then run in.
  *
@@ -67,6 +52,30 @@ console.log(describePlacement(launchArgs));
  * selector, and the run ends having learned nothing about the catalog.
  */
 const liveLogin = process.argv.includes('--login');
+
+const statePath = join(config.paths.auth, 'state.json');
+// `--login` brings its own session, so a missing state file is not its problem.
+if (!liveLogin && !existsSync(statePath)) {
+  // Not "run pnpm brevo:login": that writes a state file Brevo rejects, which
+  // is decision #10 and was measured again today. Sending a newcomer there
+  // costs them a login and leaves them exactly where they started.
+  console.error(
+    `No saved session at ${statePath}, and a saved session mostly does not work\n` +
+      'anyway: storageState does not carry sessionStorage (decision #10).' +
+      '\n\nRun this instead, and sign in inside the window that opens:\n' +
+      '  pnpm verify --login --actions <action id>',
+  );
+  process.exit(1);
+}
+
+const selected = RECIPES.filter((recipe) => requested.includes(recipe.actionId));
+if (selected.length === 0) {
+  console.error(`No matching recipes. Registered: ${RECIPES.map((r) => r.actionId).join(', ')}`);
+  process.exit(1);
+}
+
+const launchArgs = appLaunchArgs(HEADED_VIEWPORT);
+console.log(describePlacement(launchArgs));
 
 const browser = await chromium.launch({ headless: false, args: launchArgs });
 const context = liveLogin
@@ -95,13 +104,27 @@ same session the moment the dashboard appears.
 
   console.log(`signed in at ${page.url()}`);
 } else {
-  // Fail here rather than inside a recipe, where it would look like a selector
-  // problem instead of a session problem.
-  await page.goto(config.appOrigin, { waitUntil: 'domcontentloaded' });
-  if (page.url().includes('login.brevo.com')) {
+  /**
+   * Fail here rather than inside a recipe, where a dead session looks like a
+   * moved button.
+   *
+   * The check has to be made against a page that requires authentication and
+   * after the redirect has had time to happen. Checking the app origin right
+   * after `domcontentloaded` passes with a dead session — the shell loads, the
+   * bounce to login.brevo.com arrives a moment later, and the run proceeds to
+   * report "could not open the create-list dialog" on a login page. Measured:
+   * that is exactly what it did.
+   */
+  await page.goto(`${config.appOrigin}/contact/list-listing`, {
+    waitUntil: 'domcontentloaded',
+  });
+  await page.waitForTimeout(6000);
+  if (/login\.brevo\.com|\/login/.test(page.url())) {
     console.error(
-      `\nThe saved session at ${statePath} was not accepted: landed on ${page.url()}.\n` +
-        'Re-run with --login and sign in inside the window (see decision #10).',
+      `\nThe saved session at ${statePath} was not accepted: landed on ${page.url()}.` +
+        '\nstorageState does not carry sessionStorage, which is decision #10.\n\n' +
+        'Re-run and sign in inside the window that opens:\n' +
+        '  pnpm verify --login --actions <action id>',
     );
     await browser.close();
     process.exit(1);
