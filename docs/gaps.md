@@ -289,38 +289,62 @@ Sources: [Claude tool search](https://platform.claude.com/docs/en/agents-and-too
 
 ## What more time would buy, in order
 
-1. **Verify `campaigns.send_now`.** The most dangerous entry in the catalog and
-   the only risk class nothing has proved. Behind a five-call wizard.
-2. **Record the sender-creation flow.** Fifteen minutes closes the last eval
-   task.
-3. **Resolve the three overlapping list reads.** A taxonomy call, not a wording
-   tweak.
-4. **More flows.** Three exist (`flows/index.json`), covering 16 steps. The
-   capture holds more — segment creation, the import mapping, company setup —
-   and each is a window and six lines of prose, since the steps derive
-   themselves. Flows are also the better answer to the taxonomy problem below:
-   sending one campaign crosses three modules, so intent and URL prefix are
-   different axes and only one of them is what an agent asks for.
-5. ~~**Normalise the module taxonomy.**~~ Done: nine areas in
-   `src/catalog/areas.ts`, stamped onto every index entry, gated. The 62
-   modules stay, because they are the right axis for reading the capture; they
-   were only ever the wrong axis for finding a feature.
-6. ~~**A query command**~~ Done: `pnpm catalog` (areas, area, show, search,
-   flows, flow), all with `--json`. It also settled the assumption it was meant
-   to test, in the uncomfortable direction. `pnpm bench:search` runs the eval's
-   19 tasks through the lexical search with no model: the answer ranks first
-   twice and reaches the top three five times, against 15 of 19 for a model
-   reading all 197 entries. **Narrowing the context is not free**, because the
-   catalog's wording and a person's wording do not overlap — which is the eval's
-   first design rule, now biting the retrieval path instead of the model. The
-   usable shape is browse-then-read, not search-then-trust, and improving this
-   means better retrieval (embeddings, or a model doing the narrowing), not more
-   words in the descriptions.
-7. **An MCP server** over the existing index — about a hundred lines, and then
-   there is a live demo. Decision #4 explains why it was demoted, not why it is
-   worthless.
-8. **`execute_action`.** Turns the catalog from a description into a capability.
-   Where this goes next in production, and deliberately not a weekend task.
+1. **Settle whether the `destructive` label is suppressing selection.** The
+   sharpest open question in this repository, and the cheapest: one run of
+   `pnpm eval --no-risk-labels`. Of 19 eval tasks, the 4 whose answer is
+   destructive score 1 while the other 15 score 13, and the failures come in two
+   shapes — twice the model answers that no action fits, once it picks a safe
+   neighbour. Either the marker in the rendered catalogue is losing those tasks,
+   in which case risk has to be carried where an agent reads it as information
+   rather than as permission withheld, or the model is declining the request
+   itself, in which case a catalogue for agents needs an authorisation story and
+   no wording fixes it. **This is a safety question, not a score question**, and
+   it is first because a catalogue whose risk flags cost it the risky actions is
+   failing at the thing it was most careful about. The first attempt died with
+   15 of 19 tasks returning `claude CLI exited 1`; see [eval.md](eval.md).
+2. **Verify `campaigns.send_now`.** The most dangerous entry in the catalogue
+   and the only risk class nothing has proved. Behind a five-call wizard, so
+   hours of selector work rather than an afternoon. Its preconditions are
+   written down and marked inferred, which is not the same as proved.
+3. **Record the sender-creation flow.** Fifteen minutes of capture closes the
+   last eval task, the only one with no answer in the catalogue at all.
+4. **Resolve the three overlapping list reads.** A taxonomy call, not a wording
+   tweak — both descriptions were already rewritten and the model's choice did
+   not move. Costs one eval task today.
+5. **More flows.** Three exist, covering 16 steps. The capture holds more —
+   segment creation, the import mapping, company setup — and each is a window
+   plus six lines of prose, since the steps derive themselves.
+6. **Delete `ui.load_home`.** Its `internal_endpoint.path` is `/undefined`, a
+   crawler artefact that should never have become an entry. It is documented
+   above rather than removed because deleting it restates eight measured
+   numbers; doing it properly means doing it with the other taxonomy cleanups.
+7. **A documentation gate.** Two published numbers were wrong for one commit
+   each — `0 of 197` for the public-API overlap and `17 of 19` for the eval —
+   and both were found by hand. A script that checks every count and link in
+   the docs against the data would have caught both before a reader did.
+8. **An MCP server** over the existing index — about a hundred lines, and then
+   there is a live demo. [Decision 4](decisions.md#4-no-mcp-server) explains why
+   it was demoted, not why it is worthless, and `pnpm catalog` now covers most
+   of what it would have shown.
+9. **`execute_action`.** Turns the catalogue from a description into a
+   capability. Where this goes next in production, and deliberately not a
+   weekend task. Start from the distinction in
+   [decision 16](decisions.md#16-no-retrieval-layer-because-the-whole-index-fits-in-a-prompt):
+   197 rows read as data behave nothing like 197 tools loaded into context.
 
-Done since the first draft of this document: the HAR sessions (four of them,
-which took writes from 4 to 38), and the 42 dangling cross-references (now 0).
+## Already done, and what it cost
+
+- **Four hand-driven HAR sessions**, which took write endpoints from 4 to 38 and
+  the eval from 0 of 20 to a scoreable 19. The selector automation built for the
+  same job reached two of six target routes.
+- **The 42 dangling cross-references**, now 0 and gated at zero.
+- **Nine areas** over the 62 URL-derived modules, gated: an unmapped module
+  fails the build rather than defaulting into the catch-all
+  ([decision 14](decisions.md#14-two-groupings-modules-for-reading-the-capture-areas-for-finding-a-feature)).
+- **Three flows**, derived from capture windows and re-derived by
+  `pnpm validate`, so a flow cannot drift into a story
+  ([decision 15](decisions.md#15-flows-are-derived-from-the-capture-never-authored)).
+- **`pnpm catalog` and `pnpm bench:search`.** The query command settled the
+  assumption it was built to test, in the uncomfortable direction: narrowing the
+  context is not free, and browse-then-read beats search-then-trust at this size
+  ([decision 16](decisions.md#16-no-retrieval-layer-because-the-whole-index-fits-in-a-prompt)).

@@ -63,97 +63,63 @@ Asking a model for facts you already have is how documentation gets invented.
 
 Ids look like `contacts.create_contact` and `campaigns.send_now`.
 
-## 62 modules were the wrong boxes
+## Nine boxes, because 62 modules were the wrong ones
 
-A `module` is the first segment of an internal URL. It describes which Brevo
-service answers the call, which is the wrong question: 62 modules hold 197
-actions, **34 of them hold exactly one**, and sending a single campaign crosses
-`email_campaigns`, `editor` and `marketing_campaign`. Nobody asks for a feature
-by hostname.
+A `module` is the first segment of an internal URL, so 62 of them hold 197
+actions, **34 hold exactly one**, and sending one campaign crosses three of
+them. Nobody asks for a feature by hostname. So every action also carries an
+`area`:
 
-So every action also carries an `area` — one of nine boxes named after what a
-person does in the app:
+| | | | |
+|:--|--:|:--|--:|
+| `contacts` | 64 | `transactional` | 10 |
+| `campaigns` | 38 | `ecommerce` | 7 |
+| `platform` — **not a feature** | 27 | `automation` | 6 |
+| `crm` | 21 | `reporting` | 3 |
+| `account` | 21 | | |
 
-| Area | Actions | What you do there |
-|:--|--:|:--|
-| `contacts` | 64 | Hold the people you market to; cut them into lists and segments |
-| `campaigns` | 38 | Compose and send email, SMS and WhatsApp, and read how they did |
-| `platform` | 27 | **Not a feature.** Fonts, locales, feature flags, widget lists |
-| `crm` | 21 | Companies, deals, pipelines, tasks, meetings |
-| `account` | 21 | Plan, senders, security, integrations, users |
-| `transactional` | 10 | The one-to-one mail an app triggers: receipts, resets, SMTP |
-| `ecommerce` | 7 | Connect a store, follow orders, run loyalty programmes |
-| `automation` | 6 | Workflows that act without anyone pressing send |
-| `reporting` | 3 | The cross-product summaries the dashboard shows |
-
-Both groupings ship, because they answer different questions: `module` is for
-reading the capture, `area` is for finding a feature.
-
-`platform` exists so the other eight stay honest. Those 27 entries are the web
-app drawing itself — `locales.fetch_english`, `editor.list_fonts`,
-`navigation.get_header_menu` — and boxing them under a label that says *not a
-feature* beats scattering them through the areas a user actually visits.
+Both ship: `module` for reading the capture, `area` for finding a feature.
+`platform` holds the app drawing itself — fonts, locales, feature flags — so the
+other eight stay honest.
 
 The assignment is a table in [`src/catalog/areas.ts`](src/catalog/areas.ts), not
-a model call: it is a naming decision, and those belong where they can be argued
-with. **A module with no area fails the build.** It does not default into
-`platform`, because a catch-all that fills itself stops describing anything.
+a model call, and **a module with no area fails the build** rather than
+defaulting into the catch-all. Why, in full: [decision 14](docs/decisions.md#14-two-groupings-modules-for-reading-the-capture-areas-for-finding-a-feature).
 
 ## Reading it as an agent would: `pnpm catalog`
 
-Decision #4 demoted an MCP server. This is the cheaper half of what one would
-have provided — an agent already has a shell, so a server adds a protocol and a
-lifecycle to a problem that needed neither. It reads the catalog; it never calls
-Brevo.
+An agent already has a shell, so this is the cheaper half of what an MCP server
+would provide. It reads the catalog; it never calls Brevo. Every subcommand
+takes `--json`.
 
 ```bash
 pnpm catalog                                  # the 9 areas          ~100 tokens
 pnpm catalog area contacts                    # 64 names, no prose   ~790 tokens
 pnpm catalog show contacts.delete_contact     # one entry in full    ~400 tokens
-pnpm catalog search "someone asked to be deleted"
 pnpm catalog flow erase_contact               # the recipe, in order
+pnpm catalog search "someone asked to be deleted"
 ```
 
-Every subcommand takes `--json`. Group listings are names only on purpose:
-`contacts` holds 64 entries whose descriptions are 5 773 tokens and whose names
-are 787, and the descriptions are paid for on the one entry that gets chosen.
-Browsing all three hops costs roughly a twentieth of the 18 519 tokens the whole
-index takes.
-
 **The search is the weak part, and it is measured rather than claimed.**
-`pnpm bench:search` runs the eval's own 19 tasks through it with no model
-anywhere:
+`pnpm bench:search` runs the eval's 19 tasks through it with no model: the right
+answer ranks first **2 of 19** times and reaches the top three **5 of 19**,
+against **15 of 19** for a model reading all 197 entries. A task never reuses
+the catalog's wording, so *"I need a new audience group"* has to reach
+`lists.create_list` without sharing a word with it. A model bridges that; prefix
+matching cannot.
 
-| | |
-|:--|:--|
-| Right answer ranked first | **2 of 19** |
-| Right answer in the top 3 | **5 of 19** |
-| Right answer anywhere in 10 | **8 of 19** |
-| A model reading all 197 entries | **15 of 19** |
-
-That gap is the eval's first rule biting back: a task never reuses the catalog's
-wording, so *"I need a new audience group"* has to reach `lists.create_list`
-without sharing a word with it. A model bridges that. Prefix matching cannot.
-
-So the honest shape of this tool is **browse, not search**: areas, then an area
-listing, then the model picks from names it can see. Trusting the top three
-search hits would make an agent worse than handing it everything, and the
-command says so in its own output.
-
-Not building a real retrieval layer is a decision, not an omission: the whole
-index is 18 519 tokens against the ~200 000 under which published guidance says
-to skip retrieval entirely. [gaps.md](docs/gaps.md#why-there-is-no-retrieval-layer-and-what-one-would-look-like)
-has the token maths, the sources, and the hybrid-plus-rerank design to reach for
-if the catalog ever grows an order of magnitude.
+So the shape is **browse, not search**, and the command says so in its own
+output. Not building real retrieval is a decision: the whole index is 18 519
+tokens against the ~200 000 under which published guidance says to skip it
+([decision 16](docs/decisions.md#16-no-retrieval-layer-because-the-whole-index-fits-in-a-prompt)
+has the sources and the hybrid-plus-rerank design for when that changes).
 
 ## 197 actions do not say what order to call them in
 
-A flat catalog answers *what can this app do* and is silent on *and then what*.
-That silence is measurable: the eval's remaining misses are tasks that take more
-than one call, and on both the model picked the listing action that would have
-been step one.
-
-So three flows are derived — not written — from the capture:
+A flat catalog is silent on *and then what*, and that silence is measurable: the
+eval's two-step tasks are missed because the model picks the listing action that
+would have been step one. So three flows are derived — not written — from the
+capture:
 
 ```
 send_email_campaign   8 steps   create > count > recipients > subject > design > preview > test > send
@@ -161,15 +127,11 @@ onboard_contact       6 steps   list > company > contact > link > membership > a
 erase_contact         2 steps   unsubscribe > delete
 ```
 
-Each flow names a capture file and a time window, and its steps are the write
-calls Brevo's own UI made in that window, in that order. `pnpm validate`
-re-derives them and fails on any difference, so a flow is a claim about evidence
-rather than a claim about memory. Editing `flows/index.json` by hand breaks the
-build and prints both sequences.
-
-`erase_contact` is the pair worth reading: step one is reversible and answers
-*"stop emailing me"*, step two is irreversible and answers *"delete me"*.
-Confusing them is the most expensive mistake an agent can make here.
+Each names a capture file and a time window; the steps are the write calls
+Brevo's UI made in that window, in that order. `pnpm validate` re-derives them
+and fails on any difference, so editing `flows/index.json` by hand breaks the
+build. `erase_contact` is the pair worth reading: step one is reversible and
+answers *"stop emailing me"*, step two is not and answers *"delete me"*.
 
 ## How much to trust it
 
@@ -198,6 +160,14 @@ someone outside your account sees it.* Not "not a read".
 We tried deriving this from the HTTP method. It failed, because **Brevo reads
 using POST.** That shipped `get_count` as destructive — and an agent that learns
 to ignore the flag on reads will ignore it on deletes.
+
+**And the flag has a problem nobody has solved.** Of the 19 eval tasks, the 4
+whose answer is destructive score **1**; the other 15 score 13. The model either
+answers that no action fits or picks a safe neighbour. A flag written to stop an
+agent deleting the wrong contact may be stopping it from deleting the right one.
+One run of `pnpm eval --no-risk-labels` settles it and has not happened —
+[eval.md](docs/eval.md) has both candidate causes and why neither is guessed at
+here.
 
 ## Where the model got it wrong
 
