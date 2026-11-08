@@ -365,7 +365,7 @@
       {
         "tag": "a",
         "role": "",
-        "label": "weineolliver@gmail.com",
+        "label": "{{EMAIL}}",
         "testid": ""
       },
       {

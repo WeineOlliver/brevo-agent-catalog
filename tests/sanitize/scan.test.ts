@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { redactText } from '../../src/sanitize/redact.js';
 import { scanForLeaks } from '../../src/sanitize/scan.js';
 
 const empty = { accountIds: [], emails: [] };
@@ -121,6 +122,37 @@ describe('scanForLeaks', () => {
   it('reports the matched text so a failure is actionable', () => {
     const leaks = scanForLeaks('xkeysib-0123456789abcdef0123', empty);
     expect(leaks[0]?.match).toContain('xkeysib-');
+  });
+
+  it('finds a percent-encoded address', () => {
+    const kinds = scanForLeaks('?email=someone%40gmail.com', empty).map((l) => l.kind);
+    expect(kinds).toContain('email');
+  });
+
+  it('still forgives a reserved domain when the address is encoded', () => {
+    // The fixtures this project creates are all @example.com, and they reach
+    // query strings encoded. Reporting them would train the operator to
+    // ignore the gate.
+    expect(scanForLeaks('?email=catalog.test%40example.com', empty)).toEqual([]);
+  });
+
+  it('finds a phone number under an attribute key', () => {
+    const kinds = scanForLeaks('{"SMS":"5511972929773"}', empty).map((l) => l.kind);
+    expect(kinds).toContain('phone');
+  });
+
+  it('passes the real create-contact body once the redactor has run', () => {
+    // The gate's whole job: what sanitize is about to write must come back
+    // clean. This is the body that proved the redactor had no phone rule.
+    const body =
+      '{"email":"tonystark@example.com","attributes":{"SMS":"5511972929773",' +
+      '"WHATSAPP":"5511972929773","LANDLINE_NUMBER":"5511972929773","JOB_TITLE":"CEO"}}';
+    expect(scanForLeaks(body, empty).map((l) => l.kind)).toContain('phone');
+    expect(scanForLeaks(redactText(body, empty), empty)).toEqual([]);
+  });
+
+  it('does not flag an epoch timestamp as a phone number', () => {
+    expect(scanForLeaks('{"capturedAt":1762500000000}', empty)).toEqual([]);
   });
 
   it('finds several leaks of different kinds in one document', () => {

@@ -51,6 +51,43 @@ export const FOREIGN_KEY_SOURCE =
 
 export const EMAIL_SOURCE = '[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}';
 
+/**
+ * The same address with its @ percent-encoded.
+ *
+ * An analytics beacon puts the signed-in user's address in a query string, and
+ * a query string encodes @ as %40 — so EMAIL_SOURCE, which needs a literal @,
+ * matched none of it. Both the redactor and the gate were blind to the same
+ * shape, which is the dangerous kind of hole: sanitize reported those captures
+ * clean while the address sat in them. Double encoding is covered too, because
+ * a redirect parameter carrying a URL encodes its own payload a second time.
+ */
+export const EMAIL_ENCODED_SOURCE =
+  '[A-Za-z0-9._%+-]+(?:%40|%2540)[A-Za-z0-9.-]+(?:\\.|%2E)[A-Za-z]{2,}';
+
+/**
+ * A phone number sitting under a key that says it is one.
+ *
+ * Shape alone cannot find these: a bare 5511972929773 is indistinguishable from
+ * an epoch timestamp or a numeric id, and a rule broad enough to catch it would
+ * condemn every capturedAt in the store. The key is the evidence, so this reads
+ * Brevo's own contact attribute names (SMS, WHATSAPP, LANDLINE_NUMBER)
+ * alongside the generic ones.
+ */
+export const PHONE_ASSIGNMENT_SOURCE =
+  '((?:sms|whatsapp|landline(?:[-_]?number)?|phone(?:[-_]?number)?|mobile(?:[-_]?number)?|' +
+  'tel|telephone|cell(?:phone)?|msisdn|fax)["\']?[ \\t]*[:=][ \\t]*["\']?)' +
+  '(\\+?\\d[\\d ().-]{6,18}\\d)';
+
+/**
+ * An international number written with its +, under any key or none.
+ *
+ * The leading + must not be preceded by an identifier character or a closing
+ * bracket, because a+12345678 in a minified bundle is addition, not a phone
+ * number, and a gate that cannot tell the two apart would block every capture
+ * that holds a JavaScript asset.
+ */
+export const PHONE_E164_SOURCE = '(?<![0-9A-Za-z_)\\]])\\+[1-9]\\d{7,14}(?![0-9])';
+
 /** Request and response headers removed wholesale rather than redacted. */
 export const DROPPED_HEADERS = new Set(['cookie', 'set-cookie', 'authorization']);
 

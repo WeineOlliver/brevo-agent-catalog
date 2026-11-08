@@ -11,16 +11,19 @@ import {
   CODE_REFERENCE_VALUE,
   COOKIE_PAIR_SOURCE,
   COOKIE_SOURCE,
+  EMAIL_ENCODED_SOURCE,
   EMAIL_SOURCE,
   FOREIGN_KEY_SOURCE,
   JWT_SOURCE,
+  PHONE_ASSIGNMENT_SOURCE,
+  PHONE_E164_SOURCE,
   PLACEHOLDER_PATTERN,
   SECRET_ASSIGNMENT_SOURCE,
   escapeRegExp,
 } from './patterns.js';
 import type { RedactionRules } from './redact.js';
 
-export type LeakKind = 'api_key' | 'jwt' | 'cookie' | 'email' | 'account_id';
+export type LeakKind = 'api_key' | 'jwt' | 'cookie' | 'email' | 'phone' | 'account_id';
 
 export type Leak = { kind: LeakKind; match: string };
 
@@ -34,7 +37,7 @@ export type Leak = { kind: LeakKind; match: string };
  * even on a reserved domain.
  */
 const RESERVED_EMAIL_DOMAIN =
-  /@(?:example\.(?:com|org|net)|[^@\s]*\.(?:example|test|invalid|localhost))$/i;
+  /(?:@|%40|%2540)(?:example\.(?:com|org|net)|[^@\s]*\.(?:example|test|invalid|localhost))$/i;
 
 const SHAPES: ReadonlyArray<{
   kind: LeakKind;
@@ -55,6 +58,9 @@ const SHAPES: ReadonlyArray<{
   { kind: 'cookie', source: COOKIE_SOURCE, flags: 'gi' },
   { kind: 'cookie', source: COOKIE_PAIR_SOURCE, flags: 'gi' },
   { kind: 'email', source: EMAIL_SOURCE, flags: 'g' },
+  { kind: 'email', source: EMAIL_ENCODED_SOURCE, flags: 'gi' },
+  { kind: 'phone', source: PHONE_ASSIGNMENT_SOURCE, flags: 'gi' },
+  { kind: 'phone', source: PHONE_E164_SOURCE, flags: 'g' },
 ];
 
 export function scanForLeaks(text: string, rules: RedactionRules): Leak[] {

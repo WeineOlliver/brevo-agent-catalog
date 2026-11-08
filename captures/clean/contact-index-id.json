@@ -751,7 +751,7 @@
     "source": "playwright",
     "route": "/contact/index/:id",
     "method": "GET",
-    "url": "https://contacts-api.brevo.com/contact/backend/contacts/activities?limit=20&planned=1&contact_id=1&email=weineolliver%40gmail.com&type=task",
+    "url": "https://contacts-api.brevo.com/contact/backend/contacts/activities?limit=20&planned=1&contact_id=1&email={{EMAIL}}&type=task",
     "status": 200,
     "requestHeaders": {
       "sec-ch-ua-platform": "\"Windows\"",
@@ -1057,7 +1057,7 @@
     "source": "playwright",
     "route": "/contact/index/:id",
     "method": "GET",
-    "url": "https://contacts-api.brevo.com/contact/backend/contacts/activities?limit=10&pinned=true&contact_id=1&email=weineolliver%40gmail.com&type=note",
+    "url": "https://contacts-api.brevo.com/contact/backend/contacts/activities?limit=10&pinned=true&contact_id=1&email={{EMAIL}}&type=note",
     "status": 200,
     "requestHeaders": {
       "sec-ch-ua-platform": "\"Windows\"",
@@ -1123,7 +1123,7 @@
     "source": "playwright",
     "route": "/contact/index/:id",
     "method": "GET",
-    "url": "https://contacts-api.brevo.com/contact/backend/contacts/activities?limit=6&planned=0&contact_id=1&email=weineolliver%40gmail.com&ecommerce_frame_date=2026-11-06T18%3A21%3A18.506Z",
+    "url": "https://contacts-api.brevo.com/contact/backend/contacts/activities?limit=6&planned=0&contact_id=1&email={{EMAIL}}&ecommerce_frame_date=2026-11-06T18%3A21%3A18.506Z",
     "status": 200,
     "requestHeaders": {
       "sec-ch-ua-platform": "\"Windows\"",
@@ -1592,7 +1592,7 @@
     "source": "playwright",
     "route": "/contact/index/:id",
     "method": "POST",
-    "url": "https://www.google.com/ccm/collect?rcb=2&frm=0&apvc=1&ae=g&auid=433591472.1793989018&dt=weineolliver%40gmail.com%20-%20Brevo&en=page_view&dl=https%3A%2F%2Fapp.brevo.com%2Fcontact%2Findex%2F1&scrsrc=metrics.brevo.com&rnd=664880686.1793989280&navt=n&npa=1&ep.ads_data_redaction=0&gtm=45He6b41v9104444316za204zd9104444316xeaxf3&gcd=13l3l3l2l1l1&dma_cps=a&dma=1&tag_exp=115616985~115938465~115938469~{{ID}}~{{ID}}~120385423~120412528~120420416~{{ID}}~{{ID}}~121049589~121191153~{{ID}}~{{ID}}~123814183&tft=1793989280463&tfd=4259&fmt=8",
+    "url": "https://www.google.com/ccm/collect?rcb=2&frm=0&apvc=1&ae=g&auid=433591472.1793989018&dt={{EMAIL}}%20-%20Brevo&en=page_view&dl=https%3A%2F%2Fapp.brevo.com%2Fcontact%2Findex%2F1&scrsrc=metrics.brevo.com&rnd=664880686.1793989280&navt=n&npa=1&ep.ads_data_redaction=0&gtm=45He6b41v9104444316za204zd9104444316xeaxf3&gcd=13l3l3l2l1l1&dma_cps=a&dma=1&tag_exp=115616985~115938465~115938469~{{ID}}~{{ID}}~120385423~120412528~120420416~{{ID}}~{{ID}}~121049589~121191153~{{ID}}~{{ID}}~123814183&tft=1793989280463&tfd=4259&fmt=8",
     "status": 200,
     "requestHeaders": {
       "sec-ch-ua-platform": "\"Windows\"",
@@ -1798,7 +1798,7 @@
     "source": "playwright",
     "route": "/contact/index/:id",
     "method": "GET",
-    "url": "https://metrics.brevo.com/g/collect?v=2&tid=G-V8SFL2N220&gtm=45je6b41v9115571177z89104444316za20gzb9104444316zd9104444316xf1&_p=1793989280436&gcs=G100&gcd=13m3m3m2m5l1&npa=1&dma_cps=-&dma=0&ecid=264992648&_eu=AAAAAGA&_fplc=0&cid=1849949530.1793989281&ec_mode=c&frm=0&pscdl=denied&rcb=5&sr=1440x900&uaa=x86&uab=64&uafvl=Not%253AA-Brand%3B8.0.0.0%7CChromium%3B156.0.8078.4&uam=&uamb=0&uap=Windows&uapv=19.0.0&uaw=0&ul=pt-br&ur=BR-SP&sst.rnd=664880686.1793989280&sst.gch=0&sst.etld=google.com.br&sst.tft=1793989280436&sst.lpc=157294186&sst.navt=n&sst.ude=0&gaf=2&_s=1&tag_exp=115938465~115938469~{{ID}}~{{ID}}~120213116~120385423~120412526~120420416~{{ID}}~{{ID}}~{{ID}}~{{ID}}~123814185&uid=&sid={{TOKEN}}&sct=1&seg=0&dl=https%3A%2F%2Fapp.brevo.com%2Fcontact%2Findex%2F1&dt=weineolliver%40gmail.com%20-%20Brevo&_tu=DA&en=Bigquery_pageviews&_fv=1&_nsi=1&_ss=1&gap.sstd=5&ep.first_referrer=https%3A%2F%2Fapp.brevo.com%2F&epn.timestamp=1793989280&ep.hostname=app.brevo.com&ep.msclkid=&ep.anonymous_Id=394bf141-0388-4803-8cbc-773418427261&ep.user_data.email=weineolliver%40gmail.com&ep.user_data._tag_mode=AUTO&ep.user_data._tag_metadata.email.mode=a&ep.user_data._tag_metadata.email.location=H1&ep.user_data._tag_metadata.email.selector=%23contactHeader%3E.width_wrapper%3Anth-child(1)%3E.header&tfd=4314&richsstsse",
+    "url": "https://metrics.brevo.com/g/collect?v=2&tid=G-V8SFL2N220&gtm=45je6b41v9115571177z89104444316za20gzb9104444316zd9104444316xf1&_p=1793989280436&gcs=G100&gcd=13m3m3m2m5l1&npa=1&dma_cps=-&dma=0&ecid=264992648&_eu=AAAAAGA&_fplc=0&cid=1849949530.1793989281&ec_mode=c&frm=0&pscdl=denied&rcb=5&sr=1440x900&uaa=x86&uab=64&uafvl=Not%253AA-Brand%3B8.0.0.0%7CChromium%3B156.0.8078.4&uam=&uamb=0&uap=Windows&uapv=19.0.0&uaw=0&ul=pt-br&ur=BR-SP&sst.rnd=664880686.1793989280&sst.gch=0&sst.etld=google.com.br&sst.tft=1793989280436&sst.lpc=157294186&sst.navt=n&sst.ude=0&gaf=2&_s=1&tag_exp=115938465~115938469~{{ID}}~{{ID}}~120213116~120385423~120412526~120420416~{{ID}}~{{ID}}~{{ID}}~{{ID}}~123814185&uid=&sid={{TOKEN}}&sct=1&seg=0&dl=https%3A%2F%2Fapp.brevo.com%2Fcontact%2Findex%2F1&dt={{EMAIL}}%20-%20Brevo&_tu=DA&en=Bigquery_pageviews&_fv=1&_nsi=1&_ss=1&gap.sstd=5&ep.first_referrer=https%3A%2F%2Fapp.brevo.com%2F&epn.timestamp=1793989280&ep.hostname=app.brevo.com&ep.msclkid=&ep.anonymous_Id=394bf141-0388-4803-8cbc-773418427261&ep.user_data.email={{EMAIL}}&ep.user_data._tag_mode=AUTO&ep.user_data._tag_metadata.email.mode=a&ep.user_data._tag_metadata.email.location=H1&ep.user_data._tag_metadata.email.selector=%23contactHeader%3E.width_wrapper%3Anth-child(1)%3E.header&tfd=4314&richsstsse",
     "status": 200,
     "requestHeaders": {
       "sec-ch-ua-platform": "\"Windows\"",

@@ -20,9 +20,12 @@ import {
   COOKIE_SOURCE,
   DROPPED_HEADERS,
   DROPPED_HEADER_PATTERN,
+  EMAIL_ENCODED_SOURCE,
   EMAIL_SOURCE,
   FOREIGN_KEY_SOURCE,
   JWT_SOURCE,
+  PHONE_ASSIGNMENT_SOURCE,
+  PHONE_E164_SOURCE,
   SECRET_ASSIGNMENT_SOURCE,
   escapeRegExp,
 } from './patterns.js';
@@ -106,8 +109,15 @@ export function redactText(text: string, rules: RedactionRules): string {
   out = out.replace(new RegExp(SECRET_ASSIGNMENT_SOURCE, 'gi'), '$1{{TOKEN}}');
   out = out.replace(new RegExp(COOKIE_SOURCE, 'gi'), 'cookie: {{COOKIE}}');
 
-  // Any email-shaped string, not only the configured ones.
+  // Any email-shaped string, not only the configured ones — in a body, and
+  // percent-encoded in a query string, where an analytics beacon puts it.
   out = out.replace(new RegExp(EMAIL_SOURCE, 'g'), '{{EMAIL}}');
+  out = out.replace(new RegExp(EMAIL_ENCODED_SOURCE, 'gi'), '{{EMAIL}}');
+
+  // A contact's own attributes carry real phone numbers: Brevo's create-contact
+  // body holds SMS, WHATSAPP and LANDLINE_NUMBER verbatim.
+  out = out.replace(new RegExp(PHONE_ASSIGNMENT_SOURCE, 'gi'), '$1{{PHONE}}');
+  out = out.replace(new RegExp(PHONE_E164_SOURCE, 'g'), '{{PHONE}}');
 
   out = redactIdentifiers(out, rules.accountIds);
 

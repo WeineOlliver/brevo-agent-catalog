@@ -27,6 +27,12 @@ const record: CaptureRecord = {
   capturedAt: '2026-11-06T12:00:00.000Z',
 };
 
+const createContactBody =
+  '{"email":"tonystark@example.com","listIds":[5],"attributes":{"FIRSTNAME":"Tony",' +
+  '"LASTNAME":"Stark","SMS":"5511972929773","WHATSAPP":"5511972929773",' +
+  '"LANDLINE_NUMBER":"5511972929773","EXT_ID":"ext_id","_COUNTRY":"br",' +
+  '"JOB_TITLE":"CEO","OPT_IN":true}}';
+
 describe('redactCapture', () => {
   it('drops cookie, set-cookie, authorization and x-csrf* headers', () => {
     const out = redactCapture(record, rules);
@@ -167,5 +173,51 @@ describe('redactText', () => {
 
   it('leaves text with nothing sensitive untouched', () => {
     expect(redactText('{"name":"Promo campaign"}', rules)).toBe('{"name":"Promo campaign"}');
+  });
+
+  it('redacts the phone numbers a contact carries as attributes', () => {
+    const out = redactText(createContactBody, empty);
+    expect(out).not.toContain('5511972929773');
+    expect(out).toContain('"SMS":"{{PHONE}}"');
+    expect(out).toContain('"WHATSAPP":"{{PHONE}}"');
+    expect(out).toContain('"LANDLINE_NUMBER":"{{PHONE}}"');
+    // Structure preserved: still parseable, and the non-sensitive attributes
+    // an agent needs to compose this call are still there.
+    const parsed = JSON.parse(out) as { attributes: Record<string, unknown> };
+    expect(parsed.attributes.JOB_TITLE).toBe('CEO');
+    expect(parsed.attributes.OPT_IN).toBe(true);
+  });
+
+  it('redacts an address whose @ is percent-encoded', () => {
+    // Brevo's analytics beacon carries the signed-in user's address in a query
+    // string, where @ is %40. Eight of these were sitting in captures/clean
+    // with the gate reporting it clean.
+    const url =
+      'https://metrics.brevo.com/g/collect?ep.user_data.email=someone%40gmail.com&v=2';
+    const out = redactText(url, empty);
+    expect(out).not.toContain('someone%40gmail.com');
+    expect(out).toContain('{{EMAIL}}');
+  });
+
+  it('redacts a doubly encoded address', () => {
+    expect(redactText('?redirect=a%2540b.com', empty)).toBe('?redirect={{EMAIL}}');
+  });
+
+  it('redacts an international number written with its plus', () => {
+    expect(redactText('{"recipient":"+5511972929773"}', empty)).toBe(
+      '{"recipient":"{{PHONE}}"}',
+    );
+  });
+
+  it('leaves an epoch timestamp alone', () => {
+    // A thirteen-digit number is the single most common value in the store.
+    // A shape-only phone rule would redact every capturedAt in it.
+    const text = '{"capturedAt":1762500000000,"total_count":2}';
+    expect(redactText(text, empty)).toBe(text);
+  });
+
+  it('leaves arithmetic in a minified bundle alone', () => {
+    const text = 'var t=e+12345678;return t+987654321';
+    expect(redactText(text, empty)).toBe(text);
   });
 });
