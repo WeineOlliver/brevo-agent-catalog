@@ -111,13 +111,25 @@ almost never fires. So **the typed inputs here are mostly inferred by a model
 from captured traffic, not taken from a published contract.** Treat `inputs` on
 an `observed` entry as a hypothesis about a request's shape, not a spec.
 
-## 23 of the 197 are app plumbing, not business actions
+## 27 of the 197 are app plumbing, not business actions
 
 The catalogue is what the app calls, and an app calls things that are not
-business actions. Counted by hand, **23 entries are the shell rather than the
-product** — static reference assets, feature flags, editor furniture, UI view
-config, and two endpoints that belong to the brevo.com marketing site rather
-than to the app at all.
+business actions. **27 entries are the shell rather than the product** — static
+reference assets, feature flags, editor furniture, UI view config, and two
+endpoints that belong to the brevo.com marketing site rather than to the app at
+all. They are the `platform` area in `src/catalog/areas.ts`, which is where the
+number now comes from.
+
+**This said 23 for one commit, counted by hand.** The table puts it at 27: the
+hand count missed `objects.get_plan`, `objects.get_user_info`,
+`objects.get_view`, `agent.get_organization` and
+`conversations.load_chat_widget_script`, and wrongly included
+`editor.open_newsletter_editor`, which is a user opening the newsletter editor
+and belongs to `campaigns`. A hand count is a guess with a number on it; the
+difference is exactly why the grouping is a table the build checks.
+
+The list below is that hand count, kept because its two defect findings still
+stand.
 
 ```
 ui.load_home                       navigation.get_header_menu
@@ -134,9 +146,10 @@ branding.get_brand                 phone.get_auth
 analytics.get_live_updates_token
 ```
 
-**So the honest headline is 174 product actions, not 197.** All 23 are reads and
-none is destructive, so the write figures are untouched: 38 of 38 write endpoints
-still have an entry, and the 3 verified actions are all product actions.
+**So the honest headline is 170 product features, not 197.** All 27 are reads
+and none is destructive, so the write figures are untouched: 38 of 38 write
+endpoints still have an entry, and the 3 verified actions are all product
+actions.
 
 Two of them are defects rather than noise. `ui.load_home` has
 `internal_endpoint.path` of `/undefined` — a crawler artifact that should not
@@ -153,10 +166,10 @@ a deadline would have re-stated eight numbers to make one of them prettier. The
 cost of keeping them is that an agent selecting over `index.json` reads 23
 entries it will never need.
 
-**This split is a hand classification, not a gate.** Unlike the cross-reference
-count or the schema check, nothing in `pnpm validate` enforces it, so it can
-drift as the catalogue grows. Making `surface: product | plumbing` a schema
-field is how it would stop drifting.
+**This split is now a gate.** It began as a hand classification that nothing
+enforced. It is the `platform` area in `src/catalog/areas.ts`, every action
+resolves to exactly one area, and a module with no area fails `pnpm validate`
+and `pnpm build:index` rather than defaulting into the catch-all.
 
 ## Deliberately out of scope
 
@@ -214,8 +227,10 @@ field is how it would stop drifting.
    themselves. Flows are also the better answer to the taxonomy problem below:
    sending one campaign crosses three modules, so intent and URL prefix are
    different axes and only one of them is what an agent asks for.
-5. **Normalise the module taxonomy.** 62 modules for 197 actions, many with a
-   single entry (`ui`, `widgets`, `locales`, `countries`).
+5. ~~**Normalise the module taxonomy.**~~ Done: nine areas in
+   `src/catalog/areas.ts`, stamped onto every index entry, gated. The 62
+   modules stay, because they are the right axis for reading the capture; they
+   were only ever the wrong axis for finding a feature.
 6. **A query command** over the index and the flows — `search` and `show`, so an
    agent asks for three entries instead of reading 197. This is the cheaper
    half of what an MCP server would provide, runs anywhere a shell does, and

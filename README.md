@@ -8,7 +8,7 @@
 ![coverage](https://img.shields.io/badge/write%20endpoints-38%2F38-16a34a)
 ![eval](https://img.shields.io/badge/selection%20eval-15%2F19-ca8a04)
 ![verified](https://img.shields.io/badge/verified-3%2F197-ca8a04)
-![tests](https://img.shields.io/badge/tests-495-2563eb)
+![tests](https://img.shields.io/badge/tests-503-2563eb)
 
 </div>
 
@@ -27,13 +27,13 @@ calls, and turns that into a catalog an AI agent can use.
 | | |
 |:--|:--|
 | Actions catalogued | **197** in 62 modules |
-| Of those, product actions / app plumbing | **174 / 23** |
+| Of those, product features / app plumbing | **170 / 27** |
 | Multi-step flows, derived from the capture | **3** (16 steps) |
 | Write endpoints found / covered | **38 / 38** |
 | Can a model pick the right action? | **15 of 19** tasks (best run 17; see below) |
 | Actually executed and proven | **3** (194 are captured but unproven) |
 | Public API overlap | **2 of 197** |
-| Tests | **495** |
+| Tests | **503** |
 
 ## How it works
 
@@ -62,6 +62,42 @@ Asking a model for facts you already have is how documentation gets invented.
 | `captures/clean/` | The traffic every entry came from |
 
 Ids look like `contacts.create_contact` and `campaigns.send_now`.
+
+## 62 modules were the wrong boxes
+
+A `module` is the first segment of an internal URL. It describes which Brevo
+service answers the call, which is the wrong question: 62 modules hold 197
+actions, **34 of them hold exactly one**, and sending a single campaign crosses
+`email_campaigns`, `editor` and `marketing_campaign`. Nobody asks for a feature
+by hostname.
+
+So every action also carries an `area` — one of nine boxes named after what a
+person does in the app:
+
+| Area | Actions | What you do there |
+|:--|--:|:--|
+| `contacts` | 64 | Hold the people you market to; cut them into lists and segments |
+| `campaigns` | 38 | Compose and send email, SMS and WhatsApp, and read how they did |
+| `platform` | 27 | **Not a feature.** Fonts, locales, feature flags, widget lists |
+| `crm` | 21 | Companies, deals, pipelines, tasks, meetings |
+| `account` | 21 | Plan, senders, security, integrations, users |
+| `transactional` | 10 | The one-to-one mail an app triggers: receipts, resets, SMTP |
+| `ecommerce` | 7 | Connect a store, follow orders, run loyalty programmes |
+| `automation` | 6 | Workflows that act without anyone pressing send |
+| `reporting` | 3 | The cross-product summaries the dashboard shows |
+
+Both groupings ship, because they answer different questions: `module` is for
+reading the capture, `area` is for finding a feature.
+
+`platform` exists so the other eight stay honest. Those 27 entries are the web
+app drawing itself — `locales.fetch_english`, `editor.list_fonts`,
+`navigation.get_header_menu` — and boxing them under a label that says *not a
+feature* beats scattering them through the areas a user actually visits.
+
+The assignment is a table in [`src/catalog/areas.ts`](src/catalog/areas.ts), not
+a model call: it is a naming decision, and those belong where they can be argued
+with. **A module with no area fails the build.** It does not default into
+`platform`, because a catch-all that fills itself stops describing anything.
 
 ## 197 actions do not say what order to call them in
 
@@ -136,7 +172,7 @@ judgment. Both behind one interface, so the Groq key is optional.
 Node 20+ and pnpm. `pnpm install`, then:
 
 ```bash
-pnpm test          # 495 tests
+pnpm test          # 503 tests
 pnpm validate      # schema + no broken references + flows match their captures
 pnpm build:flows   # re-derive flows/index.json from the captures
 pnpm eval          # can a model pick the right action?

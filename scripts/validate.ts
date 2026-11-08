@@ -14,6 +14,7 @@ import { loadConfig } from '../src/config.js';
 import { validateAction } from '../src/catalog/validate.js';
 import { findDanglingRefs, textOf } from '../src/catalog/crossrefs.js';
 import { validateFlowIndex } from '../src/flows/validate.js';
+import { AREAS, areaOf, unmappedModules } from '../src/catalog/areas.js';
 
 /**
  * Dangling cross-references the catalog is allowed to carry: none.
@@ -162,3 +163,44 @@ if (!existsSync(flowIndexPath)) {
 
   console.log('flows match the capture windows they are derived from');
 }
+
+// --- areas -------------------------------------------------------------------
+//
+// Every action belongs to exactly one user-facing area, and every module has to
+// be assigned to one deliberately. An unmapped module fails here rather than
+// defaulting into `platform`, because a catch-all that fills itself is how a
+// taxonomy stops describing anything.
+
+const areaActions = files.map((file) => {
+  const action = JSON.parse(readFileSync(join(dir, file), 'utf8')) as {
+    id: string;
+    module: string;
+  };
+  return action;
+});
+
+const unmapped = unmappedModules(areaActions.map((action) => action.module));
+
+if (unmapped.length > 0) {
+  console.error('');
+  console.error(
+    `FAIL: ${unmapped.length} module(s) have no area: ${unmapped.join(', ')}.` +
+      ' Assign them in src/catalog/areas.ts.',
+  );
+  process.exit(1);
+}
+
+const areaCounts = new Map<string, number>();
+for (const action of areaActions) {
+  const area = areaOf(action);
+  if (area === null) {
+    console.error(`FAIL: ${action.id} resolves to no area.`);
+    process.exit(1);
+  }
+  areaCounts.set(area, (areaCounts.get(area) ?? 0) + 1);
+}
+
+console.log(
+  `all ${areaActions.length} action(s) in ${AREAS.length} areas: ` +
+    AREAS.map((area) => `${area.id} ${areaCounts.get(area.id) ?? 0}`).join(', '),
+);
