@@ -9,6 +9,15 @@
  * `/contacts/{identifier}` while a capture shows `/contacts/42`. A naive string
  * compare reports "no public API" for nearly every operation and silently
  * destroys the enrichment this whole stage exists for.
+ *
+ * It is also where this stage can lie. Brevo runs the app on more than fifty
+ * internal hosts, and a path alone does not say which one answered: matching
+ * `/account` against the spec's `/v3/account` claimed a public API for
+ * `https://cdp-analytics-api.brevo.com/account`, a different service that
+ * merely ends in the same word, and handed the entry that operation's typed
+ * inputs. So a lookup given a full url is gated on the host the spec declares;
+ * a lookup given a bare path still matches, because the callers that only hold
+ * a path template are asking a narrower question.
  */
 
 import { load } from 'js-yaml';
@@ -124,6 +133,34 @@ function collectEnums(operation: OperationNode): Record<string, string[]> {
   return enums;
 }
 
+/** The host of an absolute url, or null for a bare path. */
+function hostOf(value: string): string | null {
+  try {
+    return new URL(value).host;
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * The hosts the specification itself declares. A capture from any other host is
+ * a different service, whatever its path looks like.
+ */
+function declaredHosts(servers: unknown): Set<string> {
+  const hosts = new Set<string>();
+  if (!Array.isArray(servers)) return hosts;
+
+  for (const server of servers) {
+    const url = (server as { url?: unknown })?.url;
+    if (typeof url !== 'string') continue;
+    const host = hostOf(url);
+    // A relative server url declares no host, so there is nothing to gate on.
+    if (host !== null) hosts.add(host);
+  }
+
+  return hosts;
+}
+
 /** Reduces a captured url or path to a bare, prefix-stripped path. */
 function normalizePath(concretePath: string): string {
   let path = concretePath;
@@ -146,8 +183,12 @@ function normalizePath(concretePath: string): string {
 }
 
 export function buildPublicApiIndex(specYaml: string): PublicApiIndex {
-  const spec = load(specYaml) as { paths?: Record<string, Record<string, unknown>> };
+  const spec = load(specYaml) as {
+    paths?: Record<string, Record<string, unknown>>;
+    servers?: unknown;
+  };
   const paths = spec?.paths;
+  const publicHosts = declaredHosts(spec?.servers);
 
   if (!paths || typeof paths !== 'object') {
     throw new Error('Not an OpenAPI document: expected a top-level `paths` object.');
@@ -184,6 +225,11 @@ export function buildPublicApiIndex(specYaml: string): PublicApiIndex {
     operations,
     lookup(method: string, concretePath: string): PublicApiOperation | null {
       const wanted = method.toUpperCase();
+
+      // A url from a host the spec never claims is a different service.
+      const host = hostOf(concretePath);
+      if (host !== null && publicHosts.size > 0 && !publicHosts.has(host)) return null;
+
       const path = normalizePath(concretePath);
 
       const exact = literal.find((o) => o.method === wanted && o.pathTemplate === path);

@@ -54,8 +54,8 @@
     "body_example": null
   },
   "public_api": {
-    "exists": true,
-    "operationId": "getAccount"
+    "exists": false,
+    "operationId": null
   },
   "plan_tier": "free",
   "verification": {

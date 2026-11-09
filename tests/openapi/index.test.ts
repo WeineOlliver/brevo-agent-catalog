@@ -55,6 +55,26 @@ describe('lookup', () => {
     );
   });
 
+  it('refuses a url from a host the spec does not declare', () => {
+    // The defect this exists for: an internal service whose path happens to
+    // read like a public one. `/account` is the real case — it shipped two
+    // entries claiming a public API, one of them with inputs copied off the
+    // wrong operation.
+    expect(index.lookup('GET', 'https://cdp-analytics-api.brevo.com/contacts')).toBeNull();
+    expect(index.lookup('GET', 'https://editor-api.brevo.com/editor-api/contacts')).toBeNull();
+  });
+
+  it('still matches a bare path, which carries no host to judge', () => {
+    expect(index.lookup('GET', '/contacts')?.operationId).toBe('getContacts');
+  });
+
+  it('gates on the host even when the rest of the url matches exactly', () => {
+    expect(index.lookup('GET', 'https://api.brevo.com/v3/contacts')?.operationId).toBe(
+      'getContacts',
+    );
+    expect(index.lookup('GET', 'https://not-brevo.example.com/v3/contacts')).toBeNull();
+  });
+
   it('ignores a query string', () => {
     expect(index.lookup('GET', '/v3/contacts?limit=10')?.operationId).toBe('getContacts');
   });

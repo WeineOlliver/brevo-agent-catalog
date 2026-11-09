@@ -208,7 +208,13 @@ for (const candidate of candidates) {
     continue;
   }
 
-  const operation = publicApi.lookup(candidate.method, candidate.pathTemplate);
+  // The sample url, not the path template: the path alone cannot tell
+  // `api.brevo.com/v3/account` from `cdp-analytics-api.brevo.com/account`, and
+  // the lookup gates on the host the spec declares.
+  const operation = publicApi.lookup(
+    candidate.method,
+    candidate.samples[0]?.url ?? candidate.pathTemplate,
+  );
   if (operation !== null) matched += 1;
 
   // `withDeadline` does not cancel the work it gives up on — the adapter's own

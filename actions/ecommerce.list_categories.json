@@ -6,16 +6,7 @@
   "preconditions": [],
   "inputs": {
     "type": "object",
-    "properties": {
-      "sort": {
-        "type": "string",
-        "enum": [
-          "asc",
-          "desc"
-        ],
-        "description": "Sort order of the returned categories."
-      }
-    },
+    "properties": {},
     "required": []
   },
   "outputs": {
@@ -84,8 +75,8 @@
     "body_example": null
   },
   "public_api": {
-    "exists": true,
-    "operationId": "getCategories"
+    "exists": false,
+    "operationId": null
   },
   "plan_tier": "unknown",
   "verification": {
