@@ -8,8 +8,10 @@ on purpose; the commit history has the full reasoning for each.
 The two surfaces barely meet. Of Brevo's 292 published operations, 79 are
 partner and reseller surface no ordinary user sees, and **none covers
 automation, landing pages, forms, meetings or push** — all of which exist in the
-product. 0 of the 197 endpoints this catalogue holds appear in the spec. The app
-runs on more than fifty internal hosts the public `/v3` surface does not wrap.
+product. 0 of the 197 endpoints this catalogue holds appear in the spec, matched
+on method, path and host — the app runs on more than fifty internal hosts the
+public `/v3` surface does not wrap, and matching without the host is how the two
+false positives below got in.
 
 **Cost accepted:** the typed inputs here are mostly inferred by a model from
 captured traffic rather than taken from a published contract. Treat `inputs` on
@@ -75,11 +77,19 @@ Worth stating, because the catalogue's argument is that measured claims beat
 confident ones, and these are what that costs.
 
 - **Public API overlap** read `0 of 197` unmeasured, was corrected to `2` by an
-  audit, and is `0` again: both matches were false positives, one from a
-  truncated path and one from a matcher that compared paths while ignoring
-  hosts.
-- **The eval** was published as `17 of 19` from a single run. Four runs the next
-  day gave 15, 14, 15. The badge carries 15, and the spread is 14 to 17.
+  audit, and is `0` again — but for a day the prose said `0` while the shipped
+  JSON still said `2`, which is the worse of the two errors: a reader and an
+  agent got different answers from the same repository. Both matches were false
+  positives of a matcher that compared paths while ignoring hosts, so
+  `GET /account` on `cdp-analytics-api.brevo.com` claimed the public
+  `getAccount`. The matcher now gates on the host the spec declares, the two
+  entries say `exists: false`, and one of them had inherited a `sort` parameter
+  from the public operation that appears in no captured request — a wrong match
+  does not just mislabel an entry, it invents inputs.
+- **The eval** was published as `17 of 19` from a single run. Three runs the
+  next day gave 15, 14 and 15. The badge carried 15 while the committed report
+  said 14; the badge now carries 14, the run you can open, and the spread is 14
+  to 17.
 - **The plumbing count** was 23 by hand and is 27 by the table that now gates
   it.
 
@@ -110,7 +120,7 @@ Brevo account; the browser stages need one of your own.
 | `pnpm bench:search` | Scores the CLI search with no model at all | nothing |
 | `pnpm catalog` | Answers what a user can do | nothing |
 | `pnpm scan` | **Leak gate.** Run before any push | nothing |
-| `pnpm test` / `pnpm typecheck` | 527 tests, strict TypeScript | nothing |
+| `pnpm test` / `pnpm typecheck` | 530 tests, strict TypeScript | nothing |
 
 `pnpm eval` is the only command that spends money. A saved session does not work
 against Brevo — `storageState` does not carry `sessionStorage` — so the browser

@@ -6,9 +6,9 @@
 
 ![capabilities](https://img.shields.io/badge/user%20capabilities-170-2563eb)
 ![coverage](https://img.shields.io/badge/write%20endpoints-38%2F38-16a34a)
-![eval](https://img.shields.io/badge/selection%20eval-15%2F19-ca8a04)
+![eval](https://img.shields.io/badge/selection%20eval-14%2F19-ca8a04)
 ![verified](https://img.shields.io/badge/verified-3%2F197-ca8a04)
-![tests](https://img.shields.io/badge/tests-527-2563eb)
+![tests](https://img.shields.io/badge/tests-530-2563eb)
 
 </div>
 
@@ -38,12 +38,15 @@ Automation  —  6, all read-only — nothing here changes anything
 Then `area <id>`, `show <id>`, `flow <id>`. No Brevo account needed: the
 sanitized captures are committed, so a fresh clone runs offline.
 
-`pnpm test` (527) · `pnpm validate` (the gate) · `pnpm scan` (leak gate)
+`pnpm test` (530) · `pnpm validate` (the gate) · `pnpm scan` (leak gate)
 
 ## Approach
 
 Brevo's public API has 292 operations. **None of them appear in the 197 the app
-actually calls.** So I watched the app instead of reading the spec.
+actually calls** — measured on method, path and host, and the host is the part
+that matters: two entries claimed a public API until the matcher learned that
+`cdp-analytics-api.brevo.com/account` is not `api.brevo.com/v3/account`. So I
+watched the app instead of reading the spec.
 
 The first attempt was a crawler. It found 118 entries: 108 reads, one write. The
 eval scored **0 of 20**. A coverage count would have called 118 a success.
@@ -71,7 +74,10 @@ a person — *can I do this, what does it cost* — not to send requests. So:
   the capture are covered.
 - **9 areas and 3 flows, both gated.** Flow steps are re-derived from the
   capture, so a flow cannot drift from what the app did.
-- **An eval**: 19 tasks worded like a user would word them. **15 of 19.**
+- **An eval**: 19 tasks worded like a user would word them. **14 of 19** — the
+  run committed as `data/eval-report.json`. An earlier single run scored 17 and
+  three runs the next day gave 15, 14 and 15, so no one run is the number. The
+  badge carries the run you can open; the spread is 14 to 17.
 - **Confidence is required.** `verified` means we ran it — **3 of 197**. The
   other 194 are traffic we saw and never ran, and say so.
 
@@ -103,5 +109,13 @@ a fact about that model.
 **Broken and known:** `campaigns.send_now` is the most dangerous entry and
 unverified. Sender creation is missing — the one eval task with no answer.
 `ui.load_home` has a path of `/undefined`.
+
+## On the timing
+
+The brief gives 24 hours. I received it on Friday and the recruiter said the
+submission was due Monday, so I took Monday as the deadline and used the time
+that gave me, as far as it went. Writing the assumption down rather than
+leaving it to be noticed, which is what the brief asks for when something is
+open to reading.
 
 [docs/NOTES.md](docs/NOTES.md) has the reasoning and the commands.
