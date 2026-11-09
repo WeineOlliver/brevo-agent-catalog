@@ -54,6 +54,22 @@ code was deleted rather than shipped unused.
 done. The 20-25 verified executions in the plan all run through the real UI,
 where the host is whatever the browser used, so the plan does not depend on it.
 
+## What built this
+
+Claude Code (Opus) drove it, working from a design spec and an implementation
+plan written before the first line of code and executed test-first, task by
+task. Both documents live in the history at commit `f7618f6`, where the tree was
+trimmed for review. The plan is worth one line here: it named "OpenAPI path
+templates versus concrete captured paths" as a failure mode on day one, and the
+matcher still shipped a defect on exactly that line — it matched too loosely
+instead of too tightly. Naming a risk is not the same as closing it.
+
+Four tools, split by what each is good at. **Groq** (`openai/gpt-oss-120b`) for
+breadth: one capture per call, drafting entries. **Headless `claude -p`** for
+judgement: prose rewrites and the selection eval. **Playwright** for the crawl
+and the verification harness. **Chrome DevTools** for the four hand-driven HAR
+recordings, which is the stage that actually found the writes.
+
 ## Where the model was wrong, and how it was caught
 
 Every one of these was caught by a check, not by reading the output.
@@ -66,7 +82,6 @@ Every one of these was caught by a check, not by reading the output.
 | Leaked phone numbers and encoded emails past the gate | Grepping the committed files by hand |
 | Answered "no action fits" while printing as a parser error | Reading the stored report instead of the console |
 
-Two models, split by job: Groq for volume, headless Claude Code for judgement.
 The eval runs on Claude only, because one call ships the whole catalogue and
 Groq rejects it at 14 846 tokens against an 8 000 TPM ceiling. The header
 claimed Groq was available as a fallback; nobody had tried it.

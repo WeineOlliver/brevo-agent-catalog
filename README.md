@@ -42,6 +42,11 @@ sanitized captures are committed, so a fresh clone runs offline.
 
 ## Approach
 
+A design spec and an implementation plan were written before any code, and the
+plan was executed test-first, task by task. Both documents are in the history at
+commit `f7618f6`, where they were cut from the tree: they are how this was
+planned, not something a reviewer of the result needs open.
+
 Brevo's public API has 292 operations. **None of them appear in the 197 the app
 actually calls** — measured on method, path and host, and the host is the part
 that matters: two entries claimed a public API until the matcher learned that
