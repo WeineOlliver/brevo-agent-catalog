@@ -106,7 +106,18 @@ score **1**. The other fifteen score 13. The warning label may be scaring the
 model off the right action. `pnpm eval --no-risk-labels` answers it in one run;
 quota blocked it.
 
-**Production:** 20-25 verified instead of 197, picked by risk. Then
+**First, the answer the agent hands back.** `pnpm catalog` is the product here,
+and it is the least polished part of it: an entry tells an agent what the
+capability costs, but it does not yet give it the words to carry that to a
+person, or the next instruction to offer them. That is a day of work on the
+renderer, not on the data, and it moves every answer the catalogue ever gives.
+
+**Then coverage, the way coverage actually came.** More hand-driven recordings,
+aimed at the nested flows the first four did not reach — a wizard inside a
+wizard, an automation built step by step. Each one is fifteen minutes and a HAR
+import, and that is the measured route from 4 writes to 38.
+
+**Then the rest:** 20-25 verified instead of 197, picked by risk. Then
 `execute_action` — that is when the missing host becomes a bug. Then hybrid
 search if this grows tenfold. Then a second model, because one model's score is
 a fact about that model.
